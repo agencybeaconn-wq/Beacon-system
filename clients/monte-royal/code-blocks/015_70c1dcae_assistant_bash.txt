@@ -1,0 +1,12 @@
+# Ver insights (cache 6h)
+node .claude/skills/clarity/clarity.mjs MontRoyal --days=1
+
+# Quebrar por dimensão
+node .claude/skills/clarity/clarity.mjs MontRoyal --days=3 --dimension=URL
+node .claude/skills/clarity/clarity.mjs MontRoyal --days=1 --dimension=Device
+
+# Ver quanto da quota usei hoje (não consome)
+node .claude/skills/clarity/clarity.mjs MontRoyal --usage
+
+# Forçar refresh ignorando cache (gasta 1 da quota 10/dia)
+node .claude/skills/clarity/clarity.mjs MontRoyal --days=1 --force

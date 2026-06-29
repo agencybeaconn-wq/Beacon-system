@@ -1,0 +1,179 @@
+{%- comment -%}
+  Seção de configuração de regras de "Compre Junto" (Shop the Look)
+  Permite definir produtos complementares globalmente baseado em palavras-chave no título do produto principal.
+  Inclui a lógica de interceptação do botão de adicionar ao carrinho.
+{%- endcomment -%}
+
+<script>
+  window.shopTheLookRules = [
+    {%- for block in section.blocks -%}
+      {%- if block.settings.keywords != blank and block.settings.product_list != blank -%}
+        {
+          keywords: {{ block.settings.keywords | json }},
+          excludeKeywords: {{ block.settings.exclude_keywords | json }},
+          heading: {{ block.settings.heading | default: 'Compre Junto e Ganhe Desconto!' | json }},
+          discountText: {{ block.settings.discount_text | default: 'Leve os 2 por apenas' | json }},
+          discountPercentage: {{ block.settings.discount_percentage | default: 0 | json }},
+          products: [
+            {%- for product in block.settings.product_list -%}
+              {
+                id: {{ product.id }},
+                title: {{ product.title | json }},
+                handle: {{ product.handle | json }},
+                url: {{ product.url | json }},
+                image: {{ product.featured_image | image_url: width: 400 | json }},
+                price: {{ product.price }},
+                priceFormatted: {{ product.price | money | json }},
+                compareAtPrice: {{ product.compare_at_price | default: product.price }},
+                compareAtPriceFormatted: {{ product.compare_at_price | default: product.price | money | json }},
+                available: {{ product.available | json }},
+                variants: [
+                  {%- for variant in product.variants -%}
+                    {
+                      id: {{ variant.id }},
+                      title: {{ variant.title | json }},
+                      price: {{ variant.price }},
+                      available: {{ variant.available | json }}
+                    }{%- unless forloop.last -%},{%- endunless -%}
+                  {%- endfor -%}
+                ]
+              }{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+          ]
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endif -%}
+    {%- endfor -%}
+  ];
+  
+  // Script para processar essas regras globalmente
+  (function() {
+    if (window.shopTheLookGlobalInitialized) return;
+    window.shopTheLookGlobalInitialized = true;
+    
+    // Configurações do tema e produto atual
+    const currentProductTitle = {{ product.title | json }} || '';
+    if (!currentProductTitle) return; // Não estamos em uma página de produto válida para isso
+    
+    // Função para verificar se o produto corresponde a alguma regra
+    function matchRule(rules, title) {
+      if (!rules || !Array.isArray(rules)) return null;
+      
+      const titleLower = title.toLowerCase();
+      
+      // Procura a primeira regra que corresponda
+      return rules.find(rule => {
+        // Verifica palavras-chave de inclusão (OR logic - qualquer uma serve)
+        const keywords = rule.keywords.toLowerCase().split(',').map(k => k.trim()).filter(k => k);
+        const hasMatch = keywords.some(keyword => titleLower.includes(keyword));
+        
+        if (!hasMatch) return false;
+        
+        // Verifica palavras-chave de exclusão (OR logic - qualquer uma invalida)
+        if (rule.excludeKeywords) {
+          const excludeKeywords = rule.excludeKeywords.toLowerCase().split(',').map(k => k.trim()).filter(k => k);
+          const hasExclusion = excludeKeywords.some(keyword => titleLower.includes(keyword));
+          if (hasExclusion) return false;
+        }
+        
+        return true;
+      });
+    }
+    
+    // Encontra a regra ativa
+    const activeRule = matchRule(window.shopTheLookRules, currentProductTitle);
+    
+    if (activeRule) {
+      console.log('Shop the Look Global: Regra encontrada:', activeRule);
+      
+      // Armazena a regra ativa globalmente para acesso fácil
+      window.activeShopTheLookRule = activeRule;
+      
+      // Carrega o script de lógica apenas se houver uma regra ativa
+      const script = document.createElement('script');
+      script.src = "{{ 'shop-the-look-global.js' | asset_url }}";
+      script.defer = true;
+      document.head.appendChild(script);
+      
+      // Carrega os estilos
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = "{{ 'shop-the-look-global.css' | asset_url }}";
+      document.head.appendChild(link);
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Regras Compre Junto",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Defina regras globais para exibir produtos 'Compre Junto' baseados em palavras-chave no título do produto. A ordem das regras importa: a primeira regra que corresponder ao título do produto será aplicada."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "rule",
+      "name": "Regra",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Gatilhos"
+        },
+        {
+          "type": "textarea",
+          "id": "keywords",
+          "label": "Palavras-chave (Obrigatório)",
+          "info": "Separe por vírgulas. Ex: flamengo, liverpool. Se o título do produto contiver qualquer uma dessas palavras, a regra será aplicada."
+        },
+        {
+          "type": "textarea",
+          "id": "exclude_keywords",
+          "label": "Palavras-chave para Exclusão",
+          "info": "Separe por vírgulas. Ex: treino, infantil. Se o título contiver qualquer uma dessas palavras, a regra NÃO será aplicada."
+        },
+        {
+          "type": "header",
+          "content": "Produtos e Oferta"
+        },
+        {
+          "type": "product_list",
+          "id": "product_list",
+          "label": "Produtos Complementares",
+          "limit": 4,
+          "info": "Selecione os produtos que aparecerão na oferta."
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Título do Modal",
+          "default": "Compre Junto e Ganhe Desconto!"
+        },
+        {
+          "type": "text",
+          "id": "discount_text",
+          "label": "Texto do Desconto",
+          "default": "Leve os 2 por apenas"
+        },
+        {
+          "type": "range",
+          "id": "discount_percentage",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "label": "Percentual de Desconto (Visual)",
+          "default": 10,
+          "info": "Isso apenas altera o preço exibido visualmente no 'Compre Junto' para incentivar a compra. O desconto real deve ser configurado no Shopify Scripts ou App de descontos."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Regras Compre Junto"
+    }
+  ]
+}
+{% endschema %}

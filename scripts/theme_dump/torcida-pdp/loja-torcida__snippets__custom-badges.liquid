@@ -1,0 +1,49 @@
+{%- comment -%}
+  Custom Badges Snippet
+  Accepts:
+  - product: {Object} Product Liquid object
+{%- endcomment -%}
+
+{%- for i in (1..5) -%}
+  {%- capture enabled_key -%}custom_badge_{{ i }}_enabled{%- endcapture -%}
+  {%- capture condition_key -%}custom_badge_{{ i }}_condition{%- endcapture -%}
+  {%- capture value_key -%}custom_badge_{{ i }}_value{%- endcapture -%}
+  {%- capture text_key -%}custom_badge_{{ i }}_text{%- endcapture -%}
+  {%- capture bg_color_key -%}custom_badge_{{ i }}_bg_color{%- endcapture -%}
+  {%- capture text_color_key -%}custom_badge_{{ i }}_text_color{%- endcapture -%}
+
+  {%- assign is_enabled = settings[enabled_key] -%}
+  {%- assign condition = settings[condition_key] -%}
+  {%- assign condition_value = settings[value_key] | downcase | strip -%}
+  {%- assign badge_text = settings[text_key] -%}
+  {%- assign bg_color = settings[bg_color_key] -%}
+  {%- assign text_color = settings[text_color_key] -%}
+
+  {%- if is_enabled and badge_text != blank and condition_value != blank -%}
+    {%- assign show_badge = false -%}
+
+    {%- if condition == 'tag' -%}
+      {%- for tag in product.tags -%}
+        {%- assign tag_downcase = tag | downcase | strip -%}
+        {%- if tag_downcase == condition_value -%}
+          {%- assign show_badge = true -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- elsif condition == 'title' -%}
+      {%- assign product_title_downcase = product.title | downcase -%}
+      {%- if product_title_downcase contains condition_value -%}
+        {%- assign show_badge = true -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if show_badge -%}
+      <span
+        class="badge custom-badge"
+        style="background-color: {{ bg_color }}; color: {{ text_color }}; border-color: transparent;"
+      >
+        {{ badge_text }}
+      </span>
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}

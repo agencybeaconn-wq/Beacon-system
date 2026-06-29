@@ -1,0 +1,104 @@
+{
+  "_comment": "Snippets pra colar no settings.json do Windows Terminal. Cole o colorScheme em 'schemes', os profiles em 'profiles.list', e ajuste defaults se quiser. Logo: lever/assets/branding/lever-white.png (caminho absoluto).",
+
+  "schemes_to_merge": [
+    {
+      "name": "Lever",
+      "background": "#050505",
+      "foreground": "#E5E5E5",
+      "cursorColor": "#DC2626",
+      "selectionBackground": "#DC2626",
+      "black": "#050505",
+      "red": "#DC2626",
+      "green": "#22C55E",
+      "yellow": "#EAB308",
+      "blue": "#3B82F6",
+      "purple": "#A855F7",
+      "cyan": "#06B6D4",
+      "white": "#E5E5E5",
+      "brightBlack": "#666666",
+      "brightRed": "#EF4444",
+      "brightGreen": "#4ADE80",
+      "brightYellow": "#FACC15",
+      "brightBlue": "#60A5FA",
+      "brightPurple": "#C084FC",
+      "brightCyan": "#22D3EE",
+      "brightWhite": "#FFFFFF"
+    }
+  ],
+
+  "profiles_to_merge": [
+    {
+      "name": "Lever · Workspace",
+      "commandline": "powershell.exe -NoExit -Command \"cd 'C:\\Users\\João Vithor\\Documents\\João Workspace'\"",
+      "startingDirectory": "C:\\Users\\João Vithor\\Documents\\João Workspace",
+      "colorScheme": "Lever",
+      "backgroundImage": "C:\\Users\\João Vithor\\Documents\\João Workspace\\lever\\assets\\branding\\lever-white.png",
+      "backgroundImageOpacity": 0.08,
+      "backgroundImageStretchMode": "uniform",
+      "backgroundImageAlignment": "center",
+      "useAcrylic": true,
+      "opacity": 92,
+      "font": { "face": "JetBrains Mono", "size": 11 },
+      "tabColor": "#DC2626",
+      "icon": "C:\\Users\\João Vithor\\Documents\\João Workspace\\lever\\assets\\branding\\lever-white.png"
+    },
+    {
+      "name": "Lever · lever",
+      "commandline": "powershell.exe -NoExit -Command \"cd 'C:\\Users\\João Vithor\\Documents\\João Workspace\\lever'\"",
+      "startingDirectory": "C:\\Users\\João Vithor\\Documents\\João Workspace\\lever",
+      "colorScheme": "Lever",
+      "backgroundImage": "C:\\Users\\João Vithor\\Documents\\João Workspace\\lever\\assets\\branding\\lever-white.png",
+      "backgroundImageOpacity": 0.08,
+      "backgroundImageStretchMode": "uniform",
+      "useAcrylic": true,
+      "opacity": 92,
+      "font": { "face": "JetBrains Mono", "size": 11 },
+      "tabColor": "#DC2626",
+      "icon": "C:\\Users\\João Vithor\\Documents\\João Workspace\\lever\\assets\\branding\\lever-white.png"
+    },
+    {
+      "name": "Lever · kron",
+      "commandline": "powershell.exe -NoExit -Command \"cd 'C:\\Users\\João Vithor\\Documents\\João Workspace\\kron'\"",
+      "startingDirectory": "C:\\Users\\João Vithor\\Documents\\João Workspace\\kron",
+      "colorScheme": "Lever",
+      "backgroundImage": "C:\\Users\\João Vithor\\Documents\\João Workspace\\lever\\assets\\branding\\lever-white.png",
+      "backgroundImageOpacity": 0.06,
+      "useAcrylic": true,
+      "opacity": 92,
+      "font": { "face": "JetBrains Mono", "size": 11 },
+      "tabColor": "#1a1a1a",
+      "icon": "C:\\Users\\João Vithor\\Documents\\João Workspace\\lever\\assets\\branding\\lever-white.png"
+    },
+    {
+      "name": "Lever · fg-atacado",
+      "commandline": "powershell.exe -NoExit -Command \"cd 'C:\\Users\\João Vithor\\Documents\\João Workspace\\fg-atacado'\"",
+      "startingDirectory": "C:\\Users\\João Vithor\\Documents\\João Workspace\\fg-atacado",
+      "colorScheme": "Lever",
+      "backgroundImage": "C:\\Users\\João Vithor\\Documents\\João Workspace\\lever\\assets\\branding\\lever-white.png",
+      "backgroundImageOpacity": 0.06,
+      "useAcrylic": true,
+      "opacity": 92,
+      "font": { "face": "JetBrains Mono", "size": 11 },
+      "tabColor": "#3B82F6",
+      "icon": "C:\\Users\\João Vithor\\Documents\\João Workspace\\lever\\assets\\branding\\lever-white.png"
+    }
+  ],
+
+  "global_settings_recommendation": {
+    "theme": "dark",
+    "useAcrylicInTabRow": true,
+    "alwaysShowTabs": true,
+    "showTabsInTitlebar": true,
+    "copyOnSelect": true,
+    "copyFormatting": "none"
+  },
+
+  "keybinds_useful": [
+    { "command": "newTab", "keys": "ctrl+t", "_": "nova aba (ex: outra sessão Claude paralela)" },
+    { "command": { "action": "splitPane", "split": "right" }, "keys": "alt+shift+plus", "_": "split vertical (lado a lado)" },
+    { "command": { "action": "splitPane", "split": "down" }, "keys": "alt+shift+minus", "_": "split horizontal (em cima/embaixo)" },
+    { "command": { "action": "moveFocus", "direction": "left" }, "keys": "alt+left", "_": "navegar entre painéis" },
+    { "command": "closePane", "keys": "ctrl+shift+w", "_": "fecha painel ativo" }
+  ]
+}

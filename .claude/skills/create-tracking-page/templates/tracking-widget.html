@@ -1,0 +1,309 @@
+<!-- GOALKIT TRACKING WIDGET — powered by 17TRACK (no backend) -->
+<div class="gk-tracking-widget">
+  <div class="gk-widget-layout">
+
+    <!-- LEFT PANEL: Step-by-Step Guide -->
+    <div class="gk-guide-panel">
+      <h2 class="gk-guide-title">How to Track Your Order</h2>
+      <div class="gk-steps">
+        <div class="gk-step">
+          <div class="gk-step-number">1</div>
+          <div class="gk-step-content">
+            <h4>Find Your Tracking Code</h4>
+            <p>It's in the shipping confirmation email we sent once your order left our warehouse. It looks like <strong>LP123456789CN</strong>.</p>
+          </div>
+        </div>
+        <div class="gk-step">
+          <div class="gk-step-number">2</div>
+          <div class="gk-step-content">
+            <h4>Enter &amp; Track</h4>
+            <p>Paste your tracking code on the right and click <strong>Track</strong>. We pull live updates straight from the carrier.</p>
+          </div>
+        </div>
+        <div class="gk-step">
+          <div class="gk-step-number">3</div>
+          <div class="gk-step-content">
+            <h4>Follow in Real-Time</h4>
+            <p>See your package move through <strong>Placed</strong>, <strong>Shipped</strong> and <strong>Delivered</strong>, with full details on 17TRACK.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Support Section (no WhatsApp) -->
+      <div class="gk-support-section">
+        <div class="gk-support-divider"></div>
+        <p class="gk-support-text">Having trouble tracking your order?<br>Our support team is ready to help!</p>
+        <div class="gk-support-buttons">
+          <a href="{{CONTACT_URL}}" class="gk-btn-contact">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            <span>Contact Page</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: Form -->
+    <div class="gk-form-panel">
+      <form id="gkTrackingForm" onsubmit="handleGKTrack(event)">
+        <div class="gk-form-group">
+          <label for="gkSearchInput">Order Number or Tracking Code</label>
+          <input type="text" id="gkSearchInput" placeholder="e.g. #1056 or LP123456789CN" required autocomplete="off">
+        </div>
+
+        <button type="submit" id="gkBtnSubmit" class="gk-btn-track">
+          <svg id="gkBtnIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span id="gkBtnText">Track</span>
+          <div id="gkBtnSpinner" class="gk-spinner"></div>
+        </button>
+
+        <div id="gkErrorText" class="gk-error-message"></div>
+      </form>
+
+      <!-- Tracking result (injected via JS) -->
+      <div id="gkTrackingResult" style="display: none;"></div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .gk-tracking-widget {
+    --gk-primary: rgb(var(--color-button, 37 99 235));
+    --gk-border: #e2e8f0;
+    --gk-text: rgb(var(--color-foreground, 18 18 18));
+    --gk-text-muted: #64748b;
+    --gk-success: #10b981;
+    --gk-error: #ef4444;
+    --gk-warning: #f59e0b;
+
+    width: 100%;
+    max-width: 900px;
+    margin: 30px auto;
+    background: transparent;
+    color: var(--gk-text);
+    box-sizing: border-box;
+    text-align: left;
+  }
+
+  .gk-tracking-widget * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .gk-tracking-widget .gk-widget-layout { display: flex; gap: 40px; align-items: flex-start; }
+  .gk-tracking-widget .gk-guide-panel { flex: 1; min-width: 0; }
+  .gk-tracking-widget .gk-form-panel {
+    flex: 1; min-width: 0; background: #ffffff; border: 1.5px solid var(--gk-border);
+    border-radius: 12px; padding: 28px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
+  }
+
+  .gk-tracking-widget .gk-guide-title { font-size: 20px; font-weight: 800; color: var(--gk-text); margin-bottom: 24px; letter-spacing: -0.3px; }
+  .gk-tracking-widget .gk-steps { display: flex; flex-direction: column; gap: 20px; }
+  .gk-tracking-widget .gk-step { display: flex; gap: 14px; align-items: flex-start; }
+  .gk-tracking-widget .gk-step-number {
+    width: 32px; height: 32px; min-width: 32px; background: var(--gk-primary); color: #ffffff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; margin-top: 2px;
+  }
+  .gk-tracking-widget .gk-step-content h4 { font-size: 14px; font-weight: 700; color: var(--gk-text); margin-bottom: 4px; }
+  .gk-tracking-widget .gk-step-content p { font-size: 13px; color: var(--gk-text-muted); line-height: 1.5; }
+  .gk-tracking-widget .gk-step-content p strong { color: var(--gk-text); }
+
+  .gk-tracking-widget .gk-support-section { margin-top: 28px; }
+  .gk-tracking-widget .gk-support-divider { height: 1px; background: var(--gk-border); margin-bottom: 20px; }
+  .gk-tracking-widget .gk-support-text { font-size: 13px; color: var(--gk-text-muted); line-height: 1.6; margin-bottom: 14px; }
+  .gk-tracking-widget .gk-support-buttons { display: flex; gap: 10px; }
+  .gk-tracking-widget .gk-btn-contact {
+    display: inline-flex; align-items: center; gap: 10px; background: #ffffff; color: #1e293b; border: 1.5px solid #cbd5e1;
+    border-radius: 50px; padding: 12px 22px; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.25s ease; cursor: pointer;
+  }
+  .gk-tracking-widget .gk-btn-contact:hover { border-color: #1e293b; background: #1e293b; color: #ffffff; transform: translateY(-2px); }
+
+  .gk-tracking-widget .gk-form-group { margin-bottom: 18px; display: flex; flex-direction: column; gap: 6px; }
+  .gk-tracking-widget .gk-form-group label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gk-text-muted); }
+  .gk-tracking-widget .gk-form-group input { width: 100%; background: #ffffff; border: 1.5px solid var(--gk-border); border-radius: 6px; padding: 12px 14px; font-size: 14px; outline: none; transition: all 0.15s ease; color: #0a0a0a; }
+  .gk-tracking-widget .gk-form-group input:focus { border-color: var(--gk-primary); box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.12); }
+
+  .gk-tracking-widget .gk-btn-track {
+    width: 100%; background: var(--gk-primary); color: #ffffff; border: none; border-radius: 50px;
+    padding: 16px 24px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px;
+    margin-top: 24px; transition: all 0.25s ease; text-transform: uppercase; letter-spacing: 0.8px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  }
+  .gk-tracking-widget .gk-btn-track:hover { filter: brightness(1.08); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22); }
+  .gk-tracking-widget .gk-btn-track:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .gk-tracking-widget .gk-spinner {
+    width: 16px; height: 16px; border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 50%;
+    border-top-color: #ffffff; animation: gkSpin 0.8s linear infinite; display: none;
+  }
+  @keyframes gkSpin { to { transform: rotate(360deg); } }
+
+  .gk-tracking-widget .gk-error-message { color: var(--gk-error); font-size: 12px; font-weight: 600; text-align: center; margin-top: 12px; display: none; }
+
+  .gk-tracking-widget .gk-result-card { animation: gkFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .gk-tracking-widget .gk-result-badge-container { display: flex; justify-content: flex-start; }
+  .gk-tracking-widget .gk-badge {
+    display: inline-flex; align-items: center; padding: 6px 12px; border-radius: 50px;
+    font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .gk-tracking-widget .gk-badge-success { background-color: #ecfdf5; color: #059669; border: 1.5px solid #a7f3d0; }
+  .gk-tracking-widget .gk-badge-warning { background-color: #fffbeb; color: #d97706; border: 1.5px solid #fde68a; }
+  .gk-tracking-widget .gk-badge-info { background-color: #eff6ff; color: #2563eb; border: 1.5px solid #bfdbfe; }
+
+  .gk-tracking-widget .gk-order-title { font-size: 22px; font-weight: 800; color: var(--gk-text); margin: 12px 0 4px; letter-spacing: -0.5px; word-break: break-all; }
+  .gk-tracking-widget .gk-store-info { font-size: 13px; color: var(--gk-text-muted); }
+  .gk-tracking-widget .gk-result-divider { height: 1px; background: var(--gk-border); margin: 20px 0; }
+
+  /* Timeline */
+  .gk-tracking-widget .gk-timeline { display: flex; align-items: flex-start; justify-content: space-between; position: relative; margin: 32px 0 24px; padding: 0 10px; }
+  .gk-tracking-widget .gk-timeline-line { position: absolute; top: 20px; left: 50px; right: 50px; height: 4px; background: #e2e8f0; z-index: 1; border-radius: 2px; }
+  .gk-tracking-widget .gk-timeline-progress { position: absolute; top: 0; left: 0; height: 100%; background: var(--gk-success); width: 0%; border-radius: 2px; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+  .gk-tracking-widget .gk-timeline-step { display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 2; flex: 1; position: relative; }
+  .gk-tracking-widget .gk-timeline-icon {
+    width: 40px; height: 40px; border-radius: 50%; background: #ffffff; color: #94a3b8;
+    display: flex; align-items: center; justify-content: center; border: 3px solid #e2e8f0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  }
+  .gk-tracking-widget .gk-timeline-step.active .gk-timeline-icon { border-color: var(--gk-primary); color: var(--gk-primary); background: #eff6ff; transform: scale(1.05); box-shadow: 0 0 0 5px rgba(0, 102, 255, 0.15); }
+  .gk-tracking-widget .gk-timeline-step.completed .gk-timeline-icon { border-color: var(--gk-success); color: #ffffff; background: var(--gk-success); }
+  .gk-tracking-widget .gk-timeline-label { font-size: 11px; font-weight: 800; color: var(--gk-text-muted); text-transform: uppercase; letter-spacing: 0.8px; text-align: center; }
+  .gk-tracking-widget .gk-timeline-step.active .gk-timeline-label { color: var(--gk-primary); }
+  .gk-tracking-widget .gk-timeline-step.completed .gk-timeline-label { color: var(--gk-success); }
+
+  .gk-tracking-widget .gk-btn-details {
+    width: 100%; background: var(--gk-primary); color: #ffffff; border: none; border-radius: 8px; padding: 14px;
+    font-size: 13px; font-weight: 700; text-decoration: none; text-align: center; display: inline-flex;
+    justify-content: center; align-items: center; gap: 8px; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .gk-tracking-widget .gk-btn-details:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+  .gk-tracking-widget .gk-17track-box { margin: 18px 0; border: 1px solid var(--gk-border); border-radius: 10px; overflow: hidden; min-height: 60px; }
+  .gk-tracking-widget .gk-note { background: #f8fafc; border: 1px solid var(--gk-border); border-radius: 10px; padding: 18px; margin-bottom: 16px; font-size: 13px; color: var(--gk-text-muted); line-height: 1.6; }
+  .gk-tracking-widget .gk-note strong { color: var(--gk-text); }
+
+  .gk-tracking-widget .gk-btn-back {
+    width: 100%; background: #ffffff; color: var(--gk-text-muted); border: 1.5px solid var(--gk-border); border-radius: 50px;
+    padding: 14px 20px; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; justify-content: center;
+    align-items: center; gap: 8px; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 10px;
+  }
+  .gk-tracking-widget .gk-btn-back:hover { border-color: var(--gk-text); color: var(--gk-text); }
+
+  @keyframes gkFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 700px) {
+    .gk-tracking-widget .gk-widget-layout { flex-direction: column; gap: 24px; }
+    .gk-tracking-widget .gk-guide-panel { order: 2; }
+    .gk-tracking-widget .gk-form-panel { order: 1; }
+    .gk-tracking-widget .gk-support-buttons { flex-direction: column; }
+    .gk-tracking-widget .gk-btn-contact { justify-content: center; width: 100%; }
+  }
+</style>
+
+<script>
+  (function () {
+    var SVG_PLACED = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>';
+    var SVG_SHIPPED = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>';
+    var SVG_DELIVERED = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>';
+
+    function timeline(step1, step2, step3, progress) {
+      return '' +
+        '<div class="gk-timeline">' +
+          '<div class="gk-timeline-line"><div class="gk-timeline-progress" style="width:' + progress + ';"></div></div>' +
+          '<div class="gk-timeline-step ' + step1 + '"><div class="gk-timeline-icon">' + SVG_PLACED + '</div><div class="gk-timeline-label">Placed</div></div>' +
+          '<div class="gk-timeline-step ' + step2 + '"><div class="gk-timeline-icon">' + SVG_SHIPPED + '</div><div class="gk-timeline-label">Shipped</div></div>' +
+          '<div class="gk-timeline-step ' + step3 + '"><div class="gk-timeline-icon">' + SVG_DELIVERED + '</div><div class="gk-timeline-label">Delivered</div></div>' +
+        '</div>';
+    }
+
+    function load17track(code, containerId) {
+      function go() {
+        try {
+          window.YQV5.add({ YQ_ContainerId: containerId, YQ_Height: 560, YQ_Fc: "0", YQ_Lang: "en", YQ_Num: code });
+        } catch (e) {}
+      }
+      if (window.YQV5 && typeof window.YQV5.add === 'function') { go(); return; }
+      // load 17track external script once, then run
+      if (!document.getElementById('gk-17track-script')) {
+        var s = document.createElement('script');
+        s.id = 'gk-17track-script';
+        s.src = 'https://www.17track.net/externalcall.js';
+        document.body.appendChild(s);
+      }
+      var tries = 0;
+      var iv = setInterval(function () {
+        tries++;
+        if (window.YQV5 && typeof window.YQV5.add === 'function') { clearInterval(iv); go(); }
+        else if (tries > 40) { clearInterval(iv); }
+      }, 150);
+    }
+
+    window.handleGKTrack = function (event) {
+      event.preventDefault();
+      var input = document.getElementById('gkSearchInput').value.trim();
+      var btn = document.getElementById('gkBtnSubmit');
+      var btnText = document.getElementById('gkBtnText');
+      var btnSpinner = document.getElementById('gkBtnSpinner');
+      var errorText = document.getElementById('gkErrorText');
+      var result = document.getElementById('gkTrackingResult');
+
+      errorText.style.display = 'none';
+      result.style.display = 'none';
+      result.innerHTML = '';
+
+      if (!input) {
+        errorText.innerText = 'Please enter an order number or tracking code.';
+        errorText.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true; btnText.style.display = 'none'; btnSpinner.style.display = 'block';
+
+      // Order number (starts with # or only digits) cannot be tracked directly without the carrier code.
+      var clean = input.replace(/^#/, '');
+      var isOrderNumber = /^#/.test(input) || /^\d{1,8}$/.test(clean);
+
+      if (isOrderNumber) {
+        result.innerHTML =
+          '<div class="gk-result-card">' +
+            '<div class="gk-result-badge-container"><span class="gk-badge gk-badge-info">Order Confirmed</span></div>' +
+            '<h3 class="gk-order-title">#' + clean + '</h3>' +
+            '<div class="gk-result-divider"></div>' +
+            timeline('completed', 'active', 'pending', '0%') +
+            '<div class="gk-result-divider"></div>' +
+            '<div class="gk-note">Your order is confirmed and is being prepared. As soon as it ships, we email you a <strong>tracking code</strong>. Paste that code here to follow it in real time, or reach out and we will look it up for you.</div>' +
+            '<a href="{{CONTACT_URL}}" class="gk-btn-details"><span>Contact Support</span></a>' +
+            '<button type="button" class="gk-btn-back" onclick="resetGKTrackingForm()">Search Again</button>' +
+          '</div>';
+        document.getElementById('gkTrackingForm').style.display = 'none';
+        result.style.display = 'block';
+        btn.disabled = false; btnText.style.display = 'block'; btnSpinner.style.display = 'none';
+        return;
+      }
+
+      // Tracking code: has a code => already shipped. Delivered is confirmed by 17TRACK below.
+      var containerId = 'YQContainer';
+      var link17 = 'https://t.17track.net/en#nums=' + encodeURIComponent(input);
+      result.innerHTML =
+        '<div class="gk-result-card">' +
+          '<div class="gk-result-badge-container"><span class="gk-badge gk-badge-success">Shipped</span></div>' +
+          '<h3 class="gk-order-title">' + input.toUpperCase() + '</h3>' +
+          '<p class="gk-store-info">Live updates from the carrier.</p>' +
+          '<div class="gk-result-divider"></div>' +
+          timeline('completed', 'completed', 'active', '50%') +
+          '<div class="gk-result-divider"></div>' +
+          '<div id="' + containerId + '" class="gk-17track-box"></div>' +
+          '<a href="' + link17 + '" target="_blank" rel="noopener" class="gk-btn-details"><span>Verify on 17TRACK</span>' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>' +
+          '<button type="button" class="gk-btn-back" onclick="resetGKTrackingForm()">Search Again</button>' +
+        '</div>';
+      document.getElementById('gkTrackingForm').style.display = 'none';
+      result.style.display = 'block';
+      btn.disabled = false; btnText.style.display = 'block'; btnSpinner.style.display = 'none';
+      load17track(input, containerId);
+    };
+
+    window.resetGKTrackingForm = function () {
+      var result = document.getElementById('gkTrackingResult');
+      result.style.display = 'none';
+      result.innerHTML = '';
+      document.getElementById('gkTrackingForm').style.display = 'block';
+      document.getElementById('gkSearchInput').value = '';
+    };
+  })();
+</script>

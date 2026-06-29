@@ -1,0 +1,717 @@
+{{ 'section-collection-list.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+{{ 'component-tabs.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'section-tabs.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'slideshow-drag.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'slideshow-drag.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    --sliding-selector-unselected-text: {{ section.settings.unselected_tab_text_color }};
+    --sliding-selector-active-text: {{ section.settings.active_tab_text_color }};
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  /* Typography and Layout Fixes for Cards */
+  .collection-list__item .card__heading {
+    text-transform: capitalize !important;
+    letter-spacing: 0 !important;
+    font-size: 1.3rem !important; /* Smaller to fit better */
+    line-height: 1.2 !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    width: 100%;
+    /* Ensure text doesn't overflow ugly */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Reduce footer height (card content) - Much tighter */
+  .collection-list__item .card__content {
+    padding: 0.6rem 0.8rem !important; 
+  }
+
+  .collection-list__item .card__information {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  
+  /* Prevent cutting at bottom */
+  .collection-list__item {
+      padding-bottom: 0.4rem; 
+  }
+
+  .section-{{ section.id }}-padding .title-wrapper-with-link {
+    margin-top: 15px !important;
+  }
+
+  /* Better alignment for Mobile Sliders */
+  @media screen and (max-width: 749px) {
+    .section-{{ section.id }}-padding slider-component {
+       padding: 0 !important;
+    }
+    
+    .section-{{ section.id }}-padding .slider {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      width: 100% !important;
+      scroll-padding-left: 0 !important; 
+      scroll-padding-right: 0 !important;
+      scroll-snap-type: x mandatory; 
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      column-gap: var(--grid-mobile-horizontal-spacing) !important;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch !important;
+    }
+
+    .section-{{ section.id }}-padding .slider__slide {
+      flex-shrink: 0 !important;
+      scroll-snap-align: start;
+    }
+
+    .section-{{ section.id }}-padding slideshow-drag {
+      display: block !important;
+    }
+
+    .section-{{ section.id }}-padding .slider__slide:first-child {
+      margin-left: 0 !important;
+    }
+    
+    /* Ensure columns without the peek displacement and perfect centering */
+    .collection-list-wrapper .grid--2-col-tablet-down .grid__item {
+        width: calc(50% - var(--grid-mobile-horizontal-spacing) / 2) !important;
+        max-width: calc(50% - var(--grid-mobile-horizontal-spacing) / 2) !important;
+        scroll-snap-align: start !important;
+    }
+    .collection-list-wrapper .grid--1-col-tablet-down .grid__item {
+        width: 100% !important;
+        max-width: 100% !important;
+        scroll-snap-align: start !important;
+    }
+    .collection-list-wrapper .grid--3-col-tablet-down .grid__item {
+        width: calc(33.33% - var(--grid-mobile-horizontal-spacing) * 2 / 3) !important;
+        max-width: calc(33.33% - var(--grid-mobile-horizontal-spacing) * 2 / 3) !important;
+        scroll-snap-align: start !important;
+    }
+  }
+
+  .section-{{ section.id }}-padding .slider-buttons {
+    margin-top: 2rem !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    position: relative;
+    z-index: 2;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .section-{{ section.id }}-padding .slider-buttons {
+    margin-top: 0 !important; /* Was -3.5rem, moving down to increase space */
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    position: relative;
+    z-index: 2;
+  }
+
+  .section-{{ section.id }}-padding .slider {
+    margin-bottom: 0 !important;
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign columns_mobile_int = section.settings.columns_mobile | plus: 0
+-%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="collection-list-wrapper page-width isolate{% if section.settings.title == blank %} no-heading{% endif %} section-{{ section.id }}-padding">
+    <section-tabs>
+      {%- unless section.settings.title == blank -%}
+        <div class="title-wrapper-with-link" style="display: flex; align-items: {% if section.settings.header_alignment == 'left' %}flex-start{% elsif section.settings.header_alignment == 'right' %}flex-end{% else %}center{% endif %}; flex-direction: column; gap: 0; margin-bottom: 0; width: 100%;">
+          {%- if section.settings.title != blank -%}
+            <div class="{% if section.settings.header_style == 'with_line' %}section-header--with-line section-header--{{ section.settings.header_alignment }}{% endif %}">
+              <h2
+                id="SectionHeading-{{ section.id }}"
+                class="collection-list-title inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                style="margin-bottom: 0.2rem; text-align: {{ section.settings.header_alignment }};"
+              >
+                {{ section.settings.title }}
+              </h2>
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.description != blank -%}
+            <div class="collection__description {{ section.settings.description_style }} rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" style="margin-bottom: 0; margin-top: 0; text-align: {{ section.settings.header_alignment }};">
+              {{ section.settings.description -}}
+            </div>
+          {%- endif -%}
+
+          {%- liquid
+            assign total_tabs = 0
+            for block in section.blocks
+              if block.type == 'tab_header'
+                assign total_tabs = total_tabs | plus: 1
+              endif
+            endfor
+          -%}
+
+          {%- if total_tabs > 1 -%}
+            {%- comment -%} Tab Navigation {%- endcomment -%}
+            <div class="tabs-navigation tabs-navigation--{{ section.settings.header_alignment }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" role="tablist" style="margin-bottom: 0; margin-top: {% if section.settings.description == blank %}1.5rem{% else %}1.5rem{% endif %}; justify-content: {% if section.settings.header_alignment == 'left' %}flex-start{% elsif section.settings.header_alignment == 'right' %}flex-end{% else %}center{% endif %};">
+              {%- assign tab_index = 0 -%}
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'tab_header' -%}
+                  {%- assign tab_index = tab_index | plus: 1 -%}
+                  <button
+                    type="button"
+                    class="tabs-navigation__button{% if tab_index == 1 %} tabs-navigation__button--active{% endif %}"
+                    data-tab-button="{{ block.id }}"
+                    role="tab"
+                    aria-selected="{% if tab_index == 1 %}true{% else %}false{% endif %}"
+                    aria-controls="TabPanel-{{ block.id }}"
+                    {{ block.shopify_attributes }}
+                  >
+                    {{ block.settings.tab_label | default: 'Categoria' }}
+                  </button>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endunless -%}
+
+      {%- comment -%} Tab Panels {%- endcomment -%}
+      {%- assign current_tab_id = nil -%}
+      {%- assign tab_index = 0 -%}
+      {%- assign collections_in_tab = '' -%}
+      
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'tab_header' -%}
+          {%- comment -%} Close previous tab panel if exists {%- endcomment -%}
+          {%- if current_tab_id != nil -%}
+            {%- comment -%} We'll handle this differently - collect all collections first {%- endcomment -%}
+          {%- endif -%}
+          {%- assign current_tab_id = block.id -%}
+          {%- assign tab_index = tab_index | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- comment -%} Render tab panels by iterating through blocks {%- endcomment -%}
+      {%- assign current_tab_id = nil -%}
+      {%- assign tab_index = 0 -%}
+      {%- assign panel_open = false -%}
+      
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'tab_header' -%}
+          {%- if panel_open -%}
+                </ul>
+                {%- assign slider_id = 'Slider-' | append: section.id | append: '-' | append: tab_index -%}
+                {%- render 'scroll-progress-bar', target_id: slider_id -%}
+              </slideshow-drag>
+              {%- liquid
+                assign should_show_arrows = false
+                if show_desktop_slider and section.settings.show_desktop_arrows
+                  assign should_show_arrows = true
+                elsif show_mobile_slider and section.settings.show_mobile_arrows
+                  assign should_show_arrows = true
+                endif
+              -%}
+              {%- if should_show_arrows -%}
+                <div class="slider-buttons{% if show_desktop_slider and section.settings.show_desktop_arrows %} no-js-hidden{% endif %}">
+                    <button type="button" class="slider-button slider-button--prev" name="previous" aria-label="{{ 'general.slider.previous_slide' | t }}">
+                      <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                    </button>
+                    <div class="slider-counter caption">
+                      <span class="slider-counter--current">1</span>
+                      <span aria-hidden="true"> / </span>
+                      <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
+                      <span class="slider-counter--total">{{ collection_count }}</span>
+                    </div>
+                    <button type="button" class="slider-button slider-button--next" name="next" aria-label="{{ 'general.slider.next_slide' | t }}">
+                      <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                    </button>
+                  </div>
+                {%- endif -%}
+              </slider-component>
+            </div>
+          {%- endif -%}
+          
+          {%- assign tab_index = tab_index | plus: 1 -%}
+          {%- assign current_tab_id = block.id -%}
+          {%- assign collection_count = 0 -%}
+          
+          {%- comment -%} Count collections in this tab {%- endcomment -%}
+          {%- assign counting = true -%}
+          {%- for next_block in section.blocks offset: forloop.index -%}
+            {%- if next_block.type == 'tab_header' -%}
+              {%- break -%}
+            {%- elsif next_block.type == 'collection_item' -%}
+              {%- assign collection_count = collection_count | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+          
+          {%- assign show_mobile_slider = false -%}
+          {%- if section.settings.swipe_on_mobile and collection_count > columns_mobile_int -%}
+            {%- assign show_mobile_slider = true -%}
+          {%- endif -%}
+
+          {%- assign show_desktop_slider = false -%}
+          {%- if section.settings.enable_desktop_slider and collection_count > section.settings.columns_desktop -%}
+            {%- assign show_desktop_slider = true -%}
+          {%- endif -%}
+
+          <div
+            class="tabs-panel{% if tab_index == 1 %} tabs-panel--active{% endif %}"
+            data-tab-panel="{{ block.id }}"
+            id="TabPanel-{{ block.id }}"
+            role="tabpanel"
+            {% unless tab_index == 1 %}hidden{% endunless %}
+            {{ block.shopify_attributes }}
+          >
+            <slider-component class="{% if show_desktop_slider %} slider-component-desktop{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" style="padding: 0;">
+                <slideshow-drag>
+                  <ul
+                    class="collection-list contains-card contains-card--collection{% if settings.card_style == 'standard' %} contains-card--standard{% endif %} grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down{% if show_mobile_slider or show_desktop_slider %} slider slider--everywhere{% if show_mobile_slider %} slider--tablet{% endif %}{% endif %} collection-list--{{ section.blocks.size }}-items"
+                    id="Slider-{{ section.id }}-{{ tab_index }}"
+                    role="list"
+                  >
+                    {%- liquid
+                      assign columns = section.settings.columns_desktop
+                      if section.blocks.size < section.settings.columns_desktop
+                        assign columns = section.blocks.size
+                      endif
+                    -%}
+          {%- assign panel_open = true -%}
+          {%- assign item_index = 0 -%}
+          
+        {%- elsif block.type == 'collection_item' -%}
+          {%- assign item_index = item_index | plus: 1 -%}
+          {%- assign placeholder_image_index = item_index | modulo: 4 | plus: 1 -%}
+          {%- assign placeholder_image = 'collection-apparel-' | append: placeholder_image_index -%}
+          
+          <li
+            id="Slide-{{ section.id }}-{{ current_tab_id }}-{{ item_index }}"
+            class="collection-list__item grid__item{% if show_mobile_slider %} slider__slide{% endif %}{% if block.settings.collection.featured_image == nil %} collection-list__item--no-media{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            {{ block.shopify_attributes }}
+            {% if settings.animations_reveal_on_scroll %}
+              data-cascade
+              style="--animation-order: {{ item_index }};"
+            {% endif %}
+          >
+          {%- liquid
+            assign custom_team_image = block.settings.custom_image_url
+            if custom_team_image == blank
+              case block.settings.collection.handle
+              when 'flamengo' or 'mengao-collection'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/flamengo%20(2).avif'
+              when 'corinthians' or 'timao-collection'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/corinthians%20(1).png'
+              when 'cruzeiro' or 'cabuloso-collection'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/cruzeiro%20(2).avif'
+              when 'botafogo' or 'fogao-collection'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/fire%20(2).avif'
+              when 'fluminense' or 'fluzao-collection'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/fluzao%20(2).avif'
+              when 'gremio' or 'gremio-collection'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/gremio%20(2).avif'
+              when 'internacional' or 'colorado-collection'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/interr%20(2).avif'
+              when 'atletico-mineiro' or 'atletico-mineiro-1' or 'galo-collection'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/minerin%20(2).avif'
+              when 'palmeiras' or 'verdao-collection'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/palmeiras%20(2).avif'
+              when 'santos' or 'peixao-collection'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/sanney%20(2).avif'
+              when 'sao-paulo' or 'sao-paulo-fc'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/spfc%20(2).avif'
+              when 'vasco' or 'vasco-1' or 'vascao-collection'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/vasco%20(2).avif'
+              when 'argentina'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/argentina.webp'
+              when 'alemanha' or 'germany'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/alemanha%20(1).webp'
+              when 'brasil' or 'brazil'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/brasil.webp'
+              when 'colombia'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/colombia.webp'
+              when 'coreia-do-sul' or 'south-korea'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/coreia.webp'
+              when 'croacia' or 'croatia'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/croacia.webp'
+              when 'espanha' or 'spain'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/espanha.webp'
+              when 'franca' or 'france'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/franc%CC%A7a.webp'
+              when 'holanda' or 'netherlands'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/holanda.webp'
+              when 'inglaterra' or 'england'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/inglaterra.webp'
+              when 'italia' or 'italy'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/italia.webp'
+              when 'japao' or 'japan'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/japao.webp'
+              when 'mexico'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/mexico.webp'
+              when 'portugal'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/portugal.webp'
+              when 'uruguai' or 'uruguay'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/uruguai.webp'
+              when 'estados-unidos' or 'united-states' or 'usa'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/usa.webp'
+              when 'canada'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/canada.webp'
+              when 'belgica' or 'belgium'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/Belgica.png'
+              when 'paris-saint-germain' or 'psg'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/1.webp'
+              when 'barcelona'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/2.webp'
+              when 'real-madrid'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/3.webp'
+              when 'juventus'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/5.webp'
+              when 'bayern-de-munique' or 'bayern-munich' or 'bayern-munchen'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/6.webp'
+              when 'atletico-de-madrid' or 'atletico-madrid'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/7.webp'
+              when 'inter-de-milao' or 'inter-milan'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/8.webp'
+              when 'arsenal'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/9.webp'
+              when 'milan'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/10.webp'
+              when 'liverpool'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/12.webp'
+              when 'manchester-city' or 'manchester-city-1'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/13.webp'
+              when 'manchester-united'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/manutd.png'
+              when 'borussia-dortmund' or 'borussia-dortmund-1'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/17.webp'
+              when 'chelsea'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/zz.webp'
+              when 'lyon' or 'olympique-lyon'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/Lyon.png'
+              when 'olympique-de-marseille' or 'marseille'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/Marseille.png'
+              when 'monaco' or 'as-monaco'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/Monaco.png'
+              when 'valencia' or 'valencia-1'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/Valencia.png'
+              when 'sevilla'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/Sevilla.png'
+              when 'ajax'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/sssx.webp'
+              when 'tottenham' or 'tottenham-hotspur'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/a.webp'
+              when 'roma' or 'rome'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/k.webp'
+              when 'la-liga' or 'laliga'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20de%20Ligas/LaLiga.avif'
+              when 'premier-league'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20de%20Ligas/Premier%20League.avif'
+              when 'brasileirao' or 'brasileiros' or 'brazilian-championship'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20de%20Ligas/brasileirao.avif'
+              when 'bundesliga'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20de%20Ligas/bundesliga.avif'
+              when 'ligue-1'
+                assign custom_team_image = 'https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20de%20Ligas/ligue1.avif'
+              endcase
+            endif
+          -%}
+          {% render 'card-collection',
+            card_collection: block.settings.collection,
+            media_aspect_ratio: section.settings.image_ratio,
+            columns: section.settings.columns_desktop,
+            placeholder_image: placeholder_image,
+            custom_image: block.settings.image,
+            custom_image_url: custom_team_image
+          %}
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+      
+      {%- comment -%} Close last tab panel {%- endcomment -%}
+      {%- if panel_open -%}
+            </ul>
+            {%- assign slider_id = 'Slider-' | append: section.id | append: '-' | append: tab_index -%}
+            {%- render 'scroll-progress-bar', target_id: slider_id -%}
+          </slideshow-drag>
+            {%- liquid
+              assign should_show_arrows = false
+              if show_desktop_slider and section.settings.show_desktop_arrows
+                assign should_show_arrows = true
+              elsif show_mobile_slider and section.settings.show_mobile_arrows
+                assign should_show_arrows = true
+              endif
+            -%}
+            {%- if should_show_arrows -%}
+              <div class="slider-buttons{% if show_desktop_slider and section.settings.show_desktop_arrows %} no-js-hidden{% endif %}">
+                <button type="button" class="slider-button slider-button--prev" name="previous" aria-label="{{ 'general.slider.previous_slide' | t }}">
+                  <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                </button>
+                <button type="button" class="slider-button slider-button--next" name="next" aria-label="{{ 'general.slider.next_slide' | t }}">
+                  <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                </button>
+              </div>
+            {%- endif -%}
+          </slider-component>
+        </div>
+      {%- endif -%}
+    </section-tabs>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Coleções com Abas",
+  "tag": "section",
+  "class": "section section-collection-list",
+  "max_blocks": 50,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "header_style",
+      "label": "Estilo do Cabeçalho",
+      "options": [
+        { "value": "standard", "label": "Padrão" },
+        { "value": "with_line", "label": "Com Linha" }
+      ],
+      "default": "standard"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Encontre o seu time",
+      "label": "t:sections.collection-list.settings.title.label"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "t:sections.all.heading_size.options__1.label" },
+        { "value": "h1", "label": "t:sections.all.heading_size.options__2.label" },
+        { "value": "h0", "label": "t:sections.all.heading_size.options__3.label" },
+        { "value": "hxl", "label": "t:sections.all.heading_size.options__4.label" },
+        { "value": "hxxl", "label": "t:sections.all.heading_size.options__5.label" }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Descrição"
+    },
+    {
+      "type": "select",
+      "id": "description_style",
+      "label": "Estilo da descrição",
+      "options": [
+        { "value": "body", "label": "Corpo" },
+        { "value": "subtitle", "label": "Subtítulo" },
+        { "value": "uppercase", "label": "Maiúsculo" }
+      ],
+      "default": "body"
+    },
+    {
+      "type": "select",
+      "id": "header_alignment",
+      "label": "Alinhamento do Cabeçalho",
+      "options": [
+        { "value": "left", "label": "Esquerda" },
+        { "value": "center", "label": "Centro" },
+        { "value": "right", "label": "Direita" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.collection-list.settings.header_layout.content"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        { "value": "adapt", "label": "t:sections.collection-list.settings.image_ratio.options__1.label" },
+        { "value": "portrait", "label": "t:sections.collection-list.settings.image_ratio.options__2.label" },
+        { "value": "square", "label": "t:sections.collection-list.settings.image_ratio.options__3.label" }
+      ],
+      "default": "square",
+      "label": "t:sections.collection-list.settings.image_ratio.label"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 6,
+      "label": "Colunas no desktop",
+      "info": "No mobile com carrossel, exibe 2 coleções por padrão"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_desktop_slider",
+      "label": "Habilitar carrossel no desktop",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "info": "t:sections.all.colors.has_cards_info",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.collection-list.settings.header_mobile.content"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        { "value": "1", "label": "t:sections.collection-list.settings.columns_mobile.options__1.label" },
+        { "value": "2", "label": "t:sections.collection-list.settings.columns_mobile.options__2.label" },
+        { "value": "3", "label": "3 Colunas" }
+      ],
+      "default": "2",
+      "label": "t:sections.collection-list.settings.columns_mobile.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "swipe_on_mobile",
+      "default": true,
+      "label": "t:sections.collection-list.settings.swipe_on_mobile.label"
+    },
+    {
+      "type": "header",
+      "content": "Setas de Navegação"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_desktop_arrows",
+      "label": "Mostrar setas no desktop",
+      "default": true,
+      "info": "Exibe botões de navegação no desktop para sliders com múltiplos itens"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mobile_arrows",
+      "label": "Mostrar setas no mobile",
+      "default": false,
+      "info": "Exibe botões de navegação no mobile para sliders com múltiplos itens"
+    },
+    {
+      "type": "header",
+      "content": "Cores das Abas"
+    },
+    {
+      "type": "color",
+      "id": "unselected_tab_text_color",
+      "label": "Cor do Texto (Não Selecionado)",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "active_tab_text_color",
+      "label": "Cor do Texto (Selecionado)",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab_header",
+      "name": "Aba (Categoria)",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_label",
+          "label": "Título da Aba",
+          "default": "Categoria"
+        }
+      ]
+    },
+    {
+      "type": "collection_item",
+      "name": "Coleção",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "t:sections.collection-list.blocks.featured_collection.settings.collection.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagem Personalizada",
+          "info": "Selecione uma imagem para substituir a foto padrão da coleção"
+        },
+        {
+          "type": "text",
+          "id": "custom_image_url",
+          "label": "URL da Imagem Personalizada",
+          "info": "Aceita links externos (AVIF, WEBP, PNG). Deixe em branco para usar o logo padrão ou hardcodado."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Coleções com Abas",
+      "blocks": [
+        { "type": "tab_header", "settings": { "tab_label": "Seleções" } },
+        { "type": "collection_item" },
+        { "type": "collection_item" },
+        { "type": "collection_item" },
+        { "type": "tab_header", "settings": { "tab_label": "Clubes Brasileiros" } },
+        { "type": "collection_item" },
+        { "type": "collection_item" },
+        { "type": "collection_item" }
+      ]
+    }
+  ]
+}
+{% endschema %}

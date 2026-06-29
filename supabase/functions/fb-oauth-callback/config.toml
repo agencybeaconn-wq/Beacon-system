@@ -1,0 +1,4 @@
+# Disable JWT verification for this function
+# This is needed because Facebook redirects here without an Authorization header
+[functions.fb-oauth-callback]
+verify_jwt = false

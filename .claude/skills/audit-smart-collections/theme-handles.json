@@ -1,0 +1,52 @@
+{
+  "_comment": "Handles de coleções referenciados pelo tema Lever em templates/index.json e sections/collection-list-tabs.liquid. A skill audit-smart-collections usa isso pra garantir que cada handle tenha coleção existente, publicada e com produtos. Derivado de themes/lever-br/ e themes/lever-en/ em 2026-04-17.",
+  "br": {
+    "teams_br": [
+      "flamengo", "palmeiras", "corinthians", "sao-paulo", "santos",
+      "cruzeiro", "atletico-mineiro", "botafogo", "fluminense",
+      "internacional", "gremio", "vasco"
+    ],
+    "teams_intl": [
+      "real-madrid", "barcelona", "atletico-de-madrid", "juventus",
+      "bayern-de-munique", "inter-de-milao", "milan", "psg", "liverpool",
+      "arsenal", "manchester-united", "manchester-city", "tottenham",
+      "chelsea"
+    ],
+    "national": [
+      "brasil", "argentina", "alemanha", "colombia", "croacia",
+      "inglaterra", "italia", "franca", "espanha", "estados-unidos",
+      "japao", "holanda", "mexico", "portugal", "uruguai"
+    ],
+    "leagues": [
+      "brasileirao", "premier-league", "la-liga", "ligue-1",
+      "serie-a", "bundesliga", "portugal"
+    ],
+    "categories": [
+      "masculino", "feminina-brasil", "feminino", "infantil",
+      "infantil-selecao", "conjuntos-infantis",
+      "conjuntos-infantis-internacionais", "retro", "lancamentos"
+    ]
+  },
+  "en": {
+    "teams_intl": [
+      "arsenal", "manchester-city", "manchester-united", "chelsea",
+      "liverpool", "tottenham", "newcastle", "everton",
+      "barcelona", "real-madrid", "atletico-madrid", "sevilla",
+      "valencia", "real-betis",
+      "inter-milan", "milan", "juventus",
+      "psg", "lyon", "olympique-de-marseille",
+      "bayern-munchen", "borussia-dortmund"
+    ],
+    "national": [
+      "argentina", "brazil", "portugal", "france", "colombia",
+      "germany", "spain", "england", "italy", "mexico",
+      "united-states", "uruguay", "croatia", "belgium", "japan",
+      "netherlands"
+    ],
+    "categories": [
+      "national-teams", "retro", "kids-sets", "kids-kit",
+      "2026-27-jerseys", "europe-teams", "new-arrivals",
+      "destaques-europeus", "brazilian-league"
+    ]
+  }
+}

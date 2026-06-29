@@ -1,0 +1,148 @@
+# BLOCK: Patch as Line Item Property JS
+
+## META
+- **Origem:** TG Jerseys / LEVER EVER TG JERSEYS (theme 157588324582)
+- **Data:** 2026-04-08
+- **Store:** store-tg-jersey.myshopify.com
+
+## O QUE FAZ
+Quando o cliente seleciona patches (escudos, bandeiras, etc.) no drawer de personalizacao e confirma, o sistema captura quais patches foram escolhidos e os envia como propriedades do item no carrinho. O cliente ve "Patches: Champions League, La Liga" no carrinho, e no admin aparecem tambem as URLs das imagens, precos individuais e IDs das variantes de cada patch. Isso permite que os patches sejam rastreados no pedido sem serem itens separados no carrinho.
+
+## ONDE INSERIR
+- **Arquivo alvo:** `snippets/customization-inputs.liquid`
+- **Posicao:** Dentro da funcao `initCustomizationSystem()`, na area de JavaScript
+- **Como encontrar:** Procurar por `initCustomizationSystem` ou pelo handler do botao de confirmacao (`.customization-drawer__confirm`). A funcao `getSelectedPatches()` deve ser global (window) e a funcao `addToCartWithPatches()` e chamada pelo click handler do botao confirm.
+
+## DEPENDE DE
+- UI de patches renderizada no drawer de personalizacao (radio inputs com classe `.patch-radio`)
+- Container com ID que comeca com `dynamic-patches-container-`
+- Cada radio deve ter `value="Name|PriceCents|VariantId"` (pipe-separated)
+- Cada `.patch-item` deve conter um `.patch-thumb` (tag `<img>`) para capturar a URL da imagem
+
+## CONTEXTO PARA O CLAUDE QUE VAI RECEBER
+Este bloco implementa o padrao "patches as properties" — em vez de adicionar patches como itens separados no carrinho, eles vao como propriedades do item principal (a camisa).
+
+**Funcao global `window.getSelectedPatches()`:**
+- Procura o container `[id^="dynamic-patches-container-"]`
+- Le todos os `.patch-radio` que estao `checked`
+- Faz split do `value` por `|` para extrair name, price (centavos), variantId
+- Pega a URL da imagem do `.patch-thumb` mais proximo
+- Retorna array de objetos `{ name, price, variantId, image }`
+
+**Funcao `addToCartWithPatches(productForm, finalVariantId, quantity)`:**
+1. Coleta propriedades do formulario principal (`FormData`)
+2. Coleta inputs remotos que usam `form="..."` attribute (inputs do drawer que apontam para o form do produto)
+3. Chama `getSelectedPatches()` e monta as propriedades:
+   - `Patches` (visivel): nomes separados por virgula — aparece no carrinho e checkout
+   - `_patch_images` (oculto): URLs separadas por `|`
+   - `_patch_prices` (oculto): precos em centavos separados por `|`
+   - `_patch_variant_ids` (oculto): IDs de variante separados por `|`
+   - `_patch_total_cents` (oculto): soma total dos precos dos patches
+4. Faz POST para `/cart/add.js` com `Content-Type: application/json`
+
+**O que pode dar errado:**
+- Se o tema alvo nao tem UI de patches (radios com `.patch-radio`), `getSelectedPatches()` retorna array vazio — sem erro, mas sem patches.
+- O `form="${productFormId}"` e crucial: inputs do drawer de personalizacao precisam do atributo `form` apontando para o ID do form do produto. Sem isso, as propriedades Nome/Numero nao sao capturadas.
+- O nome das propriedades (`Nome`, `Numero`, `Patches`) e fixo. Para lojas em ingles, pode ser necessario adaptar para `Name`, `Number`.
+- A propriedade `_pairing_id` nao e gerada NESTE bloco — ela e gerada em outro lugar do sistema de customizacao para parear jersey + patches.
+
+## CODIGO DE REFERENCIA
+
+```javascript
+// -- getSelectedPatches() — global function --
+// Called by the confirm button to read which patches are selected.
+// Each patch radio has value="Name|PriceCents|VariantId"
+window.getSelectedPatches = function() {
+  const dynamicContainer = document.querySelector('[id^="dynamic-patches-container-"]');
+  if (!dynamicContainer) return [];
+  const selected = [];
+  const patchRadios = dynamicContainer.querySelectorAll('.patch-radio');
+
+  patchRadios.forEach(radio => {
+    if (radio.checked && radio.value) {
+      const parts = radio.value.split('|');
+      if (parts.length >= 3) {
+        const [name, price, variantId] = parts;
+        selected.push({
+          name: name,
+          price: parseInt(price, 10),
+          variantId: variantId,
+          image: radio.closest('.patch-item')?.querySelector('.patch-thumb')?.src || ''
+        });
+      }
+    }
+  });
+  return selected;
+};
+
+// -- Add-to-cart logic (inside confirm button handler) --
+// Collects form data, gets patches, and sends everything as properties.
+async function addToCartWithPatches(productForm, finalVariantId, quantity) {
+  const formData = new FormData(productForm);
+  const properties = {};
+
+  // 1. Get properties from main form
+  for (const [key, value] of formData.entries()) {
+    if (key.startsWith('properties[') && value) {
+      const propName = key.replace('properties[', '').replace(']', '');
+      properties[propName] = value;
+    }
+  }
+
+  // 2. Capture inputs associated with the form (drawer inputs use form= attribute)
+  const formId = productForm.id;
+  const remoteInputs = document.querySelectorAll(`[form="${formId}"]`);
+  remoteInputs.forEach(input => {
+    if (input.name.startsWith('properties[') && input.value) {
+      const propName = input.name.replace('properties[', '').replace(']', '');
+      properties[propName] = input.value;
+    }
+  });
+
+  // 3. Get selected patches and add as properties
+  const selectedPatches = typeof window.getSelectedPatches === 'function'
+    ? window.getSelectedPatches()
+    : [];
+
+  if (selectedPatches.length > 0) {
+    const patchNames = selectedPatches.map(p => p.name);
+    const patchImages = selectedPatches.map(p => p.image || '');
+    const patchPrices = selectedPatches.map(p => p.price || 0);
+    const patchVariantIds = selectedPatches.map(p => p.variantId || '');
+
+    // Visible property: shows in cart and checkout
+    properties['Patches'] = patchNames.join(', ');
+
+    // Hidden properties (underscore prefix): available in admin/code only
+    properties['_patch_images'] = patchImages.join('|');
+    properties['_patch_prices'] = patchPrices.join('|');
+    properties['_patch_variant_ids'] = patchVariantIds.join('|');
+    properties['_patch_total_cents'] = String(patchPrices.reduce((sum, p) => sum + p, 0));
+  }
+
+  // 4. Build cart items array and POST
+  const cartItems = [{
+    id: finalVariantId,
+    quantity: parseInt(quantity),
+    properties: properties
+  }];
+
+  const response = await fetch(window.Shopify.routes.root + 'cart/add.js', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ items: cartItems })
+  });
+
+  return response;
+}
+```
+
+## COMO VALIDAR
+- [ ] Abrir drawer de personalizacao, selecionar patches, confirmar — item adicionado ao carrinho
+- [ ] No carrinho, propriedade "Patches" aparece com nomes dos patches selecionados
+- [ ] Propriedades com `_` (como `_patch_images`) NAO aparecem no carrinho visualmente
+- [ ] No admin do Shopify (pedido), as propriedades ocultas estao presentes
+- [ ] Adicionar item SEM patches — propriedade "Patches" nao aparece
+- [ ] Nome e Numero digitados no drawer aparecem como propriedades no carrinho
+- [ ] Console do navegador nao mostra erros de JS durante o fluxo
+- [ ] Testar com 0, 1, 2 e 3 patches selecionados

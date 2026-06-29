@@ -1,0 +1,815 @@
+{% comment %}
+  Renders cart drawer
+
+  Usage:
+  {% render 'cart-drawer' %}
+{% endcomment %}
+
+{{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'cart-progress-bar.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'cart-progress-bar.js' | asset_url }}" defer="defer"></script>
+
+<style>
+  .drawer {
+    visibility: hidden;
+  }
+</style>
+
+<cart-drawer class="drawer{% if cart == empty %} is-empty{% endif %}">
+  <div id="CartDrawer" class="cart-drawer">
+    <div id="CartDrawer-Overlay" class="cart-drawer__overlay"></div>
+    <div
+      class="drawer__inner color-{{ settings.cart_color_scheme }}"
+      role="dialog"
+      aria-modal="true"
+      aria-label="{{ 'sections.cart.title' | t }}"
+      tabindex="-1"
+    >
+      {%- if cart == empty -%}
+        <div class="drawer__inner-empty">
+          <div class="cart-drawer__warnings center{% if settings.cart_drawer_collection != blank %} cart-drawer__warnings--has-collection{% endif %}">
+            <div class="cart-drawer__empty-content">
+              <h2 class="cart__empty-text">Seu carrinho está vazio</h2>
+              <button
+                class="drawer__close"
+                type="button"
+                onclick="this.closest('cart-drawer').close()"
+                aria-label="{{ 'accessibility.close' | t }}"
+              >
+                <span class="svg-wrapper">
+                  {{- 'icon-close.svg' | inline_asset_content -}}
+                </span>
+              </button>
+              <a href="{{ routes.root_url }}" class="button empty-cart-button">
+                CONTINUAR COMPRANDO
+              </a>
+
+              {%- if shop.customer_accounts_enabled and customer == null -%}
+                <p class="cart__login-title h3">{{ 'sections.cart.login.title' | t }}</p>
+                <p class="cart__login-paragraph">
+                  {{ 'sections.cart.login.paragraph_html' | t: link: routes.account_login_url }}
+                </p>
+              {%- endif -%}
+            </div>
+          </div>
+          {%- if settings.cart_drawer_collection != blank -%}
+            <div class="cart-drawer__collection">
+              {% render 'card-collection', card_collection: settings.cart_drawer_collection, columns: 1 %}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      <div class="drawer__header">
+        <h2 class="drawer__heading">{{ 'sections.cart.title' | t }}</h2>
+        <button
+          class="drawer__close"
+          type="button"
+          onclick="this.closest('cart-drawer').close()"
+          aria-label="{{ 'accessibility.close' | t }}"
+        >
+          <span class="svg-wrapper">
+            {{- 'icon-close.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      </div>
+      <cart-drawer-items
+        {% if cart == empty %}
+          class=" is-empty"
+        {% endif %}
+      >
+        <form
+          action="{{ routes.cart_url }}"
+          id="CartDrawer-Form"
+          class="cart__contents cart-drawer__form"
+          method="post"
+        >
+          <div id="CartDrawer-CartItems" class="drawer__contents js-contents">
+            {% render 'cart-progress-bar' %}
+
+            {%- comment -%} BANNER: Voce ganhou Frete Gratis (aparece quando ha itens no carrinho) {%- endcomment -%}
+            {%- if cart.item_count > 0 -%}
+              <div style="
+                background-color: #dcfce7;
+                border-radius: 8px;
+                padding: 1rem 1.4rem;
+                margin: 1rem 0;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0.8rem;
+              ">
+                <div style="display: flex; align-items: center; gap: 0.8rem; color: #15803d; font-weight: 600; font-size: 1.4rem;">
+                  
+                  <span>Você ganhou <strong>Frete Grátis</strong></span>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0; color:#15803d;">
+                  <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            {%- endif -%}
+
+            {%- comment -%} BANNER: Voce ganhou um chaveiro de brinde (aparece quando Leve 5 Pague 3 ativa) {%- endcomment -%}
+            {%- liquid
+              assign chaveiro_shirt_count = 0
+              for item in cart.items
+                assign is_patch_for_chaveiro = false
+                if item.properties['Posição'] != blank or item.product.title contains 'Patch'
+                  assign is_patch_for_chaveiro = true
+                endif
+                unless is_patch_for_chaveiro
+                  assign chaveiro_shirt_count = chaveiro_shirt_count | plus: item.quantity
+                endunless
+              endfor
+            -%}
+            {%- if chaveiro_shirt_count >= 5 -%}
+              <div style="
+                background-color: #dcfce7;
+                border-radius: 8px;
+                padding: 1rem 1.4rem;
+                margin: 1rem 0;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0.8rem;
+              ">
+                <div style="display: flex; align-items: center; gap: 0.8rem; color: #15803d; font-weight: 600; font-size: 1.4rem;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+                    <path d="M20 12V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M22 7H2V12H22V7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 22V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 7H7.5C6.11929 7 5 5.88071 5 4.5C5 3.11929 6.11929 2 7.5 2C9.5 2 12 5 12 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 7H16.5C17.8807 7 19 5.88071 19 4.5C19 3.11929 17.8807 2 16.5 2C14.5 2 12 5 12 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span>Você ganhou um <strong>chaveiro de brinde</strong></span>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0; color:#15803d;">
+                  <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            {%- endif -%}
+
+            {%- if cart != empty -%}
+              <div class="drawer__cart-items-wrapper">
+                <table class="cart-items" role="table">
+                  <thead role="rowgroup">
+                    <tr role="row">
+                      <th id="CartDrawer-ColumnProductImage" role="columnheader">
+                        <span class="visually-hidden">{{ 'sections.cart.headings.image' | t }}</span>
+                      </th>
+                      <th
+                        id="CartDrawer-ColumnProduct"
+                        class="caption-with-letter-spacing"
+                        scope="col"
+                        role="columnheader"
+                      >
+                        {{ 'sections.cart.headings.product' | t }}
+                      </th>
+                      <th id="CartDrawer-ColumnQuantity" role="columnheader" class="right">
+                        <span class="visually-hidden">{{ 'sections.cart.headings.quantity' | t }}</span>
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody role="rowgroup">
+            {%- liquid
+              assign total_savings = 0
+            -%}
+            {%- for item in cart.items -%}
+              {%- liquid
+                assign is_patch = false
+                if item.properties['Posição'] != blank or item.product.title contains 'Patch'
+                  assign is_patch = true
+                endif
+
+                assign is_personalized = false
+                if item.properties['_pairing_id'] != blank
+                  assign is_personalized = true
+                endif
+
+                # Calculate savings for this item
+                assign item_compare_at = item.variant.compare_at_price
+                if item_compare_at == blank or item_compare_at <= item.final_price
+                  assign item_compare_at = item.original_price
+                endif
+                assign item_savings = item_compare_at | minus: item.final_price | times: item.quantity
+                assign total_savings = total_savings | plus: item_savings
+              -%}
+                        <tr
+                          id="CartDrawer-Item-{{ item.index | plus: 1 }}"
+                          class="cart-item{% if is_patch %} cart-item--patch{% endif %}{% if is_personalized and is_patch == false %} cart-item--parent{% endif %}{% if item.parent_relationship.parent != null %} cart-item__nested-line{% endif %}"
+                          role="row"
+                          data-pairing-id="{{ item.properties._pairing_id }}"
+                          data-item-title="{{ item.product.title | escape }}"
+                          data-is-patch="{{ is_patch }}"
+                          {% if item.parent_relationship.parent != null %}
+                            aria-label="{{- 'products.product.nested_label' | t: title: item.product.title, parent_title: item.parent_relationship.parent.title | escape -}}"
+                          {% endif %}
+                        >
+                        <td
+                          class="cart-item__media"
+                          role="cell"
+                          headers="CartDrawer-ColumnProductImage"
+                        >
+                          {% if item.image %}
+                            <a href="{{ item.url }}" class="cart-item__link" tabindex="-1" aria-hidden="true">
+                              <img
+                                class="cart-item__image"
+                                src="{{ item.image | image_url: width: 300 }}"
+                                alt="{{ item.image.alt | escape }}"
+                                loading="lazy"
+                                width="150"
+                                height="{{ 150 | divided_by: item.image.aspect_ratio | ceil }}"
+                              >
+                            </a>
+                          {% endif %}
+                        </td>
+
+                        <td class="cart-item__details" role="cell" headers="CartDrawer-ColumnProduct">
+                          {%- if settings.show_vendor -%}
+                            <p class="caption-with-letter-spacing light">{{ item.product.vendor }}</p>
+                          {%- endif -%}
+
+                          <a href="{{ item.url }}" class="cart-item__name h4 break">
+                            {{- item.product.title | escape -}}
+                          </a>
+                          {%- if item.product.tags contains 'kit-casal' -%}
+                            <span class="kit-casal-tag">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                              <span>KIT CASAL</span>
+                            </span>
+                            <style>
+                              .kit-casal-tag { display: inline-flex; align-items: center; gap: 0.4rem; background: linear-gradient(135deg, #dbeafe 0%, #fce7f3 100%); color: #6b21a8; font-size: 1.1rem; font-weight: 700; padding: 0.35rem 0.8rem; border-radius: 8px; letter-spacing: 0.02em; margin-top: 0.4rem; white-space: nowrap; width: fit-content; }
+                              .kit-casal-tag svg { flex-shrink: 0; }
+                            </style>
+                          {%- endif -%}
+
+                          <div class="cart-item__price-row">
+                            {%- assign item_compare_at = item.variant.compare_at_price -%}
+                            {%- if item_compare_at > item.final_price or item.original_price != item.final_price -%}
+                              <div class="cart-item__discounted-prices">
+                                <strong class="cart-item__final-price product-option">
+                                  {{ item.final_price | money | replace: ' ', '' }}
+                                </strong>
+                                <span class="visually-hidden">
+                                  {{ 'products.product.price.regular_price' | t }}
+                                </span>
+                                <s class="cart-item__old-price product-option">
+                                  {%- if item_compare_at > item.final_price -%}
+                                    {{- item_compare_at | money | replace: ' ', '' -}}
+                                  {%- else -%}
+                                    {{- item.original_price | money | replace: ' ', '' -}}
+                                  {%- endif -%}
+                                </s>
+                              </div>
+                            {%- else -%}
+                              <div class="product-option cart-item__final-price">
+                                {{ item.original_price | money | replace: ' ', '' }}
+                              </div>
+                            {%- endif -%}
+                            <cart-remove-button
+                              id="CartDrawer-Remove-{{ item.index | plus: 1 }}"
+                              data-index="{{ item.index | plus: 1 }}"
+                            >
+                              <button
+                                type="button"
+                                class="button button--tertiary cart-remove-button"
+                                aria-label="{{ 'sections.cart.remove_title' | t: title: item.title | escape }}"
+                                data-variant-id="{{ item.variant.id }}"
+                              >
+                                <span class="svg-wrapper">
+                                  {{- 'icon-remove.svg' | inline_asset_content -}}
+                                </span>
+                              </button>
+                            </cart-remove-button>
+                          </div>
+
+                          {%- if item.product.has_only_default_variant == false
+                            or item.properties.size != 0
+                            or item.selling_plan_allocation != null
+                            or item.quantity > 0
+                          -%}
+                            {%- if item.product.tags contains 'kit-casal' -%}
+                              {%- liquid
+                                assign tam_masc = ''
+                                assign tam_fem = ''
+                                for option in item.options_with_values
+                                  case option.name
+                                    when 'Tamanho Masculino'
+                                      assign tam_masc = option.value
+                                    when 'Tamanho Feminino'
+                                      assign tam_fem = option.value
+                                    when 'Tamanho'
+                                      assign tam_combined = option.value | strip
+                                      assign tam_parts = tam_combined | split: '/'
+                                      if tam_parts.size >= 2
+                                        assign tam_masc = tam_parts[0] | strip
+                                        assign tam_fem = tam_parts[1] | strip
+                                      endif
+                                  endcase
+                                endfor
+                                assign nome_masc = item.properties['Nome Masculino']
+                                assign num_masc  = item.properties['Número Masculino']
+                                assign nome_fem  = item.properties['Nome Feminino']
+                                assign num_fem   = item.properties['Número Feminino']
+                              -%}
+                              <div class="kit-casal-cart-grid">
+                                <div class="kit-casal-cart-col">
+                                  <p class="kit-casal-cart-title">Camisa Masculina</p>
+                                  <dl class="cart-item__properties">
+                                    <div class="product-option"><dt>Tamanho:</dt><dd>{{ tam_masc }} <span style="color:#999;font-weight:400;margin-left:0.4rem;">| Qtd: 1</span></dd></div>
+                                    <div class="product-option"><dt>Personalização:</dt><dd>
+                                      {%- if nome_masc != blank or num_masc != blank -%}
+                                        {{ nome_masc }}{% if num_masc != blank %} {{ num_masc }}{% endif %}
+                                      {%- else -%}Não{%- endif -%}
+                                    </dd></div>
+                                  </dl>
+                                </div>
+                                <div class="kit-casal-cart-col">
+                                  <p class="kit-casal-cart-title">Camisa Feminina</p>
+                                  <dl class="cart-item__properties">
+                                    <div class="product-option"><dt>Tamanho:</dt><dd>{{ tam_fem }} <span style="color:#999;font-weight:400;margin-left:0.4rem;">| Qtd: 1</span></dd></div>
+                                    <div class="product-option"><dt>Personalização:</dt><dd>
+                                      {%- if nome_fem != blank or num_fem != blank -%}
+                                        {{ nome_fem }}{% if num_fem != blank %} {{ num_fem }}{% endif %}
+                                      {%- else -%}Não{%- endif -%}
+                                    </dd></div>
+                                  </dl>
+                                </div>
+                              </div>
+                              <style>
+                                .kit-casal-cart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid #eee; border-radius: 0.6rem; overflow: hidden; margin-top: 0.4rem; }
+                                .kit-casal-cart-col { padding: 0.8rem 1rem; }
+                                .kit-casal-cart-col + .kit-casal-cart-col { border-left: 1px solid #eee; }
+                                .kit-casal-cart-title { font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: #111; margin: 0 0 0.4rem; }
+                                .kit-casal-cart-grid .cart-item__properties { margin: 0; padding: 0; }
+                                .kit-casal-cart-grid .product-option { font-size: 1.15rem; line-height: 1.35; margin: 0.15rem 0; }
+                                .kit-casal-cart-grid .product-option dt { display: inline; color: #666; font-weight: 500; }
+                                .kit-casal-cart-grid .product-option dd { display: inline; margin-left: 0.3rem; color: #111; font-weight: 600; }
+                              </style>
+                            {%- else -%}
+                            <dl class="cart-item__properties">
+                              <div class="product-option quantity-line">
+                                <dt>Quantidade:</dt>
+                                <dd>{{ item.quantity }}</dd>
+                              </div>
+
+                              {%- if item.product.has_only_default_variant == false -%}
+                                {%- for option in item.options_with_values -%}
+                                  <div class="product-option">
+                                    <dt>{{ option.name }}:</dt>
+                                    <dd>
+                                      {{ option.value -}}
+                                      {%- unless forloop.last %}, {% endunless %}
+                                    </dd>
+                                  </div>
+                                {%- endfor -%}
+                              {%- endif -%}
+
+                              {%- for property in item.properties -%}
+                                {%- assign property_first_char = property.first | slice: 0 -%}
+                                {%- if property.last != blank and property_first_char != '_' -%}
+                                  <div class="product-option">
+                                    <dt>{{ property.first }}:</dt>
+                                    <dd>
+                                      {%- if property.last contains '/uploads/' -%}
+                                        <a
+                                          href="{{ property.last }}"
+                                          class="link"
+                                          target="_blank"
+                                          aria-describedby="a11y-new-window-message"
+                                        >
+                                          {{ property.last | split: '/' | last }}
+                                        </a>
+                                      {%- else -%}
+                                        {{ property.last }}
+                                      {%- endif -%}
+                                    </dd>
+                                  </div>
+                                {%- endif -%}
+                              {%- endfor -%}
+                            </dl>
+
+                            <p class="product-option">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+                            {%- endif -%}
+                          {%- endif -%}
+
+                          <ul
+                            class="discounts list-unstyled"
+                            role="list"
+                            aria-label="{{ 'customer.order.discount' | t }}"
+                          >
+                            {%- for discount in item.line_level_discount_allocations -%}
+                              <li class="discounts__discount">
+                                {{- 'icon-discount.svg' | inline_asset_content -}}
+                                {{ discount.discount_application.title }}
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        </td>
+
+
+                        {%- liquid
+                          assign has_qty_rules = false
+                          if item.variant.quantity_rule.increment > 1 or item.variant.quantity_rule.min > 1 or item.variant.quantity_rule.max != null
+                            assign has_qty_rules = true
+                          endif
+
+                          assign has_vol_pricing = false
+                          if item.variant.quantity_price_breaks.size > 0
+                            assign has_vol_pricing = true
+                          endif
+                        -%}
+                        <td
+                          class="cart-item__quantity-hidden"
+                          role="cell"
+                          headers="CartDrawer-ColumnQuantity"
+                          style="display: none;"
+                        >
+                          <input type="hidden" name="updates[]" value="{{ item.quantity }}" data-index="{{ item.index | plus: 1 }}">
+                          <div
+                            id="CartDrawer-LineItemError-{{ item.index | plus: 1 }}"
+                            class="cart-item__error"
+                            role="alert"
+                          >
+                            <small class="cart-item__error-text"></small>
+                            <span class="svg-wrapper">
+                              {{- 'icon-error.svg' | inline_asset_content -}}
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    {%- endfor -%}
+                  </tbody>
+                </table>
+              </div>
+            {%- endif -%}
+            <p id="CartDrawer-LiveRegionText" class="visually-hidden" role="status"></p>
+            <p id="CartDrawer-LineItemStatus" class="visually-hidden" aria-hidden="true" role="status">
+              {{ 'accessibility.loading' | t }}
+            </p>
+          </div>
+          <div id="CartDrawer-CartErrors" role="alert"></div>
+        </form>
+      </cart-drawer-items>
+      <div class="drawer__footer">
+        {%- if settings.show_cart_note -%}
+          <details id="Details-CartDrawer">
+            <summary>
+              <span class="summary__title">
+                {{ 'sections.cart.note' | t }}
+                {{- 'icon-caret.svg' | inline_asset_content -}}
+              </span>
+            </summary>
+            <cart-note class="cart__note field">
+              <label class="visually-hidden" for="CartDrawer-Note">{{ 'sections.cart.note' | t }}</label>
+              <textarea
+                id="CartDrawer-Note"
+                class="text-area text-area--resize-vertical field__input"
+                name="note"
+                placeholder="{{ 'sections.cart.note' | t }}"
+              >{{ cart.note }}</textarea>
+            </cart-note>
+          </details>
+        {%- endif -%}
+
+        <!-- Start blocks -->
+        <!-- Subtotals -->
+
+        <div class="cart-drawer__footer" {{ block.shopify_attributes }}>
+          <div>
+            <!-- ============================================ -->
+            <!-- SUBTOTAL (preço original antes dos descontos) -->
+            <!-- ============================================ -->
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0;">
+              <span style="font-weight: 600; font-size: 1.5rem; color: rgba(var(--color-foreground), 0.75);">Subtotal</span>
+              <span style="font-weight: 600; font-size: 1.5rem; color: rgba(var(--color-foreground), 0.75);">{{ cart.original_total_price | money | replace: ' ', '' }}</span>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- BANNER VERDE COM CUPOM (aparece só se houver desconto) -->
+            <!-- ============================================ -->
+            {%- if cart.total_discount > 0 -%}
+              {%- for discount in cart.discount_applications -%}
+                <div style="
+                  background-color: #dcfce7;
+                  border-radius: 6px;
+                  padding: 1rem 1.4rem;
+                  margin: 0.8rem 0;
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                ">
+                  <!-- Lado esquerdo: Ícone de tag + Nome do cupom -->
+                  <div style="display: flex; align-items: center; gap: 0.8rem; color: #15803d; font-weight: 600; font-size: 1.4rem;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                      <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <circle cx="7" cy="7" r="1" fill="currentColor"/>
+                    </svg>
+                    {{ discount.title }}
+                  </div>
+                  <!-- Lado direito: Valor do desconto -->
+                  <span style="color: #15803d; font-weight: 800; font-size: 1.5rem;">
+                    -{{ discount.total_allocated_amount | money }}
+                  </span>
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+
+          <!-- ============================================ -->
+          <!-- TOTAL (valor final) -->
+          <!-- ============================================ -->
+          <div class="totals" style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            margin-top: 0.4rem;
+          ">
+            <h2 class="totals__total" style="margin: 0; text-transform: uppercase; font-weight: 800; font-size: 2.22rem; color: #151515;">TOTAL</h2>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              {%- if total_savings > 0 -%}
+                <s style="color: #dc2626; font-size: 1.3rem; text-decoration: line-through; font-weight: 600;">{{ cart.total_price | plus: total_savings | money | replace: ' ', '' }}</s>
+              {%- endif -%}
+              <p class="totals__total-value" style="margin: 0; font-weight: 900; font-size: 2.4rem; color: #151515;">{{ cart.total_price | money | replace: ' ', '' }}</p>
+            </div>
+          </div>
+
+          {%- comment -%} BANNER: Voce esta economizando R$X (aparece quando total_savings > 0) {%- endcomment -%}
+          {%- if total_savings > 0 -%}
+            <div style="
+              background-color: #dcfce7;
+              border-radius: 8px;
+              padding: 1rem 1.4rem;
+              margin-top: 0.8rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 0.8rem;
+              color: #15803d;
+              font-weight: 600;
+              font-size: 1.4rem;
+            ">
+              <svg width="18" height="18" viewBox="0 0 256 256" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+                <path d="M216,64H180.92c.39-.33.79-.65,1.17-1A29.53,29.53,0,0,0,192,40.84,32.32,32.32,0,0,0,158.83,8c-8.18.16-16.34,3.85-23.6,10.62A39.51,39.51,0,0,0,128,28.78a39.51,39.51,0,0,0-7.23-10.16C113.51,11.85,105.35,8.16,97.17,8A32.32,32.32,0,0,0,64,40.84,29.53,29.53,0,0,0,73.91,63c.38.33.78.65,1.17,1H40A16,16,0,0,0,24,80v40a16,16,0,0,0,16,16v64a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V136a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64ZM84.51,42.5a16.31,16.31,0,0,1,16.36-16.5h.4c8.39.17,17.21,7.16,21.07,16.59-9.43-3.86-16.42-12.68-16.59-21.07A16.31,16.31,0,0,1,84.51,42.5ZM136,64H120V48a8,8,0,0,1,16,0Zm0,16h64v40H136ZM120,80V120H40V80ZM40,200V136h80v64Zm160,0H136V136h64v64Z"/>
+              </svg>
+              <span>Você está economizando <strong>{{ total_savings | money | replace: ' ', '' }}</strong>!</span>
+            </div>
+          {%- endif -%}
+
+          <!-- CTA -->
+          <div class="cart__ctas" {{ block.shopify_attributes }}>
+            <button
+              type="button"
+              class="cart__checkout-button button"
+              onclick="var d=this.closest('cart-drawer');if(d){d.close();}setTimeout(function(){if(typeof window.cartxTriggerCheckout==='function'){window.cartxTriggerCheckout();}else{window.location.href='/cart';}},50);"
+              {% if cart == empty %} disabled {% endif %}
+              style="
+                width: 100%;
+                min-height: 5.5rem;
+                font-size: 1.8rem;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 0.1rem;
+                margin: 0;
+              "
+            >
+              Finalizar Compra
+            </button>
+            <button
+              type="button"
+              class="link underlined-link"
+              onclick="this.closest('cart-drawer').close()"
+              style="margin-top: 1rem; width: 100%; margin-left: auto; margin-right: auto; display: block;"
+            >
+              Continuar comprando
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</cart-drawer>
+{%- comment -%} CART-LINE-PRICE-LAYOUT (Lever 2026-05-15): mesmo padrão do PDP — comparativo menor antes, real maior depois {%- endcomment -%}
+<style>
+  /* CART-LINE-PRICE-LAYOUT */
+  .cart-item__discounted-prices,
+  .cart-drawer-item__single-item-prices > span,
+  cart-drawer .cart-item__discounted-prices {
+    display: inline-flex !important;
+    flex-direction: row-reverse !important;
+    align-items: baseline !important;
+    gap: 0.6rem !important;
+    flex-wrap: wrap !important;
+  }
+  .cart-item__discounted-prices .cart-item__final-price,
+  cart-drawer .cart-item__final-price {
+    font-size: 1.6rem !important;
+    font-weight: 800 !important;
+    color: #151515 !important;
+    line-height: 1 !important;
+  }
+  .cart-item__discounted-prices .cart-item__old-price,
+  cart-drawer .cart-item__old-price,
+  cart-drawer s.price-item {
+    font-size: 1.15rem !important;
+    color: #999 !important;
+    font-weight: 500 !important;
+    text-decoration: line-through !important;
+  }
+</style>
+{%- comment -%} CART-REMOVE-TOPRIGHT — lixeira do line item no canto superior direito (perto do título) {%- endcomment -%}
+<style>
+  /* CART-REMOVE-TOPRIGHT */
+  cart-drawer .cart-drawer-item,
+  cart-drawer-items tr.cart-item,
+  cart-drawer-items li.cart-item {
+    position: relative !important;
+  }
+  cart-drawer cart-remove-button,
+  cart-drawer-items cart-remove-button {
+    position: absolute !important;
+    top: 0.6rem !important;
+    right: 0.6rem !important;
+    z-index: 2;
+  }
+  cart-drawer cart-remove-button .cart-remove-button,
+  cart-drawer-items cart-remove-button .cart-remove-button {
+    padding: 0.4rem !important;
+    min-height: auto !important;
+    background: transparent !important;
+    border: 0 !important;
+    color: #888 !important;
+  }
+  cart-drawer cart-remove-button .cart-remove-button:hover {
+    color: #d63838 !important;
+  }
+  cart-drawer cart-remove-button .svg-wrapper svg {
+    width: 16px;
+    height: 16px;
+  }
+  /* Liberar espaço pro título não invadir a lixeira */
+  cart-drawer .cart-item__name,
+  cart-drawer-items .cart-item__name {
+    padding-right: 2.4rem;
+  }
+</style>
+{%- comment -%} KIT-CASAL-LAYOUT-V2 — tag KIT CASAL à direita do título (acima do preço), preço sobe pra cima do grid {%- endcomment -%}
+<style>
+  /* KIT-CASAL-LAYOUT-V2 */
+  /* Tag KIT CASAL: posicionada �� direita do título, abaixo da lixeira */
+  cart-drawer-items .cart-item__details {
+    position: relative;
+  }
+  cart-drawer-items .cart-item__details .kit-casal-tag {
+    position: static !important;
+    margin: 0 0 0 0.8rem !important;
+    font-size: 1rem !important;
+    padding: 0.35rem 0.8rem !important;
+    flex-shrink: 0;
+  }
+  cart-drawer-items .cart-item__price-row {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 0.4rem !important;
+  }
+  /* Título: liberar espaço à direita pra não cobrir a tag */
+  cart-drawer-items .cart-item__details .cart-item__name {
+    padding-right: 2.5rem !important; /* só pra lixeira */
+  }
+  /* Preço sobe — fica logo abaixo do título, antes do grid */
+  cart-drawer-items .cart-item__details .cart-item__price-row {
+    margin-top: 0.4rem !important;
+    margin-bottom: 0.8rem !important;
+  }
+  /* Grid masc/fem com mais espaçamento + fundo azul-rosa sutil */
+  cart-drawer-items .kit-casal-cart-grid {
+    margin-top: 0.8rem !important;
+    background: linear-gradient(135deg, #eff6ff 0%, #fdf2f8 100%) !important;
+    border: 1px solid #e9d5ff !important;
+  }
+  cart-drawer-items .kit-casal-cart-col {
+    padding: 1rem 1.2rem !important;
+  }
+  cart-drawer-items .kit-casal-cart-grid .product-option {
+    margin: 0.2rem 0 !important;
+  }
+</style>
+{%- comment -%} KIT-CASAL-COLS-BRAND — bloco masculino azul / feminino rosa (mesma identidade da PDP) {%- endcomment -%}
+<style>
+  /* KIT-CASAL-COLS-BRAND */
+  cart-drawer-items .kit-casal-cart-grid {
+    background: transparent !important;
+    border: 0 !important;
+    gap: 0.4rem !important;
+    border-radius: 0.6rem !important;
+    overflow: hidden !important;
+  }
+  cart-drawer-items .kit-casal-cart-col {
+    border: 0 !important;
+    padding: 1rem 1.2rem !important;
+    border-radius: 0.5rem !important;
+  }
+  cart-drawer-items .kit-casal-cart-col:nth-child(1) {
+    background: #dbeafe !important; /* azul masc */
+  }
+  cart-drawer-items .kit-casal-cart-col:nth-child(2) {
+    background: #fbcfe8 !important; /* rosa fem */
+  }
+  cart-drawer-items .kit-casal-cart-col:nth-child(1) .kit-casal-cart-title {
+    color: #1e40af !important; /* título masc azul mais escuro */
+  }
+  cart-drawer-items .kit-casal-cart-col:nth-child(2) .kit-casal-cart-title {
+    color: #9d174d !important; /* título fem rosa mais escuro */
+  }
+</style>
+{%- comment -%} _kitCasalTagMover — move tag KIT CASAL pro dentro do .cart-item__price-row {%- endcomment -%}
+<script>
+(function() {
+  if (window._kitCasalTagMover) return;
+  window._kitCasalTagMover = true;
+  function moveKitTags() {
+    document.querySelectorAll(".kit-casal-tag").forEach(function (tag) {
+      var parent = tag.parentElement;
+      if (!parent) return;
+      var priceRow = parent.querySelector(".cart-item__price-row");
+      if (priceRow && tag.parentElement !== priceRow) {
+        var discounted = priceRow.querySelector(".cart-item__discounted-prices");
+        if (discounted) discounted.insertAdjacentElement("afterend", tag);
+        else priceRow.insertBefore(tag, priceRow.firstChild);
+      }
+    });
+  }
+  moveKitTags();
+  document.addEventListener("DOMContentLoaded", moveKitTags);
+  setInterval(moveKitTags, 500);
+})();
+</script>
+{%- comment -%} KIT-CASAL-BORDERS-STRONG — bordas azul/rosa fortes igual PDP {%- endcomment -%}
+<style>
+  /* KIT-CASAL-BORDERS-STRONG */
+  cart-drawer-items .kit-casal-cart-col:nth-child(1) {
+    border: 2px solid #2563eb !important; /* azul forte masc */
+  }
+  cart-drawer-items .kit-casal-cart-col:nth-child(2) {
+    border: 2px solid #ec4899 !important; /* rosa forte fem */
+  }
+</style>
+{%- comment -%} KIT-CASAL-TAG-ANIMATED — gradient animado azul ↔ rosa {%- endcomment -%}
+<style>
+  /* KIT-CASAL-TAG-ANIMATED */
+  cart-drawer-items .cart-item__details .kit-casal-tag {
+    background: linear-gradient(90deg, #2563eb 0%, #ec4899 25%, #2563eb 50%, #ec4899 75%, #2563eb 100%) !important;
+    background-size: 400% 100% !important;
+    color: #fff !important;
+    animation: kit-tag-shift 1.6s linear infinite !important;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.18);
+    border: 0 !important;
+  }
+  @keyframes kit-tag-shift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
+</style>
+{%- comment -%} KIT-CASAL-TAG-EXPAND — tag se estende ocupando o espaço entre preço e lixeira {%- endcomment -%}
+<style>
+  /* KIT-CASAL-TAG-EXPAND */
+  cart-drawer-items .cart-item__details .kit-casal-tag {
+    flex: 0 0 auto !important;
+    width: 150px !important;
+    max-width: 150px !important;
+    justify-content: center !important;
+    margin: 0 0 0 0.8rem !important;
+    padding: 0.5rem 0.8rem !important;
+  }
+</style>
+{%- comment -%} CART-TRASH-BOLD — lixeira preta nítida {%- endcomment -%}
+<style>
+  /* CART-TRASH-BOLD */
+  cart-drawer cart-remove-button .cart-remove-button,
+  cart-drawer-items cart-remove-button .cart-remove-button {
+    color: #111 !important;
+    opacity: 1 !important;
+  }
+  cart-drawer cart-remove-button .svg-wrapper svg,
+  cart-drawer-items cart-remove-button .svg-wrapper svg {
+    width: 18px;
+    height: 18px;
+  }
+  cart-drawer cart-remove-button .svg-wrapper svg path[stroke],
+  cart-drawer-items cart-remove-button .svg-wrapper svg path[stroke] {
+    stroke: #111 !important;
+    stroke-width: 2.5 !important;
+  }
+  cart-drawer cart-remove-button .cart-remove-button:hover {
+    color: #d63838 !important;
+  }
+  cart-drawer cart-remove-button:hover .svg-wrapper svg path[stroke] {
+    stroke: #d63838 !important;
+  }
+</style>

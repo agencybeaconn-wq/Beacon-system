@@ -1,0 +1,466 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* NOVO TEMA GLOBAL LEVER SYSTEM (CLARO MANTEM ESTRUTURA SEMELHANTE PARA CONSISTÊNCIA, MAS INVERTE PRO FUNDO BRANCO) */
+    --background: 0 0% 100%;
+    /* #FFFFFF Branco */
+    --foreground: 0 0% 0%;
+    /* #000000 Preto */
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+
+    /* Muted Red - #dc2626 (Tailwind red-600) */
+    --primary: 0 72% 51%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 92%;
+    --secondary-foreground: 0 0% 5%;
+
+    --muted: 0 0% 98%;
+    --muted-foreground: 0 0% 40%;
+
+    --accent: 0 72% 51%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Bordas translúcidas */
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 72% 51%;
+
+    --radius: 12px;
+    /* Rounded uniform corners */
+
+    /* Sidebar theme - Acompanhando o branco */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 15%;
+    --sidebar-primary: 0 72% 51%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 92%;
+    --sidebar-accent-foreground: 0 72% 51%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 0 72% 51%;
+
+    /* Apple HIG Semantic Colors */
+    --system-success: 135 59% 49%;
+    --system-warning: 48 100% 50%;
+    --system-danger: 349 100% 59%;
+    --system-info: 211 100% 50%;
+    --system-purple: 280 69% 60%;
+
+    /* Map old variables for compatibility, but prefer system-* */
+    --success: 135 59% 49%;
+    --success-foreground: 0 0% 100%;
+    --success-light: 135 59% 96%;
+
+    --cost: 4 100% 59%;
+    --cost-foreground: 0 0% 100%;
+    --cost-light: 4 100% 97%;
+
+    --warning: 48 100% 50%;
+    --warning-foreground: 0 0% 100%;
+    --warning-light: 48 100% 96%;
+
+    --shadow-card: none;
+  }
+
+  .dark {
+    /* TEMA BLACK & RED (User requested) */
+    --background: 0 0% 2%;
+    /* #050505 Near Black */
+    --foreground: 0 0% 100%;
+    /* White */
+
+    --card: 0 0% 4%;
+    /* Layer above background */
+    --card-foreground: 0 0% 100%;
+
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
+
+    /* Primary Red - #dc2626 */
+    --primary: 0 72% 51%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 70%;
+
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Bordas neutras e escuras */
+    --border: 0 0% 15%;
+    --input: 0 0% 12%;
+    --ring: 0 72% 51%;
+
+    --radius: 12px;
+
+    /* Sidebar - Apple HIG Blue para Active Itens e tons de cinza profundos */
+    --sidebar-background: 0 0% 2%;
+    --sidebar-foreground: 0 0% 85%;
+    --sidebar-primary: 211 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 12%;
+    --sidebar-ring: 211 100% 50%;
+
+    /* Apple HIG Semantic Colors (Dark variants) */
+    --system-success: 135 65% 50%;
+    --system-warning: 50 100% 52%;
+    --system-danger: 5 100% 61%;
+    --system-info: 210 100% 52%;
+    --system-purple: 280 85% 65%;
+
+    /* Compatibilidade */
+    --success: 135 65% 50%;
+    --success-foreground: 0 0% 100%;
+    --success-light: 135 65% 15%;
+
+    --cost: 5 100% 61%;
+    --cost-foreground: 0 0% 100%;
+    --cost-light: 5 100% 15%;
+
+    --warning: 50 100% 52%;
+    --warning-foreground: 0 0% 100%;
+    --warning-light: 50 100% 15%;
+
+    --shadow-card: none;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  /* Apple HIG Focus Ring Global */
+  :focus-visible {
+    outline: 2px solid hsl(var(--system-info));
+    outline-offset: 2px;
+  }
+
+  button:focus-visible,
+  [role="button"]:focus-visible {
+    outline: 2px solid hsl(var(--system-info));
+    outline-offset: 2px;
+  }
+
+  html {
+    max-width: 100vw;
+    overflow-x: hidden;
+    position: relative;
+    /* iOS Safe Area Support */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    overflow-x: hidden;
+    max-width: 100vw;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    font-family: "Inter Tight", sans-serif;
+    font-weight: 300;
+    /* Ensure content respects safe areas on iOS */
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    /* Typography defaults apple */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Baseline Tracking (17pt default equivalent) */
+    letter-spacing: 0.01em;
+  }
+
+  /* Custom Scrollbar Styling - Elegant, Thin, Rounded */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 10px;
+    transition: background 0.2s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+
+  /* Firefox Support */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 800;
+  }
+
+  .font-light {
+    font-weight: 300;
+  }
+
+  .font-bold {
+    font-weight: 700;
+  }
+
+  .font-extrabold {
+    font-weight: 800;
+  }
+
+  #root {
+    overflow-x: hidden;
+    max-width: 100vw;
+    position: relative;
+    width: 100%;
+  }
+}
+
+@layer components {
+
+  /* Light mode - ultra soft borders and shadows macOS */
+  :root .border {
+    @apply border-border/80;
+  }
+
+  :root [class*="Card"] {
+    @apply transition-all duration-300 ease-out border-border/60 bg-white/70 backdrop-blur-3xl;
+    /* Clean flat blocks */
+  }
+
+  :root .dark [class*="Card"]:hover {
+    @apply border-white/10;
+    transform: translateY(-2px);
+  }
+
+  :root table,
+  :root [class*="Table"] {
+    @apply border-border/40;
+  }
+
+  :root input,
+  :root textarea,
+  :root select {
+    @apply border-border/60 bg-white/50 backdrop-blur-md focus:bg-white;
+  }
+
+  :root [class*="Popover"],
+  :root [class*="Dialog"],
+  :root [class*="Dropdown"] {
+    @apply border-border/50 bg-white/80 backdrop-blur-2xl;
+  }
+
+  /* Dark mode - macOS stealth glass aesthetics */
+  .dark [data-radix-collection-item] {
+    @apply border-border/50;
+  }
+
+  .dark [class*="Card"] {
+    /* Flat dark mode look */
+    @apply border-border focus-within:border-primary/30 transition-all duration-300;
+    background-color: hsl(var(--card));
+    /* Using the new card variable */
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .dark input,
+  .dark textarea,
+  .dark select {
+    @apply border-border/40 bg-black/40 backdrop-blur-md focus:bg-black/80;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .dark [class*="Popover"],
+  .dark [class*="Dialog"],
+  .dark [class*="Dropdown"] {
+    @apply border-border/50;
+    background-color: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  }
+
+  /* Glass Premium Utility - Tinted with Lever Red */
+  .glass-panel {
+    @apply border border-primary/20;
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+
+  .dark .glass-panel {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 0 0 1px rgba(214, 9, 9, 0.1);
+  }
+}
+
+@layer utilities {
+
+  /* Typography Utilities for Dynamic Tracking (HIG) */
+  .text-title-large {
+    @apply text-5xl font-extrabold tracking-[-0.02em];
+  }
+
+  .text-title-1 {
+    @apply text-4xl font-extrabold tracking-[-0.02em];
+  }
+
+  .text-title-2 {
+    @apply text-3xl font-bold tracking-[-0.02em];
+  }
+
+  .text-headline {
+    @apply text-lg font-semibold tracking-[-0.01em];
+  }
+
+  .text-body {
+    @apply text-base font-light tracking-[0.01em];
+  }
+
+  .font-mono-numbers {
+    font-family: "Inter Tight", monospace !important;
+  }
+
+  /* --- LIQUID WATER EFFECT --- */
+  .liquid-water-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+    background: var(--background);
+    pointer-events: none;
+  }
+
+  .liquid-water-bg::before,
+  .liquid-water-bg::after {
+    content: '';
+    position: absolute;
+    width: 150vw;
+    height: 150vh;
+    top: -25vh;
+    left: -25vw;
+    background: radial-gradient(circle at 50% 50%, rgba(214, 9, 9, 0.08) 0%, transparent 60%);
+    animation: liquidMove 25s ease-in-out infinite alternate;
+    transform-origin: center;
+    filter: blur(60px);
+  }
+
+  .dark .liquid-water-bg::before,
+  .dark .liquid-water-bg::after {
+    background: radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0) 60%);
+    opacity: 0.6;
+  }
+
+  .liquid-water-bg::after {
+    background: radial-gradient(circle at 70% 30%, rgba(0, 0, 0, 0.03) 0%, transparent 50%);
+    animation: liquidMove 30s ease-in-out infinite alternate-reverse;
+    animation-delay: -5s;
+  }
+
+  .dark .liquid-water-bg::after {
+    background: radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.01) 0%, transparent 50%);
+  }
+
+  @keyframes liquidMove {
+    0% {
+      transform: scale(1) translate(0, 0) rotate(0deg);
+    }
+
+    33% {
+      transform: scale(1.1) translate(3%, 4%) rotate(2deg);
+    }
+
+    66% {
+      transform: scale(0.9) translate(-2%, 2%) rotate(-1deg);
+    }
+
+    100% {
+      transform: scale(1.05) translate(4%, -3%) rotate(1deg);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* -------------------------- */
+
+  /* Smooth collapsible content animation */
+  [data-state="open"]>div {
+    animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  }
+
+  /* Explosion Gradient: Red to Orange */
+  .bg-meta-gradient {
+    background: hsl(var(--primary));
+  }
+
+  .text-meta-gradient {
+    color: hsl(var(--primary));
+    background: none;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+    background-clip: unset;
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+}

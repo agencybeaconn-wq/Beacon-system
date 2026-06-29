@@ -1,0 +1,24 @@
+{
+  "name": "client-onboarder",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "login": "tsx src/cli.ts login",
+    "doctor": "tsx src/cli.ts doctor",
+    "status": "tsx src/cli.ts status",
+    "worker": "tsx src/cli.ts worker",
+    "flow": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.7",
+    "dotenv": "^16.4.5",
+    "ws": "^8.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "playwright": "1.60.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}

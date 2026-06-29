@@ -1,0 +1,12 @@
+{
+  "_comment": "Copie para keys.json (gitignored — NUNCA commitar) e preencha a key de cada membro com a chave do Lever MCP. Rotacione se vazar.",
+  "url": "https://lever-shopify-mcp.vercel.app/mcp",
+  "users": {
+    "joao":    { "label": "João",        "key": "PREENCHER" },
+    "pedro":   { "label": "Pedro",       "key": "PREENCHER" },
+    "wesley":  { "label": "Wesley",      "key": "PREENCHER" },
+    "felipe":  { "label": "Felipe",      "key": "PREENCHER" },
+    "matheus": { "label": "Matheus",     "key": "PREENCHER" },
+    "jv":      { "label": "João Victor", "key": "PREENCHER" }
+  }
+}

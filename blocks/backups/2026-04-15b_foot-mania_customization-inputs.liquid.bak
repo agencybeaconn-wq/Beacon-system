@@ -1,0 +1,1075 @@
+{% comment %}
+  Renders customization drawer for personalized products (Name/Number).
+  Opens as a side drawer when "Customize" option is selected.
+  Confirm button adds to cart and opens cart drawer.
+  
+  IMPORTANT: The drawer HTML is appended to BODY to avoid being destroyed
+  when Dawn re-renders the variant-selects component.
+  
+  Accepts:
+  - section_id: {String} ID of the section for unique IDs.
+  - product_form_id: {String} ID of the product form to associate inputs with.
+
+  Usage:
+  {% render 'customization-inputs', section_id: section.id, product_form_id: product_form_id %}
+{% endcomment %}
+
+<script>
+  function initCustomizationSystem() {
+    // --- PRODUCT DATA FOR VARIANT SWITCHING ---
+    const productData = {
+      variants: {{ product.variants | json }},
+      options: {{ product.options_with_values | json }}
+    };
+    console.log('DEBUG: Loaded product data for variant switching:', productData.variants.length, 'variants');
+
+    const sectionId = "{{ section_id }}";
+    const productFormId = "{{ product_form_id }}";
+    
+    // Create unique drawer ID
+    const drawerId = `customization-drawer-${sectionId}`;
+    const overlayId = `customization-overlay-${sectionId}`;
+    
+    // Check if drawer already exists in body (prevents duplicates)
+    if (document.getElementById(drawerId)) {
+      // Re-attach variant listeners to the NEW product form (Dawn re-renders it)
+      // The drawer itself stays same in BODY, so we don't need to re-init it.
+      attachVariantListeners();
+      return;
+    }
+    
+    // Create and append drawer HTML to body (outside of variant-selects)
+    // INJECT CUSTOM STYLES for White Backgrounds & Refined Spacing
+    const customStyles = `
+      <style>
+         .customization-drawer__header {
+           background-color: #ffffff !important;
+           border-bottom: 1px solid rgba(0,0,0,0.05);
+           box-shadow: none !important;
+        }
+        .customization-drawer__footer {
+           background-color: #ffffff !important;
+           border-top: 1px solid rgba(0,0,0,0.05);
+           box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05) !important; /* Softer shadow */
+           padding: 2rem 1.5rem !important;
+           display: flex;
+           flex-direction: column;
+           gap: 1.5rem; /* Increased spacing between Total and Button */
+        }
+        .customization-drawer__confirm {
+           background-color: rgb(var(--color-button)) !important;
+           color: #ffffff !important; /* Force white text */
+           border-radius: 12px !important;
+           margin-top: 0 !important;
+           width: 100%;
+           min-height: 5.5rem !important;
+           font-size: 1.8rem !important;
+           font-weight: 800 !important;
+           text-transform: uppercase !important;
+           letter-spacing: 0.1rem !important;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           gap: 1rem;
+           border: none;
+           cursor: pointer;
+           transition: box-shadow var(--duration-short) ease, transform 0.3s ease !important;
+        }
+        .customization-drawer__confirm svg {
+           fill: #ffffff !important; 
+           stroke: #ffffff !important;
+           color: #ffffff !important;
+        }
+        .customization-drawer__confirm svg path {
+           fill: #ffffff !important;
+           stroke: none !important;
+        }
+        .customization-drawer__confirm:hover {
+           box-shadow: 0 0 2rem rgba(var(--color-button), 0.3) !important;
+           transform: translateY(-2px);
+           background-color: rgb(var(--color-button)) !important; /* Keep background color */
+        }
+        .customization-drawer__confirm:hover::after,
+        .customization-drawer__confirm:hover::before {
+           content: none !important; /* Remove any pseudo-elements causing sharp corners */
+           box-shadow: none !important;
+        }
+        .customization-totals-block {
+           margin-bottom: 0 !important;
+           padding-bottom: 0 !important;
+        }
+        .customization-totals-block p, .customization-totals-block h3 {
+           margin-bottom: 0 !important;
+        }
+        .customization-drawer__title {
+           font-weight: 800 !important;
+        }
+      </style>
+    `;
+
+    const drawerHTML = customStyles + `
+      <!-- Drawer Overlay Container (like cart drawer .drawer class) -->
+      <div id="${overlayId}" class="customization-overlay">
+        <!-- Drawer Panel -->
+        <div id="${drawerId}" class="customization-drawer" data-section="${sectionId}" data-form="${productFormId}">
+          <!-- Drawer Header -->
+          <div class="customization-drawer__header">
+            <h2 class="customization-drawer__title">Customização</h2>
+            <button type="button" class="customization-drawer__close" aria-label="Fechar">
+              <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" class="icon icon-close" viewBox="0 0 18 17" fill="none">
+                <path d="M.865 15.978a.5.5 0 00.707.707l7.433-7.431 7.579 7.282a.501.501 0 00.846-.37.5.5 0 00-.153-.351L9.712 8.546l7.417-7.416a.5.5 0 10-.707-.708L8.991 7.853 1.413.573a.5.5 0 10-.693.72l7.563 7.268-7.418 7.417z" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
+
+        <!-- Drawer Content -->
+        <div class="customization-drawer__content">
+          <div class="personalization-cost-info">
+            <span class="step-title">01 - Customização (Nome + Número)</span> <span class="cost-price" id="cost-price-${sectionId}">+ R$ 0,00</span>
+          </div>
+
+          <!-- Mode Selector -->
+          <div class="customization-mode-selector">
+            <div class="customization-mode-active-bg"></div>
+            <button type="button" class="customization-mode-btn active" data-mode="player">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/>
+              </svg>
+              Escolha o Jogador
+            </button>
+            <button type="button" class="customization-mode-btn" data-mode="custom">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 20h9"/>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+              </svg>
+              Personalize o Seu
+            </button>
+          </div>
+
+
+          <!-- Load Player Rules moved to theme.liquid to prevent "section inside section" error -->
+          {% comment %} {% section 'custom-player-rules' %} {% endcomment %}
+
+          <!-- Mode 1: Player Selection -->
+          <div class="customization-mode-content" data-mode-content="player">
+            <div class="customization-field">
+              <select id="player-select-${sectionId}" class="customization-select">
+                <option value="">Escolha um jogador...</option>
+                <!-- Options populated via JS -->
+              </select>
+            </div>
+          </div>
+
+          <!-- Mode 2: Custom Input -->
+          <div class="customization-mode-content" data-mode-content="custom" style="display: none;">
+            <div class="customization-form">
+              <div class="customization-field">
+                <label for="custom-name-${sectionId}" class="customization-label">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                  Nome na Camisa
+                </label>
+                <input 
+                  type="text" 
+                  id="custom-name-${sectionId}" 
+                  name="properties[Nome]" 
+                  placeholder="Ex: JOÃO" 
+                  maxlength="15"
+                  form="${productFormId}"
+                  class="customization-input"
+                >
+                <span class="customization-hint">Máximo 15 caracteres</span>
+              </div>
+              
+              <div class="customization-field">
+                <label for="custom-number-${sectionId}" class="customization-label">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <path d="M12 8v8"/>
+                    <path d="M8 12h8"/>
+                  </svg>
+                  Número
+                </label>
+                <input 
+                  type="text" 
+                  id="custom-number-${sectionId}" 
+                  name="properties[Número]" 
+                  placeholder="Ex: 10" 
+                  maxlength="3"
+                  form="${productFormId}"
+                  class="customization-input customization-input--number"
+                >
+                <span class="customization-hint">Máximo 3 dígitos</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="customization-info-list">
+            <ul class="customization-info-items">
+              <li>Produtos personalizados não podem ser trocados, devolvidos ou cancelados;</li>
+              <li>A fonte utilizada será a mesma observada na linha oficial de jogo;</li>
+            </ul>
+          </div>
+
+          <!-- Patches Section -->
+          <div class="patches-section">
+            <div class="patches-header">
+              <span class="step-title">02 - Escolha seus Patches</span>
+            </div>
+            
+            <!-- Dynamic Patches Container -->
+            <div id="dynamic-patches-container-${sectionId}">
+              <div class="patches-loading" style="text-align: center; padding: 2rem; color: #888;">
+                <svg class="spinner" width="24" height="24" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 10px;">
+                  <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                </svg>
+                <p>Buscando patches disponíveis...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Drawer Footer -->
+        <div class="customization-drawer__footer">
+          <div class="customization-totals-block">
+            <div class="totals" role="status">
+              <h2 class="totals__total">CUSTOMIZAÇÃO</h2>
+              <p class="totals__total-value" id="customization-total-value-${sectionId}">+ R$ 0,00</p>
+            </div>
+          </div>
+
+          <button type="button" class="customization-drawer__confirm">
+            ADICIONAR AO CARRINHO
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.5" class="icon icon-cart" viewBox="0 0 256 256" width="20" height="20">
+              <path d="M136,120v56a8,8,0,0,1-16,0V120a8,8,0,0,1,16,0Zm36.84-.8-5.6,56A8,8,0,0,0,174.4,184a7.32,7.32,0,0,0,.81,0,8,8,0,0,0,7.95-7.2l5.6-56a8,8,0,0,0-15.92-1.6Zm-89.68,0a8,8,0,0,0-15.92,1.6l5.6,56a8,8,0,0,0,8,7.2,7.32,7.32,0,0,0,.81,0,8,8,0,0,0,7.16-8.76ZM239.93,89.06,224.86,202.12A16.06,16.06,0,0,1,209,216H47a16.06,16.06,0,0,1-15.86-13.88L16.07,89.06A8,8,0,0,1,24,80H68.37L122,18.73a8,8,0,0,1,12,0L187.63,80H232a8,8,0,0,1,7.93,9.06ZM89.63,80h76.74L128,36.15ZM222.86,96H33.14L47,200H209Z" fill="currentColor" stroke="none"></path>
+            </svg>
+          </button>
+        </div>
+        </div>
+      </div>
+    `;
+    
+    // Append to body
+    document.body.insertAdjacentHTML('beforeend', drawerHTML);
+    
+    // Initialize event listeners
+    setupEventListeners();
+    
+    // Auto-load player presets if rules exist
+    populatePlayerPresets();
+
+    function populatePlayerPresets() {
+      const select = document.getElementById(`player-select-${sectionId}`);
+      if (!select || !window.customPlayerRules) return;
+
+      const productTitle = "{{ product.title | escape }}".toLowerCase();
+      let matchedRule = null;
+
+      // Find first matching rule
+      for (const rule of window.customPlayerRules) {
+        if (!rule.keywords) continue;
+
+        // Check exclusions first
+        if (rule.excludeKeywords) {
+          const exclusions = rule.excludeKeywords.split(',').map(k => k.trim()).filter(k => k);
+          const hasExclusion = exclusions.some(ex => productTitle.includes(ex));
+          if (hasExclusion) continue;
+        }
+
+        // Check matches
+        const keywords = rule.keywords.split(',').map(k => k.trim()).filter(k => k);
+        const isMatch = keywords.some(k => productTitle.includes(k));
+        
+        if (isMatch) {
+          matchedRule = rule;
+          break; // Stop at first match
+        }
+      }
+
+      if (matchedRule && matchedRule.playerData) {
+        console.log('DEBUG: Found matching player rule for product');
+        const lines = matchedRule.playerData.split('\n');
+        let html = '<option value="">Escolha um jogador...</option>';
+        
+        lines.forEach(line => {
+          const parts = line.split('|');
+          if (parts.length >= 2) {
+            const name = parts[0].trim().toUpperCase();
+            const number = parts[1].trim();
+            html += `<option value="${name}|${number}">${name} ${number}</option>`;
+          }
+        });
+        
+        select.innerHTML = html;
+      } else {
+        console.log('DEBUG: No matching player rule found. Using defaults/empty.');
+        // Optionally keep default "Escolha um jogador..." or hide the select if no rule matches
+        // For now we just leave it empty.
+      }
+    }
+    
+    function setupEventListeners() {
+      const drawer = document.getElementById(drawerId);
+      const overlay = document.getElementById(overlayId);
+      if (!drawer || !overlay || drawer.dataset.initialized === 'true') return;
+      
+      drawer.dataset.initialized = 'true';
+
+      const closeBtn = drawer.querySelector('.customization-drawer__close');
+      const confirmBtn = drawer.querySelector('.customization-drawer__confirm');
+
+      // (Cloning removed to keep DOM stable)
+      const freshDrawer = drawer;
+      const freshOverlay = overlay;
+      const freshCloseBtn = closeBtn;
+      const freshConfirmBtn = confirmBtn;
+
+      function openDrawer() {
+        // Reset confirm button state just in case it got stuck
+        if (freshConfirmBtn) {
+          freshConfirmBtn.disabled = false;
+          if (freshConfirmBtn.dataset.originalHtml) {
+            freshConfirmBtn.innerHTML = freshConfirmBtn.dataset.originalHtml;
+          }
+        }
+        
+        freshDrawer.classList.add('is-open');
+        freshOverlay.classList.add('is-visible');
+        document.body.classList.add('customization-open');
+      }
+      
+      function closeDrawer(revertToDefault = true) {
+        if (freshDrawer.dataset.isClosing === 'true' || !freshDrawer.classList.contains('is-open')) return;
+        freshDrawer.dataset.isClosing = 'true';
+
+        try {
+          freshDrawer.classList.remove('is-open');
+          freshOverlay.classList.remove('is-visible');
+          document.body.classList.remove('customization-open');
+          
+          // Clear input fields
+          const nameInput = document.getElementById(`custom-name-${sectionId}`);
+          const numberInput = document.getElementById(`custom-number-${sectionId}`);
+          if (nameInput) nameInput.value = '';
+          if (numberInput) numberInput.value = '';
+          
+          // Clear patch selections (reset to first option - usually 'none')
+          const patchRadios = freshDrawer.querySelectorAll('.patch-radio');
+          patchRadios.forEach(radio => { 
+            if (radio.value === '') radio.checked = true;
+            else radio.checked = false;
+          });
+          const patchesTotal = freshDrawer.querySelector('.patches-total');
+          if (patchesTotal) patchesTotal.style.display = 'none';
+          
+          // Revert to "Não Personalizar" option if closing without confirming
+          if (revertToDefault) {
+            const allFieldsets = document.querySelectorAll('.product-form__input--pill, .product-form__input--swatch');
+            allFieldsets.forEach(fieldset => {
+              const legend = fieldset.querySelector('.form__label');
+              if (!legend) return;
+              const legendText = legend.textContent.toLowerCase();
+              if (!legendText.includes('customize') && !legendText.includes('personalizar')) return;
+              
+              // Find and click the "Não Personalizar" option
+              const radioInputs = fieldset.querySelectorAll('input[type="radio"]');
+              radioInputs.forEach(radio => {
+                const val = radio.value.toLowerCase();
+                if (val.includes('não') || val === 'não personalizar' || val === 'no' || val === 'none') {
+                  if (!radio.checked) {
+                    radio.checked = true;
+                    // Dispatch change to notify Dawn, but we are protected by isClosing
+                    radio.dispatchEvent(new Event('change', { bubbles: true }));
+                  }
+                }
+              });
+            });
+          }
+        } finally {
+          freshDrawer.dataset.isClosing = 'false';
+        }
+      }
+
+      // Mode selector functionality
+      const modeBtns = freshDrawer.querySelectorAll('.customization-mode-btn');
+      const modeContents = freshDrawer.querySelectorAll('.customization-mode-content');
+      const playerSelect = freshDrawer.querySelector('.customization-select');
+      const nameInput = document.getElementById(`custom-name-${sectionId}`);
+      const numberInput = document.getElementById(`custom-number-${sectionId}`);
+
+      function switchMode(mode) {
+        const activeBg = freshDrawer.querySelector('.customization-mode-active-bg');
+        if (activeBg) {
+          activeBg.style.transform = mode === 'custom' ? 'translateX(100%)' : 'translateX(0)';
+        }
+
+        // Update button states
+        modeBtns.forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.mode === mode);
+        });
+        
+        // Show/hide content panels
+        modeContents.forEach(content => {
+          content.style.display = content.dataset.modeContent === mode ? 'block' : 'none';
+        });
+
+        // Clear inputs when switching modes
+        if (nameInput) nameInput.value = '';
+        if (numberInput) numberInput.value = '';
+        if (playerSelect) playerSelect.value = '';
+      }
+
+      modeBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          switchMode(this.dataset.mode);
+        });
+      });
+
+      // Player selection fills the name/number inputs
+      if (playerSelect) {
+        playerSelect.addEventListener('change', function() {
+          const value = this.value;
+          if (value) {
+            const [name, number] = value.split('|');
+            if (nameInput) nameInput.value = name;
+            if (numberInput) numberInput.value = number;
+          } else {
+            if (nameInput) nameInput.value = '';
+            if (numberInput) numberInput.value = '';
+          }
+          // Trigger total update
+          if (typeof window.updateCustomizationTotal === 'function') {
+            window.updateCustomizationTotal();
+          }
+        });
+      }
+
+      // Store functions globally for reuse - explicitly using both names for clarity
+      window[`openCustomDrawer_${sectionId}`] = openDrawer;
+      window[`closeCustomDrawer_${sectionId}`] = closeDrawer;
+      
+      // Also expose a more generic one if needed
+      if (!window.openPersonalizationDrawer) {
+         window.openPersonalizationDrawer = openDrawer;
+      }
+
+      // Find the customization fieldset and add pencil icon + click handlers
+      attachVariantListeners();
+
+      // Close button
+      freshCloseBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeDrawer();
+      });
+
+      // Overlay click (only if clicking on overlay background, not on drawer)
+      freshOverlay.addEventListener('click', function(e) {
+        // Only close if clicking directly on the overlay, not on the drawer inside
+        if (e.target === freshOverlay) {
+          e.preventDefault();
+          e.stopPropagation();
+          closeDrawer();
+        }
+      });
+
+      // CONFIRM BUTTON: Add to Cart + Open Cart Drawer
+      freshConfirmBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const formId = freshDrawer.dataset.form;
+        const productForm = document.getElementById(formId);
+        if (!productForm) {
+          console.error('Product form not found:', formId);
+          closeDrawer();
+          return;
+        }
+
+        // Show loading state
+        freshConfirmBtn.disabled = true;
+        const originalHTML = freshConfirmBtn.innerHTML;
+        freshConfirmBtn.dataset.originalHtml = originalHTML; // Save for reset
+        freshConfirmBtn.innerHTML = `
+          <svg class="spinner" width="20" height="20" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+            <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+          </svg>
+          Adicionando...
+        `;
+
+        try {
+          // Get main product data from form
+          const formData = new FormData(productForm);
+          const quantity = formData.get('quantity') || 1;
+          const variantId = formData.get('id');
+          
+          if (!variantId) {
+             console.error('DEBUG: No variant ID found in form data');
+             throw new Error('ID da variante não encontrado');
+          }
+
+          // Build main product properties
+          const properties = {};
+          
+          // 1. Get properties from main form
+          for (const [key, value] of formData.entries()) {
+            if (key.startsWith('properties[') && value) {
+              const propName = key.replace('properties[', '').replace(']', '');
+              properties[propName] = value;
+            }
+          }
+          
+          // 2. Capture inputs specifically associated with this formId (handles drawer inputs)
+          const remoteInputs = document.querySelectorAll(`[form="${formId}"]`);
+          remoteInputs.forEach(input => {
+            if (input.name.startsWith('properties[') && input.value) {
+              const propName = input.name.replace('properties[', '').replace(']', '');
+              properties[propName] = input.value;
+            }
+          });
+          
+          // Get selected patches
+          const selectedPatches = typeof window.getSelectedPatches === 'function' 
+            ? window.getSelectedPatches() 
+            : [];
+          
+          if (selectedPatches.length > 0) {
+            properties['Patches'] = selectedPatches.map(p => p.name).join(', ');
+          }
+          
+          const cartItems = [];
+          
+          // --- ROBUST PRICE-BASED VARIANT SWITCH LOGIC ---
+          let finalVariantId = parseInt(variantId);
+          console.log('DEBUG: Initial variant ID:', finalVariantId);
+
+          try {
+            const variantsData = productData.variants;
+            const optionsData = productData.options;
+
+            if (variantsData && optionsData && optionsData.length > 0) {
+              const currentVariant = variantsData.find(v => v.id === finalVariantId);
+              
+              if (currentVariant) {
+                const nameIn = (properties['Nome'] || '').trim();
+                const numIn = (properties['Número'] || '').trim();
+                const playerIn = (properties['Jogador'] || '').trim();
+                const needsPersonalization = (nameIn || numIn || playerIn);
+                
+                console.log('DEBUG: Needs personalization fee?', !!needsPersonalization);
+
+                // Identify the "Personalization" option (e.g. "Personalizar Camisa")
+                const personalOpt = optionsData.find(o => 
+                  o.name.toLowerCase().includes('personalizar') || 
+                  o.name.toLowerCase().includes('personaliza')
+                );
+
+                if (personalOpt) {
+                   const optKey = `option${personalOpt.position}`;
+                   
+                   // Find all variants for the EXACT same size/color/other options
+                   const counterparts = variantsData.filter(v => {
+                     let match = true;
+                     optionsData.forEach(o => {
+                       if (o.position !== personalOpt.position) {
+                         const k = `option${o.position}`;
+                         if (String(v[k]) !== String(currentVariant[k])) match = false;
+                       }
+                     });
+                     return match;
+                   });
+
+                   console.log('DEBUG: Found', counterparts.length, 'counterparts for this selection.');
+
+                   if (counterparts.length >= 2) {
+                     // Sort by price: base is lowest, personalized is highest
+                     const sorted = counterparts.sort((a, b) => a.price - b.price);
+                     const baseVariant = sorted[0];
+                     const personalizedVariant = sorted[sorted.length - 1];
+
+                     const target = needsPersonalization ? personalizedVariant : baseVariant;
+                     
+                     if (target && target.id !== finalVariantId) {
+                        finalVariantId = target.id;
+                        console.log('DEBUG: SUCCESSFUL SWITCH to', needsPersonalization ? 'PERSONALIZE' : 'BASE', 'variant:', finalVariantId, '(Price:', target.price, ')');
+                     } else {
+                        console.log('DEBUG: No switch needed, already correct variant.');
+                     }
+                   }
+                }
+              }
+            } else {
+              console.warn('DEBUG: Product data missing for variant switching.');
+            }
+          } catch (switchErr) {
+            console.error('DEBUG: Switch logic failed:', switchErr);
+          }
+          // --- END ROBUST PRICE-BASED VARIANT SWITCH LOGIC ---
+
+          // Generate unique ID to link shirt + patches
+          const pairingId = `camisa_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+          properties['_pairing_id'] = pairingId;
+
+          // Add main product (Using finalVariantId)
+          cartItems.push({
+            id: finalVariantId,
+            quantity: parseInt(quantity),
+            properties: properties
+          });
+          
+          // Add patches as separate items
+          selectedPatches.forEach(patch => {
+            if (patch.variantId) {
+              cartItems.push({
+                id: parseInt(patch.variantId),
+                quantity: 1,
+                properties: {
+                  '_pairing_id': pairingId,
+                  '_attached_to': 'Camisa',
+                  'Posição': patch.name.includes('Manga') ? 'Manga' : 'Peito'
+                }
+              });
+            }
+          });
+          
+          console.log('DEBUG: Adding items to cart:', cartItems);
+          
+          // Add all items at once
+          const response = await fetch(window.Shopify.routes.root + 'cart/add.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ items: cartItems })
+          });
+
+            if (response.ok) {
+            closeDrawer(true); // Revert to "Não Personalizar" since item was added
+
+            // Check if Compre Junto (Shop the Look) rule is active
+            if (window.activeShopTheLookRule && typeof window.openSTLDrawer === 'function') {
+              // Open Compre Junto modal instead of cart drawer
+              // Still update cart sections in background for when user proceeds
+              const cartDrawer = document.querySelector('cart-drawer');
+              if (cartDrawer) {
+                cartDrawer.classList.remove('is-empty');
+                const cartDrawerItems = cartDrawer.querySelector('cart-drawer-items');
+                if (cartDrawerItems) cartDrawerItems.classList.remove('is-empty');
+                
+                const sections = cartDrawer.getSectionsToRender().map((section) => section.id);
+                fetch(`${window.Shopify.routes.root}?sections=${sections.join(',')}`)
+                  .then((res) => res.json())
+                  .then((json) => {
+                    // Render contents but DON'T open the cart drawer (renderContents checks activeShopTheLookRule)
+                    cartDrawer.renderContents({ sections: json });
+                  })
+                  .catch(() => {});
+              }
+              // Publish cart update event for icon bubble, progress bar, etc.
+              if (typeof publish === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
+                publish(PUB_SUB_EVENTS.cartUpdate, { source: 'customization-drawer', productVariantId: finalVariantId });
+              }
+              // Open the Compre Junto cross-sell modal
+              window.openSTLDrawer();
+            } else {
+              // No Compre Junto rule — open cart drawer normally
+              const cartDrawer = document.querySelector('cart-drawer');
+              if (cartDrawer) {
+                 cartDrawer.classList.remove('is-empty');
+                 const cartDrawerItems = cartDrawer.querySelector('cart-drawer-items');
+                 if (cartDrawerItems) cartDrawerItems.classList.remove('is-empty');
+                 
+                 const sections = cartDrawer.getSectionsToRender().map((section) => section.id);
+                 fetch(`${window.Shopify.routes.root}?sections=${sections.join(',')}`)
+                   .then((res) => res.json())
+                   .then((json) => {
+                     // Temporarily clear the rule to allow cart drawer to open
+                     const oldRule = window.activeShopTheLookRule;
+                     window.activeShopTheLookRule = null;
+                     cartDrawer.renderContents({ sections: json });
+                     window.activeShopTheLookRule = oldRule;
+                   })
+                   .catch((err) => {
+                     console.error('Failed to fetch cart sections:', err);
+                     cartDrawer.open();
+                   });
+                   
+                 if (typeof publish === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
+                   publish(PUB_SUB_EVENTS.cartUpdate, { source: 'customization-drawer', productVariantId: finalVariantId });
+                 }
+              } else {
+                 if (typeof publish === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
+                   publish(PUB_SUB_EVENTS.cartUpdate, { source: 'customization-drawer', productVariantId: finalVariantId });
+                 } else {
+                   window.location.reload(); 
+                 }
+              }
+            }
+          }
+ else {
+            const errorBody = await response.text();
+            console.error('Failed to add to cart:', errorBody);
+            try {
+              const errorJson = JSON.parse(errorBody);
+              alert('Erro: ' + (errorJson.description || errorJson.message || 'Falha ao adicionar ao carrinho.'));
+            } catch(e) {
+              alert('Erro ao adicionar ao carrinho. Verifique se o item está em estoque.');
+            }
+          }
+        } catch (error) {
+          console.error('Error adding to cart:', error);
+          alert('Erro ao adicionar ao carrinho. Tente novamente.');
+        } finally {
+          freshConfirmBtn.disabled = false;
+          if (freshConfirmBtn.dataset.originalHtml) {
+            freshConfirmBtn.innerHTML = freshConfirmBtn.dataset.originalHtml;
+          }
+        }
+      });
+
+      // Auto-uppercase name input (nameInput already declared above)
+      if (nameInput) {
+        nameInput.addEventListener('input', function() {
+          this.value = this.value.toUpperCase();
+          // Trigger total update
+          if (typeof window.updateCustomizationTotal === 'function') {
+            window.updateCustomizationTotal();
+          }
+        });
+      }
+
+      // Number input validation (numberInput already declared above)
+      if (numberInput) {
+        numberInput.addEventListener('input', function() {
+          this.value = this.value.replace(/[^0-9]/g, '');
+          // Trigger total update
+          if (typeof window.updateCustomizationTotal === 'function') {
+            window.updateCustomizationTotal();
+          }
+        });
+      }
+
+      // Escape key to close
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && freshDrawer.classList.contains('is-open')) {
+          closeDrawer();
+        }
+      });
+
+      // ===========================================
+      // PATCHES HANDLING
+      // ===========================================
+      initPatchesHandler();
+    }
+
+    function initPatchesHandler() {
+      const drawer = document.querySelector('.customization-drawer');
+      if (!drawer) return;
+
+      const dynamicContainer = drawer.querySelector(`#dynamic-patches-container-${sectionId}`);
+      const patchesTotal = drawer.querySelector('.patches-total');
+      const patchesTotalValue = drawer.querySelector('.patches-total-value');
+
+      // Global function to render patches (called by patch-script.liquid)
+      window.renderDrawerPatches = function(products) {
+        console.log('DEBUG: window.renderDrawerPatches called with:', products ? products.length : 0, 'products');
+        if (!dynamicContainer) return;
+
+        if (!products || products.length === 0) {
+          dynamicContainer.innerHTML = '<p style="text-align: center; padding: 1rem; color: #888;">Nenhum patch disponível para este produto.</p>';
+          if (patchesTotal) patchesTotal.style.display = 'none';
+          return;
+        }
+
+        // Group products by position (Manga, Peito)
+        const groups = {
+          'Manga': [],
+          'Peito': []
+        };
+
+        products.forEach(product => {
+          const variant = product.variants[0];
+          if (!variant) return;
+
+          // FILTER: Exclude "Camisa" products from appearing as patches (Fix for phantom Atlético Mineiro shirt)
+          const titleLower = product.title.toLowerCase();
+          if (titleLower.includes('camisa') || titleLower.includes('home retrô') || titleLower.includes('lupo')) {
+             console.log('DEBUG: Filtered out non-patch product:', product.title);
+             return;
+          }
+
+          // Detect position from tags or title
+          let position = 'Manga'; // Default
+          const tags = (product.tags || []).map(t => t.toLowerCase());
+          if (tags.includes('peito') || tags.includes('torax') || tags.includes('chest') || 
+              product.title.toLowerCase().includes('peito') || product.title.toLowerCase().includes('torax')) {
+            position = 'Peito';
+          }
+
+          groups[position].push({
+            id: product.id,
+            variantId: variant.id,
+            title: product.title,
+            price: variant.price,
+            image: (product.images && product.images[0]) || product.featured_image || ''
+          });
+        });
+
+        let html = '';
+
+        // Helper to render a group
+        const renderGroup = (title, items, groupName) => {
+          if (items.length === 0) return '';
+          
+          let groupHtml = `
+            <div class="patch-category">
+              <div class="patch-category-header">
+                <span class="patch-category-title">${title}</span>
+                <span class="patch-category-hint">(Apenas 1 patch)</span>
+              </div>
+              <div class="patch-category-items">
+                <label class="patch-item">
+                  <input type="radio" name="patch-${groupName}-${sectionId}" value="" class="patch-radio" checked style="display:none;" data-was-checked="true">
+                </label>
+          `;
+
+          items.forEach(item => {
+            const priceFormatted = (item.price / 100).toFixed(2).replace('.', ',');
+            groupHtml += `
+              <label class="patch-item">
+                <input type="radio" name="patch-${groupName}-${sectionId}" 
+                       value="${item.title}|${item.price}|${item.variantId}" 
+                       class="patch-radio" 
+                       data-price="${item.price}" 
+                       data-variant-id="${item.variantId}"
+                       data-was-checked="false">
+                <div class="patch-item-content">
+                  <div class="patch-thumb-wrapper">
+                    <img src="${item.image}" alt="${item.title}" class="patch-thumb">
+                  </div>
+                  <div class="patch-info">
+                    <span class="patch-name">${item.title}</span>
+                    <span class="patch-price">R$ ${priceFormatted}</span>
+                  </div>
+                  <div class="patch-check">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </div>
+                </div>
+              </label>
+            `;
+          });
+
+          groupHtml += `</div></div>`;
+          return groupHtml;
+        };
+
+        // Render groups
+        html += renderGroup('Manga', groups['Manga'], 'manga');
+        html += renderGroup('Peito', groups['Peito'], 'peito');
+
+        dynamicContainer.innerHTML = html;
+
+        // Toggle logic for patches (allows deselecting)
+        const patchRadios = dynamicContainer.querySelectorAll('.patch-radio');
+        patchRadios.forEach(radio => {
+          if (radio.dataset.clickBound === 'true') return;
+          radio.dataset.clickBound = 'true';
+
+          radio.addEventListener('click', function(e) {
+            const container = this.closest('.patch-category-items');
+            if (!container) return;
+
+            const groupName = this.name;
+            const radiosInGroup = container.querySelectorAll(`input[name="${groupName}"]`);
+            const isSelfAlreadyChecked = this.dataset.wasChecked === 'true';
+            
+            console.log('DEBUG: Patch click - Value:', this.value, 'Was checked:', isSelfAlreadyChecked);
+
+            if (this.value !== "" && isSelfAlreadyChecked) {
+              // UNCHECK: Force empty radio to be checked
+              const emptyRadio = container.querySelector(`input[name="${groupName}"][value=""]`);
+              if (emptyRadio) {
+                emptyRadio.checked = true;
+                radiosInGroup.forEach(r => {
+                  r.dataset.wasChecked = (r.value === "") ? "true" : "false";
+                });
+                updatePatchesTotal();
+              }
+            } else {
+              // CHECK THIS ONE
+              radiosInGroup.forEach(r => {
+                r.dataset.wasChecked = "false";
+              });
+              this.dataset.wasChecked = "true";
+              updatePatchesTotal();
+            }
+          });
+        });
+      };
+
+      function updatePatchesTotal() {
+        // Query all elements internally so this works from any scope
+        const drawer = document.querySelector('.customization-drawer');
+        if (!drawer) return;
+        
+        const dynamicContainer = drawer.querySelector('[id^="dynamic-patches-container-"]');
+        const patchesTotal = drawer.querySelector('.patches-total');
+        const patchesTotalValue = drawer.querySelector('.patches-total-value');
+        
+        let total = 0;
+        let selectedCount = 0;
+
+        if (dynamicContainer) {
+          const patchRadios = dynamicContainer.querySelectorAll('.patch-radio');
+          patchRadios.forEach(radio => {
+            if (radio.checked && radio.value) {
+              const price = parseInt(radio.dataset.price || '0', 10);
+              total += price;
+              selectedCount++;
+            }
+          });
+        }
+
+        if (patchesTotal && patchesTotalValue) {
+          if (selectedCount > 0) {
+            patchesTotal.style.display = 'flex';
+            patchesTotalValue.textContent = 'R$ ' + (total / 100).toFixed(2).replace('.', ',');
+          } else {
+            patchesTotal.style.display = 'none';
+          }
+        }
+
+        // Update Overall Customization Total
+        const customizationTotalValue = drawer.querySelector('[id^="customization-total-value-"]');
+        if (customizationTotalValue) {
+          // Dynamic cost for customization (Name/Number) = R$ 30,00 if any customization is present
+          let baseCost = 0;
+          const nameInput = drawer.querySelector('[id^="custom-name-"]');
+          const numberInput = drawer.querySelector('[id^="custom-number-"]');
+          const playerSelectEl = drawer.querySelector('.customization-select');
+          
+          const nameValue = nameInput?.value || '';
+          const numberValue = numberInput?.value || '';
+          const playerValue = playerSelectEl?.value || '';
+          
+          const topCostPriceEl = drawer.querySelector('[id^="cost-price-"]');
+
+          if (nameValue.trim() || numberValue.trim() || playerValue.trim()) {
+            baseCost = 3000; // R$ 30,00 (personalized variant)
+            if (topCostPriceEl) topCostPriceEl.textContent = '+ R$ 30,00';
+          } else {
+            baseCost = 0; // Base variant (no personalization fee)
+            if (topCostPriceEl) topCostPriceEl.textContent = '+ R$ 0,00';
+          }
+          
+          const grandTotal = baseCost + total; // total is patches cost
+          customizationTotalValue.textContent = '+ R$ ' + (grandTotal / 100).toFixed(2).replace('.', ',');
+        }
+
+        return { total, selectedCount };
+      }
+
+      // Expose updatePatchesTotal globally so it can be called from input event listeners
+      window.updateCustomizationTotal = updatePatchesTotal;
+
+      // Store references globally for the confirm button to use
+      window.getSelectedPatches = function() {
+        if (!dynamicContainer) return [];
+        const selected = [];
+        const patchRadios = dynamicContainer.querySelectorAll('.patch-radio');
+        
+        patchRadios.forEach(radio => {
+          if (radio.checked && radio.value) {
+            const parts = radio.value.split('|');
+            if (parts.length >= 3) {
+              const [name, price, variantId] = parts;
+              selected.push({
+                name: name,
+                price: parseInt(price, 10),
+                variantId: variantId
+              });
+            }
+          }
+        });
+        return selected;
+      };
+    }
+
+    function attachVariantListeners() {
+      const allFieldsets = document.querySelectorAll('.product-form__input--pill, .product-form__input--swatch');
+      
+      allFieldsets.forEach(fieldset => {
+        const legend = fieldset.querySelector('.form__label');
+        if (!legend) return;
+        
+        const legendText = legend.textContent.toLowerCase();
+        if (!legendText.includes('customize') && !legendText.includes('personalizar')) return;
+        
+        // Add pencil icon to legend (if not already there)
+        const legendSpan = legend.querySelector('span'); // usually variant name is in a span
+        const targetElement = legendSpan || legend;
+        
+        if (!legend.querySelector('.customize-icon')) {
+          const iconHTML = `<svg class="customize-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-right: 6px; vertical-align: -3px;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`;
+          targetElement.insertAdjacentHTML('afterbegin', iconHTML);
+        }
+
+        // Add listeners to inputs
+        const radios = fieldset.querySelectorAll('input[type="radio"]');
+        radios.forEach(radio => {
+          // Remove old listeners (cloning is tricky with Dawn's form handling, better to just add new one if not present)
+          if (radio.dataset.customizationListener) return;
+          radio.dataset.customizationListener = 'true';
+          
+          radio.addEventListener('change', function(e) {
+            const val = this.value.toLowerCase();
+            const isCustomize = (val.includes('customize') || val.includes('personalize') || val.includes('personalizar') || val.includes('sim')) && 
+                               !val.includes('não') && !val.includes('no') && !val.includes('none');
+            
+            if (isCustomize) {
+               const openFn = window[`openCustomDrawer_${sectionId}`];
+               if (openFn) openFn();
+            } else {
+               const closeFn = window[`closeCustomDrawer_${sectionId}`];
+               if (closeFn) closeFn();
+            }
+          });
+          
+          // Also check initial state
+          if (radio.checked) {
+            const val = radio.value.toLowerCase();
+             const isCustomize = (val.includes('customize') || val.includes('personalize') || val.includes('personalizar') || val.includes('sim')) && 
+                               !val.includes('não') && !val.includes('no') && !val.includes('none');
+             if (isCustomize && !document.querySelector('.customization-drawer.is-open')) {
+                 // Don't auto-open on page load, maybe? Or yes? 
+                 // Usually better not to auto-open on load unless user just clicked it. 
+                 // But for 'change' event it's fine.
+             }
+          }
+        });
+      });
+    }
+
+  }
+
+  // Run immediately
+  initCustomizationSystem();
+
+  // Re-run when variant-selects gets re-rendered by Dawn
+  document.addEventListener('product-info:loaded', function() {
+    // Small delay to let DOM settle
+    setTimeout(initCustomizationSystem, 100);
+  });
+
+  // Also run on DOMContentLoaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCustomizationSystem);
+  }
+</script>
+
+{%- render 'patch-script', product: product, pr_se_id: section_id -%}

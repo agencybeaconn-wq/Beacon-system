@@ -1,0 +1,61 @@
+{% comment %}
+    Renders a Shop the Look (Buy Together) box.
+    Accepts:
+    - block: {Object} Block object
+    - product: {Object} Product object
+{% endcomment %}
+
+{{ 'shop-the-look.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'shop-the-look.js' | asset_url }}" defer="defer"></script>
+
+<shop-the-look class="shop-the-look" data-url="{{ routes.product_recommendations_url }}?intent=complementary" data-section-id="{{ section.id }}" data-product-id="{{ product.id }}" data-limit="{{ block.settings.limit }}">
+  <div class="shop-the-look__container {% if block.settings.product_list == blank %}hidden{% endif %}">
+    <div class="shop-the-look__header">
+      <h3 class="shop-the-look__title">{{ block.settings.heading | default: 'Compre Junto' }}</h3>
+    </div>
+    <div class="shop-the-look__preview">
+      <div class="shop-the-look__images" id="ShopTheLookImages">
+        {% if block.settings.product_list != blank %}
+          {% for stl_product in block.settings.product_list limit: block.settings.limit %}
+            <img src="{{ stl_product.featured_image | image_url: width: 150 }}" class="shop-the-look__thumb" alt="{{ stl_product.title | escape }}">
+          {% endfor %}
+          {% if block.settings.product_list.count > block.settings.limit %}
+            <div class="shop-the-look__more-count">+{{ block.settings.product_list.count | minus: block.settings.limit }}</div>
+          {% endif %}
+        {% endif %}
+      </div>
+      <button type="button" class="shop-the-look__view-btn" id="ShopTheLookViewAll">
+        Ver mais
+      </button>
+    </div>
+  </div>
+
+  <div id="ShopTheLookModal" class="shop-the-look__modal drawer">
+    <div class="shop-the-look__modal-overlay"></div>
+    <div class="shop-the-look__modal-content drawer__inner">
+      <div class="shop-the-look__modal-header drawer__header">
+        <h2 class="shop-the-look__modal-title">{{ block.settings.heading | default: 'Compre Junto' }}</h2>
+        <button type="button" class="shop-the-look__modal-close" id="ShopTheLookModalClose" aria-label="Fechar">
+          <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" class="icon icon-close" fill="none" viewBox="0 0 18 17">
+            <path d="M.865 15.978a.5.5 0 00.707.707l7.433-7.434 7.434 7.434a.5.5 0 00.707-.707L9.712 8.546l7.434-7.434a.5.5 0 00-.707-.707L9.005 7.839 1.571.405a.5.5 0 00-.707.707l7.433 7.434L.865 15.978z" fill="currentColor">
+          </svg>
+        </button>
+      </div>
+      <div class="shop-the-look__modal-body drawer__body" id="ShopTheLookModalBody">
+        {% if block.settings.product_list != blank %}
+          {% for stl_product in block.settings.product_list %}
+            <div class="stl-product-card">
+              <img src="{{ stl_product.featured_image | image_url: width: 300 }}" class="stl-product-image" alt="{{ stl_product.title | escape }}">
+              <div class="stl-product-info">
+                <h4 class="stl-product-title">{{ stl_product.title }}</h4>
+                <div class="stl-product-price">{{ stl_product.price | money }}</div>
+                <a href="{{ stl_product.url }}" class="link underlined-link" style="font-size: 1.2rem; margin-top: 0.5rem;">Ver Produto</a>
+              </div>
+              <button type="button" class="stl-add-btn" onclick="window.location.href='{{ stl_product.url }}'">Adicionar</button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</shop-the-look>

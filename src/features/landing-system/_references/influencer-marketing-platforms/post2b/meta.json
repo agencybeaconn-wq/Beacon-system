@@ -1,0 +1,18 @@
+{
+  "slug": "post2b",
+  "url": "https://www.post2b.com/",
+  "scrapedAt": "2026-05-18T20:22:09.600Z",
+  "title": "Post2B.com | Marketing de Influência | Influenciadores Digitais e Marcas",
+  "description": "Temos o maior e mais completo portfólio de influenciadores do país. Somos a melhor plataforma para as suas campanhas. Conheça a Post2B",
+  "ogImage": "https://www.post2b.com/wp-content/uploads/2021/07/embredamento-3.jpg",
+  "headings": 37,
+  "ctas": 22,
+  "visual": {
+    "fontPrimary": "Poppins",
+    "fonts": [
+      "Poppins"
+    ],
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(33, 37, 41)"
+  }
+}

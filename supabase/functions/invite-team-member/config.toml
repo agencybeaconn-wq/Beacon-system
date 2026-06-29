@@ -1,0 +1,4 @@
+# Disable JWT verification for invite function
+# The function uses SUPABASE_SERVICE_ROLE_KEY internally and does not need caller JWT
+[functions.invite-team-member]
+verify_jwt = false

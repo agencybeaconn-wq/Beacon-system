@@ -1,0 +1,129 @@
+{
+  "mantos": [
+    {
+      "key": "snippets/kit-casal-variant-picker.liquid",
+      "exists": true,
+      "size": 36743
+    },
+    {
+      "key": "snippets/product-variant-picker.liquid",
+      "exists": true,
+      "size": 6085
+    },
+    {
+      "key": "snippets/cart-drawer.liquid",
+      "exists": true,
+      "size": 40328
+    },
+    {
+      "key": "snippets/cart-progress-bar.liquid",
+      "exists": true,
+      "size": 15195
+    },
+    {
+      "key": "snippets/customization-inputs.liquid",
+      "exists": true,
+      "size": 44748
+    },
+    {
+      "key": "snippets/patch-script.liquid",
+      "exists": true,
+      "size": 78739
+    },
+    {
+      "key": "sections/main-product.liquid",
+      "exists": true,
+      "size": 138616
+    },
+    {
+      "key": "sections/cart-drawer.liquid",
+      "exists": true,
+      "size": 29
+    },
+    {
+      "key": "sections/main-cart-items.liquid",
+      "exists": true,
+      "size": 16491
+    },
+    {
+      "key": "sections/custom-patch-rules.liquid",
+      "exists": true,
+      "size": 4498
+    },
+    {
+      "key": "templates/product.json",
+      "exists": true,
+      "size": 52038
+    },
+    {
+      "key": "snippets/cart-item-kit-casal.liquid",
+      "exists": false,
+      "size": 0,
+      "error": "status=404"
+    }
+  ],
+  "torcida": [
+    {
+      "key": "snippets/kit-casal-variant-picker.liquid",
+      "exists": false,
+      "size": 0,
+      "error": "status=404"
+    },
+    {
+      "key": "snippets/product-variant-picker.liquid",
+      "exists": true,
+      "size": 15120
+    },
+    {
+      "key": "snippets/cart-drawer.liquid",
+      "exists": true,
+      "size": 28200
+    },
+    {
+      "key": "snippets/cart-progress-bar.liquid",
+      "exists": true,
+      "size": 14901
+    },
+    {
+      "key": "snippets/customization-inputs.liquid",
+      "exists": true,
+      "size": 47588
+    },
+    {
+      "key": "snippets/patch-script.liquid",
+      "exists": true,
+      "size": 80777
+    },
+    {
+      "key": "sections/main-product.liquid",
+      "exists": true,
+      "size": 140469
+    },
+    {
+      "key": "sections/cart-drawer.liquid",
+      "exists": true,
+      "size": 29
+    },
+    {
+      "key": "sections/main-cart-items.liquid",
+      "exists": true,
+      "size": 13865
+    },
+    {
+      "key": "sections/custom-patch-rules.liquid",
+      "exists": true,
+      "size": 4498
+    },
+    {
+      "key": "templates/product.json",
+      "exists": true,
+      "size": 46367
+    },
+    {
+      "key": "snippets/cart-item-kit-casal.liquid",
+      "exists": false,
+      "size": 0,
+      "error": "status=404"
+    }
+  ]
+}

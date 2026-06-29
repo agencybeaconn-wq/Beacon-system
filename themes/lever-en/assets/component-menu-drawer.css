@@ -1,0 +1,399 @@
+.header__icon--menu {
+  position: initial;
+}
+
+.js menu-drawer>details:not(.menu-opening)>summary::before {
+  content: '';
+  position: absolute;
+  cursor: default;
+  width: 100%;
+  height: calc(100vh - 100%);
+  height: calc(var(--viewport-height, 100vh) - (var(--header-bottom-position, 100%)));
+  top: 100%;
+  left: 0;
+  background: rgba(var(--color-foreground), 0.5);
+  opacity: 0;
+  visibility: hidden;
+  z-index: 2;
+  transition: opacity var(--duration-default) ease, visibility 0s var(--duration-default);
+}
+
+menu-drawer>details[open]>summary::before {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity var(--duration-default) ease, visibility var(--duration-default) ease;
+}
+
+.menu-drawer {
+  position: fixed;
+  transform: translateX(-100%);
+  visibility: hidden;
+  z-index: 10000 !important;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100% !important;
+  height: 100svh !important;
+  padding: 0;
+  background-color: #fff;
+  color: #000;
+  /* Flex Layout for Fixed Footer */
+  display: flex !important;
+  flex-direction: column;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.js .menu-drawer {
+  height: 100vh !important;
+  height: 100svh !important;
+}
+
+.js details[open]>.menu-drawer {
+  visibility: visible;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.js details[open].menu-opening>.menu-drawer {
+  transform: translateX(0);
+}
+
+/* Closing animation - transition back to hidden state */
+.js details[open]:not(.menu-opening)>.menu-drawer {
+  transform: translateX(-100%);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s 0.6s;
+}
+
+.js .menu-drawer__navigation .submenu-open {
+  visibility: visible;
+}
+
+@media screen and (min-width: 750px) {
+  .menu-drawer {
+    width: 45rem;
+  }
+}
+
+.menu-drawer__inner-container {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.menu-drawer__navigation-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+  overflow: hidden;
+}
+
+.menu-drawer__navigation {
+  padding: 1.5rem 0;
+  flex: 1;
+  overflow-y: auto;
+  /* Scroll only here */
+  overflow-x: hidden;
+}
+
+.menu-drawer__navigation::-webkit-scrollbar {
+  display: none;
+}
+
+.menu-drawer__inner-submenu {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.js .menu-drawer__menu li {
+  margin-bottom: 0;
+  position: relative;
+}
+
+.js .menu-drawer__menu li::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  /* Full Width */
+  width: 100%;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.05);
+  display: block;
+}
+
+.js .menu-drawer__menu li:last-child::after {
+  display: none;
+}
+
+.menu-drawer__menu-item {
+  padding: 1.5rem 3rem;
+  text-decoration: none;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #000 !important;
+  /* Force Black */
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-drawer summary.menu-drawer__menu-item {
+  padding-right: 3rem;
+}
+
+.menu-drawer__menu-item--active,
+.menu-drawer__menu-item:focus,
+.menu-drawer__close-button:focus,
+.menu-drawer__menu-item:hover,
+.menu-drawer__close-button:hover {
+  color: #000 !important;
+  background-color: transparent;
+}
+
+.js .menu-drawer__menu-item .icon-caret {
+  display: none;
+}
+
+.menu-drawer__menu-item>.svg-wrapper {
+  display: none;
+}
+
+/* Accordion Style Submenu */
+.js .menu-drawer__submenu {
+  display: block;
+  max-height: 0;
+  visibility: hidden;
+  transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s;
+  width: 100%;
+  background-color: transparent;
+  padding-left: 1.5rem;
+  overflow: hidden;
+}
+
+details[open]>.menu-drawer__submenu {
+  max-height: 1000px;
+  visibility: visible;
+}
+
+.js .menu-drawer__submenu>ul {
+  padding: 0;
+  margin: 0;
+}
+
+.menu-drawer__submenu .menu-drawer__menu-item {
+  font-size: 1.6rem;
+  font-weight: 600;
+  padding: 1.2rem 2.5rem;
+}
+
+details[open]>.menu-drawer__submenu .menu-drawer__menu-item {
+  opacity: 1;
+  transform: none;
+}
+
+
+.menu-drawer__menu>li:first-child>.menu-drawer__menu-item {
+  padding-top: 1rem;
+}
+
+.menu-drawer__close-button {
+  display: none !important;
+}
+
+/* Updated Utility Links - Fixed Bottom */
+.menu-drawer__utility-links {
+  padding: 2rem 3rem;
+  padding-bottom: calc(2rem + env(safe-area-inset-bottom, 1rem));
+  background-color: transparent;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+  /* Not sticky, simply at bottom of flex */
+  z-index: 5;
+  margin-top: auto;
+  flex-shrink: 0;
+  /* Don't shrink */
+}
+
+@media screen and (max-width: 749px) {
+  .header--has-account:where(:not(.header--has-social):not(.header--has-localizations)) .menu-drawer__utility-links {
+    padding: 2rem 3rem;
+  }
+}
+
+@media screen and (max-width: 989px) {
+  .header--has-localizations:where(:not(.header--has-social)) .menu-drawer__utility-links {
+    padding: 2rem 3rem;
+  }
+}
+
+.menu-drawer__account {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 1rem 0;
+  font-size: 1.4rem;
+  color: #000;
+  margin-bottom: 0;
+}
+
+.menu-drawer__utility-links:has(.menu-drawer__localization) .menu-drawer__account {
+  margin: 0;
+}
+
+.menu-drawer__account account-icon>.svg-wrapper {
+  height: 2rem;
+  width: 2rem;
+  margin-right: 1rem;
+}
+
+.menu-drawer__account shop-user-avatar {
+  --shop-avatar-size: 2.4rem;
+  margin-right: 0.55rem;
+  margin-left: -0.45rem;
+}
+
+.menu-drawer__account:hover account-icon>.svg-wrapper {
+  transform: scale(1.07);
+}
+
+.menu-drawer .list-social {
+  justify-content: flex-start;
+  margin-left: -1.25rem;
+}
+
+.menu-drawer .list-social:empty {
+  display: none;
+}
+
+.menu-drawer .list-social__link {
+  padding: 1.1rem 1.1rem;
+}
+
+/* Plus/Minus Toggle Icons - Only show if parent has details (meaning it has sublinks) */
+details>.menu-drawer__menu-item::after {
+  content: '+';
+  font-size: 2.4rem;
+  font-weight: 300;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+  transform-origin: center;
+  display: inline-block;
+  color: #000 !important;
+  /* Force Black */
+}
+
+details[open]>.menu-drawer__menu-item::after {
+  color: rgb(var(--color-button)) !important;
+  transform: rotate(45deg);
+}
+
+/* Hide plus icon for simple links that are NOT inside a details tag */
+.menu-drawer__menu>li>a.menu-drawer__menu-item::after {
+  display: none;
+}
+
+.menu-drawer__submenu .menu-drawer__menu-item::after {
+  content: none;
+}
+
+.menu-drawer .list-social__link {
+  color: #000;
+}
+
+.menu-drawer__header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1.5rem 3rem;
+  background-color: #fff;
+  /* Ensure solid background when sticky */
+  color: #000;
+  position: sticky;
+  top: 0;
+  z-index: 10001 !important;
+  flex-shrink: 0;
+  /* Keep header from shrinking */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.section-header.menu-open {
+  z-index: 9000 !important;
+  transform: none !important;
+}
+
+.menu-drawer__close-icon {
+  width: 4.4rem;
+  height: 4.4rem;
+  color: #000 !important;
+  /* Force Black */
+  cursor: pointer;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.menu-drawer__close-icon .icon-close {
+  width: 2.2rem !important;
+  height: 2.2rem !important;
+  display: block !important;
+  color: #000 !important;
+  fill: #000 !important;
+}
+
+/* Ensure the toggle X in the summary is also black when drawer is open */
+.menu-opening .header__icon--menu .icon-close,
+.menu-opening .header__icon--menu .icon-close path,
+details[open].menu-opening .header__icon--menu .icon-close {
+  color: #000 !important;
+  fill: #000 !important;
+}
+
+/* Account row with Instagram aligned to right */
+.menu-drawer__account-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.menu-drawer__account-row .list-social {
+  margin: 0;
+  justify-content: flex-end;
+}
+
+.menu-drawer__account-row .list-social__link {
+  padding: 0.5rem;
+}
+
+.menu-drawer__contact-info {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.menu-drawer__contact-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.3rem;
+  color: rgba(0, 0, 0, 0.6);
+  margin: 0;
+}
+
+.menu-drawer__contact-item .svg-wrapper {
+  width: 1.6rem;
+  height: 1.6rem;
+  opacity: 0.6;
+}

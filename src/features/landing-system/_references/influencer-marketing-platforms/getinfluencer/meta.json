@@ -1,0 +1,19 @@
+{
+  "slug": "getinfluencer",
+  "url": "https://getinfluencer.me/",
+  "scrapedAt": "2026-05-18T20:21:10.060Z",
+  "title": "Get Influencer - Conectamos influencers com anunciantes",
+  "description": "Conectamos anunciantes com influencers de maneira segura e desburocrática para ambos os lados.  Temos mais de 5 mil influenciadores em diversos segmentos ansiosos para colaborar no seu projeto.",
+  "ogImage": "",
+  "headings": 10,
+  "ctas": 14,
+  "visual": {
+    "fontPrimary": "Open Sans",
+    "fonts": [
+      "Open Sans",
+      "Montserrat"
+    ],
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(105, 105, 105)"
+  }
+}

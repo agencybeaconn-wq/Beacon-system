@@ -1,0 +1,19 @@
+{
+  "shop": "xdppna-zt.myshopify.com",
+  "theme_id": 128963772488,
+  "theme_name": "Tema Lever Rolagem",
+  "theme_role": "main",
+  "total_assets": 421,
+  "pdp_files_fetched": [
+    "config/settings_data.json",
+    "layout/theme.liquid",
+    "templates/index.json",
+    "sections/header.liquid",
+    "sections/footer.liquid",
+    "sections/footer-group.json",
+    "sections/header-group.json"
+  ],
+  "floating_video_files": [
+    "sections/floating-video.liquid"
+  ]
+}

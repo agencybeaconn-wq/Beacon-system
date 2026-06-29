@@ -1,0 +1,70 @@
+{% schema %}
+{
+  "name": "Configuração de Patches",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Adicione regras para exibir patches específicos baseados em palavras-chave no título do produto."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "patch_rule",
+      "name": "Regra de Patch",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "keywords",
+          "label": "Palavras-chave (separadas por vírgula)",
+          "info": "Ex: portugal, argentina. Se o título do produto conter qualquer uma dessas palavras, o patch será exibido."
+        },
+        {
+          "type": "product",
+          "id": "patch_product",
+          "label": "Produto Patch"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Posição",
+          "options": [
+            { "value": "manga", "label": "Manga" },
+            { "value": "peito", "label": "Peito" },
+            { "value": "manga_peito", "label": "Manga + Peito" }
+          ],
+          "default": "manga"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Configuração de Patches",
+      "blocks": [
+        {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "copa do mundo, world cup, 2026",
+            "position": "manga"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+  window.customPatchRules = [
+    {% for block in section.blocks %}
+      {% if block.settings.patch_product != blank %}
+      {
+        keywords: {{ block.settings.keywords | split: ',' | json }},
+        patchHandle: {{ block.settings.patch_product.handle | json }},
+        position: {{ block.settings.position | json }}
+      }{% unless forloop.last %},{% endunless %}
+      {% endif %}
+    {% endfor %}
+  ];
+</script>
+

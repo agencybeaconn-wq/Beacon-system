@@ -1,0 +1,28 @@
+{
+  "data": {
+    "products": {
+      "edges": []
+    },
+    "brasilCount": {
+      "productsCount": {
+        "count": 110
+      }
+    },
+    "selecoesCount": {
+      "productsCount": {
+        "count": 111
+      }
+    }
+  },
+  "extensions": {
+    "cost": {
+      "requestedQueryCost": 7,
+      "actualQueryCost": 6,
+      "throttleStatus": {
+        "maximumAvailable": 2000,
+        "currentlyAvailable": 1994,
+        "restoreRate": 100
+      }
+    }
+  }
+}

@@ -1,0 +1,208 @@
+# BLOCK: Milestone Jersey Filter
+
+## META
+- **Origem:** TG Jerseys / LEVER EVER TG JERSEYS (theme 157588324582)
+- **Data:** 2026-04-08
+- **Store:** store-tg-jersey.myshopify.com
+
+## O QUE FAZ
+Conta quantas camisas de futebol qualificadas estao no carrinho para alimentar a barra de progresso de promocoes (ex: "Compre 2 Leve 3" e "Compre 3 Leve 5"). O cliente ve a barra de progresso avancar conforme adiciona camisas, mas itens como shorts, jaquetas, agasalhos, patches e acessorios NAO contam para o progresso. A contagem e exposta via `data-shirt-count` no container HTML para que o JavaScript da barra de progresso possa le-la.
+
+## ONDE INSERIR
+- **Arquivo alvo:** `snippets/cart-progress-bar.liquid`
+- **Posicao:** No topo absoluto do arquivo, antes de qualquer output HTML
+- **Como encontrar:** Abrir `snippets/cart-progress-bar.liquid`. Se o arquivo nao existir, criar. Este codigo Liquid deve ser a PRIMEIRA coisa no arquivo, antes de qualquer `<div>`.
+
+## DEPENDE DE
+Nenhum
+
+## CONTEXTO PARA O CLAUDE QUE VAI RECEBER
+Este bloco implementa um filtro sofisticado para contar apenas camisas de futebol no carrinho, ignorando todos os outros tipos de produto.
+
+**Logica de filtragem (3 etapas por item):**
+
+1. **Exclusao de patches:** Se `item.properties['Posicao']` nao e blank OU titulo contem "patch" -> pula o item
+2. **Keywords negativas (16 palavras):** Se o titulo (downcase) contem qualquer uma dessas, NAO e camisa: `short`, `training`, `jacket`, `windbreaker`, `tank`, `hoodie`, `moletom`, `agasalho`, `jaqueta`, `corta vento`, `baby`, `body`, `conjunto`, `regata`, `accessory`, `accessories`
+3. **Keywords positivas (9 palavras):** O titulo OU tipo do produto deve conter pelo menos uma: `jersey`, `shirt`, `camisa`, `camiseta`, `version`, `retro` (no titulo), `jersey`, `shirt`, `camisa` (no tipo)
+
+**Resultado final:** Item conta se `is_jersey == true AND is_patch == false AND is_excluded == false`
+
+**Variaveis de saida:**
+- `shirt_count` — contagem real de camisas (soma de quantities)
+- `display_count` — limitado ao `final_goal` (5) para nao ultrapassar a barra
+- `progress_percent` — 0 a 100, proporcional a display_count/final_goal
+- `left_for_3` — camisas faltando para promo 1 (Buy 2 Get 3)
+- `left_for_5` — camisas faltando para promo 2 (Buy 3 Get 5)
+- `promo_1` (3) e `promo_2` (5) — goals das promocoes
+
+**Data attributes no container HTML:**
+- `data-shirt-count` — display_count (capped)
+- `data-raw-count` — shirt_count (real, sem cap)
+- `data-goal` — final_goal
+- `data-promo1` e `data-promo2` — thresholds das promos
+
+**O que pode dar errado:**
+- Lojas em portugues usam titulos como "Camisa Retrô..." enquanto lojas em ingles usam "Jersey...". As keywords cobrem ambos os idiomas, mas se uma loja usar nomenclatura diferente (ex: "Maglia", "Trikot"), o filtro NAO vai reconhecer.
+- A keyword "shirt" pode gerar falso positivo com "T-Shirt" de merch casual. Se a loja vender camisetas casuais, adicionar keyword negativa.
+- A keyword "version" captura "Player Version" e "Fan Version" — isso e intencional.
+- Se as promocoes da loja alvo forem diferentes (ex: Buy 1 Get 2), ajustar `promo_1` e `promo_2`.
+- O HTML do container (`<div class="cart-progress-bar-container">`) e apenas um stub. O HTML completo da barra de progresso com milestones visuais NAO esta neste bloco.
+
+## CODIGO DE REFERENCIA
+
+```liquid
+{%- liquid
+  # Two promotions: Buy 2 Get 3 + Buy 3 Get 5
+  assign promo_1 = 3
+  assign promo_2 = 5
+  assign final_goal = promo_2
+
+  # Count ONLY qualifying jerseys
+  assign shirt_count = 0
+  for item in cart.items
+    assign item_title_lower = item.product.title | downcase
+    assign item_type_lower = item.product.type | downcase
+
+    # -- Skip patches (line-item property or title) --
+    assign is_patch = false
+    if item.properties['Posicao'] != blank or item_title_lower contains 'patch'
+      assign is_patch = true
+    endif
+
+    # -- Negative keywords (16): if title contains any, NOT a jersey --
+    assign is_excluded = false
+    if item_title_lower contains 'short'
+      assign is_excluded = true
+    endif
+    if item_title_lower contains 'training'
+      assign is_excluded = true
+    endif
+    if item_title_lower contains 'jacket'
+      assign is_excluded = true
+    endif
+    if item_title_lower contains 'windbreaker'
+      assign is_excluded = true
+    endif
+    if item_title_lower contains 'tank'
+      assign is_excluded = true
+    endif
+    if item_title_lower contains 'hoodie'
+      assign is_excluded = true
+    endif
+    if item_title_lower contains 'moletom'
+      assign is_excluded = true
+    endif
+    if item_title_lower contains 'agasalho'
+      assign is_excluded = true
+    endif
+    if item_title_lower contains 'jaqueta'
+      assign is_excluded = true
+    endif
+    if item_title_lower contains 'corta vento'
+      assign is_excluded = true
+    endif
+    if item_title_lower contains 'baby'
+      assign is_excluded = true
+    endif
+    if item_title_lower contains 'body'
+      assign is_excluded = true
+    endif
+    if item_title_lower contains 'conjunto'
+      assign is_excluded = true
+    endif
+    if item_title_lower contains 'regata'
+      assign is_excluded = true
+    endif
+    if item_title_lower contains 'accessory'
+      assign is_excluded = true
+    endif
+    if item_title_lower contains 'accessories'
+      assign is_excluded = true
+    endif
+
+    # -- Positive keywords (9): title or type must contain at least one --
+    assign is_jersey = false
+    if item_title_lower contains 'jersey'
+      assign is_jersey = true
+    endif
+    if item_title_lower contains 'shirt'
+      assign is_jersey = true
+    endif
+    if item_title_lower contains 'camisa'
+      assign is_jersey = true
+    endif
+    if item_title_lower contains 'camiseta'
+      assign is_jersey = true
+    endif
+    if item_title_lower contains 'version'
+      assign is_jersey = true
+    endif
+    if item_title_lower contains 'retro'
+      assign is_jersey = true
+    endif
+    if item_type_lower contains 'jersey'
+      assign is_jersey = true
+    endif
+    if item_type_lower contains 'shirt'
+      assign is_jersey = true
+    endif
+    if item_type_lower contains 'camisa'
+      assign is_jersey = true
+    endif
+
+    # -- Final check: must be a jersey, not a patch, not excluded --
+    if is_jersey and is_patch == false and is_excluded == false
+      assign shirt_count = shirt_count | plus: item.quantity
+    endif
+  endfor
+
+  # Cap display at final goal
+  assign display_count = shirt_count
+  if display_count > final_goal
+    assign display_count = final_goal
+  endif
+
+  # Calculate progress percentage (0 to 5 = 0% to 100%)
+  assign progress_percent = 0
+  if display_count > 0
+    if display_count >= final_goal
+      assign progress_percent = 100
+    else
+      assign progress_percent = display_count | times: 100.0 | divided_by: final_goal
+    endif
+  endif
+
+  # How many jerseys left for each milestone
+  assign left_for_3 = promo_1 | minus: display_count
+  if left_for_3 < 0
+    assign left_for_3 = 0
+  endif
+  assign left_for_5 = promo_2 | minus: display_count
+  if left_for_5 < 0
+    assign left_for_5 = 0
+  endif
+-%}
+
+<!-- The container div outputs shirt count as data attributes for JS -->
+<div class="cart-progress-bar-container" id="CartProgressBar"
+  data-shirt-count="{{ display_count }}"
+  data-raw-count="{{ shirt_count }}"
+  data-goal="{{ final_goal }}"
+  data-promo1="{{ promo_1 }}"
+  data-promo2="{{ promo_2 }}"
+  style="margin-top: 20px;">
+  <!-- ... progress bar HTML follows ... -->
+</div>
+```
+
+## COMO VALIDAR
+- [ ] Adicionar 1 camisa ao carrinho — `data-shirt-count` mostra "1"
+- [ ] Adicionar 1 short ao carrinho — `data-shirt-count` NAO muda
+- [ ] Adicionar 1 jaqueta — `data-shirt-count` NAO muda
+- [ ] Adicionar 1 patch — `data-shirt-count` NAO muda
+- [ ] Adicionar 2 camisas (qty=2 de uma camisa) — `data-shirt-count` mostra "2"
+- [ ] Adicionar 6 camisas — `data-shirt-count` mostra "5" (capped)
+- [ ] `data-raw-count` mostra "6" (nao capped)
+- [ ] `progress_percent` e 100 quando display_count >= 5
+- [ ] Testar com titulos em portugues ("Camisa Retrô") e ingles ("Jersey")
+- [ ] Inspecionar elemento no DevTools para verificar data attributes

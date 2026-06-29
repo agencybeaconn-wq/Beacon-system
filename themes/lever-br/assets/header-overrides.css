@@ -1,0 +1,480 @@
+.header__icons {
+    justify-content: flex-end;
+    gap: 0.2rem !important;
+    /* Extremely tight gap */
+}
+
+.header__icon {
+    width: 3.2rem !important;
+    /* Force small width */
+    height: 3.2rem !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+details-modal.header__search {
+    display: inline-flex !important;
+    width: 3.2rem !important;
+    /* Match other icon widths */
+    margin-right: -0.2rem !important;
+    /* Balanced gap to match Wishlist -> Cart */
+}
+
+/* Fix "Phantom" Close Icon taking space when search is closed */
+.header__search details:not([open]) .header__icon-close {
+    display: none !important;
+}
+
+.header__search details[open] .header__icon-close {
+    display: inline-flex !important;
+}
+
+/* Ensure only one icon shows at a time in the toggle */
+.header__search details[open] .header__icon-search {
+    display: none !important;
+}
+
+/* Force Hamburger to match other icons (Primary/Gold) */
+.header__icon--menu,
+.header__icon--menu .icon {
+    color: rgb(var(--color-button)) !important;
+}
+
+/* Tighter spacing for inline lists specifically if used */
+.header__icons .list-menu__item {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+/* Standardized Badges (Cart & Wishlist) - DEFINITIVE SYMMETRY & CENTERING */
+.cart-count-bubble,
+.wishlist-count-bubble {
+    position: absolute !important;
+    top: -0.4rem !important;
+    /* Slightly higher for premium placement */
+    right: -0.5rem !important;
+    font-size: 0.9rem !important;
+    font-weight: 800 !important;
+    height: 1.5rem !important;
+    width: 1.5rem !important;
+    border-radius: 50% !important;
+    /* Ultra-precise centering */
+    display: flex !important;
+    /* Will be toggled by JS display: none */
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: normal !important;
+    text-align: center !important;
+    min-width: 1.5rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    z-index: 5 !important;
+    pointer-events: none !important;
+    pointer-events: none !important;
+    /* Removed box-shadow border per user request */
+    /* Subtle border for definition against black */
+}
+
+/* Force children to not have any offsetting styles */
+.cart-count-bubble span[aria-hidden="true"],
+.wishlist-count-bubble span[aria-hidden="true"] {
+    display: block !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Announcement Bar - Vertical Centering & Styling Refinement */
+.utility-bar {
+    height: 4.8rem !important;
+    /* Fixed height for consistency */
+    min-height: 4.8rem !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+.utility-bar__grid {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.announcement-bar__message {
+    font-size: 1.4rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02rem !important;
+    padding: 0 !important;
+    /* Unified nudge on parent */
+    margin: 0 !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    text-align: center;
+    min-height: 100% !important;
+}
+
+.announcement-bar__announcement,
+.announcement-bar {
+    height: 4.8rem !important;
+    /* Match utility bar height */
+    min-height: 4.8rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+}
+
+.announcement-bar-slider {
+    align-items: center !important;
+    display: flex !important;
+    width: 100% !important;
+    height: 100% !important;
+    transform: translateY(0.6rem) !important;
+    /* Unified shift for Text + Arrows */
+}
+
+.announcement-bar .slider-button {
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.announcement-bar__link {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    text-decoration: none !important;
+}
+
+/* End Announcement Bar Styling */
+
+/* Ensure empty p tags don't kill layout */
+.announcement-bar__message:empty {
+    display: none !important;
+}
+
+/* Titles Hover - Remove Underline */
+.card__heading a:hover,
+.full-width-link:hover,
+.card-information__text:hover {
+    text-decoration: none !important;
+}
+
+/* Ensure they can BE HIDDEN by JS */
+.cart-count-bubble[style*="display: none"],
+.wishlist-count-bubble[style*="display: none"],
+.cart-count-bubble:empty,
+.wishlist-count-bubble:empty {
+    display: none !important;
+}
+
+/* Footer Lever Branding */
+.footer__lever-branding {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.footer__lever-link {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.3s ease;
+}
+
+.footer__lever-link:hover {
+    opacity: 0.8;
+}
+
+.footer__lever-text {
+    font-size: 1.2rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+}
+
+.footer__lever-logo {
+    height: 1.8rem;
+    width: auto;
+    display: block;
+}
+
+.footer__shopify-logo {
+    height: 2.2rem;
+    width: auto;
+    display: block;
+    opacity: 0.9;
+}
+
+@media screen and (max-width: 749px) {
+    .footer__lever-branding {
+        justify-content: center;
+        gap: 1.5rem;
+    }
+}
+
+/* Search Bar Refinements */
+.search-modal__content {
+    background-color: #ffffff !important;
+    padding: 1rem 1.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    /* Stable distribution */
+    gap: 0 !important;
+    /* Controlled by flex-basis */
+}
+
+/* Balanced responsive bar */
+.search-modal__content>predictive-search,
+.search-modal__content>search-form {
+    flex: 1 !important;
+    display: block !important;
+    margin-right: 1.5rem !important;
+    /* Balanced gap */
+    max-width: calc(100% - 70px) !important;
+    /* Allow bar to expand more while respecting 60px X zone */
+}
+
+.search-modal__form {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.search-modal .field {
+    width: 100% !important;
+    background: #f5f5f5 !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    overflow: hidden !important;
+    /* Ensure background and children don't bleed out */
+    box-shadow: none !important;
+    height: 4.5rem !important;
+    /* Consistent height */
+    display: flex !important;
+    align-items: center !important;
+}
+
+.search-modal .field__input {
+    background-color: transparent !important;
+    color: #000000 !important;
+    border: none !important;
+    padding-right: 4rem !important;
+    height: 100% !important;
+    /* Fill parent height */
+}
+
+.search-modal__close-button {
+    flex: 0 0 60px !important;
+    /* Tightened width for balance */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.search-modal__close-button .icon {
+    width: 2.22rem !important;
+    height: 2.22rem !important;
+    stroke-width: 0.3px !important;
+    /* Ultra-thin minimal stroke */
+}
+
+.search-modal .field__input::placeholder {
+    color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.search-modal .field__label,
+.search-modal .search__button {
+    color: #000000 !important;
+}
+
+.search-modal .search__button:hover {
+    background-color: transparent !important;
+}
+
+.search-modal .modal__close-button,
+.search-modal .reset__button {
+    color: #000000 !important;
+}
+
+.search-modal .icon {
+    color: #000000 !important;
+}
+
+/* Fix "black ball" - reset icon should not have fill */
+.search-modal .icon-close,
+.search-modal .icon-reset {
+    fill: none !important;
+    stroke: currentColor !important;
+}
+
+/* Ensure search icon is filled if it's meant to be */
+.search-modal .icon-search {
+    fill: currentColor !important;
+}
+
+/* Remove default Dawn field styling that causes "flaws" */
+.search-modal .field:after,
+.search-modal .field:before {
+    display: none !important;
+}
+
+/* desktop navigation link weight */
+.header__menu-item {
+    font-size: 2.0rem;
+    font-weight: 400 !important;
+}
+
+/* Wishlist Fly Animation */
+.wishlist-fly-item {
+    position: fixed;
+    z-index: 10000;
+    pointer-events: none;
+    transition: all 1.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.wishlist-fly-item svg {
+    width: 1.8rem !important;
+    height: 1.8rem !important;
+    color: #ff0000 !important;
+    fill: #ff0000 !important;
+    stroke: #ff0000 !important;
+}
+
+.header__icon--wishlist.is-active svg {
+    color: #ff0000 !important;
+    fill: #ff0000 !important;
+    stroke: none !important;
+}
+
+.header__icon--wishlist.is-active {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.is-active .heart-outline,
+.active .heart-outline {
+    display: none !important;
+}
+
+.is-active .heart-solid,
+.active .heart-solid {
+    display: block !important;
+    fill: #ff0000 !important;
+    color: #ff0000 !important;
+}
+
+/* Decrease desktop menu font size */
+.header__menu-item {
+    font-size: 1.3rem !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.05rem !important;
+}
+
+/* Section Header Model 2: With Line - Standardized Alignment */
+.section-header--with-line {
+    display: flex !important;
+    align-items: center !important;
+    gap: 1.5rem !important;
+    width: 100% !important;
+    margin-bottom: 0 !important;
+}
+
+.section-header--with-line h2 {
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: normal !important;
+    flex-shrink: 0 !important;
+    max-width: 100% !important;
+}
+
+/* Base line pseudo-element */
+.section-header--with-line::before,
+.section-header--with-line::after {
+    content: "";
+    height: 2px;
+    background-color: rgb(var(--color-button));
+    flex-grow: 1;
+    display: none;
+    min-width: 1rem;
+}
+
+/* Alignment Modifiers */
+.section-header--left {
+    justify-content: flex-start !important;
+}
+
+.section-header--left::after {
+    display: inline-block !important;
+}
+
+.section-header--center {
+    justify-content: center !important;
+}
+
+.section-header--center::before,
+.section-header--center::after {
+    display: inline-block !important;
+    max-width: none !important;
+}
+
+.section-header--right {
+    justify-content: flex-end !important;
+}
+
+.section-header--right::before {
+    display: inline-block !important;
+}
+
+/* Adjust for mobile */
+@media screen and (max-width: 749px) {
+    .section-header--with-line {
+        gap: 1rem !important;
+        margin-bottom: 0 !important;
+    }
+}
+
+
+@keyframes wishlist-pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.4);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.wishlist-pulse-active {
+    animation: wishlist-pulse 0.4s ease-out;
+}

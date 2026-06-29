@@ -1,0 +1,213 @@
+{%- comment -%}
+  clone-theme — product grid no estilo "premium e-commerce":
+  - Heading centralizado
+  - Card largo (4 cols) com badge + stars + preço + BOGO box opcional + swatches + Add to cart
+  - Suporta product.metafields.reviews.* (Loox/Judge.me/Yotpo) com fallback no setting
+  - BOGO box e Add to cart são togglable por section
+{%- endcomment -%}
+
+{%- liquid
+  assign products_to_show = section.settings.products_to_show
+  if template contains 'collection'
+    assign collection_handle = collection.handle
+    assign products_list = collection.products
+  else
+    assign collection_handle = section.settings.collection
+    assign products_list = collections[collection_handle].products
+  endif
+-%}
+
+<section class="clone-product-grid-section" style="padding: 32px 0;">
+  {% if section.settings.heading != blank %}
+    <div class="clone-section-head clone-section-head--center">
+      <h2 class="clone-section-head__title">{{ section.settings.heading }}</h2>
+      {% if section.settings.show_view_all and collection_handle != blank %}
+        <a href="{{ collections[collection_handle].url | default: '/collections/all' }}" class="clone-section-head__link">{{ section.settings.view_all_label | default: 'View all' }} →</a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="clone-grid clone-grid--{{ section.settings.columns }}col">
+    {% for product in products_list limit: products_to_show %}
+      {%- liquid
+        assign first_option = product.options_with_values[0]
+        assign variant = product.selected_or_first_available_variant
+        assign rating_count = product.metafields.reviews.rating_count.value
+        if rating_count == blank
+          assign rating_count = section.settings.fallback_review_count
+        endif
+      -%}
+      <div class="clone-grid__card">
+        <a href="{{ product.url }}" class="clone-grid__media-wrap">
+          {%- assign badge_max = section.settings.badge_max | default: 4 -%}
+          {% if section.settings.show_badge and section.settings.badge_label != blank and forloop.index <= badge_max %}
+            <span class="clone-grid__badge">{{ section.settings.badge_label }}</span>
+          {% endif %}
+          <div class="clone-grid__media">
+            {%- liquid
+              assign primary_img = product.featured_image
+              assign secondary_img = nil
+              for img in product.images
+                if img != primary_img
+                  assign secondary_img = img
+                  break
+                endif
+              endfor
+            -%}
+            {% if primary_img %}
+              {%- assign img_loading = 'lazy' -%}
+              {%- assign img_priority = 'auto' -%}
+              {%- if forloop.index <= 4 -%}
+                {%- assign img_loading = 'eager' -%}
+                {%- assign img_priority = 'high' -%}
+              {%- endif -%}
+              <img class="clone-grid__img clone-grid__img--primary"
+                   src="{{ primary_img | image_url: width: 600 }}"
+                   srcset="{{ primary_img | image_url: width: 300 }} 300w, {{ primary_img | image_url: width: 600 }} 600w, {{ primary_img | image_url: width: 900 }} 900w"
+                   sizes="(max-width: 600px) 50vw, (max-width: 990px) 33vw, 25vw"
+                   alt="{{ primary_img.alt | default: product.title | escape }}"
+                   width="600"
+                   height="750"
+                   loading="{{ img_loading }}"
+                   fetchpriority="{{ img_priority }}"
+                   decoding="async">
+              {% if secondary_img %}
+                <img class="clone-grid__img clone-grid__img--secondary"
+                     src="{{ secondary_img | image_url: width: 600 }}"
+                     srcset="{{ secondary_img | image_url: width: 300 }} 300w, {{ secondary_img | image_url: width: 600 }} 600w"
+                     sizes="(max-width: 600px) 50vw, (max-width: 990px) 33vw, 25vw"
+                     alt="{{ secondary_img.alt | default: product.title | escape }}"
+                     width="600"
+                     height="750"
+                     loading="lazy"
+                     decoding="async">
+              {% endif %}
+            {% else %}
+              {{ 'product-1' | placeholder_svg_tag }}
+            {% endif %}
+          </div>
+        </a>
+        <div class="clone-grid__info">
+          <a href="{{ product.url }}" class="clone-grid__title-link">
+            <h3 class="clone-grid__title">{{ product.title | escape }}</h3>
+          </a>
+
+          {% if section.settings.show_stars %}
+            <div class="clone-grid__stars">
+              <span class="clone-grid__stars-mark">★★★★★</span>
+              {% if rating_count != blank %}<span class="clone-grid__stars-count">({{ rating_count }})</span>{% endif %}
+            </div>
+          {% endif %}
+
+          <div class="clone-grid__price">
+            <strong>{{ variant.price | money }}</strong>
+            {% if variant.compare_at_price > variant.price %}
+              <span class="clone-grid__price-compare">{{ variant.compare_at_price | money }}</span>
+            {% endif %}
+          </div>
+
+          {% if section.settings.show_bogo and section.settings.bogo_text != blank %}
+            {%- assign formatted_price = variant.price | money -%}
+            {%- assign each_price = variant.price | divided_by: 2 | money -%}
+            <div class="clone-grid__bogo">
+              <div class="clone-grid__bogo-main">{{ section.settings.bogo_text | replace: '[price]', formatted_price }}</div>
+              <div class="clone-grid__bogo-sub">(Just {{ each_price }} each)</div>
+            </div>
+          {% endif %}
+
+          {% if section.settings.show_swatches %}
+            <p class="clone-grid__swatch-label">{{ section.settings.swatch_label | default: 'Select Colors' }}</p>
+            <div class="clone-grid__variant-picks" data-bulk-picker>
+              {%- assign default_v = product.variants[0] -%}
+              {%- assign default_img = default_v.image | default: product.featured_image -%}
+              {%- for n in (1..2) -%}
+                <div class="clone-grid__pick-wrap" data-bulk-pick-wrap>
+                  <span class="clone-grid__pick-num">#{{ n }}</span>
+                  <button type="button" class="clone-grid__pick-toggle" data-pick-toggle aria-haspopup="listbox">
+                    <img class="clone-grid__pick-img" data-pick-current-img src="{{ default_img | image_url: width: 60 }}" alt="" loading="lazy" decoding="async" width="22" height="22">
+                    <span class="clone-grid__pick-label" data-pick-current-label>{{ default_v.option1 | default: 'Default' }}</span>
+                    <svg class="clone-grid__pick-caret" viewBox="0 0 10 6" width="9" height="6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>
+                  </button>
+                  <input type="hidden" data-bulk-pick value="{{ default_v.id }}">
+                  <ul class="clone-grid__pick-options" data-pick-options hidden role="listbox">
+                    {%- for v in product.variants -%}
+                      {%- assign v_img = v.image | default: product.featured_image -%}
+                      <li>
+                        <button type="button" class="clone-grid__pick-option"
+                                data-pick-option
+                                data-value="{{ v.id }}"
+                                data-img="{{ v_img | image_url: width: 60 }}"
+                                data-label="{{ v.option1 | escape }}"
+                                role="option">
+                          <img src="{{ v_img | image_url: width: 60 }}" alt="" loading="lazy" decoding="async" width="22" height="22">
+                          <span>{{ v.option1 }}</span>
+                        </button>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              {%- endfor -%}
+            </div>
+          {% endif %}
+
+          {% if section.settings.show_add_to_cart %}
+            <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" class="clone-grid__form">
+              <input type="hidden" name="id" value="{{ variant.id }}">
+              <button type="submit" class="clone-grid__cart-btn" {% unless variant.available %}disabled{% endunless %}>
+                {% if variant.available %}{{ section.settings.cart_label | default: 'Add to cart' }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}
+              </button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      {% for i in (1..4) %}
+        <div class="clone-grid__card">
+          <div class="clone-grid__media-wrap"><div class="clone-grid__media">{{ 'product-1' | placeholder_svg_tag }}</div></div>
+          <div class="clone-grid__info">
+            <h3 class="clone-grid__title">Produto demo {{ i }}</h3>
+            <div class="clone-grid__price"><strong>R$ 0,00</strong></div>
+          </div>
+        </div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Clone Product Grid",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Conteúdo" },
+    { "type": "text", "id": "heading", "label": "Título da seção", "default": "Best sellers" },
+    { "type": "collection", "id": "collection", "label": "Coleção" },
+    { "type": "range", "id": "products_to_show", "min": 4, "max": 24, "step": 2, "default": 8, "label": "Produtos a mostrar" },
+    { "type": "range", "id": "columns", "min": 2, "max": 5, "step": 1, "default": 4, "label": "Colunas (desktop)" },
+    { "type": "checkbox", "id": "show_view_all", "default": false, "label": "Mostrar link 'Ver tudo'" },
+    { "type": "text", "id": "view_all_label", "label": "Texto 'Ver tudo'", "default": "View all" },
+
+    { "type": "header", "content": "Badge" },
+    { "type": "checkbox", "id": "show_badge", "default": true, "label": "Mostrar badge no card" },
+    { "type": "text", "id": "badge_label", "label": "Texto do badge", "default": "BEST SELLER" },
+    { "type": "range", "id": "badge_max", "min": 1, "max": 24, "step": 1, "default": 4, "label": "Badge nos N primeiros produtos", "info": "Limita o badge aos N primeiros cards (ex: 4 = só os 4 best-sellers)" },
+
+    { "type": "header", "content": "Avaliações" },
+    { "type": "checkbox", "id": "show_stars", "default": true, "label": "Mostrar estrelas + contagem" },
+    { "type": "text", "id": "fallback_review_count", "label": "Contagem fallback (se metafield ausente)" },
+
+    { "type": "header", "content": "BOGO box (opcional)" },
+    { "type": "checkbox", "id": "show_bogo", "default": false, "label": "Mostrar BOGO box" },
+    { "type": "textarea", "id": "bogo_text", "label": "Texto do BOGO", "info": "Use [price] pra inserir o preço dinâmico" },
+
+    { "type": "header", "content": "Swatches" },
+    { "type": "checkbox", "id": "show_swatches", "default": false, "label": "Mostrar swatches (1ª option)" },
+    { "type": "text", "id": "swatch_label", "label": "Label das swatches", "default": "Select Colors" },
+
+    { "type": "header", "content": "Add to cart" },
+    { "type": "checkbox", "id": "show_add_to_cart", "default": true, "label": "Mostrar botão Add to cart" },
+    { "type": "text", "id": "cart_label", "label": "Texto do botão", "default": "Add to cart" }
+  ],
+  "presets": [{ "name": "Clone Product Grid", "category": "Custom" }]
+}
+{% endschema %}

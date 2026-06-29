@@ -1,0 +1,129 @@
+.search__input.field__input {
+  padding-right: 14rem;
+}
+
+.search__button {
+  right: var(--inputs-border-width);
+  top: var(--inputs-border-width);
+}
+
+.reset__button {
+  right: calc(var(--inputs-border-width) + 4.4rem);
+  top: var(--inputs-border-width);
+}
+
+.reset__button:not(:focus-visible)::after {
+  border-right: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  display: block;
+  height: calc(100% - 1.6rem);
+  content: '';
+  position: absolute;
+  right: 0;
+}
+
+.reset__button:not(:focus)::after {
+  border-right: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  display: block;
+  height: calc(100% - 1.8rem);
+  content: '';
+  position: absolute;
+  right: 0;
+}
+
+.search__button:focus-visible,
+.reset__button:focus-visible {
+  background-color: rgb(var(--color-background));
+  z-index: 4;
+}
+
+.search__button:focus,
+.reset__button:focus {
+  background-color: rgb(var(--color-background));
+  z-index: 4;
+}
+
+.search__button:not(:focus-visible):not(.focused),
+.reset__button:not(:focus-visible):not(.focused) {
+  box-shadow: inherit;
+  background-color: inherit;
+}
+
+.search__button:hover .icon,
+.reset__button:hover .icon {
+  transform: scale(1.07);
+}
+
+.search__button .icon {
+  height: 1.8rem;
+  width: 1.8rem;
+  /* Make it slightly bolder/filled by default */
+  stroke-width: 0.15rem;
+  stroke: rgb(var(--color-foreground));
+}
+
+.search__button:hover .icon {
+  transform: scale(1.1);
+}
+
+.reset__button .icon.icon-close {
+  height: 1.8rem;
+  width: 1.8rem;
+  stroke-width: 0.1rem;
+}
+
+/* Remove extra spacing for search inputs in Safari */
+input::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+.template-search__results {
+  position: relative;
+}
+
+/* --- SEARCH BAR BORDER RESET & FIX --- */
+
+/* 1. Kill any shadow/border on the input itself */
+.search-modal__form .field__input,
+.search-modal__form .field__input:focus,
+.search-modal__form .field__input:focus-visible,
+.search-modal__form .field__input:active {
+  box-shadow: none !important;
+  outline: none !important;
+  border: none !important;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* 2. Kill the 'before' pseudo-element which often adds the shadow box */
+.search-modal__form .field:before {
+  content: none !important;
+  display: none !important;
+  box-shadow: none !important;
+}
+
+/* 3. Define the SINGLE clean border on 'after' */
+.search-modal__form .field:after,
+.search-modal__form .field:focus-within:after,
+.search-modal__form .field:hover:after {
+  box-shadow: none !important;
+  border: 1px solid rgba(var(--color-foreground), 0.2) !important;
+  border-radius: var(--inputs-radius) !important;
+  content: '';
+}
+
+/* 4. Remove bottom radius when results are open - ROBUST SELECTORS */
+/* Targeting both the web component attribute and the input state accessibly */
+predictive-search[open] .field:after,
+predictive-search[open] .field,
+.search-modal__form:has(input[aria-expanded="true"]) .field:after,
+.search-modal__form:has(input[aria-expanded="true"]) .field {
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  /* Force a separation line or match */
+}
+
+/* Move "X" button to the left/center */
+.search-modal__close-button {
+  margin-right: 3rem;
+}

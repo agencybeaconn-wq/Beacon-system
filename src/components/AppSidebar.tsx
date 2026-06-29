@@ -1,0 +1,570 @@
+import { NavLink } from "@/components/NavLink";
+import { cn } from "@/lib/utils";
+import { AdAccountSelector } from "@/components/AdAccountSelector";
+import { useLocation } from "react-router-dom";
+import leverLogo from "@/assets/lever-logo.png";
+import { ThemeToggleButton } from "@/components/ThemeToggleButton";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarFooter,
+  useSidebar,
+} from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useState, useMemo, useRef, useEffect } from "react";
+import { useDashboard } from "@/contexts/DashboardContext";
+import { useTranslation } from "react-i18next";
+import { ProfileSwitcher } from "@/components/ProfileSwitcher";
+import { WorkspaceSwitcher } from "@/components/WorkspaceSwitcher";
+import { LeverLogoIcon } from "@/components/LeverIcon";
+import { useAccountType } from "@/contexts/AccountTypeContext";
+import { usePermissions } from "@/contexts/PermissionsContext";
+import { supabase } from "@/integrations/supabase/client";
+import { motion } from "framer-motion";
+import { AccountDetailsPopover } from "@/components/sidebar/AccountDetailsPopover";
+
+// Theme toggle now handled by shared component imported above
+
+import {
+  LayoutDashboard,
+  Home as HomeIcon,
+  Users,
+  Folder,
+  Image,
+  PieChart,
+  BarChart3,
+  FileText,
+  Link,
+  Settings,
+  Bell,
+  ShieldCheck,
+  Briefcase,
+  Sliders,
+  UserCheck,
+  UserCog,
+  ChevronRight,
+  LucideIcon,
+  ClipboardList,
+  ClipboardPlus,
+  ClipboardCheck,
+  Package,
+  LogOut,
+  MessageSquare,
+  DollarSign,
+  Truck,
+  ShoppingCart,
+  FolderOpen,
+  History,
+  Box,
+  LayoutGrid,
+  Layers,
+  Wallet,
+  Sparkles,
+  Wrench,
+  FileSpreadsheet,
+  Calendar,
+  GraduationCap,
+  Play,
+  Settings2,
+  Repeat,
+  Trophy,
+} from "lucide-react";
+
+type IconComponent = LucideIcon | React.ComponentType<any>;
+
+interface MenuItem {
+  title: string;
+  transKey: string;
+  url?: string;
+  icon: IconComponent;
+  // Seção do sidebar: 'agency' aparece em cima, 'management' embaixo
+  section: 'agency' | 'management';
+  submenu?: Array<{
+    title: string;
+    transKey: string;
+    url: string;
+    icon: IconComponent;
+  }>;
+}
+
+// Menu items para o sistema Lever Digital
+// A ordem do array determina a ordem visual dentro de cada seção.
+// O agrupamento visual é controlado pelo campo `section`, não por slice/index.
+const mainMenuItems: MenuItem[] = [
+  // ─── Seção: Agência ───
+  { section: 'agency', title: "Visão Geral", transKey: "sidebar.dashboard", url: "/dashboard", icon: LayoutDashboard },
+  {
+    section: 'agency',
+    title: "Demandas",
+    transKey: "sidebar.tasks",
+    url: "/tasks",
+    icon: ClipboardList,
+    submenu: [
+      { title: "Fixo (MRR)", transKey: "sidebar.tasks_fixo", url: "/tasks?type=fixo", icon: Repeat },
+      { title: "Avulso", transKey: "sidebar.tasks_avulso", url: "/tasks?type=avulso", icon: Briefcase },
+    ]
+  },
+  { section: 'agency', title: "Prazos de Entrega", transKey: "sidebar.active_projects", url: "/active-projects", icon: Briefcase },
+  { section: 'agency', title: "Solicitações", transKey: "sidebar.request_demand", icon: ClipboardCheck, url: "/solicitacoes" },
+  { section: 'agency', title: "Comercial", transKey: "sidebar.crm", url: "/comercial", icon: FileText },
+  {
+    section: 'agency',
+    title: "Clientes",
+    transKey: "sidebar.clients",
+    url: "/clients",
+    icon: Users,
+    submenu: [
+      { title: "Ranking", transKey: "sidebar.clients_ranking", url: "/ranking-clientes", icon: Trophy },
+      { title: "Onboarding", transKey: "sidebar.onboarding", url: "/client-onboarding", icon: ClipboardCheck },
+      { title: "Briefing", transKey: "sidebar.client_briefing", url: "/client-briefing", icon: ClipboardList },
+      { title: "Documentos", transKey: "sidebar.files", url: "/documentos", icon: FolderOpen },
+      { title: "Preços", transKey: "sidebar.pricing", url: "/precos", icon: DollarSign },
+      { title: "Conexões", transKey: "sidebar.connections", url: "/client-connections", icon: Link },
+      { title: "Configurações", transKey: "sidebar.client_config", url: "/client-config", icon: Settings2 },
+    ]
+  },
+  {
+    section: 'agency',
+    title: "Ferramentas",
+    transKey: "sidebar.tools",
+    icon: Wrench,
+    submenu: [
+      { title: "Shopify Manager", transKey: "sidebar.shopify_manager", url: "/shopify-manager", icon: ShoppingCart },
+      { title: "Estúdio IA", transKey: "sidebar.studio_ia", url: "/estudio-ia", icon: Image },
+      { title: "Claude Skills", transKey: "sidebar.skills", url: "/skills", icon: Sparkles }
+    ]
+  },
+  { section: 'agency', title: "Google Calendar", transKey: "sidebar.google_calendar", url: "/google-calendar", icon: Calendar },
+
+  // ─── Seção: Gestão e Ajustes ───
+  { section: 'management', title: "Financeiro Agência", transKey: "sidebar.financial_agency", url: "/financeiro", icon: Wallet },
+  { section: 'management', title: "Financeiro Academy", transKey: "sidebar.financial_academy", url: "/financeiro-academy", icon: GraduationCap },
+  { section: 'management', title: "Painéis", transKey: "sidebar.paineis", url: "/paineis", icon: BarChart3 },
+  { section: 'management', title: "Dados Inteligentes", transKey: "sidebar.smart_data", url: "/smart-data", icon: Sparkles },
+  { section: 'management', title: "Produtos", transKey: "sidebar.products", url: "/products", icon: Package },
+
+  {
+    section: 'management',
+    title: "Treinamentos",
+    transKey: "sidebar.training",
+    icon: GraduationCap,
+    submenu: [
+      { title: "Biblioteca", transKey: "sidebar.training_library", url: "/treinamentos", icon: Play },
+      { title: "Gerenciar", transKey: "sidebar.training_manage", url: "/treinamentos/gerenciar", icon: Settings2 },
+    ]
+  },
+
+  {
+    section: 'management',
+    title: "Briefing",
+    transKey: "sidebar.briefing",
+    icon: ClipboardList,
+    submenu: [
+      { title: "Formulário", transKey: "sidebar.briefing_form", url: "/briefing/formulario", icon: FileText },
+      { title: "Arquivos", transKey: "sidebar.briefing_archive", url: "/briefing/arquivos", icon: FolderOpen },
+    ]
+  },
+
+  { section: 'management', title: "Grupos de Contas", transKey: "sidebar.account_groups", url: "/account-groups", icon: Briefcase },
+  { section: 'management', title: "Ajustes", transKey: "sidebar.settings", url: "/settings", icon: Settings },
+];
+
+export function AppSidebar() {
+  const { state, toggleSidebar, isMobile, setOpenMobile, open, setOpen } = useSidebar();
+  const location = useLocation();
+  const { t } = useTranslation();
+  const { selectedClientId, selectedClientName } = useDashboard();
+  const { isOwner, isAgency, setIsAgency } = useAccountType();
+  const isCollapsed = state === "collapsed";
+  const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
+  const [initializedMenus, setInitializedMenus] = useState<{ [key: string]: boolean }>({});
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const { canView, isAdmin, isClient, isLoading: isLoadingPermissions } = usePermissions();
+
+  const isAdminMode = isAgency;
+
+  if (isClient) {
+    return null;
+  }
+
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+    if (!isMobile) {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+        hoverTimeoutRef.current = null;
+      }
+      if (!open) {
+        setOpen(true);
+      }
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+    if (!isMobile && open && !isPopoverOpen) {
+      hoverTimeoutRef.current = setTimeout(() => {
+        setOpen(false);
+      }, 150);
+    }
+  };
+
+  useEffect(() => {
+    if (!isPopoverOpen && open && !isMobile && !isHovering) {
+      setOpen(false);
+    }
+  }, [isPopoverOpen, open, isMobile, setOpen, isHovering]);
+
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const getPermissionFeature = (transKey: string): string | null => {
+    const map: Record<string, string> = {
+      'sidebar.dashboard': 'dashboard',
+      'sidebar.general_board': 'demands',
+      'sidebar.clients': 'clients',
+      'sidebar.tasks': 'demands',
+      'sidebar.tasks_fixo': 'demands',
+      'sidebar.tasks_avulso': 'demands',
+      'sidebar.forms': 'solicitacoes_forms',
+      'sidebar.requests_list': 'solicitacoes_list',
+      'sidebar.products': 'products',
+      'sidebar.connections': 'connections',
+      'sidebar.account_groups': 'account_groups',
+      'sidebar.analytics': 'analytics',
+      'sidebar.reports': 'reports',
+      'sidebar.relatorios': 'reports',
+      'sidebar.reports_group': 'reports',
+      'sidebar.financial': 'financial',
+      'sidebar.financial_agency': 'financial',
+      'sidebar.financial_academy': 'financial',
+      'settings.tabs.general': 'settings_general',
+      'settings.tabs.team': 'team',
+      'settings.tabs.notifications': 'notifications',
+      'settings.tabs.governance': 'governance',
+      'sidebar.finance': 'financial',
+      'sidebar.settings': 'settings_general',
+      'sidebar.request_demand': 'demands',
+      'sidebar.tracking': 'tracking',
+      'sidebar.smart_data': 'analytics',
+      'sidebar.crm': 'crm',
+      'sidebar.timeline': 'demands',
+      'sidebar.tools': 'demands',
+      'sidebar.google_calendar': 'google_tools',
+      'sidebar.training': 'training',
+      'sidebar.training_library': 'training',
+      'sidebar.training_manage': 'training',
+      'sidebar.briefing': 'training',
+      'sidebar.briefing_form': 'training',
+      'sidebar.briefing_archive': 'training',
+      'sidebar.orders': 'clients',
+      'sidebar.files': 'clients',
+    };
+    return map[transKey] || null;
+  };
+
+  const filteredMainMenu = useMemo(() => {
+    return mainMenuItems.map(item => {
+      let filteredSubmenu = item.submenu;
+      if (item.submenu) {
+        filteredSubmenu = item.submenu.filter(sub => {
+          if (sub.transKey === "settings.tabs.team" && !isAgency) return false;
+          const subFeature = getPermissionFeature(sub.transKey);
+          if (subFeature && !canView(subFeature)) return false;
+          return true;
+        });
+      }
+      if (item.transKey === "sidebar.clients" && selectedClientId) {
+        // No longer inject hubMenuItems - those are now standalone pages
+      }
+      return {
+        ...item,
+        submenu: filteredSubmenu && filteredSubmenu.length > 0 ? filteredSubmenu : undefined
+      };
+    }).filter(item => {
+      const feature = getPermissionFeature(item.transKey);
+      if (feature && !canView(feature)) return false;
+      if (item.transKey === "sidebar.account_groups") return !isAdminMode;
+      if (item.transKey === "sidebar.paineis") return isAdmin;
+      if (!item.url && (!item.submenu || (Array.isArray(item.submenu) && item.submenu.length === 0))) return false;
+      return true;
+    });
+  }, [isAdminMode, canView, selectedClientId, isAgency, isClient]);
+
+  const handleNavClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+
+  const renderIcon = (Icon: IconComponent, className?: string) => {
+    return <Icon className={cn("h-[18px] w-[18px] shrink-0", className)} strokeWidth={1.5} />;
+  };
+
+  const renderMenuItem = (item: MenuItem) => {
+    const translated = t(item.transKey);
+    const itemTitle = translated === item.transKey ? item.title : translated;
+
+    if (item.submenu) {
+      const isAnySubmenuActive = item.submenu?.some(sub => {
+        if (sub.url?.includes('?')) {
+          const [path, query] = sub.url.split('?');
+          return location.pathname === path && location.search === `?${query}`;
+        }
+        return sub.url ? location.pathname === sub.url : false;
+      });
+
+      const isOpen = initializedMenus[item.title]
+        ? !!openMenus[item.title]
+        : (openMenus[item.title] ?? isAnySubmenuActive);
+
+      return (
+        <Collapsible
+          key={item.title}
+          open={isOpen}
+          onOpenChange={(open) => {
+            setInitializedMenus(prev => ({ ...prev, [item.title]: true }));
+            setOpenMenus(prev => ({ ...prev, [item.title]: open }));
+          }}
+          className="group/collapsible"
+        >
+          <SidebarMenuItem>
+            <motion.div
+              whileHover={{ scale: 0.98 }}
+              whileTap={{ scale: 0.96 }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className={cn(
+                "flex items-center w-full transition-all duration-300 ease-out",
+                !isCollapsed ? "px-0 py-1.5" : "p-0 justify-center",
+                isAnySubmenuActive
+                  ? "text-primary font-bold bg-primary/10 shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+              )}>
+              <SidebarMenuButton
+                asChild
+                tooltip={itemTitle}
+                className={cn(
+                  "h-auto p-0 rounded-none border-none hover:bg-transparent hover:text-inherit flex-1 px-4",
+                  !isCollapsed && "gap-3"
+                )}
+              >
+                <NavLink
+                  to={item.url || "#"}
+                  onClick={(e) => {
+                    handleNavClick();
+                    if (!item.url) {
+                      e.preventDefault();
+                      setInitializedMenus(prev => ({ ...prev, [item.title]: true }));
+                      setOpenMenus(prev => ({ ...prev, [item.title]: !isOpen }));
+                    }
+                  }}
+                  className="flex items-center gap-3 w-full"
+                >
+                  {isAnySubmenuActive && (
+                    <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-primary animate-in slide-in-from-left-1 duration-300" />
+                  )}
+                  {renderIcon(item.icon, isAnySubmenuActive ? "text-primary" : "text-muted-foreground group-hover/menu-item:text-primary")}
+                  {!isCollapsed && (
+                    <span className="text-left text-base font-medium tracking-tight truncate">{itemTitle}</span>
+                  )}
+                </NavLink>
+              </SidebarMenuButton>
+
+              {!isCollapsed && (
+                <CollapsibleTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 w-6 p-0 hover:bg-transparent hover:text-inherit mr-2"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <ChevronRight className={`h-4 w-4 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-90" : ""} ${isAnySubmenuActive ? "text-primary" : ""}`} strokeWidth={1.5} />
+                  </Button>
+                </CollapsibleTrigger>
+              )}
+            </motion.div>
+
+            {!isCollapsed && (
+              <CollapsibleContent>
+                <SidebarMenuSub className="ml-8 pl-0 border-l border-primary/10 space-y-0.5 mt-1 mb-1">
+                  {item.submenu?.map((subItem) => {
+                    const subFeature = getPermissionFeature(subItem.transKey);
+                    if (subFeature && !canView(subFeature)) return null;
+                    if (subItem.transKey === "settings.tabs.team" && !isAgency) return null;
+
+                    let isActive = false;
+                    if (subItem.url?.includes('?')) {
+                      const [path, query] = subItem.url.split('?');
+                      isActive = location.pathname === path && location.search === `?${query}`;
+                    } else if (subItem.url) {
+                      isActive = location.pathname === subItem.url;
+                    }
+
+                    const isSubActive = isActive;
+
+                    return (
+                      <SidebarMenuSubItem key={subItem.title} className="w-full p-0 m-0 block group/sub-item">
+                        <motion.div
+                          whileHover={{ scale: 0.98, x: 2 }}
+                          whileTap={{ scale: 0.96 }}
+                          transition={{ duration: 0.2, ease: "easeInOut" }}
+                        >
+                          <SidebarMenuSubButton asChild className="w-full h-auto p-0 m-0 rounded-none border-none block hover:bg-transparent hover:text-inherit">
+                            <NavLink
+                              to={subItem.url}
+                              onClick={handleNavClick}
+                              className={cn(
+                                "relative flex items-center gap-2.5 px-3 py-1 transition-all duration-300 ease-out font-medium w-full text-[13px]",
+                                isSubActive
+                                  ? "text-primary bg-primary/10 font-bold"
+                                  : "text-muted-foreground hover:text-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                              )}
+                            >
+                              {isSubActive && (
+                                <div className="absolute left-[-1px] top-0 bottom-0 w-[3px] bg-primary" />
+                              )}
+                              {renderIcon(subItem.icon, cn("h-4 w-4 shrink-0 transition-colors", isSubActive ? "text-primary" : "text-muted-foreground group-hover/sub-item:text-primary"))}
+                              <span className="tracking-tight">{subItem.transKey ? (t(subItem.transKey) === subItem.transKey ? subItem.title : t(subItem.transKey)) : subItem.title}</span>
+                            </NavLink>
+                          </SidebarMenuSubButton>
+                        </motion.div>
+                      </SidebarMenuSubItem>
+                    );
+                  })}
+                </SidebarMenuSub>
+              </CollapsibleContent>
+            )}
+          </SidebarMenuItem>
+        </Collapsible>
+      );
+    } else {
+      const isActive = item.url?.includes('?')
+        ? (() => {
+          const [path, query] = item.url.split('?');
+          return location.pathname === path && location.search === `?${query}`;
+        })()
+        : location.pathname === item.url;
+      return (
+        <SidebarMenuItem key={item.title}>
+          <motion.div
+            whileHover={{ scale: 0.98 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            className={cn(
+              "flex items-center w-full transition-all duration-300 ease-out",
+              !isCollapsed ? "px-0 py-1.5" : "p-0 justify-center",
+              isActive
+                ? "text-primary font-medium bg-primary/10"
+                : "text-muted-foreground hover:text-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+            )}>
+            <SidebarMenuButton
+              asChild
+              tooltip={itemTitle}
+              className={cn(
+                "h-auto p-0 rounded-none border-none hover:bg-transparent hover:text-inherit flex-1 px-4",
+                !isCollapsed && "gap-3"
+              )}
+            >
+              <NavLink
+                to={item.url || "#"}
+                onClick={handleNavClick}
+                className="flex items-center gap-3 w-full"
+              >
+                {isActive && (
+                  <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-primary animate-in slide-in-from-left-1 duration-300" />
+                )}
+                {renderIcon(item.icon, isActive ? "text-primary" : "text-muted-foreground group-hover/menu-item:text-primary")}
+                {!isCollapsed && (
+                  <span className="text-left text-base font-medium tracking-tight truncate">{itemTitle}</span>
+                )}
+              </NavLink>
+            </SidebarMenuButton>
+          </motion.div>
+        </SidebarMenuItem>
+      );
+    }
+  };
+
+  return (
+    <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <Sidebar collapsible="icon" className="border-r border-border bg-background">
+        <div className={cn(
+          "flex flex-col border-b border-border/40 transition-all duration-200 h-16 justify-center",
+          isCollapsed ? "items-center px-0" : "px-5"
+        )}>
+          <NavLink to="/" className="hover:opacity-80 transition-opacity">
+            {!isCollapsed ? (
+              <div className="flex items-center gap-2">
+                <img src={leverLogo} alt="Beacon" className="h-7 w-auto" />
+                <span className="font-semibold text-lg text-foreground tracking-tight">System</span>
+              </div>
+            ) : (
+              <img src={leverLogo} alt="Beacon" className="h-6 w-6 object-contain" />
+            )}
+          </NavLink>
+        </div>
+
+        <SidebarContent className="p-0">
+          <SidebarGroup className="p-0">
+            {isAdmin && isAgency && !isClient && (
+              <SidebarGroupLabel className="px-5 mt-4 text-[10px] uppercase tracking-widest font-bold opacity-40">Agência</SidebarGroupLabel>
+            )}
+            <SidebarMenu className="gap-0">
+              {filteredMainMenu.filter(i => i.section === 'agency').map(renderMenuItem)}
+            </SidebarMenu>
+          </SidebarGroup>
+
+          <SidebarGroup className="p-0">
+            {isAdmin && isAgency && !isClient && (
+              <SidebarGroupLabel className="px-5 mt-4 text-[10px] uppercase tracking-widest font-bold opacity-40">Gestão e Ajustes</SidebarGroupLabel>
+            )}
+            <SidebarMenu className="gap-0">
+              {filteredMainMenu.filter(i => i.section === 'management').map(renderMenuItem)}
+            </SidebarMenu>
+          </SidebarGroup>
+        </SidebarContent>
+
+        <SidebarFooter className={cn(
+          "p-4 border-t border-border/50 transition-all duration-200 space-y-3",
+          isCollapsed && "items-center px-0"
+        )}>
+          <div className={cn("flex flex-col gap-2 w-full", isCollapsed && "items-center")}>
+            <div className={cn("flex items-center justify-between w-full", isCollapsed && "justify-center")}>
+              <AccountDetailsPopover collapsed={isCollapsed} onOpenChange={setIsPopoverOpen} />
+            </div>
+          </div>
+
+          {!isCollapsed ? (
+            <div className="flex items-center justify-between w-full px-1">
+              <span className="text-xs text-muted-foreground">Tema</span>
+              <ThemeToggleButton />
+            </div>
+          ) : (
+            <ThemeToggleButton />
+          )}
+        </SidebarFooter>
+      </Sidebar >
+    </div>
+  );
+}

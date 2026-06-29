@@ -1,0 +1,42 @@
+[
+  {
+    "key": "snippets/kit-casal-variant-picker.liquid",
+    "mode": "NEW",
+    "status": "OK",
+    "proposedBytes": 36864,
+    "pulledBytes": 36867,
+    "backup": null
+  },
+  {
+    "key": "snippets/cart-item-kit-casal.liquid",
+    "mode": "NEW",
+    "status": "OK",
+    "proposedBytes": 3348,
+    "pulledBytes": 3348,
+    "backup": null
+  },
+  {
+    "key": "snippets/product-variant-picker.liquid",
+    "mode": "PATCH",
+    "status": "OK",
+    "proposedBytes": 15357,
+    "pulledBytes": 15159,
+    "backup": "2026-05-19_loja-da-torcida_snippets__product-variant-picker.liquid.bak"
+  },
+  {
+    "key": "snippets/cart-drawer.liquid",
+    "mode": "PATCH",
+    "status": "OK",
+    "proposedBytes": 29958,
+    "pulledBytes": 28221,
+    "backup": "2026-05-19_loja-da-torcida_snippets__cart-drawer.liquid.bak"
+  },
+  {
+    "key": "snippets/cart-progress-bar.liquid",
+    "mode": "PATCH",
+    "status": "OK",
+    "proposedBytes": 15082,
+    "pulledBytes": 14919,
+    "backup": "2026-05-19_loja-da-torcida_snippets__cart-progress-bar.liquid.bak"
+  }
+]

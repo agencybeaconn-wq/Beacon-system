@@ -1,0 +1,154 @@
+{{ 'section-video-stories.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'video-stories.js' | asset_url }}" defer="defer"></script>
+
+{%- if section.settings.show_floating_video and section.settings.video != blank -%}
+  {%- assign video = section.settings.video -%}
+  {%- assign video_source = video.sources | first -%}
+  <style>
+    .floating-video-widget {
+        --widget-width: {{ section.settings.widget_width_mobile }}px;
+    }
+    @media (min-width: 750px) {
+        .floating-video-widget {
+            --widget-width: {{ section.settings.widget_width_desktop }}px;
+        }
+    }
+  </style>
+
+  <div id="FloatingVideoWidget" class="floating-video-widget" style="position: fixed; bottom: {{ section.settings.bottom_offset }}px; left: {{ section.settings.left_offset }}px; z-index: 9999; width: var(--widget-width); aspect-ratio: 9/16; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3)); cursor: pointer; transition: transform 0.3s ease, opacity 0.3s ease;">
+
+    <div class="video-stories__item" style="width: 100%; height: 100%;">
+      <button
+        type="button"
+        class="video-stories__button"
+        data-video-type="shopify"
+        data-shopify-video-src="{{ video_source.url }}"
+        data-shopify-video-type="{{ video_source.mime_type }}"
+        aria-label="{{ section.settings.title | default: 'Watch Video' }}"
+        style="width: 100%; height: 100%; padding: 0; border: none; background: none; position: relative;"
+      >
+        <div class="video-stories__thumbnail" style="width: 100%; height: 100%; aspect-ratio: 9/16; border-radius: 12px; overflow: hidden; position: relative; border: none;">
+          <video
+            autoplay
+            loop
+            muted
+            playsinline
+            style="width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;"
+          >
+            {%- for source in video.sources -%}
+              <source src="{{ source.url }}" type="{{ source.mime_type }}">
+            {%- endfor -%}
+          </video>
+
+          <div class="video-stories__overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; background: rgba(0,0,0,0.1);">
+              <span class="video-stories__icon" style="color: white !important; background: rgba(255, 255, 255, 0.25) !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border: 1.5px solid rgba(255, 255, 255, 0.45) !important; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" class="icon-play" stroke="#fff" stroke-width="2" style="margin-left: 2px;">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+            </span>
+          </div>
+        </div>
+      </button>
+
+      {%- comment -%} Close Button INSIDE the video area, top right {%- endcomment -%}
+      <button type="button" onclick="document.getElementById('FloatingVideoWidget').style.display='none'; event.stopPropagation();" aria-label="Close" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.25); backdrop-filter: blur(4px); color: #fff; border: none; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10001; transition: background 0.2s;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="VideoStoriesModal" class="video-stories-modal" aria-hidden="true">
+      <button type="button" class="video-stories-modal__close" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <button type="button" class="video-stories-modal__mute" aria-label="Mute/Unmute">
+        <svg class="icon-unmuted" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <line x1="19" y1="5" x2="19" y2="19"></line>
+        </svg>
+        <svg class="icon-muted hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <line x1="23" y1="9" x2="17" y2="15"></line>
+          <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
+      </button>
+    <div class="video-stories-modal__content">
+      <div class="video-stories-modal__video-container"></div>
+    </div>
+    <div class="video-stories-modal__backdrop"></div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Floating Video Story",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_floating_video",
+      "label": "Enable Floating Video",
+      "default": true
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "header",
+      "content": "Position & Size"
+    },
+    {
+      "type": "range",
+      "id": "widget_width_desktop",
+      "min": 80,
+      "max": 300,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop Widget Width",
+      "default": 160
+    },
+    {
+      "type": "range",
+      "id": "widget_width_mobile",
+      "min": 60,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Widget Width",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "bottom_offset",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom Offset",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "left_offset",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Left Offset",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "Floating Video Story"
+    }
+  ]
+}
+{% endschema %}

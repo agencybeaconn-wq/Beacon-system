@@ -1,0 +1,16 @@
+{
+  "name": "lever-lp-scraper",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Scraper isolado pra construir corpus de referências de LPs por categoria.",
+  "scripts": {
+    "scrape": "node scrape-lp-references.mjs",
+    "install:browsers": "playwright install chromium"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "playwright": "^1.48.0",
+    "turndown": "^7.2.0"
+  }
+}

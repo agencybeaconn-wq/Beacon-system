@@ -1,0 +1,83 @@
+/* CSS for Player Cards Carousel */
+.player-card-wrapper {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: rgb(var(--color-background));
+    border-radius: 1.6rem;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    border: 1px solid rgba(var(--color-foreground), 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.player-card-wrapper:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.player-card__image-container {
+    aspect-ratio: 1/1;
+    width: 100%;
+    overflow: hidden;
+    background: #f3f3f3;
+}
+
+.player-card__image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.player-card__info {
+    padding: 0.6rem 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgb(var(--color-background));
+    border-top: 1px solid rgba(var(--color-foreground), 0.08);
+    min-height: 2.0rem;
+    /* Estabiliza a altura para cards com e sem número */
+}
+
+.player-card__name {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-weight: 700;
+    font-size: 1.4rem;
+    text-transform: capitalize;
+    color: rgb(var(--color-foreground));
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.player-card__number {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: rgb(var(--color-foreground));
+    margin-left: 1rem;
+}
+
+/* Specific grid adjustments for player cards - removed hardcoded gaps to use theme defaults */
+.grid--player-cards {}
+
+@media screen and (max-width: 749px) {
+    .player-card__info {
+        padding: 0.8rem 1rem;
+    }
+
+    .player-card__name {
+        font-size: 1.2rem;
+    }
+
+    .player-card__number {
+        font-size: 1.4rem;
+    }
+}

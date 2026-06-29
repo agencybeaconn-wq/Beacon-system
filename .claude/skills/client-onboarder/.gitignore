@@ -1,0 +1,9 @@
+node_modules/
+profile/
+storage-state.json
+runs/
+.env
+.env.local
+*.log
+*.tar.gz
+.profile_seed_url.txt

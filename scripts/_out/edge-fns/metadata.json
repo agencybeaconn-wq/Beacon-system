@@ -1,0 +1,1 @@
+{"name":"client-upload","verify_jwt":false,"entrypoint_path":"client-upload/index.ts"}

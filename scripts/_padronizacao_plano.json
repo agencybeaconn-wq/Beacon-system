@@ -1,0 +1,21 @@
+{
+  "stats": {
+    "totalEligibles": 1203,
+    "needRenameGGG": 0,
+    "needRenameGGGG": 0,
+    "needCreate2GG": 0,
+    "needCreate3GG": 1,
+    "needCreate4GG": 1,
+    "needCreateMany": 0,
+    "alreadyComplete": 1203,
+    "totalVariantsToCreate": 0,
+    "totalRenames": 0,
+    "excluded": {
+      "kitCasal": 0,
+      "infantil": 190,
+      "acessorio": 6,
+      "noSizeOpt": 30
+    }
+  },
+  "plans": []
+}

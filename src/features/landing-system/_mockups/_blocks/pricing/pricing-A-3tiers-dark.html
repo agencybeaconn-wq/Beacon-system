@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pricing A · 3 Tiers Dark · Beacon Blocks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,700;1,800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { fontFamily: { sans: ['"Inter Tight"','sans-serif'] } } } };
+  </script>
+  <style>
+    body { font-family: 'Inter Tight', sans-serif; font-weight: 300; -webkit-font-smoothing: antialiased; }
+    .container-wide { max-width: 1280px; margin-inline: auto; padding-inline: 1.5rem; }
+    @media (min-width: 768px) { .container-wide { padding-inline: 2rem; } }
+    .eyebrow { letter-spacing: 0.18em; }
+    .bg-dark-noise {
+      background-color: #0A0A0A;
+      background-image:
+        radial-gradient(60% 50% at 50% 0%, rgba(239,68,68,0.16) 0%, transparent 60%),
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+    .pill-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.375rem 0.875rem; border-radius: 9999px;
+      background: rgba(239,68,68,0.10); border: 1px solid rgba(239,68,68,0.30);
+      color: #EF4444; font-size: 0.75rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .tier-card {
+      position: relative; border-radius: 24px; padding: 2rem 1.75rem;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+      transition: transform .22s ease, border-color .22s ease;
+    }
+    .tier-card:hover { transform: translateY(-4px); border-color: rgba(239,68,68,0.40); }
+    .tier-card-highlighted {
+      background: linear-gradient(180deg, rgba(239,68,68,0.08) 0%, rgba(239,68,68,0.02) 100%);
+      border: 1.5px solid rgba(239,68,68,0.45);
+      box-shadow: 0 20px 60px -20px rgba(239,68,68,0.30);
+    }
+    .badge-popular {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      padding: 0.25rem 0.75rem; border-radius: 9999px;
+      background: #EF4444; color: white;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body class="bg-black text-white">
+
+  <!-- BLOCK: pricing-A-3tiers-dark -->
+  <section id="planos" class="bg-dark-noise">
+    <div class="container-wide py-20 md:py-28">
+
+      <div class="text-center max-w-2xl mx-auto">
+        <span class="pill-tag">
+          <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+          Planos transparentes
+        </span>
+        <h2 class="mt-6 text-3xl md:text-5xl font-black tracking-tight text-white leading-tight">
+          Sua loja Shopify, do <span class="text-red-500 italic">setup</span> ao ROAS.
+        </h2>
+        <p class="mt-5 text-lg text-white/60 font-light">
+          Setup único + manutenção opcional. Sem fidelidade. Cancela com 15 dias de aviso.
+        </p>
+      </div>
+
+      <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+
+        <!-- Tier 1 — Starter -->
+        <div class="tier-card flex flex-col">
+          <div class="text-xs uppercase eyebrow text-white/50 font-semibold">Starter</div>
+          <div class="mt-3 text-sm text-white/60 font-light">Loja simples, primeiros passos.</div>
+
+          <div class="mt-6 flex items-baseline gap-1">
+            <span class="text-5xl font-black tabular-nums">R$ 2.997</span>
+          </div>
+          <div class="text-xs text-white/50 mt-1">setup único · R$ 297/mês manutenção (opcional)</div>
+
+          <ul class="mt-7 space-y-3 text-sm text-white/80 font-light flex-1">
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              Setup completo Shopify Basic
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              Tema Beacon aplicado
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              Até 100 produtos importados
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              Integrações básicas (Yampi, Meta pixel, GA)
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              Suporte por email
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              Entrega em <strong class="font-semibold text-white">10 dias</strong>
+            </li>
+          </ul>
+
+          <a href="#cta" class="mt-8 inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md bg-white/5 text-white border border-white/15 font-semibold text-base hover:bg-white/10 transition">
+            Começar Starter
+          </a>
+        </div>
+
+        <!-- Tier 2 — Pro (destacado) -->
+        <div class="tier-card tier-card-highlighted flex flex-col">
+          <div class="badge-popular">Mais popular</div>
+
+          <div class="text-xs uppercase eyebrow text-red-500 font-semibold">Pro</div>
+          <div class="mt-3 text-sm text-white/70 font-light">Loja escalando com tráfego integrado.</div>
+
+          <div class="mt-6 flex items-baseline gap-1">
+            <span class="text-5xl font-black tabular-nums">R$ 5.997</span>
+          </div>
+          <div class="text-xs text-white/60 mt-1">setup único · <strong class="text-red-500">R$ 597/mês inclui gestão de tráfego</strong></div>
+
+          <ul class="mt-7 space-y-3 text-sm text-white/85 font-light flex-1">
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              Tudo do <strong class="font-semibold text-white">Starter</strong> +
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              Customização avançada do tema
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              Até <strong class="font-semibold text-white">1.000 produtos</strong>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              <span><strong class="font-semibold text-white">Gestão Meta + Google Ads</strong> incluída (3 primeiros meses)</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              4 criativos full IA/mês (via Scale)
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              WhatsApp Business integrado
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              Suporte WhatsApp + reunião quinzenal
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              Entrega em <strong class="font-semibold text-white">14 dias</strong>
+            </li>
+          </ul>
+
+          <a href="#cta" class="mt-8 inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md bg-red-500 text-white font-semibold text-base hover:bg-red-600 transition">
+            Quero Pro
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <!-- Tier 3 — Enterprise -->
+        <div class="tier-card flex flex-col">
+          <div class="text-xs uppercase eyebrow text-white/50 font-semibold">Enterprise</div>
+          <div class="mt-3 text-sm text-white/60 font-light">Operação grande, multi-loja.</div>
+
+          <div class="mt-6 flex items-baseline gap-1">
+            <span class="text-3xl font-black">Sob consulta</span>
+          </div>
+          <div class="text-xs text-white/50 mt-1">a partir de R$ 12.997 setup</div>
+
+          <ul class="mt-7 space-y-3 text-sm text-white/80 font-light flex-1">
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              Tudo do <strong class="font-semibold text-white">Pro</strong> +
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              Multi-loja / multi-locale (BR/UK/US)
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              Sistemas custom (CRM, ERP, marketplace)
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              Automação completa (estoque, fulfillment)
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              Account Senior dedicado
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+              Entrega em <strong class="font-semibold text-white">30 dias</strong>
+            </li>
+          </ul>
+
+          <a href="#cta" class="mt-8 inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md bg-white/5 text-white border border-white/15 font-semibold text-base hover:bg-white/10 transition">
+            Falar com sócio
+          </a>
+        </div>
+
+      </div>
+
+      <p class="mt-10 text-center text-xs text-white/50 font-light max-w-2xl mx-auto">
+        Sem mensalidade obrigatória de tema (Beacon Tema próprio inclui evolução contínua).
+        Sem fidelidade — cancela quando quiser com 15 dias de aviso.
+      </p>
+
+    </div>
+  </section>
+  <!-- /BLOCK -->
+
+</body>
+</html>

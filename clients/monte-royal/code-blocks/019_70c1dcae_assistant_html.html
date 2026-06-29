@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Mont Royal — Escolha o verde</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: #0a0a0a;
+    color: #fff;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+  h1 { font-size: 28px; font-weight: 200; letter-spacing: 0.3em; text-align: center; margin-bottom: 8px; }
+  .subtitle { text-align: center; opacity: 0.5; font-size: 13px; margin-bottom: 50px; letter-spacing: 0.15em; text-transform: uppercase; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .card {
+    background: #111;
+    border: 1px solid #222;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .swatch {
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: 0.4em;
+    color: rgba(255,255,255,0.85);
+    text-transform: uppercase;
+    position: relative;
+  }
+  .swatch::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.4) 100%);
+    pointer-events: none;
+  }
+  .info { padding: 24px; }
+  .label { font-size: 11px; opacity: 0.5; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 8px; }
+  .name { font-size: 20px; font-weight: 400; margin-bottom: 12px; }
+  .hex { font-family: 'Courier New', monospace; font-size: 13px; opacity: 0.6; margin-bottom: 16px; }
+  .desc { font-size: 13px; line-height: 1.6; opacity: 0.75; margin-bottom: 16px; }
+  .ref { font-size: 11px; opacity: 0.45; font-style: italic; }
+  .preview {
+    margin-top: 20px;
+    padding: 18px 20px;
+    background: #fff;
+    color: #111;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .preview-btn {
+    padding: 10px 22px;
+    color: #fff;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    font-weight: 600;
+    text-transform: uppercase;
+    border: none;
+  }
+  .preview-link { font-size: 13px; text-decoration: underline; }
+
+  /* dark preview block */
+  .preview-dark {
+    margin-top: 0;
+    padding: 18px 20px;
+    background: #0a0a0a;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-top: 1px solid #222;
+  }
+</style>
+</head>
+<body>
+
+<h1>MONT ROYAL</h1>
+<p class="subtitle">Escolha a tonalidade do verde da marca</p>
+
+<div class="grid">
+
+  <!-- A — ESMERALDA PROFUNDO -->
+  <div class="card">
+    <div class="swatch" style="background:#0F5132">A — ESMERALDA PROFUNDO</div>
+    <div class="info">
+      <div class="label">Opção A</div>
+      <div class="name">Esmeralda Profundo</div>
+      <div class="hex">#0F5132</div>
+      <div class="desc">Luxo aristocrático, atemporal, britânico discreto. Combina perfeitamente com o Capítulo Gold (verde + ouro = riqueza biológica clássica).</div>
+      <div class="ref">Referência: Rolex Submariner Hulk · Bottega Veneta</div>
+    </div>
+    <div class="preview">
+      <button class="preview-btn" style="background:#0F5132">ADD TO CART</button>
+      <span class="preview-link" style="color:#0F5132">Ver coleção →</span>
+    </div>
+    <div class="preview-dark">
+      <button class="preview-btn" style="background:#0F5132">ADD TO CART</button>
+      <span class="preview-link" style="color:#0F5132">Ver coleção →</span>
+    </div>
+  </div>
+
+  <!-- B — BRITISH RACING GREEN -->
+  <div class="card">
+    <div class="swatch" style="background:#004225">B — BRITISH RACING GREEN</div>
+    <div class="info">
+      <div class="label">Opção B</div>
+      <div class="name">British Racing Green</div>
+      <div class="hex">#004225</div>
+      <div class="desc">Esportivo refinado, cavalheiro, escuro. Mais sóbrio que o A — quase preto-esverdeado. Stealth máximo.</div>
+      <div class="ref">Referência: Aston Martin · Jaguar · Land Rover Defender</div>
+    </div>
+    <div class="preview">
+      <button class="preview-btn" style="background:#004225">ADD TO CART</button>
+      <span class="preview-link" style="color:#004225">Ver coleção →</span>
+    </div>
+    <div class="preview-dark">
+      <button class="preview-btn" style="background:#004225">ADD TO CART</button>
+      <span class="preview-link" style="color:#004225">Ver coleção →</span>
+    </div>
+  </div>
+
+  <!-- C — VERDE MILITAR / OLIVA -->
+  <div class="card">
+    <div class="swatch" style="background:#3D5128">C — VERDE MILITAR / OLIVA</div>
+    <div class="info">
+      <div class="label">Opção C</div>
+      <div class="name">Verde Militar / Oliva</div>
+      <div class="hex">#3D5128</div>
+      <div class="desc">Utilitário, masculino bruto, "field watch". Mais terroso, menos formal. Bom pra esportivo aventureiro, fraco pra dress watch.</div>
+      <div class="ref">Referência: Tudor Black Bay 58 Bronze · IWC Pilot</div>
+    </div>
+    <div class="preview">
+      <button class="preview-btn" style="background:#3D5128">ADD TO CART</button>
+      <span class="preview-link" style="color:#3D5128">Ver coleção →</span>
+    </div>
+    <div class="preview-dark">
+      <button class="preview-btn" style="background:#3D5128">ADD TO CART</button>
+      <span class="preview-link" style="color:#3D5128">Ver coleção →</span>
+    </div>
+  </div>
+
+  <!-- D — VERDE GARRAFA SATURADO -->
+  <div class="card">
+    <div class="swatch" style="background:#1B4D3E">D — VERDE GARRAFA</div>
+    <div class="info">
+      <div class="label">Opção D</div>
+      <div class="name">Verde Garrafa</div>
+      <div class="hex">#1B4D3E</div>
+      <div class="desc">Meio-termo entre A e B. Mais profundo que esmeralda, mais saturado que racing. Equilíbrio entre luxo e esporte.</div>
+      <div class="ref">Referência: Hermès · Loro Piana · Patek Philippe Aquanaut Olive</div>
+    </div>
+    <div class="preview">
+      <button class="preview-btn" style="background:#1B4D3E">ADD TO CART</button>
+      <span class="preview-link" style="color:#1B4D3E">Ver coleção →</span>
+    </div>
+    <div class="preview-dark">
+      <button class="preview-btn" style="background:#1B4D3E">ADD TO CART</button>
+      <span class="preview-link" style="color:#1B4D3E">Ver coleção →</span>
+    </div>
+  </div>
+
+</div>
+
+<div style="text-align:center; margin-top: 60px; opacity: 0.4; font-size: 11px; letter-spacing: 0.2em;">
+  CADA SWATCH MOSTRA O TOM EM 4 CONTEXTOS:<br>
+  HERO COLOR · INFO · BOTÃO + LINK SOBRE FUNDO BRANCO · BOTÃO + LINK SOBRE FUNDO PRETO
+</div>
+
+</body>
+</html>
+

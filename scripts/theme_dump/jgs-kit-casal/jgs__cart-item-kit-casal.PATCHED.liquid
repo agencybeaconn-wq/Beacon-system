@@ -1,0 +1,74 @@
+{% comment %}
+  Renders kit casal cart item — grid 2 colunas (Masculina/Feminina).
+  Suporta os DOIS modos do produto:
+    - Legado: options separadas "Tamanho Masculino" + "Tamanho Feminino"
+    - Novo:   option combinada "Tamanho" (M/G) + option "Personalização"
+
+  Accepts:
+    - item: line_item
+
+  Usage:
+    {% render 'cart-item-kit-casal', item: item %}
+{% endcomment %}
+
+{%- liquid
+  assign tam_masc = ''
+  assign tam_fem = ''
+  for option in item.options_with_values
+    case option.name
+      when 'Tamanho Masculino'
+        assign tam_masc = option.value
+      when 'Tamanho Feminino'
+        assign tam_fem = option.value
+      when 'Tamanho'
+        # Modo novo: combinado "M/G"
+        assign parts = option.value | split: '/'
+        if parts.size >= 2
+          assign tam_masc = parts[0] | strip
+          assign tam_fem = parts[1] | strip
+        endif
+    endcase
+  endfor
+
+  assign nome_masc = item.properties['Nome Masculino']
+  assign num_masc  = item.properties['Número Masculino']
+  assign nome_fem  = item.properties['Nome Feminino']
+  assign num_fem   = item.properties['Número Feminino']
+-%}
+
+<div class="kit-casal-cart-grid">
+  <div class="kit-casal-cart-col">
+    <p class="kit-casal-cart-title">Camisa Masculina</p>
+    <dl class="cart-item__properties">
+      <div class="product-option"><dt>Qtd:</dt><dd>1</dd></div>
+      <div class="product-option"><dt>Tamanho:</dt><dd>{{ tam_masc }}</dd></div>
+      <div class="product-option"><dt>Personalização:</dt><dd>
+        {%- if nome_masc != blank or num_masc != blank -%}
+          {{ nome_masc }}{% if num_masc != blank %} {{ num_masc }}{% endif %}
+        {%- else -%}Não{%- endif -%}
+      </dd></div>
+    </dl>
+  </div>
+  <div class="kit-casal-cart-col">
+    <p class="kit-casal-cart-title">Camisa Feminina</p>
+    <dl class="cart-item__properties">
+      <div class="product-option"><dt>Qtd:</dt><dd>1</dd></div>
+      <div class="product-option"><dt>Tamanho:</dt><dd>{{ tam_fem }}</dd></div>
+      <div class="product-option"><dt>Personalização:</dt><dd>
+        {%- if nome_fem != blank or num_fem != blank -%}
+          {{ nome_fem }}{% if num_fem != blank %} {{ num_fem }}{% endif %}
+        {%- else -%}Não{%- endif -%}
+      </dd></div>
+    </dl>
+  </div>
+</div>
+<style>
+  .kit-casal-cart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid #eee; border-radius: 0.6rem; overflow: hidden; margin-top: 0.4rem; }
+  .kit-casal-cart-col { padding: 0.8rem 1rem; }
+  .kit-casal-cart-col + .kit-casal-cart-col { border-left: 1px solid #eee; }
+  .kit-casal-cart-title { font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: #111; margin: 0 0 0.4rem; }
+  .kit-casal-cart-grid .cart-item__properties { margin: 0; padding: 0; }
+  .kit-casal-cart-grid .product-option { font-size: 1.15rem; line-height: 1.35; margin: 0.15rem 0; }
+  .kit-casal-cart-grid .product-option dt { display: inline; color: #666; font-weight: 500; }
+  .kit-casal-cart-grid .product-option dd { display: inline; margin-left: 0.3rem; color: #111; font-weight: 600; }
+</style>

@@ -1,0 +1,22 @@
+{
+  "slug": "99influence",
+  "url": "https://www.99influence.com/",
+  "scrapedAt": "2026-05-18T20:21:41.034Z",
+  "title": "Contratar Influenciadores Digitais ficou Fácil - 99Influence",
+  "description": "Marketplace para você contratar um ator ou influenciador digital, para promover seu negócio.",
+  "ogImage": "",
+  "headings": 9,
+  "ctas": 15,
+  "visual": {
+    "fontPrimary": "-apple-system",
+    "fonts": [
+      "-apple-system",
+      "__DM_Sans_750548",
+      "Roboto",
+      "Arial",
+      "__Poppins_86336c"
+    ],
+    "bg": "rgba(0, 0, 0, 0)",
+    "fg": "rgb(0, 0, 0)"
+  }
+}

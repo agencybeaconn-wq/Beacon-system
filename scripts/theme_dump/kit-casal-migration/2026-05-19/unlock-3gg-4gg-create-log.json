@@ -1,0 +1,65 @@
+{
+  "lots": [
+    {
+      "masc": "3GG",
+      "requested": 20,
+      "created": 20,
+      "userErrors": [],
+      "createdIds": [
+        "gid://shopify/ProductVariant/45186948956355",
+        "gid://shopify/ProductVariant/45186948989123",
+        "gid://shopify/ProductVariant/45186949021891",
+        "gid://shopify/ProductVariant/45186949054659",
+        "gid://shopify/ProductVariant/45186949087427",
+        "gid://shopify/ProductVariant/45186949120195",
+        "gid://shopify/ProductVariant/45186949152963",
+        "gid://shopify/ProductVariant/45186949185731",
+        "gid://shopify/ProductVariant/45186949218499",
+        "gid://shopify/ProductVariant/45186949251267",
+        "gid://shopify/ProductVariant/45186949284035",
+        "gid://shopify/ProductVariant/45186949316803",
+        "gid://shopify/ProductVariant/45186949349571",
+        "gid://shopify/ProductVariant/45186949382339",
+        "gid://shopify/ProductVariant/45186949415107",
+        "gid://shopify/ProductVariant/45186949447875",
+        "gid://shopify/ProductVariant/45186949480643",
+        "gid://shopify/ProductVariant/45186949513411",
+        "gid://shopify/ProductVariant/45186949546179",
+        "gid://shopify/ProductVariant/45186949578947"
+      ]
+    },
+    {
+      "masc": "4GG",
+      "requested": 20,
+      "created": 20,
+      "userErrors": [],
+      "createdIds": [
+        "gid://shopify/ProductVariant/45186949611715",
+        "gid://shopify/ProductVariant/45186949644483",
+        "gid://shopify/ProductVariant/45186949677251",
+        "gid://shopify/ProductVariant/45186949710019",
+        "gid://shopify/ProductVariant/45186949742787",
+        "gid://shopify/ProductVariant/45186949775555",
+        "gid://shopify/ProductVariant/45186949808323",
+        "gid://shopify/ProductVariant/45186949841091",
+        "gid://shopify/ProductVariant/45186949873859",
+        "gid://shopify/ProductVariant/45186949906627",
+        "gid://shopify/ProductVariant/45186949939395",
+        "gid://shopify/ProductVariant/45186949972163",
+        "gid://shopify/ProductVariant/45186950004931",
+        "gid://shopify/ProductVariant/45186950037699",
+        "gid://shopify/ProductVariant/45186950070467",
+        "gid://shopify/ProductVariant/45186950103235",
+        "gid://shopify/ProductVariant/45186950136003",
+        "gid://shopify/ProductVariant/45186950168771",
+        "gid://shopify/ProductVariant/45186950201539",
+        "gid://shopify/ProductVariant/45186950234307"
+      ]
+    }
+  ],
+  "summary": {
+    "totalRequested": 40,
+    "totalCreated": 40,
+    "elapsedMs": 2532
+  }
+}

@@ -1,0 +1,412 @@
+.cart-progress-bar-container {
+    padding: 0 2rem;
+    background: #ffffff;
+    margin: 0.5rem auto 1rem;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cart-progress-bar__header {
+    margin-bottom: 0.5rem;
+    text-align: center;
+    width: 100%;
+}
+
+.cart-progress-bar__message {
+    font-size: 1.4rem;
+    color: #151515;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    display: block;
+    line-height: 1.3;
+    width: 100%;
+}
+
+.cart-progress-bar__message strong {
+    color: #000000;
+    font-weight: 800;
+}
+
+.cart-progress-bar__track-wrapper {
+    position: relative;
+    padding: 2.5rem 1rem 1rem;
+    /* Unify spacing for both main cart and drawer */
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 1.5rem;
+    /* Uniform gap for both views */
+}
+
+.cart-progress-bar__track {
+    position: relative;
+    height: 1.2rem;
+    /* Slightly thinner */
+    background-color: #eeeeee !important;
+    border-radius: 2rem;
+    width: 100%;
+    z-index: 1;
+}
+
+.cart-progress-bar__fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: rgb(var(--color-button)) !important;
+    background-color: rgb(var(--color-button)) !important;
+    border-radius: 2rem;
+    transition: width 1s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 0 0 10px rgba(var(--color-button), 0.3);
+    z-index: 5;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.cart-progress-bar__steps {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    pointer-events: none;
+    transform: translateY(-50%);
+}
+
+.cart-progress-bar__step {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 2.0rem;
+    height: 2.0rem;
+    min-width: 2.0rem;
+    min-height: 2.0rem;
+    flex-shrink: 0 !important;
+    aspect-ratio: 1 / 1 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.step__icon {
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0 !important;
+    aspect-ratio: 1 / 1 !important;
+    background: #f0f0f0;
+    border: 1px solid #e0e0e0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #cccccc;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    transition: all 0.4s ease;
+}
+
+.step__icon svg {
+    width: 0.9rem;
+    height: 0.9rem;
+}
+
+.step__checkmark {
+    display: none !important;
+    /* Removed checkmark per user request */
+}
+
+.step__checkmark svg {
+    width: 0.6rem;
+    height: 0.6rem;
+}
+
+.cart-progress-bar__step.is-reached .step__icon {
+    border: 2px solid rgb(var(--color-button));
+    color: rgb(var(--color-button-text));
+    background: rgb(var(--color-button));
+    box-shadow: 0 4px 12px rgba(var(--color-button), 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    transform: scale(1.15);
+}
+
+.cart-progress-bar__step.is-reached .step__checkmark {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.cart-progress-bar__milestone {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    transition: all 0.4s ease;
+}
+
+
+
+.milestone__icon-container {
+    position: relative;
+    width: 2.8rem;
+    height: 2.8rem;
+}
+
+.milestone__icon {
+    width: 100%;
+    height: 100%;
+    background: #f0f0f0;
+    border: 1px solid #e0e0e0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #bbbbbb;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.milestone-0 .milestone__icon {
+    content: '';
+    /* Always reached for start balance */
+    border-color: rgb(var(--color-button)) !important;
+    color: rgb(var(--color-button-text)) !important;
+    background: rgb(var(--color-button)) !important;
+    box-shadow: 0 5px 15px rgba(var(--color-button), 0.3), inset 0 2px 5px rgba(255, 255, 255, 0.4) !important;
+    transform: scale(1.1) !important;
+    /* Reduced scale from 1.15 */
+}
+
+.cart-progress-bar__milestone.is-reached .milestone__icon {
+    border-color: rgb(var(--color-button));
+    color: rgb(var(--color-button-text));
+    background: rgb(var(--color-button));
+    box-shadow: 0 5px 15px rgba(var(--color-button), 0.3), inset 0 2px 5px rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+    /* Reduced scale from 1.15 */
+}
+
+.milestone__icon svg {
+    width: 1.2rem;
+    /* Reduced from 1.4rem */
+    height: 1.2rem;
+    /* Reduced from 1.4rem */
+}
+
+.milestone__badge {
+    position: absolute;
+    top: -2.2rem;
+    /* Adjusted to give more space */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #bbbbbb;
+    letter-spacing: 0.05rem;
+}
+
+.cart-progress-bar__milestone.is-reached .milestone__badge {
+    color: #000000 !important;
+    font-weight: 900;
+}
+
+.milestone__checkmark {
+    display: none !important;
+    /* Removed checkmark per user request */
+}
+
+.cart-progress-bar__milestone.is-reached .milestone__checkmark {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.milestone__checkmark svg {
+    width: 1.1rem;
+    height: 1.1rem;
+}
+
+/* Pulse animation for reached milestones */
+@keyframes reached-pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.25);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+.cart-progress-bar__milestone.is-reached:not(.was-reached) {
+    animation: reached-pulse 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Stage Logic: Removed to allow all checkmarks to be shown linearly */
+
+
+/* Desktop Enhancements: Icon Sizing & Width Constraint */
+@media screen and (min-width: 750px) {
+    .cart-progress-bar-container {
+        max-width: 700px;
+        margin: 1rem auto 2rem;
+        border-radius: 12px;
+        padding: 0 4rem;
+    }
+
+    .step__icon {
+        width: 2.4rem;
+        /* Restored/Balanced size */
+        height: 2.4rem;
+        min-width: 2.4rem;
+        min-height: 2.4rem;
+        flex-shrink: 0;
+    }
+
+    .step__icon svg {
+        width: 1.4rem;
+        height: 1.4rem;
+    }
+
+    .milestone__icon-container {
+        width: 3.2rem;
+        /* Reduced from original 4.8rem, but larger than 2.4rem for better visibility */
+        height: 3.2rem;
+        min-width: 3.2rem;
+        min-height: 3.2rem;
+        flex-shrink: 0;
+    }
+
+    .milestone__icon svg {
+        width: 1.8rem;
+        height: 1.8rem;
+    }
+
+    .milestone__badge {
+        font-size: 1.1rem;
+        top: -2.5rem;
+        /* Adjusted for new size */
+    }
+
+    .cart-progress-bar__track-wrapper {
+        padding: 2.5rem 2rem 2rem;
+        /* Unified with drawer/mobile for consistency */
+    }
+}
+
+/* Fix for Cart Drawer: Compact & Spaced */
+.drawer .cart-progress-bar-container,
+.cart-drawer .cart-progress-bar-container {
+    max-width: none !important;
+    margin: 2rem 0 1rem !important;
+    width: auto !important;
+    padding: 0 1.5rem !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+
+.drawer .cart-progress-bar__track-wrapper,
+.cart-drawer .cart-progress-bar__track-wrapper {
+    padding: 2.5rem 1.5rem 0.5rem !important;
+    /* Unified extreme tight gap */
+    overflow: visible !important;
+    /* Allow shadows to bleed */
+}
+
+.drawer .milestone__badge,
+.cart-drawer .milestone__badge {
+    top: -2.2rem !important;
+}
+
+/* Mobile Icon Sizes (Drawer default) */
+.drawer .milestone__icon-container,
+.cart-drawer .milestone__icon-container {
+    width: 2.8rem;
+    height: 2.8rem;
+}
+
+.drawer .step__icon,
+.cart-drawer .step__icon {
+    width: 2.2rem;
+    height: 2.2rem;
+}
+
+/* Softened Shadows */
+.cart-progress-bar__milestone.is-reached .milestone__icon {
+    box-shadow: 0 4px 12px rgba(var(--color-button), 0.15), inset 0 2px 5px rgba(255, 255, 255, 0.4);
+    /* Much softer shadow */
+}
+
+.milestone__icon {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    /* Softer inactive shadow */
+}
+
+/* ── Bonus Messages (Fixed Perks) ── */
+.cart-progress-bar__bonuses {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease, max-height 0.5s ease, margin-top 0.3s ease;
+}
+
+.cart-progress-bar__bonuses.is-visible {
+    opacity: 1;
+    max-height: 120px;
+    margin-top: 1rem;
+}
+
+.cart-progress-bar__bonus-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.8rem;
+    background: #f0faf0;
+    border: 1px solid #c8e6c9;
+    border-radius: 8px;
+    font-size: 1.25rem;
+    color: #2e7d32;
+    line-height: 1.3;
+}
+
+.bonus-item__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #2e7d32;
+}
+
+.bonus-item__icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.bonus-item__text {
+    flex: 1;
+}
+
+.bonus-item__text strong {
+    font-weight: 800;
+    color: #1b5e20;
+}
+
+.bonus-item__check {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2e7d32;
+    flex-shrink: 0;
+}

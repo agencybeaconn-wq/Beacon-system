@@ -1,0 +1,1948 @@
+{%- comment -%}
+  Script de patches adaptado para temas Dawn e Kalles da Shopify
+  Detecta patches baseado no título do produto e permite adicionar ao carrinho
+  Compatível com Web Components do Dawn e sistema T4S do Kalles
+{%- endcomment -%}
+
+{%- liquid
+  assign product_form_id = 'product-form-' | append: pr_se_id
+-%}
+
+<script>
+  (function() {
+    // Duplicate guard
+    if (window.patchScriptInitialized) {
+      console.log('DEBUG: patch-script already initialized, skipping duplicate.');
+      return;
+    }
+    window.patchScriptInitialized = true;
+    
+    // Store selected patch products
+    const selectedPatches = new Map();
+    // Store cart item keys for patches (to remove them later)
+    const patchCartKeys = new Map();
+    // Store custom patch positions
+    const customPatchPositions = new Map();
+    // Flag to prevent infinite loops when syncing patch properties
+    let isSyncingPatchProperties = false;
+    // Flag to prevent infinite loops when deselecting patches programmatically
+    let isDeselectingPatches = false;
+    const productCollections = {{ product.collections | map: 'handle' | json }};
+    const productTitle = {{ product.title | json }} || '';
+    const productFormId = '{{ product_form_id }}';
+    
+    // Flags for patch loading
+    let patchesLoaded = false;
+    let isLoadingPatches = false;
+    let patchSectionExpanded = false;
+    
+    // Toggle functionality with smooth CSS transitions
+    function initPatchToggle() {
+      const toggle = document.querySelector('.patch-section-toggle');
+      if (!toggle) return;
+      
+      console.log('DEBUG: Patch toggle initialized');
+      
+      toggle.addEventListener('click', function() {
+        console.log('DEBUG: Patch toggle clicked');
+        const selector = document.getElementById('patch-products-selector');
+        
+        patchSectionExpanded = !patchSectionExpanded;
+        
+        if (patchSectionExpanded) {
+          // Open - let CSS handle the smooth transition
+          if (selector) {
+            selector.classList.add('is-open');
+          }
+          toggle.setAttribute('aria-expanded', 'true');
+          loadPatchProducts();
+        } else {
+          // Close - let CSS handle the smooth transition
+          if (selector) {
+            selector.classList.remove('is-open');
+          }
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    // Initialize toggle when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        initPatchToggle();
+        initAddToCartButtonListeners();
+        // AUTO-LOAD PATCHES: Trigger loading immediately so the drawer is ready
+        setTimeout(loadPatchProducts, 500); 
+      });
+    } else {
+      initPatchToggle();
+      initAddToCartButtonListeners();
+      // AUTO-LOAD PATCHES: Trigger loading immediately
+      setTimeout(loadPatchProducts, 500);
+    }
+
+    function initAddToCartButtonListeners() {
+      console.log('DEBUG: Initializing add to cart button listeners');
+      
+      // Flag to track if we're currently adding patches
+      let isAddingPatches = false;
+      
+      // Function to handle button click - OPTIMISTIC UI: trigger theme immediately, add patches in background
+      async function handleAddToCartClick(e) {
+        const hasPatches = selectedPatches.size > 0 || 
+                          document.querySelectorAll('.patch-checkbox:checked').length > 0;
+        
+        if (!hasPatches || isAddingPatches) {
+          // No patches or already processing - let theme handle normally
+          return true;
+        }
+        
+        console.log('DEBUG: Patches selected - using optimistic UI');
+        
+        // Prevent the default action temporarily
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        
+        isAddingPatches = true;
+        
+        const button = e.target.closest('button') || e.target;
+        const form = document.getElementById(productFormId) || 
+                    button.closest('form') || 
+                    document.querySelector('form[action*="/cart/add"]');
+        
+        if (!form) {
+          console.error('Form not found');
+          isAddingPatches = false;
+          return false;
+        }
+        
+        const formData = new FormData(form);
+        const variantId = formData.get('id');
+        const quantity = parseInt(formData.get('quantity') || '1', 10);
+        
+        if (!variantId) {
+          alert('Please select a variant');
+          isAddingPatches = false;
+          return false;
+        }
+        
+        // Generate unique ID for this order (prevents Shopify from stacking items)
+        const uniqueItemId = Date.now().toString() + '-' + Math.random().toString(36).substr(2, 9);
+        const cartUrl = window.themeVariables?.routes?.cartUrl || '/cart';
+        
+        // Get patch titles for main product properties
+        const patchTitles = [];
+        const patchesToAdd = [];
+        
+        selectedPatches.forEach((patch, patchKey) => {
+          const isValid = validateSleevePatchSelection(patch, patchKey, false);
+          if (isValid) {
+            patchTitles.push(patch.title);
+            patchesToAdd.push({
+              id: parseInt(patch.id, 10),
+              quantity: quantity,
+              properties: {
+                '_is_patch': 'true',
+                '_main_product_variant': variantId.toString(),
+                '_patch_product': patch.handle,
+                '_patch_title': patch.title,
+                '_order_id': uniqueItemId // Unique ID to prevent stacking
+              }
+            });
+          }
+        });
+        
+        // Build main product with unique properties (prevents stacking)
+        const mainProperties = extractPropertiesFromForm(formData);
+        mainProperties['_order_id'] = uniqueItemId; // Unique ID prevents Shopify from stacking
+        if (patchTitles.length > 0) {
+          mainProperties['Patches'] = patchTitles.join(', ');
+        }
+        
+        const mainProduct = {
+          id: parseInt(variantId, 10),
+          quantity: quantity,
+          properties: mainProperties
+        };
+        
+        // Add selling plan if present
+        const sellingPlanId = formData.get('selling_plan');
+        if (sellingPlanId) {
+          mainProduct.selling_plan = sellingPlanId;
+        }
+        
+        // Clear patch selections IMMEDIATELY (optimistic)
+        selectedPatches.clear();
+        patchCartKeys.clear();
+        document.querySelectorAll('.patch-product-item').forEach(item => item.classList.remove('selected'));
+        document.querySelectorAll('.patch-checkbox').forEach(checkbox => { checkbox.checked = false; });
+        
+        // Add loading state to button (same as theme uses)
+        button.classList.add('loading', 'is-loading', 't4s-btn-loading');
+        button.setAttribute('aria-busy', 'true');
+        button.setAttribute('aria-disabled', 'true');
+        button.disabled = true;
+        
+        // Show spinner in button if theme supports it
+        const loadingSpinner = button.querySelector('.t4s-loading__spinner, .t4s-cart-spinner');
+        if (loadingSpinner) loadingSpinner.removeAttribute('hidden');
+        
+        // Add loading spinner if not present
+        if (!button.querySelector('.t4s-loading__spinner')) {
+          const spinner = document.createElement('span');
+          spinner.className = 't4s-loading__spinner';
+          spinner.innerHTML = '<svg width="16" height="16" class="t4s-svg-spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="t4s-path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle></svg>';
+          button.appendChild(spinner);
+        }
+        
+        // Add ALL items (patches FIRST, then product) via API with unique IDs
+        // IMPORTANT: Patches must always be added before the main product to maintain order
+        const allItems = [...patchesToAdd, mainProduct];
+        
+        console.log('DEBUG: Adding items with unique ID:', uniqueItemId);
+        
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: allItems })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to add items to cart');
+          }
+          console.log('DEBUG: Items added to cart');
+          
+          // Fetch updated cart with sections for cart drawer (Dawn + Kalles)
+          return fetch(`${cartUrl}?sections=cart-drawer,cart-icon-bubble,mini-cart`);
+        })
+        .then(r => r.json())
+        .then(sectionsData => {
+          console.log('DEBUG: Sections fetched');
+          
+          // Try Dawn cart-drawer first
+          const dawnCartDrawer = document.querySelector('cart-drawer');
+          if (dawnCartDrawer && sectionsData['cart-drawer']) {
+            console.log('DEBUG: Updating Dawn cart-drawer');
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = sectionsData['cart-drawer'];
+            
+            // Find the CartDrawer inner content
+            const newCartDrawer = tempDiv.querySelector('#CartDrawer');
+            const existingCartDrawer = document.getElementById('CartDrawer');
+            
+            if (newCartDrawer && existingCartDrawer) {
+              existingCartDrawer.innerHTML = newCartDrawer.innerHTML;
+            }
+            
+            // Remove is-empty class if cart has items
+            dawnCartDrawer.classList.remove('is-empty');
+          }
+          
+          // Update Kalles mini cart if present
+          const kallesMiniCart = document.getElementById('t4s-mini_cart');
+          if (kallesMiniCart && sectionsData['mini-cart']) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = sectionsData['mini-cart'];
+            
+            // Find the inner content to replace
+            const newContent = tempDiv.querySelector('.t4s-drawer__wrap, .t4s-mini_cart__items, [data-cart-items]');
+            const existingContent = kallesMiniCart.querySelector('.t4s-drawer__wrap, .t4s-mini_cart__items, [data-cart-items]');
+            
+            if (newContent && existingContent) {
+              existingContent.innerHTML = newContent.innerHTML;
+            } else if (sectionsData['mini-cart']) {
+              const wrapper = kallesMiniCart.querySelector('.t4s-drawer__main') || kallesMiniCart;
+              wrapper.innerHTML = sectionsData['mini-cart'];
+            }
+            
+            // Update cart count attribute
+            const cartCountMatch = sectionsData['mini-cart'].match(/data-ccount="(\d+)"/);
+            if (cartCountMatch) {
+              kallesMiniCart.setAttribute('data-ccount', cartCountMatch[1]);
+            }
+          }
+          
+          // Update Dawn cart icon bubble if present
+          if (sectionsData['cart-icon-bubble']) {
+            const cartIconBubble = document.getElementById('cart-icon-bubble');
+            if (cartIconBubble) {
+              const tempDiv = document.createElement('div');
+              tempDiv.innerHTML = sectionsData['cart-icon-bubble'];
+              const newBubble = tempDiv.querySelector('#cart-icon-bubble');
+              if (newBubble) {
+                cartIconBubble.innerHTML = newBubble.innerHTML;
+              }
+            }
+          }
+          
+          // Update cart count in header
+          return fetch(`${cartUrl}.js`);
+        })
+        .then(r => r.json())
+        .then(cartData => {
+          // Update cart count elements (Dawn + Kalles selectors)
+          const cartCountElements = document.querySelectorAll('[data-cart-count], .t4s-cart-count, .cart-count, [data-header-cart-count], .cart-count-bubble span');
+          cartCountElements.forEach(el => {
+            if (cartData.item_count !== undefined) {
+              el.textContent = cartData.item_count;
+              el.style.display = cartData.item_count > 0 ? '' : 'none';
+            }
+          });
+          
+          // Trigger cart update events for both themes
+          const events = ['cart:updated', 'cart:refresh', 't4s:cart:updated', 'shopify:cart:updated'];
+          events.forEach(eventName => {
+            document.documentElement.dispatchEvent(new CustomEvent(eventName, {
+              bubbles: true,
+              detail: { cart: cartData }
+            }));
+          });
+          
+          // jQuery events for Kalles
+          if (typeof jQuery !== 'undefined') {
+            jQuery(document).trigger('cart:updated', [cartData]);
+            jQuery(document).trigger('ajaxCart.afterCartLoad');
+          }
+          
+          // Add success animation to button
+          button.classList.add('t4s-btn-added', 'is-added');
+          setTimeout(() => {
+            button.classList.remove('t4s-btn-added', 'is-added');
+          }, 2000);
+          
+          // Open cart drawer - try Dawn first, then Kalles
+          setTimeout(() => {
+            // Try Dawn cart-drawer (Web Component with open method)
+            const dawnCartDrawer = document.querySelector('cart-drawer');
+            if (dawnCartDrawer && typeof dawnCartDrawer.open === 'function') {
+              console.log('DEBUG: Opening Dawn cart-drawer');
+              dawnCartDrawer.open();
+            } else {
+              // Try clicking cart icon (Dawn alternative)
+              const cartIcon = document.querySelector('#cart-icon-bubble');
+              if (cartIcon) {
+                console.log('DEBUG: Clicking Dawn cart icon');
+                cartIcon.click();
+              } else {
+                // Fallback to Kalles drawer
+                const kallesTrigger = document.querySelector('[data-drawer-options*="t4s-mini_cart"]');
+                if (kallesTrigger) {
+                  console.log('DEBUG: Opening Kalles mini cart');
+                  kallesTrigger.click();
+                } else {
+                  // Manual fallback for Kalles
+                  const kallesMiniCart = document.getElementById('t4s-mini_cart');
+                  if (kallesMiniCart) {
+                    kallesMiniCart.classList.remove('t4s-dn');
+                    kallesMiniCart.classList.add('is--open');
+                    kallesMiniCart.removeAttribute('aria-hidden');
+                    document.documentElement.classList.add('is--opend-drawer');
+                    document.body.classList.add('t4s-drawer-open');
+                  }
+                }
+              }
+            }
+          }, 200);
+          
+          console.log('DEBUG: Cart updated and cart drawer opened');
+        })
+        .catch(error => {
+          console.error('Error adding items:', error);
+          alert('Erro ao adicionar ao carrinho. Por favor, tente novamente.');
+        })
+        .finally(() => {
+          // Remove loading state
+          button.classList.remove('loading', 'is-loading', 't4s-btn-loading');
+          button.removeAttribute('aria-busy');
+          button.removeAttribute('aria-disabled');
+          button.disabled = false;
+          
+          // Hide spinner
+          const loadingSpinner = button.querySelector('.t4s-loading__spinner, .t4s-cart-spinner');
+          if (loadingSpinner) loadingSpinner.setAttribute('hidden', '');
+          
+          // Remove added spinner
+          const addedSpinner = button.querySelector('.t4s-loading__spinner:not([hidden])');
+          if (addedSpinner && addedSpinner.parentNode === button) {
+            // Keep the spinner but hide it
+          }
+          
+          isAddingPatches = false;
+        });
+        
+        return false;
+      }
+      
+      // Wait for DOM to be ready and theme to initialize
+      function attachListeners() {
+        // Attach click listeners to all add to cart buttons (Dawn + Kalles/T4S selectors)
+        const buttons = document.querySelectorAll(
+          'button[data-atc-form], ' +
+          'button[data-action-atc], ' +
+          'button[type="submit"][name="add"], ' +
+          'button[type="submit"][name="add1"], ' +
+          '.t4s-product-form__submit, ' +
+          '.t4s-sticky-atc__atc, ' +
+          'product-form button[type="submit"], ' +
+          '.product-form__submit, ' +
+          '.shopify-payment-button button'
+        );
+        
+        console.log('DEBUG: Found', buttons.length, 'add to cart buttons');
+        
+        buttons.forEach(button => {
+          if (!button.dataset.patchListenerAdded) {
+            button.dataset.patchListenerAdded = 'true';
+            // Add click listener with capture phase to run before theme
+            button.addEventListener('click', handleAddToCartClick, true);
+          }
+        });
+      }
+      
+      // Try to attach immediately
+      attachListeners();
+      
+      // Also attach after a short delay to catch dynamically added buttons
+      setTimeout(attachListeners, 100);
+      setTimeout(attachListeners, 500);
+      setTimeout(attachListeners, 1000);
+      
+      // Listen for dynamically added buttons
+      const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          mutation.addedNodes.forEach(function(node) {
+            if (node.nodeType === 1) {
+              const buttons = node.querySelectorAll && node.querySelectorAll(
+                'button[data-atc-form], ' +
+                'button[data-action-atc], ' +
+                'button[type="submit"][name="add"], ' +
+                '.t4s-product-form__submit, ' +
+                '.t4s-sticky-atc__atc, ' +
+                'product-form button[type="submit"], ' +
+                '.product-form__submit'
+              );
+              if (buttons && buttons.length > 0) {
+                buttons.forEach(button => {
+                  if (!button.dataset.patchListenerAdded) {
+                    button.dataset.patchListenerAdded = 'true';
+                    button.addEventListener('click', handleAddToCartClick, true);
+                  }
+                });
+              }
+            }
+          });
+        });
+      });
+      
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    }
+    
+    
+    // Club to league mapping based on simplified names
+    const clubToLeagueMap = {
+      // Premier League
+      'arsenal': 'premier-league',
+      'aston villa': 'premier-league',
+      'bournemouth': 'premier-league',
+      'brentford': 'premier-league',
+      'brighton': 'premier-league',
+      'burnley': 'premier-league',
+      'chelsea': 'premier-league',
+      'crystal palace': 'premier-league',
+      'everton': 'premier-league',
+      'fulham': 'premier-league',
+      'leeds': 'premier-league',
+      'liverpool': 'premier-league',
+      'manchester': 'premier-league',
+      'newcastle': 'premier-league',
+      'nottingham': 'premier-league',
+      'sunderland': 'premier-league',
+      'tottenham': 'premier-league',
+      'west ham': 'premier-league',
+      'wolves': 'premier-league',
+      
+      // La Liga
+      'real madrid': 'laliga',
+      'barcelona': 'laliga',
+      'atletico': 'laliga',
+      'sevilla': 'laliga',
+      'betis': 'laliga',
+      'valencia': 'laliga',
+      'villarreal': 'laliga',
+      'sociedad': 'laliga',
+      'bilbao': 'laliga',
+      'getafe': 'laliga',
+      'osasuna': 'laliga',
+      'espanyol': 'laliga',
+      'celta': 'laliga',
+      'granada': 'laliga',
+      'mallorca': 'laliga',
+      'rayo': 'laliga',
+      'alaves': 'laliga',
+      'leganes': 'laliga',
+      'levante': 'laliga',
+      
+      // Bundesliga
+      'bayern': 'bundesliga',
+      'dortmund': 'bundesliga',
+      'leipzig': 'bundesliga',
+      'leverkusen': 'bundesliga',
+      'stuttgart': 'bundesliga',
+      'frankfurt': 'bundesliga',
+      'wolfsburg': 'bundesliga',
+      'gladbach': 'bundesliga',
+      'hoffenheim': 'bundesliga',
+      'freiburg': 'bundesliga',
+      'mainz': 'bundesliga',
+      'augsburg': 'bundesliga',
+      'bochum': 'bundesliga',
+      'köln': 'bundesliga',
+      'union berlin': 'bundesliga',
+      'werder': 'bundesliga',
+      'heidenheim': 'bundesliga',
+      'darmstadt': 'bundesliga',
+      
+      // Serie A
+      'juventus': 'serie-a',
+      'inter milan': 'serie-a',
+      'milan': 'serie-a',
+      'roma': 'serie-a',
+      'lazio': 'serie-a',
+      'napoli': 'serie-a',
+      'atalanta': 'serie-a',
+      'fiorentina': 'serie-a',
+      'torino': 'serie-a',
+      'bologna': 'serie-a',
+      'verona': 'serie-a',
+      'udinese': 'serie-a',
+      'genoa': 'serie-a',
+      'lecce': 'serie-a',
+      'empoli': 'serie-a',
+      'monza': 'serie-a',
+      'cagliari': 'serie-a',
+      'sassuolo': 'serie-a',
+      
+      // Ligue 1
+      'paris': 'ligue-1',
+      'marseille': 'ligue-1',
+      'lyon': 'ligue-1',
+      'monaco': 'ligue-1',
+      'lille': 'ligue-1',
+      'nice': 'ligue-1',
+      'rennes': 'ligue-1',
+      'nantes': 'ligue-1',
+      'strasbourg': 'ligue-1',
+      'montpellier': 'ligue-1',
+      'toulouse': 'ligue-1',
+      'reims': 'ligue-1',
+      'metz': 'ligue-1',
+      'brest': 'ligue-1',
+      'lens': 'ligue-1',
+      'lorient': 'ligue-1',
+      'auxerre': 'ligue-1',
+      'clermont': 'ligue-1',
+      
+      // Liga Portugal
+      'benfica': 'liga-portugal',
+      'porto': 'liga-portugal',
+      'sporting': 'liga-portugal',
+      'braga': 'liga-portugal',
+      'guimaraes': 'liga-portugal',
+      'boavista': 'liga-portugal',
+      'estoril': 'liga-portugal',
+      'famalicao': 'liga-portugal',
+      'rio ave': 'liga-portugal',
+      'arouca': 'liga-portugal',
+      'casa pia': 'liga-portugal',
+      'vizela': 'liga-portugal',
+      'gil vicente': 'liga-portugal',
+      'moreirense': 'liga-portugal',
+      'portimonense': 'liga-portugal',
+      
+      // Brasileirão
+      'fluminense': 'brasileirao',
+      'vasco': 'brasileirao',
+      'corinthians': 'brasileirao',
+      'são paulo': 'brasileirao',
+      'sao paulo': 'brasileirao',
+      'santos': 'brasileirao',
+      'grêmio': 'brasileirao',
+      'gremio': 'brasileirao',
+      'internacional': 'brasileirao',
+      'cruzeiro': 'brasileirao',
+
+      'atletico mineiro': 'brasileirao',
+      'athletico': 'brasileirao',
+      'bahia': 'brasileirao',
+      'fortaleza': 'brasileirao',
+      'ceará': 'brasileirao',
+      'ceara': 'brasileirao',
+      'goiás': 'brasileirao',
+      'goias': 'brasileirao',
+      'cuiabá': 'brasileirao',
+      'cuiaba': 'brasileirao',
+      'red bull bragantino': 'brasileirao',
+      'bragantino': 'brasileirao',
+      'coritiba': 'brasileirao',
+      'vitória': 'brasileirao',
+      'vitoria': 'brasileirao',
+      'américa mineiro': 'brasileirao',
+      'america mineiro': 'brasileirao',
+      
+      // Liga MX
+      'américa': 'liga-mx',
+      'america': 'liga-mx',
+      'atlas': 'liga-mx',
+      'atletico de san luis': 'liga-mx',
+      'atletico san luis': 'liga-mx',
+      'cruz azul': 'liga-mx',
+      'guadalajara': 'liga-mx',
+      'chivas': 'liga-mx',
+      'chivas de guadalajara': 'liga-mx',
+      'león': 'liga-mx',
+      'leon': 'liga-mx',
+      'monterrey': 'liga-mx',
+      'rayados': 'liga-mx',
+      'necaxa': 'liga-mx',
+      'pachuca': 'liga-mx',
+      'puebla': 'liga-mx',
+      'pumas': 'liga-mx',
+      'querétaro': 'liga-mx',
+      'queretaro': 'liga-mx',
+      'santos laguna': 'liga-mx',
+      'tigres': 'liga-mx',
+      'tijuana': 'liga-mx',
+      'toluca': 'liga-mx',
+      'deportivo toluca': 'liga-mx'
+    };
+    
+    // Champions League specific club patches (order matters - more specific first)
+    const championsLeagueClubPatches = {
+      'eintracht frankfurt': 'patch-champions-league',
+      'atletico madrid': 'patch-champions-league',
+      'borussia dortmund': 'patch-champions-league',
+      'bayer leverkusen': 'patch-champions-league',
+      'real madrid': 'patch-champions-league-15',
+      'barcelona': 'patch-champions-league-5',
+      'bayern': 'patch-champions-league-6',
+      'liverpool': 'patch-champions-league-6',
+      'milan': 'patch-champions-league-7',
+      'chelsea': 'patch-world-champions',
+      'paris': 'patch-uefa-champions-25-26',
+      'tottenham': 'patch-champions-league',
+      'atalanta': 'patch-champions-league',
+      'monaco': 'patch-champions-league',
+      'juventus': 'patch-champions-league',
+      'sporting cp': 'patch-champions-league',
+      'marseille': 'patch-champions-league',
+      'villarreal': 'patch-champions-league',
+      'manchester': 'patch-champions-league',
+      'napoli': 'patch-champions-league',
+      'benfica': 'patch-champions-league',
+      'olympiacos': 'patch-champions-league'
+    };
+    
+    // Libertadores patches
+    const libertadoresPatches = {
+      'flamengo': 'patch-libertadores-3',
+      'palmeiras': 'patch-libertadores-3',
+      'são paulo': 'patch-libertadores-3',
+      'sao paulo': 'patch-libertadores-3',
+      'internacional': 'patch-libertadores-2'
+    };
+    
+    // Final Libertadores 2025
+    const finalLibertadores2025Clubs = {
+      'flamengo': 'patch-final-libertadores-2025',
+      'palmeiras': 'patch-final-libertadores-2025'
+    };
+    
+    // Participation Libertadores
+    const participationLibertadoresClubs = ['internacional', 'corinthians', 'bahia', 'flamengo', 'palmeiras', 'fortaleza', 'são paulo', 'sao paulo'];
+    
+    // Copa do Brasil
+    const copaBrasilClubs = {
+      'palmeiras': 'patch-participacao-copa-do-brasil',
+      'são paulo': 'patch-participacao-copa-do-brasil',
+      'sao paulo': 'patch-participacao-copa-do-brasil',
+      'corinthians': 'patch-participacao-copa-do-brasil',
+      'santos': 'patch-participacao-copa-do-brasil',
+      'internacional': 'patch-participacao-copa-do-brasil',
+      'grêmio': 'patch-participacao-copa-do-brasil',
+      'gremio': 'patch-participacao-copa-do-brasil',
+
+      'athletico paranaense': 'patch-participacao-copa-do-brasil',
+      'athletico': 'patch-participacao-copa-do-brasil',
+      'fluminense': 'patch-participacao-copa-do-brasil',
+      'vasco da gama': 'patch-participacao-copa-do-brasil',
+      'vasco': 'patch-participacao-copa-do-brasil'
+    };
+    
+    // Sudamericana
+    const sudamericanaClubs = {
+
+      'fluminense': 'patch-participacao-sulamericana',
+      'corinthians': 'patch-participacao-sulamericana',
+      'cruzeiro': 'patch-participacao-sulamericana',
+      'grêmio': 'patch-participacao-sulamericana',
+      'gremio': 'patch-participacao-sulamericana',
+      'vasco da gama': 'patch-participacao-sulamericana',
+      'vasco': 'patch-participacao-sulamericana',
+      'lanús': 'patch-participacao-sulamericana',
+      'lanus': 'patch-participacao-sulamericana',
+      'independiente': 'patch-participacao-sulamericana',
+      'godoy cruz': 'patch-participacao-sulamericana',
+      'huracán': 'patch-participacao-sulamericana',
+      'huracan': 'patch-participacao-sulamericana',
+      'independiente del valle': 'patch-participacao-sulamericana',
+      'bolívar': 'patch-participacao-sulamericana',
+      'bolivar': 'patch-participacao-sulamericana',
+      'once caldas': 'patch-participacao-sulamericana',
+      'alianza lima': 'patch-participacao-sulamericana',
+      'universidad de chile': 'patch-participacao-sulamericana'
+    };
+    
+    const titleKeywordPatches = [
+      { keywords: ['world cup 2026', '2026 world cup', 'world cup', 'copa do mundo', 'copa do mundo 2026', '2026 copa do mundo'], handle: 'patch-copa-do-mundo-2026' }
+    ];
+    
+    const customClubPatches = {
+      'cruz azul': 'patches-cruz-azul-champions-24-25'
+    };
+    
+    const worldCup2025ClubPatches = {
+      'chelsea': 'patch-participacao-mundial-2025',
+      'paris saint-germain': 'patch-participacao-mundial-2025',
+      'psg': 'patch-participacao-mundial-2025',
+      'real madrid': 'patch-participacao-mundial-2025',
+      'bayern': 'patch-participacao-mundial-2025',
+      'borussia dortmund': 'patch-participacao-mundial-2025',
+      'manchester city': 'patch-participacao-mundial-2025',
+      'juventus': 'patch-participacao-mundial-2025',
+      'inter milan': 'patch-participacao-mundial-2025',
+      'atlético de madrid': 'patch-participacao-mundial-2025',
+      'atletico de madrid': 'patch-participacao-mundial-2025',
+      'atlético madrid': 'patch-participacao-mundial-2025',
+      'porto': 'patch-participacao-mundial-2025',
+      'benfica': 'patch-participacao-mundial-2025',
+      'red bull salzburg': 'patch-participacao-mundial-2025',
+      'fluminense': 'patch-participacao-mundial-2025',
+      'palmeiras': 'patch-participacao-mundial-2025',
+      'flamengo': 'patch-participacao-mundial-2025',
+      'botafogo': 'patch-participacao-mundial-2025',
+      'river plate': 'patch-participacao-mundial-2025',
+      'boca juniors': 'patch-participacao-mundial-2025',
+      'inter miami': 'patch-participacao-mundial-2025',
+      'pachuca': 'patch-participacao-mundial-2025',
+      'monterrey': 'patch-participacao-mundial-2025',
+      'seattle sounders': 'patch-participacao-mundial-2025',
+      'los angeles fc': 'patch-participacao-mundial-2025',
+      'la fc': 'patch-participacao-mundial-2025',
+      'al hilal': 'patch-participacao-mundial-2025',
+      'al ahly': 'patch-participacao-mundial-2025',
+      'mamelodi sundowns': 'patch-participacao-mundial-2025',
+      'urawa red diamonds': 'patch-participacao-mundial-2025',
+      'auckland city': 'patch-participacao-mundial-2025'
+    };
+    
+    // League to patch handle mapping
+    const leaguePatchMap = {
+      'premier-league': 'patch-premier-league',
+      'laliga': 'patch-laliga',
+      'bundesliga': 'patch-bundesliga',
+      'serie-a': 'patch-serie-a',
+      'ligue-1': 'patch-ligue-1',
+      'liga-portugal': 'patch-liga-portugal',
+      'brasileirao': 'patch-brasileirao',
+      'liga-mx': 'patch-participacao-liga-mx'
+    };
+    
+    // Function to detect league and club from product title
+    function detectLeagueAndClub(productTitle) {
+      const titleLower = productTitle.toLowerCase();
+      const detected = {
+        league: null,
+        club: null,
+        championsLeaguePatch: null,
+        libertadoresPatch: null,
+        participationLibertadores: false,
+        finalLibertadores2025: null,
+        copaBrasil: null,
+        sudamericana: null,
+        titleKeywordPatch: null,
+        specialClubPatch: null,
+        worldCup2025ClubPatch: null
+      };
+      
+      // Check for World Cup 2026 FIRST (before any other detection)
+      const has2026 = titleLower.includes('2026');
+      const hasWorldCup = titleLower.includes('world cup') || titleLower.includes('worldcup') || titleLower.includes('copa do mundo');
+      
+      if (has2026 && hasWorldCup) {
+        detected.titleKeywordPatch = 'patch-copa-do-mundo-2026';
+      }
+      else if (hasWorldCup && 
+               !titleLower.includes('2025') && 
+               !titleLower.includes('2026') &&
+               !titleLower.includes('2024')) {
+        detected.titleKeywordPatch = 'patch-copa-do-mundo-2026';
+      }
+      
+      // Check for Champions League specific patches
+      if (titleLower.includes('chelsea')) {
+        detected.championsLeaguePatch = 'patch-world-champions';
+        detected.club = 'chelsea';
+      } else {
+        const sortedChampionsPatches = Object.entries(championsLeagueClubPatches).sort((a, b) => b[0].length - a[0].length);
+        for (const [club, patchHandle] of sortedChampionsPatches) {
+          if (club === 'chelsea') continue;
+          if (titleLower.includes(club.toLowerCase())) {
+            detected.championsLeaguePatch = patchHandle;
+            detected.club = club;
+            break;
+          }
+        }
+      }
+      
+      // Check for Libertadores patches
+      for (const [club, patchHandle] of Object.entries(libertadoresPatches)) {
+        if (titleLower.includes(club.toLowerCase())) {
+          detected.libertadoresPatch = patchHandle;
+          detected.club = club;
+        }
+      }
+      
+      // Check for Participation Libertadores
+      if (participationLibertadoresClubs.some(club => titleLower.includes(club.toLowerCase()))) {
+        detected.participationLibertadores = true;
+      }
+      
+      // Check for Final Libertadores 2025
+      for (const [club, patchHandle] of Object.entries(finalLibertadores2025Clubs)) {
+        if (titleLower.includes(club.toLowerCase())) {
+          detected.finalLibertadores2025 = patchHandle;
+          detected.club = club;
+          break;
+        }
+      }
+      
+      // Check for Copa do Brasil
+      const sortedCopaBrasilClubs = Object.entries(copaBrasilClubs).sort((a, b) => b[0].length - a[0].length);
+      for (const [club, patchHandle] of sortedCopaBrasilClubs) {
+        if (titleLower.includes(club.toLowerCase())) {
+          detected.copaBrasil = patchHandle;
+          if (!detected.club) {
+            detected.club = club;
+          }
+          break;
+        }
+      }
+      
+      // Check for Sudamericana
+      const sortedSudamericanaClubs = Object.entries(sudamericanaClubs).sort((a, b) => b[0].length - a[0].length);
+      for (const [club, patchHandle] of sortedSudamericanaClubs) {
+        if (titleLower.includes(club.toLowerCase())) {
+          detected.sudamericana = patchHandle;
+          if (!detected.club) {
+            detected.club = club;
+          }
+          break;
+        }
+      }
+      
+      // Check for World Cup 2025 club patches
+      const sortedWorldCup2025Clubs = Object.entries(worldCup2025ClubPatches).sort((a, b) => b[0].length - a[0].length);
+      for (const [club, patchHandle] of sortedWorldCup2025Clubs) {
+        if (titleLower.includes(club.toLowerCase())) {
+          detected.worldCup2025ClubPatch = patchHandle;
+          if (!detected.club) {
+            detected.club = club;
+          }
+          break;
+        }
+      }
+      
+      // Check for custom club-specific patches
+      const sortedCustomClubPatches = Object.entries(customClubPatches).sort((a, b) => b[0].length - a[0].length);
+      for (const [club, patchHandle] of sortedCustomClubPatches) {
+        if (titleLower.includes(club.toLowerCase())) {
+          detected.specialClubPatch = patchHandle;
+          if (!detected.club) {
+            detected.club = club;
+          }
+          break;
+        }
+      }
+      
+      // Check club to league mapping
+      const sortedClubs = Object.entries(clubToLeagueMap).sort((a, b) => b[0].length - a[0].length);
+      for (const [club, league] of sortedClubs) {
+        if (club === 'internacional') {
+          if (titleLower.includes('internacional') && !titleLower.includes('inter milan')) {
+            detected.league = league;
+            if (!detected.club) {
+              detected.club = club;
+            }
+            break;
+          }
+        } else if (titleLower.includes(club.toLowerCase())) {
+          detected.league = league;
+          if (!detected.club) {
+            detected.club = club;
+          }
+          break;
+        }
+      }
+      
+      return detected;
+    }
+    
+    // Helper function to check if patch is a champion/trophies patch
+    function isChampionOrTrophiesPatch(patch) {
+      const handleLower = patch.handle.toLowerCase();
+      const titleLower = patch.title.toLowerCase();
+      
+      if (handleLower.includes('patch-libertadores-2') || 
+          handleLower.includes('patch-libertadores-3') ||
+          handleLower.includes('patch-final-libertadores-')) {
+        return true;
+      }
+      
+      if (handleLower.includes('patch-champions-league') ||
+          handleLower.includes('patch-world-champions') ||
+          handleLower.includes('patch-uefa-champions')) {
+        return true;
+      }
+      
+      if (titleLower.includes('troféu') || 
+          titleLower.includes('trophy') || 
+          titleLower.includes('trophies') ||
+          titleLower.includes('campeão') || 
+          titleLower.includes('campeao') ||
+          titleLower.includes('champion')) {
+        return true;
+      }
+      
+      return false;
+    }
+    
+    // Helper function to check if patch is a participation patch
+    function isParticipationPatch(patch) {
+      if (isChampionOrTrophiesPatch(patch)) {
+        return false;
+      }
+      return true;
+    }
+    
+    // Function to validate and enforce sleeve patch selection rules
+    function validateSleevePatchSelection(patch, patchKey, isNewPatch) {
+      const isSleevePatch = patch.position === 'Manga' || patch.position === 'Sleeve';
+      if (!isSleevePatch) return true;
+      
+      const isLibertadoresTrophiesPatch = isChampionOrTrophiesPatch(patch) && 
+                                          (patch.handle.toLowerCase().includes('patch-libertadores-') || 
+                                           patch.handle.toLowerCase().includes('patch-final-libertadores-'));
+      
+      const selectedSleevePatches = [];
+      selectedPatches.forEach((selectedPatch, key) => {
+        if ((selectedPatch.position === 'Manga' || selectedPatch.position === 'Sleeve') && key !== patchKey) {
+          selectedSleevePatches.push({ key, patch: selectedPatch });
+        }
+      });
+      
+      if (isLibertadoresTrophiesPatch) {
+        removePatchesFromSelection(selectedSleevePatches);
+        return true;
+      }
+      
+      if (selectedSleevePatches.length > 0) {
+        removePatchesFromSelection(selectedSleevePatches);
+      }
+      
+      return true;
+    }
+    
+    // Helper function to remove patches from selection
+    function removePatchesFromSelection(patchesToRemove) {
+      if (patchesToRemove.length === 0) return;
+      
+      isDeselectingPatches = true;
+      patchesToRemove.forEach(({ key }) => {
+        selectedPatches.delete(key);
+        document.querySelectorAll('.patch-product-item').forEach(item => {
+          const itemPatchKey = item.dataset.patchKey;
+          if (itemPatchKey === key) {
+            const cb = item.querySelector('.patch-checkbox');
+            if (cb) {
+              cb.checked = false;
+              item.classList.remove('selected');
+              cb.dispatchEvent(new Event('change'));
+            }
+          }
+        });
+      });
+      isDeselectingPatches = false;
+    }
+    
+    // Function to get patch position (sleeve, chest, etc)
+    function getPatchPosition(product) {
+      if (customPatchPositions.has(product.handle)) {
+        let pos = customPatchPositions.get(product.handle);
+        if (pos === 'manga_peito') return 'Manga + Peito';
+        return pos.charAt(0).toUpperCase() + pos.slice(1).toLowerCase();
+      }
+
+      const titleLower = product.title.toLowerCase();
+      
+      if (titleLower.includes('world champions') || (titleLower.includes('chelsea') && titleLower.includes('champions'))) {
+        return 'Peito';
+      }
+      
+      if (product.handle && product.handle.toLowerCase().includes('patch-final-libertadores-2025')) {
+        return 'Manga';
+      }
+      
+      if (product.tags && product.tags.length > 0) {
+        const positionTags = ['manga', 'torax', 'costas', 'peito', 'sleeve', 'chest', 'back'];
+        for (const tag of product.tags) {
+          const tagLower = tag.toLowerCase();
+          if (positionTags.includes(tagLower)) {
+            if (tagLower === 'manga' || tagLower === 'sleeve') return 'Manga';
+            if (tagLower === 'torax' || tagLower === 'peito' || tagLower === 'chest') return 'Peito';
+            if (tagLower === 'costas' || tagLower === 'back' || tagLower === 'manga_peito') return 'Manga + Peito';
+            return tag.charAt(0).toUpperCase() + tag.slice(1);
+          }
+        }
+      }
+      
+      if (titleLower.includes('manga') || titleLower.includes('sleeve')) return 'Manga';
+      if (titleLower.includes('torax') || titleLower.includes('peito') || titleLower.includes('chest')) return 'Peito';
+      if (titleLower.includes('costas') || titleLower.includes('back')) return 'Manga + Peito';
+      
+      return 'Manga';
+    }
+    
+    // Function to load patch products
+    async function loadPatchProducts() {
+      console.log('DEBUG: loadPatchProducts starting...');
+      
+      const patchProductsSelector = document.getElementById('patch-products-selector');
+      const patchProductsList = document.getElementById('patch-products-list');
+      
+      // If we don't have the old UI list but we DO have the drawer renderer, we should proceed anyway
+      const hasOldUI = patchProductsSelector && patchProductsList;
+      const hasDrawerRenderer = typeof window.renderDrawerPatches === 'function';
+
+      if (!hasOldUI && !hasDrawerRenderer) {
+        console.log('DEBUG: No patch UI found (old or new), skipping load.');
+        return;
+      }
+      
+      if (isLoadingPatches || (patchesLoaded && !hasDrawerRenderer)) {
+        console.log('DEBUG: Already loading or patches already loaded, skipping.');
+        return;
+      }
+      
+      isLoadingPatches = true;
+      const patchProductsLoading = patchProductsSelector ? patchProductsSelector.querySelector('.patch-products-loading') : null;
+      if (patchProductsLoading) {
+        patchProductsLoading.style.display = 'block';
+      }
+      
+      if (patchProductsList) {
+        patchProductsList.innerHTML = '';
+      }
+      
+      selectedPatches.clear();
+
+      const patchSectionWrapper = document.querySelector('.patch-section-wrapper');
+      const patchSectionHeader = document.querySelector('.patch-section-header');
+      
+      try {
+        if (productTitle && productTitle.toLowerCase().includes('patch')) {
+          console.log('DEBUG: Product is itself a patch, skipping loading other patches.');
+          if (patchSectionWrapper) patchSectionWrapper.style.display = 'none';
+          if (patchSectionHeader) patchSectionHeader.style.display = 'none';
+          if (patchProductsList) patchProductsList.innerHTML = '';
+          if (patchProductsLoading) patchProductsLoading.style.display = 'none';
+          
+          if (typeof window.renderDrawerPatches === 'function') {
+            window.renderDrawerPatches([]);
+          }
+
+          patchesLoaded = true;
+          isLoadingPatches = false;
+          return;
+        }
+        
+        if (!productTitle || productTitle.trim() === '') {
+          console.log('DEBUG: Product title missing, skipping loading patches.');
+          if (patchSectionWrapper) patchSectionWrapper.style.display = 'none';
+          if (patchSectionHeader) patchSectionHeader.style.display = 'none';
+          if (patchProductsList) patchProductsList.innerHTML = '';
+          if (patchProductsLoading) patchProductsLoading.style.display = 'none';
+          
+          if (typeof window.renderDrawerPatches === 'function') {
+            window.renderDrawerPatches([]);
+          }
+
+          patchesLoaded = true;
+          isLoadingPatches = false;
+          return;
+        }
+        
+        const detected = detectLeagueAndClub(productTitle);
+        console.log('DEBUG: Detection results:', detected);
+        
+        let patchHandles = [];
+
+        // Check custom patch rules from section
+        // Wait for section to load if needed (with multiple retries)
+        let rulesToCheck = window.customPatchRules;
+        let retries = 0;
+        const maxRetries = 10;
+        
+        while ((!rulesToCheck || !Array.isArray(rulesToCheck)) && retries < maxRetries) {
+          if (retries === 0) {
+            console.warn('DEBUG: window.customPatchRules not available yet, waiting...');
+          }
+          await new Promise(resolve => setTimeout(resolve, 100));
+          rulesToCheck = window.customPatchRules;
+          retries++;
+        }
+        
+        if (retries > 0) {
+          console.log(`DEBUG: Waited ${retries * 100}ms for customPatchRules to load`);
+        }
+        
+        console.log('DEBUG: Checking custom patch rules, total rules:', rulesToCheck ? rulesToCheck.length : 0);
+        if (rulesToCheck && Array.isArray(rulesToCheck) && rulesToCheck.length > 0) {
+          const titleLower = productTitle.toLowerCase();
+          console.log('DEBUG: Product title (lowercase):', titleLower);
+          
+          rulesToCheck.forEach((rule, index) => {
+            if (!rule) return;
+            
+            if (rule.keywords && Array.isArray(rule.keywords) && rule.keywords.length > 0 && rule.patchHandle) {
+              // Check if any keyword matches
+              const match = rule.keywords.some(keyword => {
+                const kw = keyword ? keyword.toLowerCase().trim() : '';
+                const matches = kw && titleLower.includes(kw);
+                if (matches) {
+                  console.log(`DEBUG: Rule ${index} - Keyword "${kw}" matched in title "${titleLower}"`);
+                }
+                return matches;
+              });
+              
+              // Check if excluded
+              let excluded = false;
+              if (rule.excludeKeywords && Array.isArray(rule.excludeKeywords) && rule.excludeKeywords.length > 0) {
+                excluded = rule.excludeKeywords.some(keyword => {
+                  const k = keyword ? keyword.toLowerCase().trim() : '';
+                  if (k && titleLower.includes(k)) {
+                    console.log(`DEBUG: Rule ${index} - Keyword "${k}" excluded the patch`);
+                    return true;
+                  }
+                  return false;
+                });
+              }
+
+              if (match && !excluded) {
+                if (!patchHandles.includes(rule.patchHandle)) {
+                  patchHandles.push(rule.patchHandle);
+                  customPatchPositions.set(rule.patchHandle, rule.position || 'Manga');
+                  console.log('DEBUG: ✅ Custom patch rule matched:', rule.patchHandle, 'for title:', productTitle);
+                } else {
+                  console.log('DEBUG: Patch already in list:', rule.patchHandle);
+                }
+              } else if (match && excluded) {
+                console.log('DEBUG: �� Patch excluded by excludeKeywords:', rule.patchHandle);
+              } else if (!match) {
+                // Only log if it's a custom rule (not embedded)
+                if (index < 10) { // First 10 are likely custom
+                  console.log('DEBUG: ⚠️ No keyword match for rule:', rule.patchHandle, 'keywords:', rule.keywords);
+                }
+              }
+            } else {
+              console.warn('DEBUG: Invalid rule structure at index', index, ':', rule);
+            }
+          });
+        } else {
+          console.warn('DEBUG: window.customPatchRules is not available or not an array. Available:', typeof window.customPatchRules);
+        }
+        
+        // Add Champions League specific patch if detected
+        if (detected.championsLeaguePatch) {
+          patchHandles.push(detected.championsLeaguePatch);
+        }
+        
+        // Add Libertadores patch if detected
+        if (detected.libertadoresPatch) {
+          patchHandles.push(detected.libertadoresPatch);
+        }
+        
+        // Add Participation Libertadores patch if detected
+        if (detected.participationLibertadores && !detected.libertadoresPatch) {
+          patchHandles.push('patch-participacao-libertadores');
+        }
+        
+        // Add Final Libertadores 2025 patch if detected
+        if (detected.finalLibertadores2025) {
+          patchHandles.push(detected.finalLibertadores2025);
+        }
+        
+        // Add Copa do Brasil patch if detected
+        if (detected.copaBrasil) {
+          patchHandles.push(detected.copaBrasil);
+        }
+        
+        // Add Sudamericana patch if detected
+        if (detected.sudamericana) {
+          patchHandles.push(detected.sudamericana);
+        }
+        
+        // Add World Cup 2025 club patch if detected
+        if (detected.worldCup2025ClubPatch) {
+          patchHandles.push(detected.worldCup2025ClubPatch);
+        }
+        
+        // Add keyword-based patch (e.g., World Cup 2026)
+        if (detected.titleKeywordPatch) {
+          patchHandles.push(detected.titleKeywordPatch);
+        }
+        
+        // Fallback: Double-check for World Cup 2026
+        if (!detected.titleKeywordPatch && productTitle) {
+          const titleLowerCheck = productTitle.toLowerCase();
+          if (titleLowerCheck.includes('2026') && 
+              (titleLowerCheck.includes('world cup') || titleLowerCheck.includes('worldcup') || titleLowerCheck.includes('copa do mundo'))) {
+            patchHandles.push('patch-copa-do-mundo-2026');
+            console.log('World Cup 2026 patch added via fallback for:', productTitle);
+          }
+        }
+        
+        // Add custom club-specific patch if detected
+        if (detected.specialClubPatch) {
+          patchHandles.push(detected.specialClubPatch);
+        }
+        
+        // Add league patch if detected
+        if (detected.league && leaguePatchMap[detected.league]) {
+          if (detected.league === 'liga-mx' && detected.specialClubPatch) {
+            // Skip adding participation Liga MX patch
+          } else {
+            patchHandles.push(leaguePatchMap[detected.league]);
+          }
+        }
+        
+        // Fallback: if no patches detected, check collections
+        if (patchHandles.length === 0) {
+          const relevantCollections = productCollections.filter(c => {
+            return ['laliga', 'brasileirao', 'premier-league', 'bundesliga', 'serie-a', 'ligue-1', 'champions-league', 'liga-portugal', 'liga-mx'].includes(c);
+          });
+          
+          relevantCollections.forEach(collection => {
+            if (leaguePatchMap[collection]) {
+              patchHandles.push(leaguePatchMap[collection]);
+            }
+          });
+        }
+
+        // Remove duplicate handles
+        patchHandles = [...new Set(patchHandles)];
+        console.log('DEBUG: Final patch handles:', patchHandles);
+
+        if (patchHandles.length === 0) {
+          console.log('DEBUG: No patch handles found');
+          if (patchProductsList) {
+            patchProductsList.innerHTML = '<p style="padding: 15px; text-align: center; color: #666;">Nenhum patch disponível para este produto.</p>';
+          }
+          if (typeof window.renderDrawerPatches === 'function') {
+            window.renderDrawerPatches([]);
+          }
+          if (patchProductsLoading) patchProductsLoading.style.display = 'none';
+          patchesLoaded = true;
+          isLoadingPatches = false;
+          return;
+        }
+
+        // Load each patch product
+        const patchProducts = [];
+        
+        for (const handle of patchHandles) {
+          try {
+            console.log(`DEBUG: Fetching patch ${handle}...`);
+            let response = await fetch(`/products/${handle}.js`);
+            
+            if (!response.ok) {
+              console.log(`DEBUG: Failed to load ${handle} (status: ${response.status}). Trying smart search...`);
+              
+              const query = handle.replace(/-/g, ' ');
+              const searchUrl = `/search/suggest.json?q=${encodeURIComponent(query)}&resources[type]=product&resources[limit]=5`;
+              
+              const searchResponse = await fetch(searchUrl);
+              if (searchResponse.ok) {
+                const searchData = await searchResponse.json();
+                const products = searchData.resources?.results?.products;
+                
+                if (products && products.length > 0) {
+                  const originalKeywords = handle.split('-').filter(w => w !== 'patch' && w.length > 2);
+                  
+                  const match = products.find(p => {
+                    const pHandle = p.handle.toLowerCase();
+                    if (!pHandle.includes('patch')) return false;
+                    if (originalKeywords.length > 0) {
+                      return originalKeywords.some(keyword => pHandle.includes(keyword));
+                    }
+                    return true;
+                  });
+                  
+                  if (match) {
+                    console.log(`DEBUG: Smart search found match for ${handle}: ${match.handle}`);
+                    response = await fetch(`/products/${match.handle}.js`);
+                  }
+                }
+              }
+            }
+            
+            if (response.ok) {
+              const product = await response.json();
+              patchProducts.push(product);
+              console.log(`DEBUG: Successfully loaded ${product.handle}`);
+            } else {
+              console.log(`DEBUG: Failed to load ${handle} even after search fallback`);
+            }
+          } catch (error) {
+            console.log(`DEBUG: Error loading ${handle}:`, error);
+          }
+        }
+        
+        console.log('DEBUG: Total patches loaded:', patchProducts.length);
+
+        if (patchProducts.length === 0) {
+          console.log('DEBUG: No patch products loaded');
+          const failedHandles = patchHandles.join(', ');
+          
+          if (patchProductsList) {
+            patchProductsList.innerHTML = `<p style="padding: 15px; text-align: center; color: #666;">Nenhum patch disponível para este produto.<br><br><small style="color: #999;">Tentamos carregar: ${failedHandles}</small></p>`;
+          }
+          
+          if (typeof window.renderDrawerPatches === 'function') {
+            window.renderDrawerPatches([]);
+          }
+
+          if (patchProductsLoading) patchProductsLoading.style.display = 'none';
+          patchesLoaded = true;
+          isLoadingPatches = false;
+          return;
+        } else {
+          console.log('DEBUG: Successfully loaded', patchProducts.length, 'patches. Calling renderers...');
+          // Call the drawer renderer
+          if (typeof window.renderDrawerPatches === 'function') {
+            window.renderDrawerPatches(patchProducts);
+          }
+          
+          // Only proceed with old UI rendering if it exists
+          if (!patchProductsList) {
+             console.log('DEBUG: Old patch UI not found, skipping old-style rendering.');
+             patchesLoaded = true;
+             isLoadingPatches = false;
+             return;
+          }
+
+          // Group patches by position
+          const patchesByPosition = new Map();
+          
+          patchProducts.forEach((product, index) => {
+            const variant = product.variants[0];
+            const patchPosition = getPatchPosition(product);
+            
+            if (!patchesByPosition.has(patchPosition)) {
+              patchesByPosition.set(patchPosition, []);
+            }
+            
+            patchesByPosition.get(patchPosition).push({
+              product: product,
+              variant: variant,
+              index: index
+            });
+          });
+          
+          // Render each position section
+          patchesByPosition.forEach((patches, position) => {
+            const sortedPatches = [...patches].sort((a, b) => {
+              const patchA = { handle: a.product.handle, title: a.product.title };
+              const patchB = { handle: b.product.handle, title: b.product.title };
+              
+              const isAParticipation = isParticipationPatch(patchA);
+              const isBParticipation = isParticipationPatch(patchB);
+              
+              if (isAParticipation && !isBParticipation) return -1;
+              if (!isAParticipation && isBParticipation) return 1;
+              
+              return 0;
+            });
+            
+            const positionSection = document.createElement('div');
+            positionSection.className = 'patch-position-section';
+            
+            const positionTitle = document.createElement('div');
+            positionTitle.className = 'patch-position-title';
+            positionTitle.textContent = position.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+            positionSection.appendChild(positionTitle);
+            
+            const patchesContainer = document.createElement('div');
+            patchesContainer.className = 'patch-position-patches';
+            
+            sortedPatches.forEach(({ product, variant, index }) => {
+              const priceValue = variant.price ? (variant.price / 100) : 5.00;
+              const price = priceValue.toFixed(2);
+              
+              let imageUrl = '';
+              if (product.images && product.images.length > 0) {
+                imageUrl = product.images[0];
+              } else if (product.featured_image) {
+                imageUrl = product.featured_image;
+              } else {
+                imageUrl = 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-product-1_large.png';
+              }
+              
+              const uniqueId = `patch-${product.id}-${variant.id}-${index}`;
+              
+              const patchItem = document.createElement('div');
+              patchItem.className = 'patch-product-item';
+              patchItem.dataset.productId = product.id;
+              patchItem.dataset.variantId = variant.id;
+              patchItem.dataset.productHandle = product.handle;
+              patchItem.dataset.price = price;
+              patchItem.dataset.patchKey = `${variant.id}-${index}`;
+              
+              patchItem.innerHTML = `
+                <div class="block-swatch">
+                  <input type="checkbox" id="${uniqueId}" class="block-swatch__radio patch-checkbox" data-variant-id="${variant.id}" data-price="${price}">
+                  <label for="${uniqueId}" class="block-swatch__item">
+                    <div class="patch-product-content">
+                      <img src="${imageUrl}" alt="${product.title}" class="patch-product-image" loading="lazy">
+                      <div class="patch-product-info">
+                        <div class="patch-product-title">${product.title.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}</div>
+                        <div class="patch-product-price">R$ ${price.replace('.', ',')}</div>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              `;
+              
+              const label = patchItem.querySelector('.block-swatch__item');
+              if (label) {
+                label.addEventListener('click', function(e) {
+                  if (e.target.type === 'checkbox') {
+                    return;
+                  }
+                  e.preventDefault();
+                  const cb = patchItem.querySelector('.patch-checkbox');
+                  if (cb) {
+                    cb.checked = !cb.checked;
+                    cb.dispatchEvent(new Event('change'));
+                  }
+                });
+              }
+              
+              const checkbox = patchItem.querySelector('.patch-checkbox');
+              
+              checkbox.addEventListener('change', async function() {
+                if (isDeselectingPatches) {
+                  return;
+                }
+                
+                const patchKey = `${variant.id}-${index}`;
+                
+                if (this.checked) {
+                  const patch = {
+                    id: variant.id,
+                    productId: product.id,
+                    handle: product.handle,
+                    title: product.title,
+                    price: parseFloat(price),
+                    position: position
+                  };
+                  
+                  const isValid = validateSleevePatchSelection(patch, patchKey, true);
+                  
+                  if (!isValid) {
+                    this.checked = false;
+                    patchItem.classList.remove('selected');
+                    return;
+                  }
+                  
+                  selectedPatches.set(patchKey, patch);
+                  patchItem.classList.add('selected');
+                  
+                  if (patch.position === 'Manga' || patch.position === 'Sleeve') {
+                    const allSleevePatches = [];
+                    selectedPatches.forEach((selectedPatch, key) => {
+                      if (selectedPatch.position === 'Manga' || selectedPatch.position === 'Sleeve') {
+                        allSleevePatches.push({ key, patch: selectedPatch });
+                      }
+                    });
+                    
+                    if (allSleevePatches.length > 1) {
+                      const patchesToRemove = allSleevePatches.slice(0, allSleevePatches.length - 1);
+                      removePatchesFromSelection(patchesToRemove);
+                      const wasRemoved = patchesToRemove.some(({ key }) => key === patchKey);
+                      if (wasRemoved) {
+                        this.checked = false;
+                        patchItem.classList.remove('selected');
+                        return;
+                      }
+                    }
+                  }
+                  
+                  const finalValidation = validateSleevePatchSelection(patch, patchKey, false);
+                  if (!finalValidation) {
+                    selectedPatches.delete(patchKey);
+                    this.checked = false;
+                    patchItem.classList.remove('selected');
+                    return;
+                  }
+                  
+                  // Patches are stored in selectedPatches and will be added when "Add to Cart" is clicked
+                } else {
+                  // Patch deselected - remove from selectedPatches
+                  const patch = selectedPatches.get(patchKey);
+                  selectedPatches.delete(patchKey);
+                  patchItem.classList.remove('selected');
+                  patchCartKeys.delete(patchKey);
+                }
+              });
+
+              patchesContainer.appendChild(patchItem);
+            });
+            
+            positionSection.appendChild(patchesContainer);
+            patchProductsList.appendChild(positionSection);
+          });
+        }
+
+      } catch (error) {
+        console.error('Error loading patches:', error);
+        patchProductsList.innerHTML = '<p style="padding: 15px; text-align: center; color: #666;">Erro ao carregar patches. Por favor, tente novamente.</p>';
+        if (patchProductsLoading) {
+          patchProductsLoading.style.display = 'none';
+        }
+        patchesLoaded = true;
+        isLoadingPatches = false;
+      } finally {
+        if (patchProductsLoading) {
+          patchProductsLoading.style.display = 'none';
+        }
+        isLoadingPatches = false;
+        patchesLoaded = true;
+        window.patchesLoaded = true;
+        window.isLoadingPatches = false;
+      }
+    }
+    
+    function clearSelectedPatchItems() {
+      selectedPatches.clear();
+      patchCartKeys.clear();
+      document.querySelectorAll('.patch-product-item').forEach(item => item.classList.remove('selected'));
+      document.querySelectorAll('.patch-checkbox').forEach(checkbox => {
+        checkbox.checked = false;
+      });
+    }
+    
+    function extractPropertiesFromForm(formData) {
+      const properties = {};
+      for (const [key, value] of formData.entries()) {
+        if (key.startsWith('properties[')) {
+          const propertyName = key.slice(11, -1);
+          if (value && value.trim() !== '') {
+            properties[propertyName] = value;
+          }
+        }
+      }
+      return properties;
+    }
+    
+    // Get current selected variant ID from form (Kalles theme)
+    function getCurrentVariantId() {
+      const productForm = document.getElementById(productFormId);
+      if (!productForm) return null;
+      const variantInput = productForm.querySelector('input[name="id"], select[name="id"]');
+      return variantInput ? parseInt(variantInput.value, 10) : null;
+    }
+    
+    // Add patch to cart automatically when selected
+    async function addPatchToCart(patch, patchKey) {
+      try {
+        const variantId = getCurrentVariantId();
+        if (!variantId) {
+          console.warn('No variant selected, cannot add patch to cart');
+          return;
+        }
+        
+        const uniqueId = Date.now().toString() + '-' + Math.random().toString(36).substr(2, 9);
+        const quantity = 1;
+        const item = {
+          id: parseInt(patch.id, 10),
+          quantity: quantity,
+          properties: {
+            '_is_patch': 'true',
+            '_main_product_variant': variantId.toString(),
+            '_patch_product': patch.handle,
+            '_patch_title': patch.title,
+            '_patch_awaiting_product': 'true',
+            '_patch_unique_id': uniqueId
+          }
+        };
+        
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ items: [item] })
+        });
+        
+        if (response.ok) {
+          const cartUrl = window.themeVariables?.routes?.cartUrl || '/cart';
+          const cartResponse = await fetch(`${cartUrl}.js`);
+          if (cartResponse.ok) {
+            const cartData = await cartResponse.json();
+            
+            if (cartData.items && cartData.items.length > 0) {
+              const patchItem = cartData.items.find(item => 
+                item.properties && 
+                item.properties._is_patch === 'true' &&
+                item.properties._patch_awaiting_product === 'true' &&
+                item.properties._patch_unique_id === uniqueId
+              );
+              
+              if (patchItem && patchItem.key) {
+                patchCartKeys.set(patchKey, patchItem.key);
+              } else {
+                const patchItems = cartData.items.filter(item => 
+                  item.properties && 
+                  item.properties._is_patch === 'true' &&
+                  item.properties._main_product_variant === variantId.toString() &&
+                  item.properties._patch_product === patch.handle &&
+                  item.variant_id === parseInt(patch.id, 10) &&
+                  item.properties._patch_awaiting_product === 'true'
+                );
+                
+                if (patchItems.length > 0) {
+                  const addedPatchItem = patchItems[patchItems.length - 1];
+                  if (addedPatchItem && addedPatchItem.key) {
+                    patchCartKeys.set(patchKey, addedPatchItem.key);
+                  }
+                }
+              }
+            }
+            
+            document.documentElement.dispatchEvent(new CustomEvent('cart:updated', {
+              bubbles: true,
+              detail: { cart: cartData }
+            }));
+            
+            document.documentElement.dispatchEvent(new CustomEvent('cart:refresh', {
+              bubbles: true,
+              detail: { cart: cartData }
+            }));
+          }
+        }
+      } catch (error) {
+        console.error('Error adding patch to cart:', error);
+      }
+    }
+    
+    // Legacy function - kept for compatibility but not used with new approach
+    async function submitFormWithPatches(form) {
+      console.log('DEBUG: submitFormWithPatches called - adding patches only (product already in cart)');
+      
+      // Find submit button and add loading state immediately
+      const submitButton = form.querySelector('button[type="submit"], button[name="add"], button[data-atc-form], .t4s-product-form__submit, .t4s-sticky-atc__atc');
+      if (submitButton) {
+        // Add loading state immediately for visual feedback
+        submitButton.classList.add('loading', 'is-loading', 't4s-btn-loading');
+        submitButton.disabled = true;
+        submitButton.setAttribute('aria-busy', 'true');
+        
+        // Add loading text if button has text
+        const originalText = submitButton.innerHTML;
+        submitButton.dataset.originalText = originalText;
+        
+        // Show loading spinner if theme supports it
+        if (!submitButton.querySelector('.t4s-cart-spinner')) {
+          const spinner = document.createElement('span');
+          spinner.className = 't4s-cart-spinner';
+          spinner.innerHTML = '<svg class="t4s-spinner-svg" viewBox="0 0 50 50"><circle class="t4s-path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>';
+          submitButton.appendChild(spinner);
+        }
+      }
+      
+      try {
+        const uniqueItemId = Date.now().toString() + '-' + Math.random().toString(36).substr(2, 9);
+        
+        const formData = new FormData(form);
+        const quantity = parseInt(formData.get('quantity') || '1', 10);
+        const variantId = formData.get('id');
+        
+        if (!variantId) {
+          throw new Error('Please select a variant before adding to cart.');
+        }
+        
+        // Since product was already added silently when patch was selected,
+        // we only need to add patches now
+        const patchItems = [];
+        if (selectedPatches.size > 0) {
+          const validatedPatches = [];
+          const patchTitles = [];
+          
+          selectedPatches.forEach((patch, patchKey) => {
+            const isValid = validateSleevePatchSelection(patch, patchKey, false);
+            if (isValid) {
+              validatedPatches.push({ patch, patchKey });
+              patchTitles.push(patch.title);
+            } else {
+              selectedPatches.delete(patchKey);
+              document.querySelectorAll('.patch-product-item').forEach(item => {
+                const itemPatchKey = item.dataset.patchKey;
+                if (itemPatchKey === patchKey) {
+                  const cb = item.querySelector('.patch-checkbox');
+                  if (cb) {
+                    cb.checked = false;
+                    item.classList.remove('selected');
+                  }
+                }
+              });
+            }
+          });
+          
+          validatedPatches.forEach(({ patch }) => {
+            patchItems.push({
+              id: parseInt(patch.id, 10),
+              quantity: quantity,
+              properties: {
+                '_is_patch': 'true',
+                '_main_product_variant': variantId.toString(),
+                '_patch_product': patch.handle,
+                '_patch_title': patch.title,
+                '_item_id': uniqueItemId
+              }
+            });
+          });
+          
+          // Update main product properties to include patch titles
+          // Find the main product in cart and update it
+          const cartUrl = window.themeVariables?.routes?.cartUrl || '/cart';
+          const cartCheckResponse = await fetch(`${cartUrl}.js`);
+          
+          if (cartCheckResponse.ok) {
+            const cartCheckData = await cartCheckResponse.json();
+            
+            if (cartCheckData.items && cartCheckData.items.length > 0) {
+              // Find the main product (the one with _pre_added property or without _is_patch)
+              const mainProductItem = cartCheckData.items.find(item => 
+                item.variant_id === parseInt(variantId, 10) && 
+                (!item.properties || (!item.properties._is_patch && item.properties?._pre_added === 'true'))
+              );
+              
+              if (mainProductItem && patchTitles.length > 0) {
+                // Update main product to include patch titles
+                const mainProperties = extractPropertiesFromForm(formData);
+                mainProperties['Patchs'] = patchTitles.join(', ');
+                mainProperties['_item_id'] = uniqueItemId;
+                
+                // Remove _pre_added flag since we're now officially adding
+                delete mainProperties['_pre_added'];
+                
+                // Update the main product item
+                await fetch('/cart/change.js', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    id: mainProductItem.key,
+                    properties: mainProperties
+                  })
+                });
+              }
+            }
+          }
+        }
+        
+        // Add only patches (product already in cart from pre-click)
+        let response;
+        let responseData;
+        
+        if (patchItems.length > 0) {
+          const payload = {
+            items: patchItems
+          };
+          
+          response = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload)
+          });
+          
+          responseData = await response.json();
+          
+          if (!response.ok) {
+            throw new Error(responseData.description || responseData.message || 'Error adding patches to cart');
+          }
+        }
+        
+        // Get fresh cart data with sections
+        const cartUrl = window.themeVariables?.routes?.cartUrl || '/cart';
+        const cartResponse = await fetch(`${cartUrl}.js`);
+        const cartData = await cartResponse.json();
+        
+        // Update mini cart HTML
+        let miniCartUpdated = false;
+        try {
+          const sectionsResponse = await fetch(`${cartUrl}?sections=mini-cart`);
+          if (sectionsResponse.ok) {
+            const sectionsData = await sectionsResponse.json();
+            cartData.sections = sectionsData.sections;
+            
+            // Update mini cart HTML directly - try multiple selectors
+            const miniCartSelectors = ['#t4s-mini_cart', '[data-cart-drawer]', '.t4s-mini-cart', '.cart-drawer'];
+            let miniCartContainer = null;
+            
+            for (const selector of miniCartSelectors) {
+              miniCartContainer = document.querySelector(selector);
+              if (miniCartContainer) break;
+            }
+            
+            if (miniCartContainer && sectionsData.sections && sectionsData.sections['mini-cart']) {
+              // Find the inner content container if it exists
+              const contentContainer = miniCartContainer.querySelector('.t4s-drawer__content, .cart-drawer__content, .mini-cart__content') || miniCartContainer;
+              if (contentContainer) {
+                contentContainer.innerHTML = sectionsData.sections['mini-cart'];
+                miniCartUpdated = true;
+                
+                // Re-initialize any scripts that might be needed
+                if (typeof window.initMiniCart === 'function') {
+                  window.initMiniCart();
+                }
+              }
+            }
+          }
+        } catch (err) {
+          console.warn('Could not load sections:', err);
+        }
+        
+        // Update cart count in header
+        const cartCountElements = document.querySelectorAll('[data-cart-count], .t4s-cart-count, .cart-count');
+        cartCountElements.forEach(el => {
+          if (cartData.item_count !== undefined) {
+            el.textContent = cartData.item_count;
+            el.style.display = cartData.item_count > 0 ? '' : 'none';
+          }
+        });
+        
+        // Fire events that Kalles theme listens to - use the same pattern as theme's AJAX add to cart
+        // The theme expects these events to open the mini cart automatically
+        const cartUpdateEvent = new CustomEvent('cart:updated', {
+          bubbles: true,
+          detail: { cart: cartData }
+        });
+        
+        document.documentElement.dispatchEvent(cartUpdateEvent);
+        document.body.dispatchEvent(cartUpdateEvent);
+        
+        // Also dispatch shopify:cart:updated which the theme might use
+        const shopifyCartEvent = new CustomEvent('shopify:cart:updated', {
+          bubbles: true,
+          detail: { cart: cartData }
+        });
+        document.documentElement.dispatchEvent(shopifyCartEvent);
+        
+        // Trigger jQuery events if jQuery is available (Kalles theme uses jQuery)
+        if (typeof jQuery !== 'undefined') {
+          jQuery(document).trigger('cart:updated', [cartData]);
+          jQuery(document).trigger('shopify:cart:updated', [cartData]);
+          jQuery(document).trigger('t4s:cart:updated', [cartData]);
+        }
+        
+        // Let the theme handle opening the mini cart - it should do this automatically
+        // after receiving the cart:updated event
+        
+        // Clear all patch-related state after adding to cart
+        patchCartKeys.clear();
+        selectedPatches.clear();
+        
+        // Reset all patch selections visually
+        document.querySelectorAll('.patch-product-item').forEach(item => item.classList.remove('selected'));
+        document.querySelectorAll('.patch-checkbox').forEach(checkbox => {
+          checkbox.checked = false;
+        });
+        
+        // Add success animation to button
+        if (submitButton) {
+          submitButton.classList.add('t4s-btn-added');
+          setTimeout(() => {
+            submitButton.classList.remove('t4s-btn-added');
+          }, 2000);
+        }
+        
+      } catch (error) {
+        console.error('Error adding product:', error);
+        alert(error.message || 'Error adding product to cart. Please try again.');
+      } finally {
+        if (submitButton) {
+          submitButton.classList.remove('loading', 'is-loading', 't4s-btn-loading');
+          submitButton.disabled = false;
+          if (submitButton.removeAttribute) {
+            submitButton.removeAttribute('aria-busy');
+          }
+          // Restore original button text if it was changed
+          if (submitButton.dataset.originalText) {
+            submitButton.innerHTML = submitButton.dataset.originalText;
+            delete submitButton.dataset.originalText;
+          }
+        }
+      }
+    }
+    
+    // Make loadPatchProducts available globally
+    window.loadPatchProducts = loadPatchProducts;
+    window.patchesLoaded = patchesLoaded;
+    window.isLoadingPatches = isLoadingPatches;
+    
+    // Listen for variant changes - but DON'T clear patches (user wants to keep them selected)
+    // Patches will be associated with the variant when added to cart
+    const productFormElement = document.getElementById(productFormId);
+    if (productFormElement) {
+      const variantInput = productFormElement.querySelector('input[name="id"], select[name="id"]');
+      if (variantInput) {
+        // Just log variant change for debugging, but don't clear patches
+        variantInput.addEventListener('change', function() {
+          console.log('DEBUG: Variant changed to:', variantInput.value, '- Keeping patches selected');
+        });
+      }
+      
+      // Handle form submission
+      productFormElement.addEventListener('submit', function(e) {
+        console.log('DEBUG: Form submit intercepted');
+        if (selectedPatches.size > 0) {
+          console.log('DEBUG: Patches selected, preventing default submission');
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          submitFormWithPatches(productFormElement);
+        } else {
+          console.log('DEBUG: No patches selected, allowing default submission');
+        }
+      }, true);
+    }
+    
+  })();
+</script>

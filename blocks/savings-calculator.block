@@ -1,0 +1,190 @@
+# BLOCK: Savings Calculator (You Save $X!)
+
+## META
+- **Origem:** TG Jerseys / LEVER EVER TG JERSEYS (theme 157588324582)
+- **Data:** 2026-04-08
+- **Store:** store-tg-jersey.myshopify.com
+
+## O QUE FAZ
+Mostra ao cliente quanto ele esta economizando no carrinho. Cada item com desconto exibe o preco atual em negrito ao lado do preco original riscado em vermelho. Itens gratuitos mostram badge "FREE" com o preco original riscado. No rodape do carrinho, o total aparece com o valor original riscado a esquerda e o total real a direita. Abaixo do total, um banner verde mostra "You save $XX!" com a economia acumulada de todos os itens. A economia atualiza automaticamente quando o carrinho e re-renderizado via AJAX.
+
+## ONDE INSERIR
+- **Arquivo alvo:** `snippets/cart-drawer.liquid`
+- **Posicao:** 4 pontos de insercao:
+  1. **Part 1 (Calculo):** No TOPO do loop `{% for item in cart.items %}`, antes do primeiro `<tr>`. Inicializa `total_savings = 0` FORA do loop e acumula DENTRO.
+  2. **Part 2 (Preco por item):** Dentro de cada `<tr>`, na area de preco do item (`cart-item__price-row`).
+  3. **Part 3 (Footer totals):** No `.cart-drawer__footer`, dentro da div de totais. Substituir o bloco de totais existente.
+  4. **Part 4 (CSS):** Na tag `<style>` existente ou em `component-cart-drawer.css`.
+- **Como encontrar:**
+  - Part 1: Procurar `{%- for item in cart.items -%}` dentro de `<tbody>`
+  - Part 2: Procurar `.cart-item__price-row` ou a area onde o preco do item e exibido
+  - Part 3: Procurar `.cart-drawer__footer` ou `.totals__total-value`
+  - Part 4: Procurar a tag `<style>` no topo do arquivo
+
+## DEPENDE DE
+Nenhum (mas funciona melhor com `cart-item-template.block` Block 2 que ja inclui o calculo de savings no loop)
+
+## CONTEXTO PARA O CLAUDE QUE VAI RECEBER
+Este bloco implementa o sistema completo de exibicao de economia no carrinho, com 4 partes interconectadas.
+
+**Part 1 - Calculo de `total_savings` (Liquid):**
+- `total_savings` e inicializado como 0 ANTES do loop
+- Para cada item, calcula `item_compare_at`: prefere `variant.compare_at_price`, mas se for blank ou menor/igual ao `final_price`, usa `original_price`
+- `item_savings = (item_compare_at - final_price) * quantity`
+- Acumula em `total_savings`
+- IMPORTANTE: O Dawn re-renderiza o cart drawer inteiro via AJAX quando a quantidade muda, entao os valores Liquid sao recalculados automaticamente. NAO precisa de JS para atualizar a economia.
+
+**Part 2 - Preco por item (Liquid/HTML):**
+3 cenarios de exibicao:
+1. `final_price == 0`: Badge "FREE" + preco original riscado
+2. `compare_at > final_price` OU `original_price != final_price`: Preco atual em negrito + preco antigo riscado
+3. Sem desconto: Preco original simples
+
+**Part 3 - Footer totals (Liquid/HTML):**
+- Exibe "TOTAL" com layout flex
+- Se `total_savings > 0`: mostra preco original total (`cart.total_price + total_savings`) riscado em vermelho a esquerda
+- Preco real (`cart.total_price`) a direita
+- Banner verde abaixo: "You save {{ total_savings | money }}!"
+- Background: `#dcfce7` (green-100), texto: `#15803d` (green-700), borda: `#86efac` (green-300)
+
+**Part 4 - CSS:**
+- `.cart-item__old-price`: vermelho (#dc2626), line-through, 1.1rem
+- `.cart-item__final-price`: bold, 1.3rem
+- `.cart-item__discounted-prices`: flex com gap 6px
+- `.cart-item__free-badge`: verde (#22c55e), bold
+- `.totals .totals__total-value`: 1.6rem, bold
+
+**O que pode dar errado:**
+- Se o tema alvo usa `item.price` em vez de `item.final_price`, os calculos ficam errados. `final_price` inclui descontos de linha, `price` nao.
+- O `| money` filter formata o valor conforme a moeda da loja. O `| replace: ' ', ''` remove espacos que algumas formatacoes adicionam (ex: "R$ 199,90" vs "R$199,90").
+- Se a loja usa `compare_at_price` de forma inconsistente (alguns produtos tem, outros nao), o fallback para `original_price` cobre esses casos.
+- O banner de economia so aparece se `total_savings > 0`. Se todos os itens estao com preco cheio, nada extra aparece.
+- Se o tema alvo ja tem CSS para `.cart-item__old-price` ou `.totals__total-value`, havera conflito. Verificar especificidade.
+
+## CODIGO DE REFERENCIA
+
+```liquid
+<!-- Part 1: Savings Calculation (inside cart items loop) -->
+{%- liquid
+  assign total_savings = 0
+-%}
+{%- for item in cart.items -%}
+  {%- liquid
+    assign item_compare_at = item.variant.compare_at_price
+    if item_compare_at == blank or item_compare_at <= item.final_price
+      assign item_compare_at = item.original_price
+    endif
+    assign item_savings = item_compare_at | minus: item.final_price | times: item.quantity
+    assign total_savings = total_savings | plus: item_savings
+  -%}
+
+  <!-- ... rest of cart item rendering ... -->
+
+{%- endfor -%}
+```
+
+```liquid
+<!-- Part 2: Per-Item Price Display (inside each cart item row) -->
+<div class="cart-item__price-row">
+  {%- assign item_compare_at = item.variant.compare_at_price -%}
+  {%- if item.final_price == 0 -%}
+    <div class="cart-item__discounted-prices">
+      <span class="cart-item__free-badge">FREE</span>
+      <s class="cart-item__old-price product-option">
+        {{- item.original_price | money | replace: ' ', '' -}}
+      </s>
+    </div>
+  {%- elsif item_compare_at > item.final_price or item.original_price != item.final_price -%}
+    <div class="cart-item__discounted-prices">
+      <strong class="cart-item__final-price product-option">
+        {{ item.final_price | money | replace: ' ', '' }}
+      </strong>
+      <span class="visually-hidden">
+        {{ 'products.product.price.regular_price' | t }}
+      </span>
+      <s class="cart-item__old-price product-option">
+        {%- if item_compare_at > item.final_price -%}
+          {{- item_compare_at | money | replace: ' ', '' -}}
+        {%- else -%}
+          {{- item.original_price | money | replace: ' ', '' -}}
+        {%- endif -%}
+      </s>
+    </div>
+  {%- else -%}
+    <div class="product-option cart-item__final-price">
+      {{ item.original_price | money | replace: ' ', '' }}
+    </div>
+  {%- endif -%}
+</div>
+```
+
+```liquid
+<!-- Part 3: Footer Totals with Savings Display -->
+<div class="totals" role="status">
+  <h2 class="totals__total">{{ 'TOTAL' }}</h2>
+  <div style="display: flex; align-items: center; gap: 8px; justify-content: flex-end;">
+    {%- if total_savings > 0 -%}
+      <s style="color: #dc2626; font-size: 1.3rem; text-decoration: line-through; font-weight: 600;">
+        {{ cart.total_price | plus: total_savings | money | replace: ' ', '' }}
+      </s>
+    {%- endif -%}
+    <p class="totals__total-value" style="margin: 0;">
+      {{ cart.total_price | money | replace: ' ', '' }}
+    </p>
+  </div>
+</div>
+
+{%- if total_savings > 0 -%}
+  <div style="text-align: center; margin-top: 4px; padding: 8px 12px; background: #dcfce7; border-radius: 6px; border: 1px solid #86efac;">
+    <span style="font-size: 1.3rem; color: #15803d; font-weight: 700;">You save {{ total_savings | money | replace: ' ', '' }}!</span>
+  </div>
+{%- endif -%}
+```
+
+```css
+/* Part 4: CSS for Savings Display */
+
+/* Savings: strikethrough old price (per-item) */
+.cart-item__old-price {
+  color: #dc2626;
+  text-decoration: line-through;
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.cart-item__final-price {
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.cart-item__discounted-prices {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.cart-item__free-badge {
+  color: #22c55e;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+/* Savings: footer totals strikethrough */
+.totals .totals__total-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+```
+
+## COMO VALIDAR
+- [ ] Item com `compare_at_price` maior que `price` mostra preco riscado + preco atual
+- [ ] Item sem desconto mostra apenas o preco normal (sem riscado)
+- [ ] Item gratuito ($0) mostra badge "FREE" + preco original riscado
+- [ ] Footer mostra total original riscado em vermelho a esquerda do total real
+- [ ] Banner verde "You save $XX!" aparece abaixo do total
+- [ ] Economia desaparece quando todos os itens estao com preco cheio
+- [ ] Alterar quantidade de um item com desconto atualiza a economia automaticamente
+- [ ] Remover item com desconto atualiza a economia automaticamente
+- [ ] Valores monetarios formatados corretamente para a moeda da loja
+- [ ] Layout nao quebra em mobile (flex-wrap no preco por item)

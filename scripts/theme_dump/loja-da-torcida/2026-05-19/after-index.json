@@ -1,0 +1,805 @@
+{
+  "sections": {
+    "slideshow_bYRrVM": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_7HY9cd": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/CorrigidoBANNER_3_2.jpg",
+            "image_mobile": "shopify:\/\/shop_images\/CorrigidoBANNER_3_1.jpg",
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        },
+        "slide_k6DFeM": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/kgqiwny2km5jijyxib0p.webp",
+            "image_mobile": "shopify:\/\/shop_images\/hpxqaowuspjltn0g4shd.webp",
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        },
+        "slide_zjcrJe": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/nbztdozmhbufgfbur0k5.webp",
+            "image_mobile": "shopify:\/\/shop_images\/eul6hsqd0cqcxtelk534.webp",
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_7HY9cd",
+        "slide_k6DFeM",
+        "slide_zjcrJe"
+      ],
+      "custom_css": [],
+      "name": "t:sections.slideshow.presets.name",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "adapt_image",
+        "slider_visual": "dots",
+        "auto_rotate": true,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": false,
+        "accessibility_info": ""
+      }
+    },
+    "scrolling_text_xWA6Dm": {
+      "type": "scrolling-text",
+      "blocks": {
+        "text_WfiJtp": {
+          "type": "text",
+          "settings": {
+            "text": "E FUTEBOL"
+          }
+        }
+      },
+      "block_order": [
+        "text_WfiJtp"
+      ],
+      "name": "Texto rolável",
+      "settings": {
+        "background_color": "#ffffff",
+        "text_color": "#ffffff",
+        "font_size": 16,
+        "font_size_mobile": 12,
+        "font_weight": 100,
+        "separator": "-",
+        "speed": 60,
+        "direction": "left",
+        "pause_on_hover": false,
+        "repeat": 4,
+        "accessibility_label": "Texto rolável",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "blocks_bDP787": {
+      "type": "_blocks",
+      "settings": {}
+    },
+    "blocks_64UiPm": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_af59fe2_T9A6Yg": {
+          "type": "ai_gen_block_af59fe2",
+          "settings": {
+            "title": "SELEÇÃO BRASILEIRA",
+            "heading_tag": "h1",
+            "font_size": 45,
+            "font_weight": "800",
+            "text_alignment": "center",
+            "desktop_width_percent": 100,
+            "text_color": "#278a01",
+            "shimmer_color": "#ffc900",
+            "animation_duration": 5
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_af59fe2_T9A6Yg"
+      ],
+      "settings": {}
+    },
+    "featured_collection_tabs_xyG79t": {
+      "type": "featured-collection-tabs",
+      "blocks": {
+        "tab_Qfg34F": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Masculino",
+            "collection": "masculino-brasil"
+          }
+        },
+        "tab_9PmMCW": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Feminino",
+            "collection": "feminina-brasil"
+          }
+        },
+        "tab_LCJPnJ": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Infantil",
+            "collection": "infantil-selecao"
+          }
+        }
+      },
+      "block_order": [
+        "tab_Qfg34F",
+        "tab_9PmMCW",
+        "tab_LCJPnJ"
+      ],
+      "name": "Coleção Destaque + Abas",
+      "settings": {
+        "products_to_show": 25,
+        "header_style": "with_line",
+        "title": "",
+        "heading_size": "h1",
+        "description": "",
+        "description_style": "body",
+        "header_alignment": "center",
+        "collection": "",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
+        "full_width": false,
+        "show_view_all": false,
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": true,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "unselected_tab_text_color": "#ffffff",
+        "active_tab_text_color": "#010ce2",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "scrolling_text_hhgXzM": {
+      "type": "scrolling-text",
+      "blocks": {
+        "text_NEWqXb": {
+          "type": "text",
+          "settings": {
+            "text": "DNA brasileiro"
+          }
+        },
+        "text_CECzDP": {
+          "type": "text",
+          "settings": {
+            "text": "Futebol é cultura"
+          }
+        },
+        "text_f7pwnY": {
+          "type": "text",
+          "settings": {
+            "text": "Vai Brasil"
+          }
+        }
+      },
+      "block_order": [
+        "text_NEWqXb",
+        "text_CECzDP",
+        "text_f7pwnY"
+      ],
+      "name": "Texto rolável",
+      "settings": {
+        "background_color": "#018b31",
+        "text_color": "#ffc900",
+        "font_size": 30,
+        "font_size_mobile": 16,
+        "font_weight": 700,
+        "separator": "-",
+        "speed": 30,
+        "direction": "left",
+        "pause_on_hover": true,
+        "repeat": 4,
+        "accessibility_label": "",
+        "padding_top": 12,
+        "padding_bottom": 12
+      }
+    },
+    "video_MjBUyD": {
+      "type": "video",
+      "custom_css": [
+        "\/* Remove borda e deixa full width tipo banner *\/iframe {border: none; pointer-events: none; width: 100%; height: 100%;}",
+        " \/* Remove overlays do YouTube *\/iframe::-webkit-media-controls {display: none !important;}",
+        " \/* Container estilo banner *\/.video-section iframe {border-radius: 0; box-shadow: none;}"
+      ],
+      "name": "t:sections.video.presets.name",
+      "settings": {
+        "heading": "",
+        "heading_size": "h1",
+        "enable_autoplay": true,
+        "enable_video_looping": true,
+        "video": "shopify:\/\/files\/videos\/P3_VIDEO_CAMISA_I_BNT_DESK.mp4",
+        "video_url": "",
+        "description": "",
+        "full_width": true,
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 40
+      }
+    },
+    "blocks_DqCMWV": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_af59fe2_7hmLMD": {
+          "type": "ai_gen_block_af59fe2",
+          "settings": {
+            "title": "COMPRE POR CATEGORIA",
+            "heading_tag": "h1",
+            "font_size": 35,
+            "font_weight": "800",
+            "text_alignment": "center",
+            "desktop_width_percent": 100,
+            "text_color": "#278a01",
+            "shimmer_color": "#ffc900",
+            "animation_duration": 5
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_af59fe2_7hmLMD"
+      ],
+      "settings": {}
+    },
+    "collection_list_tabs_YBkWPw": {
+      "type": "collection-list-tabs",
+      "blocks": {
+        "tab_header_YjjFYW": {
+          "type": "tab_header",
+          "settings": {
+            "tab_label": "Seleções"
+          }
+        },
+        "collection_item_7Qr4gE": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "masculino-brasil",
+            "image": "shopify:\/\/shop_images\/CORRIGIDO_COLECOESMASCULINAS.jpg",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_pkKQKz": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "feminina-brasil",
+            "image": "shopify:\/\/shop_images\/CORRIGIDO_COLECOESFEMININAS.jpg",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_37VtEr": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "infantil-selecao",
+            "image": "shopify:\/\/shop_images\/CORRIGIDO_COLECOESINFANTIS.jpg",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_K4wzRp": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "jaqueta-brasil",
+            "image": "shopify:\/\/shop_images\/CORRIGIDO_COLECOESINVERNO.jpg",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_QbiTTw": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "retro",
+            "image": "shopify:\/\/shop_images\/CORRIGIDO_COLECOESRETROS.jpg",
+            "custom_image_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "tab_header_YjjFYW",
+        "collection_item_7Qr4gE",
+        "collection_item_pkKQKz",
+        "collection_item_37VtEr",
+        "collection_item_K4wzRp",
+        "collection_item_QbiTTw"
+      ],
+      "name": "Coleções com Abas",
+      "settings": {
+        "header_style": "with_line",
+        "title": "",
+        "heading_size": "h1",
+        "description": "",
+        "description_style": "body",
+        "header_alignment": "center",
+        "image_ratio": "adapt",
+        "columns_desktop": 4,
+        "enable_desktop_slider": true,
+        "color_scheme": "scheme-1",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "show_desktop_arrows": false,
+        "show_mobile_arrows": false,
+        "unselected_tab_text_color": "#000000",
+        "active_tab_text_color": "#ffffff",
+        "padding_top": 4,
+        "padding_bottom": 12
+      }
+    },
+    "video_DEM4DM": {
+      "type": "video",
+      "name": "t:sections.video.presets.name",
+      "settings": {
+        "heading": "",
+        "heading_size": "h1",
+        "enable_autoplay": true,
+        "enable_video_looping": true,
+        "video": "shopify:\/\/files\/videos\/VÍDEO LOJA DA TORCIDA.mp4",
+        "video_url": "",
+        "description": "",
+        "full_width": true,
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 32
+      }
+    },
+    "1774052356c22d20b7": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_af59fe2_KQqUjJ": {
+          "type": "ai_gen_block_af59fe2",
+          "settings": {
+            "title": "LOJA DA TORCIDA",
+            "heading_tag": "h1",
+            "font_size": 45,
+            "font_weight": "800",
+            "text_alignment": "center",
+            "desktop_width_percent": 100,
+            "text_color": "#278a01",
+            "shimmer_color": "#ffc900",
+            "animation_duration": 5
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_af59fe2_KQqUjJ"
+      ],
+      "settings": {}
+    },
+    "video_stories_kNYiiN": {
+      "type": "video-stories",
+      "blocks": {
+        "story_iDjaq4": {
+          "type": "story",
+          "settings": {
+            "title": "Vídeo",
+            "video": "shopify:\/\/files\/videos\/11.mp4",
+            "video_url": "",
+            "custom_video_url": ""
+          }
+        },
+        "story_QBVNjq": {
+          "type": "story",
+          "settings": {
+            "title": "Vídeo",
+            "video": "shopify:\/\/files\/videos\/ssstik.io_@arenafcoficial_1774051811038.mp4",
+            "video_url": "",
+            "custom_video_url": ""
+          }
+        },
+        "story_3wez9a": {
+          "type": "story",
+          "settings": {
+            "title": "Vídeo",
+            "video": "shopify:\/\/files\/videos\/65555.mp4",
+            "video_url": "",
+            "custom_video_url": ""
+          }
+        },
+        "story_XLHNhN": {
+          "type": "story",
+          "settings": {
+            "title": "Vídeo",
+            "video": "shopify:\/\/files\/videos\/ssstik.io_@carolraitik_1774051895907.mp4",
+            "video_url": "",
+            "custom_video_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "story_iDjaq4",
+        "story_QBVNjq",
+        "story_3wez9a",
+        "story_XLHNhN"
+      ],
+      "name": "Galeria de Vídeos",
+      "settings": {
+        "header_style": "standard",
+        "title": "",
+        "heading_size": "h1",
+        "description": "",
+        "description_style": "body",
+        "header_alignment": "center",
+        "video_format": "9-16",
+        "columns_desktop": 4,
+        "color_scheme": "",
+        "padding_top": 28,
+        "padding_bottom": 40
+      }
+    },
+    "blocks_EKNMdC": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_af59fe2_34GcKe": {
+          "type": "ai_gen_block_af59fe2",
+          "settings": {
+            "title": "CONJUNTO INFANTIL",
+            "heading_tag": "h1",
+            "font_size": 40,
+            "font_weight": "800",
+            "text_alignment": "center",
+            "desktop_width_percent": 100,
+            "text_color": "#278a01",
+            "shimmer_color": "#ffc900",
+            "animation_duration": 5
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_af59fe2_34GcKe"
+      ],
+      "settings": {}
+    },
+    "featured_collection_tabs_VzcGpC": {
+      "type": "featured-collection-tabs",
+      "blocks": {
+        "tab_cMJEED": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Nacionais",
+            "collection": "infantil-selecao"
+          }
+        }
+      },
+      "block_order": [
+        "tab_cMJEED"
+      ],
+      "name": "Coleção Destaque + Abas",
+      "settings": {
+        "products_to_show": 25,
+        "header_style": "with_line",
+        "title": "",
+        "heading_size": "h1",
+        "description": "",
+        "description_style": "body",
+        "header_alignment": "center",
+        "collection": "26-27",
+        "columns_desktop": 4,
+        "enable_desktop_slider": true,
+        "full_width": false,
+        "show_view_all": false,
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": true,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "unselected_tab_text_color": "#ffffff",
+        "active_tab_text_color": "#1b704c",
+        "padding_top": 20,
+        "padding_bottom": 28
+      }
+    },
+    "slideshow_38ewKF": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_6ttDNi": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/CorrigidoBANNER_5_PERSONALIZACAO.jpg",
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_6ttDNi"
+      ],
+      "custom_css": [
+        "\/* Espaçamento entre slideshow (banner) e seção seguinte *\/.slideshow,.slideshow-section {margin-bottom: 20px !important;}",
+        " \/* Ajuste fino no título da seção *\/.collection-list h2,h2 {margin-top: 20px !important;}"
+      ],
+      "name": "t:sections.slideshow.presets.name",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "adapt_image",
+        "slider_visual": "dots",
+        "auto_rotate": false,
+        "change_slides_speed": 3,
+        "image_behavior": "none",
+        "show_text_below": false,
+        "accessibility_info": ""
+      }
+    },
+    "blocks_9AYCpf": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_af59fe2_hGzYUD": {
+          "type": "ai_gen_block_af59fe2",
+          "settings": {
+            "title": "CAMISAS RETRÔ",
+            "heading_tag": "h1",
+            "font_size": 40,
+            "font_weight": "800",
+            "text_alignment": "center",
+            "desktop_width_percent": 100,
+            "text_color": "#278a01",
+            "shimmer_color": "#ffc900",
+            "animation_duration": 5
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_af59fe2_hGzYUD"
+      ],
+      "settings": {}
+    },
+    "featured_collection_tabs_ywambc": {
+      "type": "featured-collection-tabs",
+      "blocks": {
+        "tab_ETKCnQ": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Masculino",
+            "collection": "retro"
+          }
+        }
+      },
+      "block_order": [
+        "tab_ETKCnQ"
+      ],
+      "name": "Coleção Destaque + Abas",
+      "settings": {
+        "products_to_show": 25,
+        "header_style": "with_line",
+        "title": "",
+        "heading_size": "h1",
+        "description": "",
+        "description_style": "body",
+        "header_alignment": "center",
+        "collection": "",
+        "columns_desktop": 4,
+        "enable_desktop_slider": true,
+        "full_width": false,
+        "show_view_all": false,
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": true,
+        "view_all_style": "solid",
+        "color_scheme": "",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "unselected_tab_text_color": "#ffffff",
+        "active_tab_text_color": "#121212",
+        "padding_top": 20,
+        "padding_bottom": 16
+      }
+    },
+    "video_TdzRRP": {
+      "type": "video",
+      "custom_css": [
+        "\/* Remove borda e deixa full width tipo banner *\/iframe {border: none; pointer-events: none; width: 100%; height: 100%;}",
+        " \/* Remove overlays do YouTube *\/iframe::-webkit-media-controls {display: none !important;}",
+        " \/* Container estilo banner *\/.video-section iframe {border-radius: 0; box-shadow: none;}"
+      ],
+      "name": "t:sections.video.presets.name",
+      "settings": {
+        "heading": "",
+        "heading_size": "h1",
+        "enable_autoplay": true,
+        "enable_video_looping": true,
+        "video": "shopify:\/\/files\/videos\/Futebol, cultura & Identidade.mp4",
+        "video_url": "",
+        "description": "",
+        "full_width": true,
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "newsletter_XznkQd": {
+      "type": "newsletter",
+      "blocks": {
+        "heading_ijhK9j": {
+          "type": "heading",
+          "settings": {
+            "heading": "Assine nossos e-mails",
+            "heading_size": "h2"
+          }
+        },
+        "paragraph_kpL7JB": {
+          "type": "paragraph",
+          "settings": {
+            "text": "<h5>Seja a primeira pessoa a saber sobre novas coleções e ofertas exclusivas.<\/h5>"
+          }
+        },
+        "email_form_t7j9tP": {
+          "type": "email_form",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "heading_ijhK9j",
+        "paragraph_kpL7JB",
+        "email_form_t7j9tP"
+      ],
+      "name": "t:sections.newsletter.presets.name",
+      "settings": {
+        "color_scheme": "scheme-db057c15-704d-4dd6-9157-aafe7f4c83e3",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "blocks_ahpzd8": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_af59fe2_axalhk": {
+          "type": "ai_gen_block_af59fe2",
+          "settings": {
+            "title": "ACESSÓRIOS",
+            "heading_tag": "h1",
+            "font_size": 40,
+            "font_weight": "800",
+            "text_alignment": "center",
+            "desktop_width_percent": 100,
+            "text_color": "#278a01",
+            "shimmer_color": "#ffc900",
+            "animation_duration": 5
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_af59fe2_axalhk"
+      ],
+      "settings": {}
+    },
+    "featured_collection_tabs_ort1x7": {
+      "type": "featured-collection-tabs",
+      "blocks": {
+        "tab_h1lttv": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Acessórios",
+            "collection": "acessorios"
+          }
+        }
+      },
+      "block_order": [
+        "tab_h1lttv"
+      ],
+      "name": "Coleção Destaque + Abas",
+      "settings": {
+        "products_to_show": 25,
+        "header_style": "with_line",
+        "title": "",
+        "heading_size": "h1",
+        "description": "",
+        "description_style": "body",
+        "header_alignment": "center",
+        "collection": "",
+        "columns_desktop": 4,
+        "enable_desktop_slider": true,
+        "full_width": false,
+        "show_view_all": false,
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": true,
+        "view_all_style": "solid",
+        "color_scheme": "",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "unselected_tab_text_color": "#ffffff",
+        "active_tab_text_color": "#121212",
+        "padding_top": 20,
+        "padding_bottom": 16
+      }
+    }
+  },
+  "order": [
+    "slideshow_bYRrVM",
+    "scrolling_text_xWA6Dm",
+    "blocks_bDP787",
+    "blocks_64UiPm",
+    "featured_collection_tabs_xyG79t",
+    "scrolling_text_hhgXzM",
+    "video_MjBUyD",
+    "blocks_DqCMWV",
+    "collection_list_tabs_YBkWPw",
+    "video_DEM4DM",
+    "1774052356c22d20b7",
+    "video_stories_kNYiiN",
+    "blocks_EKNMdC",
+    "featured_collection_tabs_VzcGpC",
+    "slideshow_38ewKF",
+    "blocks_9AYCpf",
+    "featured_collection_tabs_ywambc",
+    "blocks_ahpzd8",
+    "featured_collection_tabs_ort1x7",
+    "video_TdzRRP",
+    "newsletter_XznkQd"
+  ]
+}

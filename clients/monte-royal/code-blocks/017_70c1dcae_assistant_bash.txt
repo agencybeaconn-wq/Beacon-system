@@ -1,0 +1,8 @@
+# Insights (cache 6h, não consome quota se já tem em cache)
+node .claude/skills/clarity/clarity.mjs MontRoyal --days=1
+
+# Quebra por dimensão
+node .claude/skills/clarity/clarity.mjs MontRoyal --days=3 --dimension=URL
+
+# Quanto da quota gastou hoje
+node .claude/skills/clarity/clarity.mjs MontRoyal --usage

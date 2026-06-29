@@ -1,0 +1,31 @@
+Produtos elegíveis: 1212
+[0/1212] Agasalho de Viagem Ajax Masculino
+[50/1212] Camisa Ajax Amsterdam 2024/25 I Torcedor
+[100/1212] Camisa Arsenal FC 2024/25 I Torcedor
+[150/1212] Camisa Bayern de Munique 2025/26 II Torcedor
+[200/1212] Camisa Brasil Reedição Total 90 Ronaldinho Masculina
+[250/1212] Camisa Corinthians 2024/25 I Torcedor
+[300/1212] Camisa Coritiba 2025/26 II Torcedor Masculina
+[350/1212] Camisa FC Copenhage 2025/26 III Torcedor
+[400/1212] Camisa Feminina Corinthians 2025/26 I Torcedor
+[450/1212] Camisa Feminina Inglaterra 2026/27 II
+[500/1212] Camisa Feminina Portugal 2026/27 II
+[550/1212] Camisa Flamengo 2025/26 III Torcedor Com Patrocínios
+[600/1212] Camisa Grêmio 2024/25 I Torcedor
+[650/1212] Camisa Internacional 2025/26 Treino
+[700/1212] Camisa Liverpool 2025/26 I Manga Longa
+[750/1212] Camisa Manga Longa Real Madrid III 14/15
+[800/1212] Camisa Nova Zelândia 2026/27 II
+[850/1212] Camisa Polo Comissão Atlético Mineiro 2024/25
+[900/1212] Camisa Retrô Botafogo 1995/96 I
+[950/1212] Camisa Retrô Liverpool 2008/09 I
+[1000/1212] Camisa Retrô São Paulo 1993/94 I
+[1050/1212] Camisa Tottenham FC 2024/25 III Jogador
+[1100/1212] Camiseta Brasil Manga Longa Academy Pro 2026 Treino Masculin
+[1150/1212] Jaqueta Itália 125th Anniversary
+[1200/1212] Shorts Itália 2026 Treino Copa do Mundo
+
+Resultado:
+Produtos atualizados: 854
+Skipped (já tinham mesmo compare_at ou sem base): 358
+Erros: 0

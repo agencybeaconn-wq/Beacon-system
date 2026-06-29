@@ -1,0 +1,4659 @@
+{
+  "sorted": [
+    "workspaces",
+    "account_groups",
+    "account_settings",
+    "fb_connections",
+    "ad_accounts",
+    "campaigns",
+    "adsets",
+    "ads",
+    "agency_clients",
+    "asset_folders",
+    "asset_folder_items",
+    "automation_rules",
+    "automation_rule_logs",
+    "budget_configs",
+    "campaign_drafts",
+    "chat_messages",
+    "client_ad_accounts",
+    "client_goals",
+    "client_upload_links",
+    "client_uploads",
+    "google_tokens",
+    "identity_cache",
+    "insights",
+    "meta_tokens",
+    "notification_settings",
+    "profiles",
+    "shared_dashboards",
+    "shopify_configs",
+    "shopify_daily_revenue",
+    "system_audit_logs",
+    "targeting_cache",
+    "team_members",
+    "user_authority",
+    "user_column_presets"
+  ],
+  "inventory": [
+    {
+      "table": "account_groups",
+      "count": "1",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "workspace_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "color",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": "'#3b82f6'::text",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [
+        {
+          "constraint_name": "account_groups_workspace_id_fkey",
+          "column_name": "workspace_id",
+          "foreign_table": "workspaces",
+          "foreign_column": "id"
+        }
+      ],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Users can delete their workspace's groups",
+          "polcmd": "d",
+          "polpermissive": true,
+          "roles": [
+            "authenticated"
+          ],
+          "qual": "(workspace_id IN ( SELECT workspaces.id\n   FROM workspaces\n  WHERE (workspaces.owner_id = auth.uid())))",
+          "check": null
+        },
+        {
+          "polname": "Users can insert groups in their workspace",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "authenticated"
+          ],
+          "qual": null,
+          "check": "(workspace_id IN ( SELECT workspaces.id\n   FROM workspaces\n  WHERE (workspaces.owner_id = auth.uid())))"
+        },
+        {
+          "polname": "Users can update their workspace's groups",
+          "polcmd": "w",
+          "polpermissive": true,
+          "roles": [
+            "authenticated"
+          ],
+          "qual": "(workspace_id IN ( SELECT workspaces.id\n   FROM workspaces\n  WHERE (workspaces.owner_id = auth.uid())))",
+          "check": null
+        },
+        {
+          "polname": "Users can view their workspace's groups",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "authenticated"
+          ],
+          "qual": "(workspace_id IN ( SELECT workspaces.id\n   FROM workspaces\n  WHERE (workspaces.owner_id = auth.uid())))",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "account_settings",
+      "count": "10",
+      "pks": [
+        "ad_account_id"
+      ],
+      "cols": [
+        {
+          "column_name": "ad_account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "primary_kpi",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": "'ROAS'::text",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "target_value",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "risk_threshold",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "max_frequency",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "3.0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "NO",
+          "column_default": "timezone('utc'::text, now())",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "NO",
+          "column_default": "timezone('utc'::text, now())",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "default_page_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "default_page_name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "default_pixel_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "default_pixel_name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "default_domain",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "account_type",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": "'ecom'::text",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "default_instagram_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "default_instagram_name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "default_form_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "default_form_name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "target_ctr",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "1.5",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "risk_ctr",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "0.5",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "target_cpc",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "1.00",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "risk_cpc",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "3.00",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "target_cpm",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "15.00",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "risk_cpm",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "40.00",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "auto_pause_enabled",
+          "data_type": "boolean",
+          "udt_name": "bool",
+          "is_nullable": "YES",
+          "column_default": "false",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "auto_scale_enabled",
+          "data_type": "boolean",
+          "udt_name": "bool",
+          "is_nullable": "YES",
+          "column_default": "false",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "alert_sensitivity",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": "'medium'::text",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "primary_kpis",
+          "data_type": "jsonb",
+          "udt_name": "jsonb",
+          "is_nullable": "YES",
+          "column_default": "'[]'::jsonb",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "default_benefits",
+          "data_type": "jsonb",
+          "udt_name": "jsonb",
+          "is_nullable": "YES",
+          "column_default": "'[]'::jsonb",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Users can insert settings for their accounts",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(EXISTS ( SELECT 1\n   FROM ad_accounts\n  WHERE ((ad_accounts.id = account_settings.ad_account_id) AND (ad_accounts.user_id = auth.uid()))))"
+        },
+        {
+          "polname": "Users can update settings for their accounts",
+          "polcmd": "w",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(EXISTS ( SELECT 1\n   FROM ad_accounts\n  WHERE ((ad_accounts.id = account_settings.ad_account_id) AND (ad_accounts.user_id = auth.uid()))))",
+          "check": null
+        },
+        {
+          "polname": "Users can view settings for their accounts",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(EXISTS ( SELECT 1\n   FROM ad_accounts\n  WHERE ((ad_accounts.id = account_settings.ad_account_id) AND (ad_accounts.user_id = auth.uid()))))",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "ad_accounts",
+      "count": "24",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "currency",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "timezone",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "status",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "access_token",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "last_synced_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "business_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "group_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "connection_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [
+        {
+          "constraint_name": "ad_accounts_connection_id_fkey",
+          "column_name": "connection_id",
+          "foreign_table": "fb_connections",
+          "foreign_column": "id"
+        },
+        {
+          "constraint_name": "ad_accounts_group_id_fkey",
+          "column_name": "group_id",
+          "foreign_table": "account_groups",
+          "foreign_column": "id"
+        }
+      ],
+      "rls": {
+        "relrowsecurity": false,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Policy with security definer functions",
+          "polcmd": "*",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": "(auth.uid() = user_id)"
+        }
+      ]
+    },
+    {
+      "table": "ads",
+      "count": "2560",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "campaign_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "adset_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "status",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "creative_body",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "creative_image_url",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "last_updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "creative",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [
+        {
+          "constraint_name": "ads_adset_id_fkey",
+          "column_name": "adset_id",
+          "foreign_table": "adsets",
+          "foreign_column": "id"
+        },
+        {
+          "constraint_name": "ads_campaign_id_fkey",
+          "column_name": "campaign_id",
+          "foreign_table": "campaigns",
+          "foreign_column": "id"
+        }
+      ],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Users can see own ads",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "true",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "adsets",
+      "count": "2065",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "campaign_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "status",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "daily_budget",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "lifetime_budget",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "targeting",
+          "data_type": "jsonb",
+          "udt_name": "jsonb",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "last_updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "promoted_object",
+          "data_type": "jsonb",
+          "udt_name": "jsonb",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "start_time",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "end_time",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "optimization_goal",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "billing_event",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "bid_amount",
+          "data_type": "integer",
+          "udt_name": "int4",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "destination_type",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [
+        {
+          "constraint_name": "adsets_campaign_id_fkey",
+          "column_name": "campaign_id",
+          "foreign_table": "campaigns",
+          "foreign_column": "id"
+        }
+      ],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Users can see own adsets",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "true",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "agency_clients",
+      "count": "2",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "color",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": "'#3B82F6'::text",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Gerenciar minhas pastas",
+          "polcmd": "*",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": "(auth.uid() = user_id)"
+        }
+      ]
+    },
+    {
+      "table": "asset_folder_items",
+      "count": "5",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "folder_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "asset_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "asset_type",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [
+        {
+          "constraint_name": "asset_folder_items_folder_id_fkey",
+          "column_name": "folder_id",
+          "foreign_table": "asset_folders",
+          "foreign_column": "id"
+        }
+      ],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Users can delete their own folder items",
+          "polcmd": "d",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        },
+        {
+          "polname": "Users can insert their own folder items",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(auth.uid() = user_id)"
+        },
+        {
+          "polname": "Users can view their own folder items",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "asset_folders",
+      "count": "49",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "parent_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [
+        {
+          "constraint_name": "asset_folders_parent_id_fkey",
+          "column_name": "parent_id",
+          "foreign_table": "asset_folders",
+          "foreign_column": "id"
+        }
+      ],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Users can delete their own folders",
+          "polcmd": "d",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        },
+        {
+          "polname": "Users can insert their own folders",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(auth.uid() = user_id)"
+        },
+        {
+          "polname": "Users can update their own folders",
+          "polcmd": "w",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        },
+        {
+          "polname": "Users can view their own folders",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "automation_rule_logs",
+      "count": "0",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "rule_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "executed_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "matched_entities",
+          "data_type": "jsonb",
+          "udt_name": "jsonb",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "action_taken",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "result",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "details",
+          "data_type": "jsonb",
+          "udt_name": "jsonb",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "entities_affected",
+          "data_type": "integer",
+          "udt_name": "int4",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [
+        {
+          "constraint_name": "automation_rule_logs_rule_id_fkey",
+          "column_name": "rule_id",
+          "foreign_table": "automation_rules",
+          "foreign_column": "id"
+        }
+      ],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Users can view logs for their rules",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(rule_id IN ( SELECT ar.id\n   FROM (automation_rules ar\n     JOIN workspaces w ON ((ar.workspace_id = w.id)))\n  WHERE (w.owner_id = auth.uid())))",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "automation_rules",
+      "count": "25",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "workspace_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "ad_account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "description",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "status",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": "'ACTIVE'::text",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "rule_type",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "trigger_type",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "schedule_spec",
+          "data_type": "jsonb",
+          "udt_name": "jsonb",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "evaluation_spec",
+          "data_type": "jsonb",
+          "udt_name": "jsonb",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "execution_spec",
+          "data_type": "jsonb",
+          "udt_name": "jsonb",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "meta_rule_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "last_synced_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "last_executed_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "execution_count",
+          "data_type": "integer",
+          "udt_name": "int4",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [
+        {
+          "constraint_name": "automation_rules_workspace_id_fkey",
+          "column_name": "workspace_id",
+          "foreign_table": "workspaces",
+          "foreign_column": "id"
+        }
+      ],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Users can delete their workspace rules",
+          "polcmd": "d",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(workspace_id IN ( SELECT workspaces.id\n   FROM workspaces\n  WHERE (workspaces.owner_id = auth.uid())))",
+          "check": null
+        },
+        {
+          "polname": "Users can insert rules in their workspace",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(workspace_id IN ( SELECT workspaces.id\n   FROM workspaces\n  WHERE (workspaces.owner_id = auth.uid())))"
+        },
+        {
+          "polname": "Users can update their workspace rules",
+          "polcmd": "w",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(workspace_id IN ( SELECT workspaces.id\n   FROM workspaces\n  WHERE (workspaces.owner_id = auth.uid())))",
+          "check": null
+        },
+        {
+          "polname": "Users can view their workspace rules",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(workspace_id IN ( SELECT workspaces.id\n   FROM workspaces\n  WHERE (workspaces.owner_id = auth.uid())))",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "budget_configs",
+      "count": "0",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "monthly_budget",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "month",
+          "data_type": "character varying",
+          "udt_name": "varchar",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Usuários podem atualizar seus budgets",
+          "polcmd": "w",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        },
+        {
+          "polname": "Usuários podem inserir/atualizar seus budgets",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(auth.uid() = user_id)"
+        },
+        {
+          "polname": "Usuários podem ver seus próprios budgets",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "campaign_drafts",
+      "count": "14",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "objective",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "budget",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "status",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": "'DRAFT'::text",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "draft_data",
+          "data_type": "jsonb",
+          "udt_name": "jsonb",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Users can delete their own drafts",
+          "polcmd": "d",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        },
+        {
+          "polname": "Users can insert their own drafts",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(auth.uid() = user_id)"
+        },
+        {
+          "polname": "Users can update their own drafts",
+          "polcmd": "w",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": "(auth.uid() = user_id)"
+        },
+        {
+          "polname": "Users can view their own drafts",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "campaigns",
+      "count": "900",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "status",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "objective",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "daily_budget",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "lifetime_budget",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "last_updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "effective_status",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "start_time",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "smart_promotion_type",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "bid_strategy",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "promoted_object",
+          "data_type": "jsonb",
+          "udt_name": "jsonb",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "special_ad_categories",
+          "data_type": "ARRAY",
+          "udt_name": "_text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [
+        {
+          "constraint_name": "campaigns_account_id_fkey",
+          "column_name": "account_id",
+          "foreign_table": "ad_accounts",
+          "foreign_column": "id"
+        }
+      ],
+      "rls": {
+        "relrowsecurity": false,
+        "relforcerowsecurity": false
+      },
+      "policies": []
+    },
+    {
+      "table": "chat_messages",
+      "count": "0",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "role",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "content",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Users can delete their own chat messages",
+          "polcmd": "d",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        },
+        {
+          "polname": "Users can insert their own chat messages",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(auth.uid() = user_id)"
+        },
+        {
+          "polname": "Users can view their own chat messages",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "client_ad_accounts",
+      "count": "2",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "client_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "ad_account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "platform",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [
+        {
+          "constraint_name": "client_ad_accounts_client_id_fkey",
+          "column_name": "client_id",
+          "foreign_table": "agency_clients",
+          "foreign_column": "id"
+        }
+      ],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Gerenciar contas dentro das pastas",
+          "polcmd": "*",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(EXISTS ( SELECT 1\n   FROM agency_clients ac\n  WHERE ((ac.id = client_ad_accounts.client_id) AND (ac.user_id = auth.uid()))))",
+          "check": "(EXISTS ( SELECT 1\n   FROM agency_clients ac\n  WHERE ((ac.id = client_ad_accounts.client_id) AND (ac.user_id = auth.uid()))))"
+        },
+        {
+          "polname": "Users can delete account links from their clients",
+          "polcmd": "d",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(EXISTS ( SELECT 1\n   FROM agency_clients\n  WHERE ((agency_clients.id = client_ad_accounts.client_id) AND (agency_clients.user_id = auth.uid()))))",
+          "check": null
+        },
+        {
+          "polname": "Users can insert account links to their clients",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(EXISTS ( SELECT 1\n   FROM agency_clients\n  WHERE ((agency_clients.id = client_ad_accounts.client_id) AND (agency_clients.user_id = auth.uid()))))"
+        },
+        {
+          "polname": "Users can view account links through their clients",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(EXISTS ( SELECT 1\n   FROM agency_clients\n  WHERE ((agency_clients.id = client_ad_accounts.client_id) AND (agency_clients.user_id = auth.uid()))))",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "client_goals",
+      "count": "1",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "metric",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "target_value",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Users can delete their own client goals",
+          "polcmd": "d",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        },
+        {
+          "polname": "Users can insert their own client goals",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(auth.uid() = user_id)"
+        },
+        {
+          "polname": "Users can update their own client goals",
+          "polcmd": "w",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        },
+        {
+          "polname": "Users can view their own client goals",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "client_upload_links",
+      "count": "6",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "agency_client_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "target_folder_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "token",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "is_active",
+          "data_type": "boolean",
+          "udt_name": "bool",
+          "is_nullable": "NO",
+          "column_default": "true",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "expires_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "max_file_size_mb",
+          "data_type": "integer",
+          "udt_name": "int4",
+          "is_nullable": "NO",
+          "column_default": "200",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [
+        {
+          "constraint_name": "client_upload_links_agency_client_id_fkey",
+          "column_name": "agency_client_id",
+          "foreign_table": "agency_clients",
+          "foreign_column": "id"
+        },
+        {
+          "constraint_name": "client_upload_links_target_folder_id_fkey",
+          "column_name": "target_folder_id",
+          "foreign_table": "asset_folders",
+          "foreign_column": "id"
+        }
+      ],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Authenticated read active upload links",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "authenticated"
+          ],
+          "qual": "((is_active = true) AND ((expires_at IS NULL) OR (expires_at > now())))",
+          "check": null
+        },
+        {
+          "polname": "Owners manage their upload links",
+          "polcmd": "*",
+          "polpermissive": true,
+          "roles": [
+            "authenticated"
+          ],
+          "qual": "(user_id = auth.uid())",
+          "check": "(user_id = auth.uid())"
+        },
+        {
+          "polname": "Public read active upload links via token",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "anon"
+          ],
+          "qual": "((is_active = true) AND ((expires_at IS NULL) OR (expires_at > now())))",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "client_uploads",
+      "count": "3",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "link_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "file_name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "file_size",
+          "data_type": "bigint",
+          "udt_name": "int8",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "mime_type",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "asset_type",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "storage_path",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "status",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": "'pending'::text",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "meta_asset_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "meta_asset_url",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "folder_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "client_message",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "rejection_reason",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "uploaded_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "reviewed_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [
+        {
+          "constraint_name": "client_uploads_folder_id_fkey",
+          "column_name": "folder_id",
+          "foreign_table": "asset_folders",
+          "foreign_column": "id"
+        },
+        {
+          "constraint_name": "client_uploads_link_id_fkey",
+          "column_name": "link_id",
+          "foreign_table": "client_upload_links",
+          "foreign_column": "id"
+        }
+      ],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Anon read uploads via active link",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "anon"
+          ],
+          "qual": "(EXISTS ( SELECT 1\n   FROM client_upload_links l\n  WHERE ((l.id = client_uploads.link_id) AND (l.is_active = true) AND ((l.expires_at IS NULL) OR (l.expires_at > now())))))",
+          "check": null
+        },
+        {
+          "polname": "Owners delete their uploads",
+          "polcmd": "d",
+          "polpermissive": true,
+          "roles": [
+            "authenticated"
+          ],
+          "qual": "(user_id = auth.uid())",
+          "check": null
+        },
+        {
+          "polname": "Owners update their uploads",
+          "polcmd": "w",
+          "polpermissive": true,
+          "roles": [
+            "authenticated"
+          ],
+          "qual": "(user_id = auth.uid())",
+          "check": "(user_id = auth.uid())"
+        },
+        {
+          "polname": "Owners view their uploads",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "authenticated"
+          ],
+          "qual": "(user_id = auth.uid())",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "fb_connections",
+      "count": "6",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "workspace_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "profile_name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "access_token_encrypted",
+          "data_type": "bytea",
+          "udt_name": "bytea",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "fb_user_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "is_patriarch",
+          "data_type": "boolean",
+          "udt_name": "bool",
+          "is_nullable": "YES",
+          "column_default": "false",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "connected_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "expires_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "risk_score",
+          "data_type": "integer",
+          "udt_name": "int4",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "status",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": "'active'::text",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [
+        {
+          "constraint_name": "fb_connections_workspace_id_fkey",
+          "column_name": "workspace_id",
+          "foreign_table": "workspaces",
+          "foreign_column": "id"
+        }
+      ],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "fb_connections_delete",
+          "polcmd": "d",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(EXISTS ( SELECT 1\n   FROM workspaces\n  WHERE ((workspaces.id = fb_connections.workspace_id) AND (workspaces.owner_id = auth.uid()))))",
+          "check": null
+        },
+        {
+          "polname": "fb_connections_insert",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(EXISTS ( SELECT 1\n   FROM workspaces\n  WHERE ((workspaces.id = fb_connections.workspace_id) AND (workspaces.owner_id = auth.uid()))))"
+        },
+        {
+          "polname": "fb_connections_select",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "((EXISTS ( SELECT 1\n   FROM workspaces\n  WHERE ((workspaces.id = fb_connections.workspace_id) AND (workspaces.owner_id = auth.uid())))) OR (EXISTS ( SELECT 1\n   FROM team_members\n  WHERE ((team_members.workspace_id = fb_connections.workspace_id) AND (team_members.user_id = auth.uid()) AND (team_members.status = 'active'::text)))))",
+          "check": null
+        },
+        {
+          "polname": "fb_connections_update",
+          "polcmd": "w",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(EXISTS ( SELECT 1\n   FROM workspaces\n  WHERE ((workspaces.id = fb_connections.workspace_id) AND (workspaces.owner_id = auth.uid()))))",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "google_tokens",
+      "count": "0",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "uuid_generate_v4()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "access_token",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "refresh_token",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "customer_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "status",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": "'disconnected'::text",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "last_updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Users can delete their own google tokens",
+          "polcmd": "d",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        },
+        {
+          "polname": "Users can insert their own google tokens",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(auth.uid() = user_id)"
+        },
+        {
+          "polname": "Users can see own google tokens",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        },
+        {
+          "polname": "Users can update their own google tokens",
+          "polcmd": "w",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        },
+        {
+          "polname": "Users can view their own google tokens",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "identity_cache",
+      "count": "12",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "ad_account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "pages",
+          "data_type": "jsonb",
+          "udt_name": "jsonb",
+          "is_nullable": "YES",
+          "column_default": "'[]'::jsonb",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "instagram_accounts",
+          "data_type": "jsonb",
+          "udt_name": "jsonb",
+          "is_nullable": "YES",
+          "column_default": "'[]'::jsonb",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "cached_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Service role full access",
+          "polcmd": "*",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "((auth.jwt() ->> 'role'::text) = 'service_role'::text)",
+          "check": null
+        },
+        {
+          "polname": "Users can view own cache",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "insights",
+      "count": "12231",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "uuid_generate_v4()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "entity_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "entity_type",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "date",
+          "data_type": "date",
+          "udt_name": "date",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "spend",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "impressions",
+          "data_type": "bigint",
+          "udt_name": "int8",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "clicks",
+          "data_type": "bigint",
+          "udt_name": "int8",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "conversions",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "revenue",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "reach",
+          "data_type": "bigint",
+          "udt_name": "int8",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "frequency",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "cpm",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "ctr",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "roas",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "cpa",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "purchases",
+          "data_type": "integer",
+          "udt_name": "int4",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "leads",
+          "data_type": "integer",
+          "udt_name": "int4",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "link_clicks",
+          "data_type": "integer",
+          "udt_name": "int4",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "add_to_cart",
+          "data_type": "integer",
+          "udt_name": "int4",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "initiate_checkout",
+          "data_type": "integer",
+          "udt_name": "int4",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": false,
+        "relforcerowsecurity": false
+      },
+      "policies": []
+    },
+    {
+      "table": "meta_tokens",
+      "count": "4",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "access_token",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "account_name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "status",
+          "data_type": "USER-DEFINED",
+          "udt_name": "connection_status",
+          "is_nullable": "YES",
+          "column_default": "'connected'::connection_status",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "expires_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Users can delete their own meta tokens",
+          "polcmd": "d",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        },
+        {
+          "polname": "Users can insert their own meta tokens",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(auth.uid() = user_id)"
+        },
+        {
+          "polname": "Users can update their own meta tokens",
+          "polcmd": "w",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        },
+        {
+          "polname": "Users can view their own meta tokens",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "notification_settings",
+      "count": "1",
+      "pks": [
+        "user_id"
+      ],
+      "cols": [
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "whatsapp_number",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "whatsapp_enabled",
+          "data_type": "boolean",
+          "udt_name": "bool",
+          "is_nullable": "YES",
+          "column_default": "false",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "alert_daily_summary",
+          "data_type": "boolean",
+          "udt_name": "bool",
+          "is_nullable": "YES",
+          "column_default": "false",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "alert_weekly_report",
+          "data_type": "boolean",
+          "udt_name": "bool",
+          "is_nullable": "YES",
+          "column_default": "false",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "alert_critical_roas",
+          "data_type": "boolean",
+          "udt_name": "bool",
+          "is_nullable": "YES",
+          "column_default": "false",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "alert_budget_cap",
+          "data_type": "boolean",
+          "udt_name": "bool",
+          "is_nullable": "YES",
+          "column_default": "false",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "alert_account_status",
+          "data_type": "boolean",
+          "udt_name": "bool",
+          "is_nullable": "YES",
+          "column_default": "false",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "NO",
+          "column_default": "timezone('utc'::text, now())",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "NO",
+          "column_default": "timezone('utc'::text, now())",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Users can insert their own notification settings",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(auth.uid() = user_id)"
+        },
+        {
+          "polname": "Users can update their own notification settings",
+          "polcmd": "w",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        },
+        {
+          "polname": "Users can view their own notification settings",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "profiles",
+      "count": "28",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "username",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "full_name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "avatar_url",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "headline",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "company_name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "instagram_handle",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "phone",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "NO",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "NO",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Users can insert own profile",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(auth.uid() = id)"
+        },
+        {
+          "polname": "Users can update own profile",
+          "polcmd": "w",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = id)",
+          "check": null
+        },
+        {
+          "polname": "Users can view own profile",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = id)",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "shared_dashboards",
+      "count": "1",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "ad_account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "share_token",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "agency_name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "agency_logo",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "primary_color",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": "'#0066FF'::text",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "is_active",
+          "data_type": "boolean",
+          "udt_name": "bool",
+          "is_nullable": "YES",
+          "column_default": "true",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "expires_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "client_costs",
+          "data_type": "jsonb",
+          "udt_name": "jsonb",
+          "is_nullable": "YES",
+          "column_default": "'{\"supplier_cost_mode\": \"per_sale\", \"gateway_fee_percent\": 0, \"supplier_cost_value\": 0}'::jsonb",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Authenticated read access via share_token",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "authenticated"
+          ],
+          "qual": "((is_active = true) AND ((expires_at IS NULL) OR (expires_at > now())))",
+          "check": null
+        },
+        {
+          "polname": "Owners can manage their shared dashboards",
+          "polcmd": "*",
+          "polpermissive": true,
+          "roles": [
+            "authenticated"
+          ],
+          "qual": "(user_id = auth.uid())",
+          "check": "(user_id = auth.uid())"
+        },
+        {
+          "polname": "Public read access via share_token",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "anon"
+          ],
+          "qual": "((is_active = true) AND ((expires_at IS NULL) OR (expires_at > now())))",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "shopify_configs",
+      "count": "1",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "ad_account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "shop_domain",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "access_token",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "scopes",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "gateway_fee_percent",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "2.5",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "is_active",
+          "data_type": "boolean",
+          "udt_name": "bool",
+          "is_nullable": "YES",
+          "column_default": "true",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "last_sync_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Users can manage their own shopify configs",
+          "polcmd": "*",
+          "polpermissive": true,
+          "roles": [
+            "authenticated"
+          ],
+          "qual": "(user_id = auth.uid())",
+          "check": "(user_id = auth.uid())"
+        }
+      ]
+    },
+    {
+      "table": "shopify_daily_revenue",
+      "count": "2",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "ad_account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "date",
+          "data_type": "date",
+          "udt_name": "date",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "gross_revenue",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "total_orders",
+          "data_type": "integer",
+          "udt_name": "int4",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "product_costs",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "net_revenue",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "YES",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Service role can manage shopify revenue",
+          "polcmd": "*",
+          "polpermissive": true,
+          "roles": [
+            "service_role"
+          ],
+          "qual": "true",
+          "check": "true"
+        },
+        {
+          "polname": "Users can view their shopify revenue",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "authenticated"
+          ],
+          "qual": "(ad_account_id IN ( SELECT shopify_configs.ad_account_id\n   FROM shopify_configs\n  WHERE (shopify_configs.user_id = auth.uid())))",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "system_audit_logs",
+      "count": "0",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "workspace_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "connection_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "action_type",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "api_response",
+          "data_type": "jsonb",
+          "udt_name": "jsonb",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "severity",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": "'info'::text",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "timestamp",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [
+        {
+          "constraint_name": "system_audit_logs_connection_id_fkey",
+          "column_name": "connection_id",
+          "foreign_table": "fb_connections",
+          "foreign_column": "id"
+        },
+        {
+          "constraint_name": "system_audit_logs_workspace_id_fkey",
+          "column_name": "workspace_id",
+          "foreign_table": "workspaces",
+          "foreign_column": "id"
+        }
+      ],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Owners insert audit logs",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(workspace_id IN ( SELECT workspaces.id\n   FROM workspaces\n  WHERE (workspaces.owner_id = auth.uid())))"
+        },
+        {
+          "polname": "View workspace audit logs",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "((workspace_id IN ( SELECT workspaces.id\n   FROM workspaces\n  WHERE (workspaces.owner_id = auth.uid()))) OR (workspace_id IN ( SELECT team_members.workspace_id\n   FROM team_members\n  WHERE ((team_members.user_id = auth.uid()) AND (team_members.status = 'active'::text)))))",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "targeting_cache",
+      "count": "0",
+      "pks": [
+        "term",
+        "type"
+      ],
+      "cols": [
+        {
+          "column_name": "term",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "type",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "data",
+          "data_type": "jsonb",
+          "udt_name": "jsonb",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "NO",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Authenticated users can insert targeting_cache",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "authenticated"
+          ],
+          "qual": null,
+          "check": "true"
+        },
+        {
+          "polname": "Authenticated users can read targeting_cache",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "authenticated"
+          ],
+          "qual": "true",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "team_members",
+      "count": "0",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "workspace_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "email",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "role",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": "'operator'::text",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "status",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": "'invited'::text",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "invited_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "joined_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [
+        {
+          "constraint_name": "team_members_workspace_id_fkey",
+          "column_name": "workspace_id",
+          "foreign_table": "workspaces",
+          "foreign_column": "id"
+        }
+      ],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "team_members_delete",
+          "polcmd": "d",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(EXISTS ( SELECT 1\n   FROM workspaces\n  WHERE ((workspaces.id = team_members.workspace_id) AND (workspaces.owner_id = auth.uid()))))",
+          "check": null
+        },
+        {
+          "polname": "team_members_insert",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(EXISTS ( SELECT 1\n   FROM workspaces\n  WHERE ((workspaces.id = team_members.workspace_id) AND (workspaces.owner_id = auth.uid()))))"
+        },
+        {
+          "polname": "team_members_select",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "((user_id = auth.uid()) OR (EXISTS ( SELECT 1\n   FROM workspaces\n  WHERE ((workspaces.id = team_members.workspace_id) AND (workspaces.owner_id = auth.uid())))))",
+          "check": null
+        },
+        {
+          "polname": "team_members_update",
+          "polcmd": "w",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(EXISTS ( SELECT 1\n   FROM workspaces\n  WHERE ((workspaces.id = team_members.workspace_id) AND (workspaces.owner_id = auth.uid()))))",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "user_authority",
+      "count": "28",
+      "pks": [
+        "user_id"
+      ],
+      "cols": [
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "lifetime_spend",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "NO",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "highest_roas",
+          "data_type": "numeric",
+          "udt_name": "numeric",
+          "is_nullable": "NO",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "current_streak",
+          "data_type": "integer",
+          "udt_name": "int4",
+          "is_nullable": "NO",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "last_activity_date",
+          "data_type": "date",
+          "udt_name": "date",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "NO",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "NO",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Authenticated users can view all authority",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "authenticated"
+          ],
+          "qual": "true",
+          "check": null
+        },
+        {
+          "polname": "Users can insert their own authority",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(auth.uid() = user_id)"
+        },
+        {
+          "polname": "Users can update their own authority",
+          "polcmd": "w",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "user_column_presets",
+      "count": "0",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "user_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "account_id",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "YES",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "columns",
+          "data_type": "ARRAY",
+          "udt_name": "_text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "is_default",
+          "data_type": "boolean",
+          "udt_name": "bool",
+          "is_nullable": "YES",
+          "column_default": "false",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [
+        {
+          "constraint_name": "user_column_presets_account_id_fkey",
+          "column_name": "account_id",
+          "foreign_table": "ad_accounts",
+          "foreign_column": "id"
+        }
+      ],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "Users can create their own presets",
+          "polcmd": "a",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": null,
+          "check": "(auth.uid() = user_id)"
+        },
+        {
+          "polname": "Users can delete their own presets",
+          "polcmd": "d",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        },
+        {
+          "polname": "Users can update their own presets",
+          "polcmd": "w",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        },
+        {
+          "polname": "Users can view their own presets",
+          "polcmd": "r",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(auth.uid() = user_id)",
+          "check": null
+        }
+      ]
+    },
+    {
+      "table": "workspaces",
+      "count": "9",
+      "pks": [
+        "id"
+      ],
+      "cols": [
+        {
+          "column_name": "id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": "gen_random_uuid()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "name",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "owner_id",
+          "data_type": "uuid",
+          "udt_name": "uuid",
+          "is_nullable": "NO",
+          "column_default": null,
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "plan_type",
+          "data_type": "text",
+          "udt_name": "text",
+          "is_nullable": "NO",
+          "column_default": "'owner'::text",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "max_fb_profiles",
+          "data_type": "integer",
+          "udt_name": "int4",
+          "is_nullable": "NO",
+          "column_default": "2",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "max_members",
+          "data_type": "integer",
+          "udt_name": "int4",
+          "is_nullable": "NO",
+          "column_default": "0",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "created_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        },
+        {
+          "column_name": "updated_at",
+          "data_type": "timestamp with time zone",
+          "udt_name": "timestamptz",
+          "is_nullable": "YES",
+          "column_default": "now()",
+          "is_identity": "NO",
+          "identity_generation": null
+        }
+      ],
+      "fks": [],
+      "rls": {
+        "relrowsecurity": true,
+        "relforcerowsecurity": false
+      },
+      "policies": [
+        {
+          "polname": "workspaces_owner_all",
+          "polcmd": "*",
+          "polpermissive": true,
+          "roles": [
+            "-"
+          ],
+          "qual": "(owner_id = auth.uid())",
+          "check": "(owner_id = auth.uid())"
+        }
+      ]
+    }
+  ]
+}

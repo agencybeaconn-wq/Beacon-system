@@ -1,0 +1,414 @@
+{% comment %}
+  Renders product variant-picker
+
+  Accepts:
+  - product: {Object} product object.
+  - block: {Object} passing the block information.
+  - product_form_id: {String} Id of the product form to which the variant picker is associated.
+  Usage:
+  {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+{% endcomment %}
+{%- unless product.has_only_default_variant -%}
+  <variant-selects
+    id="variant-selects-{{ section.id }}"
+    data-section="{{ section.id }}"
+    {{ block.shopify_attributes }}
+  >
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        assign swatch_count = option.values | map: 'swatch' | compact | size
+        assign picker_type = block.settings.picker_type
+
+        if swatch_count > 0 and block.settings.swatch_shape != 'none'
+          if block.settings.picker_type == 'dropdown'
+            assign picker_type = 'swatch_dropdown'
+          else
+            assign picker_type = 'swatch'
+          endif
+        endif
+      -%}
+      {%- if picker_type == 'swatch' -%}
+        <fieldset class="js product-form__input product-form__input--swatch">
+          <legend class="form__label">
+            {{ option.name }}:
+            <span data-selected-value>
+              {{- option.selected_value -}}
+            </span>
+          </legend>
+          {% render 'product-variant-options',
+            product: product,
+            option: option,
+            block: block,
+            picker_type: picker_type
+          %}
+        </fieldset>
+      {%- elsif picker_type == 'button' -%}
+        <fieldset class="js product-form__input product-form__input--pill">
+          <legend class="form__label" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <span>{{ option.name }}</span>
+            {%- if option.name == 'Tamanho' or option.name == 'Size' -%}
+               <button 
+                id="abrirTabela-global"
+                type="button"
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  background: none;
+                  border: none;
+                  padding: 0;
+                  font-size: 1.5rem;
+                  font-weight: 400;
+                  gap: 0.6rem;
+                  cursor: pointer;
+                  color: #000000;
+                  text-decoration: underline;
+                  text-underline-offset: 0.3rem;
+                "
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1707 1707" width="20" height="20" style="flex-shrink: 0;">
+                  <path fill="currentColor" d="M80 857c0-25 20-46 45-46h1456c25 0 46 21 46 46v397c0 25-21 45-46 45h-85v-117c0-22-18-40-40-40s-40 18-40 40v117h-121v-211c0-23-18-40-40-40s-40 17-40 40v211h-121v-117c0-22-18-40-40-40s-40 18-40 40v117h-121v-211c0-23-18-40-40-40s-40 17-40 40v211h-121v-117c0-22-17-40-40-40-22 0-40 18-40 40v117h-120v-211c0-23-18-40-40-40-23 0-40 17-40 40v211h-121v-117c0-22-18-40-40-40s-40 18-40 40v117h-86c-25 0-45-21-45-45zm259-213c19 12 43 7 55-12 12-18 7-43-12-55l-74-48h1091l-75 48c-18 12-23 37-12 55 12 19 37 24 56 12l186-120c14-7 21-21 21-36-1-14-8-27-21-34l-186-120c-19-12-44-6-56 12-11 19-6 43 12 55l75 48h-1091l74-48c19-12 24-36 12-55-12-18-36-24-55-12l-186 120c-13 7-20 20-21 34 0 15 7 28 20 36zm1368 610v-397c0-69-57-126-126-126h-1456c-69 0-125 57-125 126v397c0 69 56 125 125 125h1456c69 0 126-57 126-125z"/>
+                </svg>
+                <span>Tabela de medidas</span>
+              </button>
+            {%- endif -%}
+          </legend>
+          {% render 'product-variant-options',
+            product: product,
+            option: option,
+            block: block,
+            picker_type: picker_type
+          %}
+        </fieldset>
+      {%- else -%}
+        <div class="product-form__input product-form__input--dropdown">
+          <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
+            {{ option.name }}
+          </label>
+          <div class="select">
+            {%- if picker_type == 'swatch_dropdown' -%}
+              <span
+                data-selected-value
+                class="dropdown-swatch"
+              >
+                {% render 'swatch', swatch: option.selected_value.swatch, shape: block.settings.swatch_shape %}
+              </span>
+            {%- endif -%}
+            <select
+              id="Option-{{ section.id }}-{{ forloop.index0 }}"
+              class="select__select"
+              name="options[{{ option.name | escape }}]"
+              form="{{ product_form_id }}"
+            >
+              {% render 'product-variant-options',
+                product: product,
+                option: option,
+                block: block,
+                picker_type: picker_type
+              %}
+            </select>
+            <span class="svg-wrapper">
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+
+    <script type="application/json" data-selected-variant>
+      {{ product.selected_or_first_available_variant | json }}
+    </script>
+
+    {%- comment -%} Customization drawer REMOVIDO 2026-05-14 — substituído por inline (padrão Voltz Club) {%- endcomment -%}
+  </variant-selects>
+{%- endunless -%}
+
+<!-- Campos e Aviso (escondidos por padrão) -->
+<div id="aparecer" class="removeContainerPersonalizar">
+  <div class="personalizar-form">
+    <label for="campo-personalizacao" class="align-label-campo">
+      <ion-icon name="person" class="icon-personalizacao"></ion-icon>
+      <span style="color: #000;">Nome:</span>
+      <span class="aviso">Até 20 caracteres</span>
+    </label>
+    <input
+      type="text"
+      id="campo-personalizacao"
+      name="properties[Nome]" form="{{ product_form_id }}"
+      placeholder="Ex: João"
+      maxlength="20"
+      inputmode="text"
+      autocomplete="off"
+      pattern="[A-Za-zÀ-ÿ ]*"
+    />
+
+    <label for="personalizar-numero" class="align-label-campo" style="margin-top: 8px">
+      <ion-icon name="football" class="icon-personalizacao" style="font-size: 20px;"></ion-icon>
+      <span style="color: #000;">Número:</span>
+      <span class="aviso">Máximo 2 caracteres</span>
+    </label>
+    <input
+      type="text"
+      id="personalizar-numero"
+      name="properties[Número]" form="{{ product_form_id }}"
+      placeholder="Ex: 10"
+      maxlength="2"
+      inputmode="numeric"
+      autocomplete="off"
+      pattern="[0-9]*"
+    />
+  </div>
+</div>
+
+{% comment %} PATCHES-OCULTOS-LOJA-SEM-PATCHES (2026-05-14): loja sem produtos patch criados; manter código pronto, descomentar quando produtos patch existirem
+<!-- Patch System -->
+{% render 'patch-styles' %}
+<div class="patch-section-wrapper" style="display: none;" data-patch-debug="wrapper-exists" data-patch-position="inside-variant-picker">
+  <div class="patch-section-header">
+    Adicionar Patches
+  </div>
+  <div class="patch-section-toggle">
+    <span class="patch-section-description">Escolha seu patch</span>
+    <span class="patch-arrow-down">▼</span>
+    <span class="patch-arrow-up" style="display: none;">▲</span>
+  </div>
+  <div id="patch-products-selector" class="patch-products-selector" style="display: none;">
+    <div class="patch-products-loading">Carregando patches...</div>
+    <div id="patch-products-list"></div>
+  </div>
+</div>
+<div id="patch-unavailable" style="display: none; padding: 14px 16px; background: #f8f8f8; border: 1px solid #e0e0e0; border-radius: 12px; margin-top: 8px; color: #666; font-size: 13px; text-align: center;">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 4px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+  Esta camisa não possui patches disponíveis no momento.
+</div>
+{% render 'patch-script', product: product, product_form_id: product_form_id %}
+{% endcomment %}
+
+<style>
+/* Ocultar por padrão */
+.removeContainerPersonalizar {
+  display: none;
+}
+
+/* Container principal */
+#aparecer {
+  margin-top: 10px;
+  border-radius: 0;
+  padding: 0;
+  max-width: 100%;
+  width: 100%;
+  color: #252525;
+  background: transparent;
+}
+
+/* Desktop */
+@media screen and (min-width: 720px) {
+  #aparecer {
+    margin-left: 0;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 720px) {
+  #aparecer {
+    width: 100%;
+  }
+}
+
+/* Labels */
+.align-label-campo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+/* Inputs */
+#campo-personalizacao,
+#personalizar-numero {
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 40px;
+  width: 100%;
+  height: 42px;
+  padding: 10px 18px;
+  font-size: 14px;
+  color: #252525;
+  margin-bottom: 12px;
+}
+
+input::placeholder {
+  color: #adb4c5;
+}
+
+/* Aviso de limite */
+.aviso {
+  color: #878787;
+  font-weight: normal;
+  margin-left: 6px;
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+/* Ícones */
+.icon-personalizacao {
+  font-size: 18px;
+  margin-right: 6px;
+  color: #000;
+}
+</style>
+
+<!-- Ionicons -->
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+<script>
+  (function() {
+    'use strict';
+
+    function isPersonalizarLegend(legend) {
+      if (!legend) return false;
+      const txt = legend.textContent.toLowerCase();
+      // Match option Personalizar / Customize (mas NÃO "personalização")
+      return /\b(personalizar|customize)\b/.test(txt);
+    }
+
+    function isPersonalizarValue(val) {
+      if (!val) return false;
+      const v = val.toLowerCase().trim();
+      if (v.startsWith('não') || v.startsWith('nao') || v === 'no' || v === 'none') return false;
+      return v.includes('personalizar') || v.includes('customize') || v === 'sim' || v === 'yes';
+    }
+
+    function syncInlineCustomizationState() {
+      const fieldsets = document.querySelectorAll('.product-form__input--pill, .product-form__input--swatch');
+      let isPersonalized = false;
+
+      fieldsets.forEach(fs => {
+        const legend = fs.querySelector('.form__label');
+        if (!isPersonalizarLegend(legend)) return;
+
+        // Radio (pill) ou Select (dropdown)
+        const checkedRadio = fs.querySelector('input[type="radio"]:checked');
+        if (checkedRadio && isPersonalizarValue(checkedRadio.value)) {
+          isPersonalized = true;
+        }
+        const select = fs.querySelector('select');
+        if (select && isPersonalizarValue(select.value)) {
+          isPersonalized = true;
+        }
+      });
+
+      // Também checar dropdown fora do fieldset (caso picker_type seja dropdown)
+      document.querySelectorAll('.product-form__input--dropdown').forEach(d => {
+        const label = d.querySelector('.form__label');
+        if (!isPersonalizarLegend(label)) return;
+        const select = d.querySelector('select');
+        if (select && isPersonalizarValue(select.value)) {
+          isPersonalized = true;
+        }
+      });
+
+      const aparecer = document.getElementById('aparecer');
+      const patchWrapper = document.querySelector('.patch-section-wrapper');
+
+      if (aparecer) {
+        if (isPersonalized) {
+          aparecer.classList.remove('removeContainerPersonalizar');
+        } else {
+          aparecer.classList.add('removeContainerPersonalizar');
+          // Limpa inputs ao voltar pra Não Personalizar
+          const nameIn = document.getElementById('campo-personalizacao');
+          const numIn = document.getElementById('personalizar-numero');
+          if (nameIn) nameIn.value = '';
+          if (numIn) numIn.value = '';
+        }
+      }
+
+      const patchUnavailable = document.getElementById('patch-unavailable');
+      if (patchWrapper) {
+        patchWrapper.style.display = isPersonalized ? 'block' : 'none';
+      }
+      if (patchUnavailable && !isPersonalized) {
+        patchUnavailable.style.display = 'none';
+      }
+
+      // Se acabou de virar Personalized: aguarda 2s, checa se patch-products-list tem cards
+      if (isPersonalized) {
+        clearTimeout(window._patchAvailCheckTimer);
+        window._patchAvailCheckTimer = setTimeout(function() {
+          const list = document.getElementById('patch-products-list');
+          const loading = document.querySelector('.patch-products-loading');
+          const hasCards = list && list.children.length > 0;
+          if (!hasCards) {
+            // Esconde wrapper (header "Adicionar Patches"), mostra mensagem
+            if (patchWrapper) patchWrapper.style.display = 'none';
+            if (patchUnavailable) patchUnavailable.style.display = 'block';
+          } else {
+            if (patchUnavailable) patchUnavailable.style.display = 'none';
+            if (loading) loading.style.display = 'none';
+          }
+        }, 2000);
+      }
+    }
+
+    // Event delegation — sobrevive re-renders da Dawn (pitfall #16)
+    document.addEventListener('change', function(e) {
+      const t = e.target;
+      if (!t || !t.matches) return;
+      if (t.matches('input[type="radio"]') || t.matches('select')) {
+        // Só processa se o elemento tá num fieldset/wrapper de Personalizar
+        const wrapper = t.closest('.product-form__input--pill, .product-form__input--swatch, .product-form__input--dropdown');
+        if (!wrapper) return;
+        const legend = wrapper.querySelector('.form__label');
+        if (!isPersonalizarLegend(legend)) return;
+        syncInlineCustomizationState();
+      }
+    });
+
+    // Sync inicial + após Dawn re-renderizar variant-selects
+    function initInlineCustomization() {
+      syncInlineCustomizationState();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initInlineCustomization);
+    } else {
+      initInlineCustomization();
+    }
+
+    document.addEventListener('product-info:loaded', function() {
+      setTimeout(initInlineCustomization, 100);
+    });
+  })();
+</script>
+
+<script>
+  (function() {
+    function initInputMasks() {
+      if (window._maskInit) return;
+      window._maskInit = true;
+      document.addEventListener('input', function(e) {
+        const t = e.target;
+        if (!t || !t.id) return;
+        if (t.id === 'campo-personalizacao') {
+          // Nome: só letras (com acentos) e espaço
+          const cleaned = t.value.replace(/[^A-Za-zÀ-ÿ ]/g, '').toUpperCase();
+          if (cleaned !== t.value) t.value = cleaned;
+        } else if (t.id === 'personalizar-numero') {
+          // Número: só dígitos
+          const cleaned = t.value.replace(/\D/g, '');
+          if (cleaned !== t.value) t.value = cleaned;
+        }
+      });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initInputMasks);
+    } else {
+      initInputMasks();
+    }
+  })();
+</script>
+

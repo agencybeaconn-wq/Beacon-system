@@ -1,0 +1,44 @@
+Plano: 621 produtos pra ajustar
+
+[0/621] Agasalho de Viagem Ajax Masculino...
+
+[50/621] Camisa Arsenal 2025/26 II Jogador...
+
+[100/621] Camisa Espanha 2026 I Manga Longa Copa do Mundo...
+
+[150/621] Camisa Feminina Colômbia 2026/27 II...
+
+[200/621] Camisa Feminina Holanda 2026/27 II...
+
+[250/621] Camisa Feminina Real Madrid 2024/25 II Torcedor...
+
+[300/621] Camisa Grêmio 2024/25 I Versão Jogador...
+
+[350/621] Camisa Mexico 2026 Manga Longa I Copa do Mundo...
+
+[400/621] Camisa Retrô Brasil 1993/1994 Torcedor...
+
+[450/621] Camisa Retrô Manchester United 2007/08 I...
+
+[500/621] Camisa Retrô Seleção Brasileira Feminina 2019 III...
+
+[550/621] Conjunto Treino Flamengo 2025/26...
+
+[600/621] Shorts Espanha 2026 I Copa do Mundo...
+
+=== RESULTADO ===
+Renames aplicados: 2
+Variants criadas: 1422
+Erros: 82
+
+Primeiros 10 erros:
+  gid://shopify/Product/9027126526194: bulkCreate 4GG → {"field":["variants","0"],"message":"You need to add option values for Personalizar Camisa","code":"NEED_TO_ADD_OPTION_VALUES"}
+  gid://shopify/Product/9027126493426: bulkCreate 4GG → {"field":["variants","0"],"message":"You need to add option values for Personalizar Camisa","code":"NEED_TO_ADD_OPTION_VALUES"}
+  gid://shopify/Product/9027126558962: bulkCreate 4GG → {"field":["variants","0"],"message":"You need to add option values for Personalizar Camisa","code":"NEED_TO_ADD_OPTION_VALUES"}
+  gid://shopify/Product/9027127869682: bulkCreate 3GG,4GG → {"field":["variants","0"],"message":"You need to add option values for Personalizar Camisa (Nome e Número)","code":"NEED_TO_ADD_OPTION_VALUES"}
+  gid://shopify/Product/9027126296818: bulkCreate 4GG → {"field":["variants","0"],"message":"You need to add option values for Personalizar Camisa","code":"NEED_TO_ADD_OPTION_VALUES"}
+  gid://shopify/Product/9027122725106: bulkCreate 3GG,4GG → {"field":["variants","0"],"message":"You need to add option values for Personalizar Camisa (Nome e Número)","code":"NEED_TO_ADD_OPTION_VALUES"}
+  gid://shopify/Product/9027122790642: bulkCreate 3GG,4GG → {"field":["variants","0"],"message":"You need to add option values for Personalizar Camisa (Nome e Número)","code":"NEED_TO_ADD_OPTION_VALUES"}
+  gid://shopify/Product/9027127214322: bulkCreate 3GG,4GG → {"field":["variants","0"],"message":"You need to add option values for Personalizar Camisa (Nome e Número)","code":"NEED_TO_ADD_OPTION_VALUES"}
+  gid://shopify/Product/9027123446002: bulkCreate 3GG,4GG → {"field":["variants","0"],"message":"You need to add option values for Personalizar Camisa (Nome e Número)","code":"NEED_TO_ADD_OPTION_VALUES"}
+  gid://shopify/Product/9027122495730: bulkCreate 3GG,4GG → {"field":["variants","0"],"message":"You need to add option values for Personalizar Camisa (Nome e Número)","code":"NEED_TO_ADD_OPTION_VALUES"}

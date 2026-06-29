@@ -1,0 +1,18 @@
+{%- comment -%}
+  clone-theme — tokens (paleta + fontes Google + preconnect) sobre Dawn.
+  Renderize antes de </head>. Otimizado pra carga paralela e LCP rápido.
+
+  GERADO PELA SKILL: cabeçalho <link> de fontes é substituido por clone-assemble.mjs
+  com base nas fontes detectadas em _design/tokens.json.
+{%- endcomment -%}
+{%- comment -%} Preconnect aos CDNs críticos (DNS + TLS handshake antecipados) {%- endcomment -%}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+<link rel="dns-prefetch" href="https://cdn.shopify.com">
+
+{%- comment -%} Fontes Google consolidadas (não @import — bloqueia render) — substituído pela skill {%- endcomment -%}
+<!--GOOGLE_FONTS_LINK-->
+
+{%- comment -%} CSS principal do tema com preload (high priority) {%- endcomment -%}
+{{ 'clone-base.css' | asset_url | stylesheet_tag: preload: true }}

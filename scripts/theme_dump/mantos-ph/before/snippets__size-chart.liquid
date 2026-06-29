@@ -1,0 +1,486 @@
+
+
+<!-- Painel lateral da Tabela de Medidas -->
+<div id="sizePanelOverlay-{{ section.id }}" class="size-drawer-overlay">
+  <div class="size-drawer" id="SizeDrawer" role="dialog" aria-modal="true" aria-label="Tabela de Medidas" tabindex="-1">
+    <div class="drawer__inner">
+      <div class="drawer__header">
+        <h2 class="drawer__heading">TABELA DE MEDIDAS</h2>
+        <button class="drawer__close" aria-label="Fechar">
+          <span class="svg-wrapper">
+            {{- 'icon-close.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      </div>
+
+      <div class="drawer__contents size-panel-content">
+        <!-- AVISO ESPECÍFICO -->
+          <div class="size-notice">
+            <p><strong>Versão Torcedor e Feminina:</strong> indicamos escolher <strong>1 tamanho acima</strong> do habitual.</p>
+            <p><strong>Versão Jogador (Authentic):</strong> é extremamente justa. Recomendamos <strong>1 ou at�� 2 tamanhos acima</strong> do que você costuma usar.</p>
+          </div>
+
+          <!-- COLAPS��VEIS -->
+          <div class="collapsible-container">
+
+            <!-- Masculina Torcedor -->
+            <div class="collapsible-field">
+              <button class="field-header" data-target="masculinas">
+                <span class="field-header-text">Camisas Masculinas</span>
+                <span class="field-header-arrow">
+                  <span class="svg-wrapper">
+                    {{- 'icon-caret.svg' | inline_asset_content -}}
+                  </span>
+                </span>
+              </button>
+              <div class="field-content" id="masculinas">
+                <div class="table-scroll-wrapper">
+                  <table class="size-table">
+                    <thead>
+                      <tr><th>Medida (cm)</th><th>P</th><th>M</th><th>G</th><th>GG</th><th>2GG</th><th>3GG</th><th>4GG</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>Comprimento</td><td>67–69</td><td>69–71</td><td>71–73</td><td>73–76</td><td>76–79</td><td>79–81</td><td>81–83</td></tr>
+                      <tr><td>Largura (peito)</td><td>53–55</td><td>55–57</td><td>57–58</td><td>58–60</td><td>60–62</td><td>62–64</td><td>64–65</td></tr>
+                      <tr><td>Altura Recomendada (cm)</td><td>162–170</td><td>170–176</td><td>176–182</td><td>182–190</td><td>190–195</td><td>192–197</td><td>197–200</td></tr>
+                      <tr><td>Peso Recomendado (kg)</td><td>50–62</td><td>62–78</td><td>78–83</td><td>83–90</td><td>90–97</td><td>97–104</td><td>104–110</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Feminina -->
+            <div class="collapsible-field">
+              <button class="field-header" data-target="femininas">
+                <span class="field-header-text">Camisas Femininas</span>
+                <span class="field-header-arrow">
+                  <span class="svg-wrapper">
+                    {{- 'icon-caret.svg' | inline_asset_content -}}
+                  </span>
+                </span>
+              </button>
+              <div class="field-content" id="femininas">
+                <div class="table-scroll-wrapper">
+                  <table class="size-table">
+                    <thead><tr><th>Medida (cm)</th><th>P</th><th>M</th><th>G</th><th>GG</th></tr></thead>
+                    <tbody>
+                      <tr><td>Comprimento</td><td>61–63</td><td>63–66</td><td>66–69</td><td>69–71</td></tr>
+                      <tr><td>Largura (peito)</td><td>40–41</td><td>41–44</td><td>44–47</td><td>47–50</td></tr>
+                      <tr><td>Altura Recomendada (cm)</td><td>150–160</td><td>160–165</td><td>165–170</td><td>170–175</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Jogador -->
+            <div class="collapsible-field">
+              <button class="field-header" data-target="jogador">
+                <span class="field-header-text">Camisas Versão Jogador (Authentic)</span>
+                <span class="field-header-arrow">
+                  <span class="svg-wrapper">
+                    {{- 'icon-caret.svg' | inline_asset_content -}}
+                  </span>
+                </span>
+              </button>
+              <div class="field-content" id="jogador">
+                <div class="table-scroll-wrapper">
+                  <table class="size-table">
+                    <thead><tr><th>Medida (cm)</th><th>P</th><th>M</th><th>G</th><th>GG</th><th>2GG</th><th>3GG</th></tr></thead>
+                    <tbody>
+                      <tr><td>Comprimento</td><td>67–69</td><td>69–71</td><td>71–73</td><td>73–76</td><td>76–78</td><td>78–79</td></tr>
+                      <tr><td>Largura (peito)</td><td>49–51</td><td>51–53</td><td>53–55</td><td>55–57</td><td>57–60</td><td>60–63</td></tr>
+                      <tr><td>Altura Recomendada (cm)</td><td>162–170</td><td>170–175</td><td>175–180</td><td>180–185</td><td>185–190</td><td>190–195</td></tr>
+                      <tr><td>Peso Recomendado (kg)</td><td>50–62</td><td>62–75</td><td>75–80</td><td>80–85</td><td>85–90</td><td>90–95</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Infantil -->
+            <div class="collapsible-field">
+              <button class="field-header" data-target="infantis">
+                <span class="field-header-text">Camisas Infantis</span>
+                <span class="field-header-arrow">
+                  <span class="svg-wrapper">
+                    {{- 'icon-caret.svg' | inline_asset_content -}}
+                  </span>
+                </span>
+              </button>
+              <div class="field-content" id="infantis">
+                <div class="table-scroll-wrapper">
+                  <table class="size-table">
+                    <thead><tr><th>Medida (cm)</th><th>16</th><th>18</th><th>20</th><th>22</th><th>24</th><th>26</th><th>28</th></tr></thead>
+                    <tbody>
+                      <tr><td>Idade</td><td>3–4</td><td>4–5</td><td>5–6</td><td>7–8</td><td>8–9</td><td>10–11</td><td>12–14</td></tr>
+                      <tr><td>Altura (cm)</td><td>95–105</td><td>105–110</td><td>115–125</td><td>125–135</td><td>135–145</td><td>145–155</td><td>155–160</td></tr>
+                      <tr><td>Comprimento camisa (cm)</td><td>44</td><td>47</td><td>50</td><td>53</td><td>56</td><td>59</td><td>62</td></tr>
+                      <tr><td>Medida peito criança (cm)</td><td>70</td><td>74</td><td>78</td><td>82</td><td>86</td><td>90</td><td>94</td></tr>
+                      <tr><td>Comprimento short (cm)</td><td>32</td><td>36</td><td>36</td><td>38</td><td>39</td><td>40</td><td>43</td></tr>
+                      <tr><td>Cintura short (cm)</td><td>40–74</td><td>42–78</td><td>44–82</td><td>46–84</td><td>48–88</td><td>50–94</td><td>52–100</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Guia de medidas -->
+          <div class="measurement-guide">
+            <h3>Como tirar suas medidas:</h3>
+            <p>Compare com uma camisa que você já tenha. Meça a largura de axila a axila (peito) e o comprimento da gola at�� a barra.</p>
+            <img src="https://i.imgur.com/PjGrIFi.png" alt="Guia de medidas" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ============================================
+   DRAWER & OVERLAY (Standardized)
+   ============================================ */
+.size-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 2147483640;
+  background: rgba(var(--color-foreground), 0.5); /* Theme standard opacity */
+  transition: opacity var(--duration-default) ease, visibility var(--duration-default) ease;
+  opacity: 0;
+}
+
+.size-drawer-overlay.active {
+  visibility: visible;
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.size-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 100vw;
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none; /* Let overlay catch backdrop clicks */
+}
+
+.size-drawer .drawer__inner {
+  height: 100%;
+  width: 100vw;
+  max-width: 100vw;
+  background: #ffffff !important;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform var(--duration-default) ease;
+  pointer-events: auto;
+}
+
+@media screen and (min-width: 750px) {
+  .size-drawer .drawer__inner {
+    width: 55rem; /* Matches Cart Drawer width */
+    max-width: 55rem;
+  }
+}
+
+.size-drawer-overlay.active .drawer__inner {
+  transform: translateX(0);
+}
+
+.size-drawer .drawer__header {
+  position: relative;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff !important;
+  color: #000000 !important;
+  z-index: 2;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: none !important;
+}
+
+
+.size-drawer .drawer__heading {
+  margin: 0;
+  font-family: var(--font-heading-family); /* Match product title font */
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  color: #000000 !important;
+}
+
+.size-drawer .drawer__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  min-width: 4.4rem;
+  min-height: 4.4rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 1rem;
+  color: #000000 !important;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.drawer__close svg {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.size-drawer .drawer__contents {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 2rem 1.5rem;
+  background: #fff;
+}
+
+/* ============================================
+   CONTENT STYLES
+   ============================================ */
+
+.size-notice {
+  background-color: #fff5f5;
+  border: 1px solid #ffebeb;
+  border-radius: 12px;
+  padding: 2rem; /* Increased padding */
+  margin-bottom: 2rem;
+  font-size: 1.4rem; /* Increased font size */
+  line-height: 1.6;
+  color: #8b4d4d;
+}
+
+.size-notice p { margin: 0 0 1rem 0; }
+.size-notice p:last-child { margin-bottom: 0; }
+.size-notice strong { color: #6b2d2d; font-weight: 700; }
+
+.collapsible-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.collapsible-field {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.field-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.6rem 2rem; /* Increased padding */
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-heading-family); /* Match product title font */
+  font-size: 1.8rem; /* Checked against user request */
+  font-weight: 800; /* Thick weight */
+  color: #1a1a1a;
+  text-align: left;
+  transition: background 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+}
+
+.field-header:hover { background: #fafafa; }
+
+.field-header-arrow {
+  transition: transform 0.3s ease;
+  line-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #737373;
+}
+
+.field-header-arrow .svg-wrapper {
+  width: 0.8rem;
+  height: 0.8rem;
+  display: flex;
+}
+
+.field-header.expanded .field-header-arrow { transform: rotate(180deg); }
+
+.field-content {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease-in-out; /* Smooth animation */
+}
+
+.field-content.expanded {
+  padding: 1.5rem 1.6rem 2rem;
+  opacity: 1;
+  max-height: none !important;
+}
+
+.table-scroll-wrapper {
+  width: 100%;
+  overflow-x: auto !important; /* Force scroll */
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
+}
+
+.size-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.2rem;
+  border: none;
+  /* Removed border-radius/overflow here to avoid double-clipping issues */
+}
+
+.size-table th, .size-table td {
+  padding: 1rem;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  white-space: nowrap;
+}
+
+.size-table th { background: #f9f9f9; font-weight: 600; }
+.size-table td:first-child { background: #f9f9f9; font-weight: 500; text-align: left; }
+
+.measurement-guide {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.measurement-guide h3 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.measurement-guide img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+</style>
+
+<script>
+(function () {
+  const STATE = { initialized: false };
+
+  function boot() {
+    if (STATE.initialized) return;
+    STATE.initialized = true;
+
+    /* == Selectors must match the new HTML structure == */
+    const openBtn = document.getElementById('abrirTabela-{{ section.id }}');
+    const overlayId = 'sizePanelOverlay-{{ section.id }}';
+    const overlay = document.getElementById(overlayId);
+    const closeBtn = overlay?.querySelector('.drawer__close');
+    const inner    = overlay?.querySelector('.drawer__inner');
+
+    // Move overlay to body to ensure correct stacking
+    if (overlay && overlay.parentNode !== document.body) {
+      // Check if an overlay with this ID already exists in body and remove it (cleanup old renders)
+      const existingOverlay = document.body.querySelector(`#${overlayId}`);
+      if (existingOverlay && existingOverlay !== overlay) {
+          existingOverlay.remove();
+      }
+      document.body.appendChild(overlay);
+    }
+
+    if (!openBtn || !overlay) return;
+
+    function openPanel() {
+      overlay.classList.add('active'); // CSS handles display & opacity
+      document.body.style.overflow = 'hidden';
+      // Trigger update/reflow if needed, though CSS transitions handle it
+    }
+
+    function closePanel() {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+      // Wait for transition if needed, CSS transition is on opacity
+    }
+
+    // --- Event Listeners ---
+    openBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openPanel();
+    });
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        closePanel();
+      });
+    }
+
+    // Close on click outside (overlay click)
+    overlay.addEventListener('click', (e) => {
+      // If clicking exactly on the overlay (backdrop), close.
+      // The inner drawer stops propagation implicitly or checks target.
+      if (e.target === overlay) {
+        closePanel();
+      }
+    });
+
+    // Close on ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('active')) {
+        closePanel();
+      }
+    });
+
+    // --- Collapsibles Logic (Restored) ---
+    function toggleField(fieldId) {
+      const headerBtn = overlay.querySelector(`[data-target="${CSS.escape(fieldId)}"]`);
+      const content   = overlay.querySelector('#' + CSS.escape(fieldId));
+      if (!headerBtn || !content) return;
+
+      const isExpanded = content.classList.contains('expanded');
+
+      if (isExpanded) {
+        content.classList.remove('expanded');
+        headerBtn.classList.remove('expanded');
+        content.style.maxHeight = '0';
+      } else {
+        content.classList.add('expanded');
+        headerBtn.classList.add('expanded');
+        content.style.maxHeight = content.scrollHeight + 'px';
+      }
+    }
+
+    overlay.querySelectorAll('.field-header').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = btn.getAttribute('data-target');
+        if (targetId) toggleField(targetId);
+      });
+    });
+
+    // Global Exposure
+    window.openSizePanel  = openPanel;
+    window.closeSizePanel = closePanel;
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+
+

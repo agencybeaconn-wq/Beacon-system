@@ -1,0 +1,220 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "slideshow_QRM9t8": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_wtQJUF": {
+          "type": "slide",
+          "disabled": true,
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_wtQJUF"
+      ],
+      "name": "t:sections.slideshow.presets.name",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "adapt_image",
+        "slider_visual": "counter",
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": false,
+        "accessibility_info": "Apresentação de slides sobre nossa marca"
+      }
+    },
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "show_collection_description": false,
+        "show_collection_image": false,
+        "color_scheme": "scheme-5"
+      }
+    },
+    "collection_player_tabs_yY4dL7": {
+      "type": "collection-player-tabs",
+      "blocks": {
+        "collection_item_rNwnyE": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "barcelona",
+            "custom_image_url": "",
+            "title": "",
+            "link": ""
+          }
+        },
+        "collection_item_CWpnwR": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "atletico-de-madrid",
+            "custom_image_url": "",
+            "title": "",
+            "link": ""
+          }
+        },
+        "collection_item_kJxxwm": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "atletico-mineiro",
+            "custom_image_url": "",
+            "title": "",
+            "link": ""
+          }
+        },
+        "collection_item_e9443h": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "atletico-de-madrid",
+            "custom_image_url": "",
+            "title": "",
+            "link": ""
+          }
+        },
+        "collection_item_Ck8Xa4": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "barcelona",
+            "custom_image_url": "",
+            "title": "",
+            "link": ""
+          }
+        },
+        "player_item_rjGXt3": {
+          "type": "player_item",
+          "settings": {
+            "collection": "",
+            "custom_image_url": "",
+            "player_name": "M. DEPAY",
+            "player_number": "10",
+            "player_link": ""
+          }
+        },
+        "player_item_PtnQAT": {
+          "type": "player_item",
+          "settings": {
+            "collection": "",
+            "custom_image_url": "",
+            "player_name": "ROMERO",
+            "player_number": "11",
+            "player_link": ""
+          }
+        },
+        "player_item_yrikEU": {
+          "type": "player_item",
+          "settings": {
+            "collection": "",
+            "custom_image_url": "",
+            "player_name": "",
+            "player_number": "",
+            "player_link": ""
+          }
+        },
+        "player_item_GCqKai": {
+          "type": "player_item",
+          "settings": {
+            "collection": "",
+            "custom_image_url": "",
+            "player_name": "",
+            "player_number": "",
+            "player_link": ""
+          }
+        },
+        "player_item_ka6Tca": {
+          "type": "player_item",
+          "settings": {
+            "collection": "",
+            "custom_image_url": "",
+            "player_name": "",
+            "player_number": "",
+            "player_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_item_rNwnyE",
+        "collection_item_CWpnwR",
+        "collection_item_kJxxwm",
+        "collection_item_e9443h",
+        "collection_item_Ck8Xa4",
+        "player_item_rjGXt3",
+        "player_item_PtnQAT",
+        "player_item_yrikEU",
+        "player_item_GCqKai",
+        "player_item_ka6Tca"
+      ],
+      "disabled": true,
+      "name": "Coleção com Jogadores",
+      "settings": {
+        "header_style": "standard",
+        "title": "",
+        "heading_size": "h1",
+        "description": "",
+        "description_style": "body",
+        "header_alignment": "center",
+        "category_tab_label": "Compre por categoria",
+        "player_tab_label": "Compre pelo jogador",
+        "image_ratio": "square",
+        "columns_desktop": 5,
+        "color_scheme": "",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "show_desktop_arrows": true,
+        "show_mobile_arrows": false,
+        "padding_top": 36,
+        "unselected_tab_text_color": "#000000",
+        "active_tab_text_color": "#ffffff",
+        "padding_bottom": 36
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 16,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "enable_filtering": true,
+        "filter_type": "horizontal",
+        "enable_sorting": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "slideshow_QRM9t8",
+    "banner",
+    "collection_player_tabs_yY4dL7",
+    "product-grid"
+  ]
+}

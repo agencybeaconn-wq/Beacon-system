@@ -1,0 +1,192 @@
+<div class="rgd-rating-badge-wrapper">
+
+  <div class="rgd-rating-badge">
+
+    <span class="rgd-rating-text">EXCELENTE</span>
+
+    <div class="rgd-stars">
+      {% for i in (1..5) %}
+        <svg viewBox="0 0 28 28">
+          <path d="M12.701 3.908c.532-1.078 2.069-1.078 2.6 0l2.692 5.452l6.017.875c1.19.173 1.664 1.634.804 2.473l-4.355 4.244l1.028 5.993c.204 1.185-1.04 2.088-2.103 1.529l-5.382-2.83l-5.382 2.83c-1.064.559-2.307-.344-2.104-1.529l1.028-5.993l-4.355-4.244c-.86-.839-.385-2.3.804-2.473l6.017-.875z"/>
+        </svg>
+      {% endfor %}
+    </div>
+
+    <div class="rgd-rating-inline">
+      <span id="rgd-rating-number">5</span>/5
+      <span class="rgd-based">baseado em</span>
+      <span id="rgd-rating-count">80</span>
+      <span>reviews</span>
+    </div>
+
+  </div>
+
+</div>
+
+<style>
+/* WRAPPER */
+.rgd-rating-badge-wrapper{
+  width:100%;
+  margin:24px 0;
+}
+
+/* CARD */
+.rgd-rating-badge{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+
+  background:#fff;
+  border:1px solid #e9e9e9;
+  border-radius:10px;
+  padding:14px 18px;
+
+  box-shadow:0 1px 4px rgba(0,0,0,0.05);
+  transition:.2s ease;
+}
+
+/* hover leve (premium feel) */
+.rgd-rating-badge:hover{
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* TEXT */
+.rgd-rating-text{
+  font-weight:700;
+  font-size:13px;
+  letter-spacing:.6px;
+  color:#111;
+}
+
+/* STARS WRAPPER */
+.rgd-stars{
+  display:flex;
+  gap:4px;
+  align-items:center;
+}
+
+/* STAR BOX STYLE (tipo trustpilot) */
+.rgd-stars svg{
+  width:18px;
+  height:18px;
+
+  background:#71c4f9;
+  padding:2px;
+  border-radius:2px;
+
+  fill:#fff;
+}
+
+/* INLINE INFO */
+.rgd-rating-inline{
+  font-size:14px;
+  color:#111;
+  display:flex;
+  gap:6px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+/* número rating */
+#rgd-rating-number{
+  font-weight:700;
+}
+
+/* texto secundário */
+.rgd-rating-inline .rgd-based{
+  color:#8a8a8a;
+}
+
+/* spacing final */
+.rgd-rating-inline span{
+  line-height:1;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+  .rgd-rating-badge{
+    gap:10px;
+    padding:12px 14px;
+  }
+
+  .rgd-stars svg{
+    width:16px;
+    height:16px;
+  }
+
+  .rgd-rating-inline{
+    font-size:13px;
+  }
+
+}
+</style>
+
+<script>
+(function() {
+
+  function parseNumber(text) {
+    return parseInt((text || '').replace(/[^\d]/g,'')) || 0;
+  }
+
+  function parseRating(text) {
+    const match = (text || '').match(/(\d+(\.\d+)?)/);
+    return match ? parseFloat(match[0]) : 0;
+  }
+
+  function init() {
+    const root = document.querySelector('.tw-w-full.tw-flex.tw-flex-col.tw-items-center');
+    if(!root) return;
+
+    const ratingEl = root.querySelector('.tw-text-7xl');
+    const countEl = root.querySelector('.tw-text-xl');
+
+    const rating = parseRating(ratingEl?.textContent);
+    const total = parseNumber(countEl?.textContent);
+
+    // seta número
+    if(rating){
+      document.getElementById('rgd-rating-number').innerText = rating;
+    }
+
+    if(total){
+      document.getElementById('rgd-rating-count').innerText = total;
+    }
+
+    // pega linhas de estrelas
+    const rows = root.querySelectorAll('.tw-flex.tw-gap-3.tw-items-center.tw-justify-center');
+
+    let data = {};
+
+    rows.forEach(row => {
+      const star = parseInt(row.querySelector('p')?.textContent);
+      const value = parseNumber(row.querySelectorAll('p')[1]?.textContent);
+      if(star) data[star] = value;
+    });
+
+    // preenche barras
+    Object.keys(data).forEach(star => {
+      const count = data[star];
+      const percent = total > 0 ? (count / total) * 100 : 0;
+
+      const el = document.querySelector(`[data-star-row="${star}"]`);
+      if(!el) return;
+
+      el.querySelector('.rgd-bar-fill').style.width = percent + '%';
+      el.querySelector('.rgd-bar-value').innerText = count;
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    let tries = 0;
+
+    const interval = setInterval(() => {
+      tries++;
+      init();
+      if(tries > 20) clearInterval(interval);
+    }, 400);
+  });
+
+})();
+</script>

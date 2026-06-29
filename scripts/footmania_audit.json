@@ -1,0 +1,1635 @@
+{
+  "totals": {
+    "collections": 280,
+    "empty": 108,
+    "suspect": 0
+  },
+  "empty_collections": [
+    {
+      "handle": "mirassol",
+      "title": "MIRASSOL"
+    },
+    {
+      "handle": "chapecoense",
+      "title": "CHAPECOENSE"
+    },
+    {
+      "handle": "goias",
+      "title": "GOIAS"
+    },
+    {
+      "handle": "cuiaba",
+      "title": "CUIABÁ"
+    },
+    {
+      "handle": "america-mg",
+      "title": "AMÉRICA MG"
+    },
+    {
+      "handle": "nacional",
+      "title": "NACIONAL"
+    },
+    {
+      "handle": "penarol",
+      "title": "PEÑAROL"
+    },
+    {
+      "handle": "universidad-catolica",
+      "title": "UNIVERSIDAD CATOLICA"
+    },
+    {
+      "handle": "cerro-porteno",
+      "title": "CERRO PORTEÑO"
+    },
+    {
+      "handle": "olimpia",
+      "title": "OLIMPIA"
+    },
+    {
+      "handle": "libertad",
+      "title": "LIBERTAD"
+    },
+    {
+      "handle": "indepiendente-del-valle",
+      "title": "INDEPENDIENTE DEL VALLE"
+    },
+    {
+      "handle": "barcelona-de-guayaquil",
+      "title": "BARCELONA DE GUAYAQUIL"
+    },
+    {
+      "handle": "ldu",
+      "title": "LDU"
+    },
+    {
+      "handle": "emelec",
+      "title": "EMELEC"
+    },
+    {
+      "handle": "the-strongest",
+      "title": "THE STRONGEST"
+    },
+    {
+      "handle": "bolivar",
+      "title": "BOLÍVAR"
+    },
+    {
+      "handle": "america-de-cali",
+      "title": "AMÉRICA DE CALI"
+    },
+    {
+      "handle": "once-caldas",
+      "title": "ONCE CALDAS"
+    },
+    {
+      "handle": "atletico-nacional",
+      "title": "ATLÉTICO NACIONAL"
+    },
+    {
+      "handle": "millonarios",
+      "title": "MILLONARIOS"
+    },
+    {
+      "handle": "tolima",
+      "title": "TOLIMA"
+    },
+    {
+      "handle": "alianza-lima",
+      "title": "ALIANZA LIMA"
+    },
+    {
+      "handle": "times-norte-americanos",
+      "title": "TIMES NORTE AMERICANOS"
+    },
+    {
+      "handle": "new-york-city",
+      "title": "NEW YORK CITY"
+    },
+    {
+      "handle": "orlando-city",
+      "title": "ORLANDO CITY"
+    },
+    {
+      "handle": "ny-red-bull",
+      "title": "NY RED BULL"
+    },
+    {
+      "handle": "atlanta-united",
+      "title": "ATLANTA UNITED"
+    },
+    {
+      "handle": "cincinnati",
+      "title": "CINCINNATI"
+    },
+    {
+      "handle": "la-fc",
+      "title": "LA FC"
+    }
+  ],
+  "suspect_collections": [],
+  "sample_collections": [
+    {
+      "handle": "frontpage",
+      "title": "Página inicial",
+      "products": 1
+    },
+    {
+      "handle": "brasileirao",
+      "title": "BRASILEIRÃO",
+      "products": 296
+    },
+    {
+      "handle": "gremio",
+      "title": "GRÊMIO",
+      "products": 9
+    },
+    {
+      "handle": "flamengo",
+      "title": "FLAMENGO",
+      "products": 53
+    },
+    {
+      "handle": "palmeiras",
+      "title": "PALMEIRAS",
+      "products": 43
+    },
+    {
+      "handle": "cruzeiro",
+      "title": "CRUZEIRO",
+      "products": 17
+    },
+    {
+      "handle": "mirassol",
+      "title": "MIRASSOL",
+      "products": 0
+    },
+    {
+      "handle": "botafogo",
+      "title": "BOTAFOGO",
+      "products": 16
+    },
+    {
+      "handle": "bahia",
+      "title": "BAHIA",
+      "products": 4
+    },
+    {
+      "handle": "fluminense",
+      "title": "FLUMINENSE",
+      "products": 14
+    },
+    {
+      "handle": "sao-paulo",
+      "title": "SÃO PAULO",
+      "products": 19
+    },
+    {
+      "handle": "red-bull-bragantino",
+      "title": "RED BULL BRAGANTINO",
+      "products": 2
+    },
+    {
+      "handle": "corinthians",
+      "title": "CORINTHIANS",
+      "products": 40
+    },
+    {
+      "handle": "atletico-mg",
+      "title": "ATLETICO MG",
+      "products": 13
+    },
+    {
+      "handle": "vasco-da-gama",
+      "title": "VASCO DA GAMA",
+      "products": 14
+    },
+    {
+      "handle": "ceara",
+      "title": "CEARÁ",
+      "products": 2
+    },
+    {
+      "handle": "internacional",
+      "title": "INTERNACIONAL",
+      "products": 8
+    },
+    {
+      "handle": "vitoria",
+      "title": "VITÓRIA",
+      "products": 2
+    },
+    {
+      "handle": "santos",
+      "title": "SANTOS",
+      "products": 20
+    },
+    {
+      "handle": "fortaleza",
+      "title": "FORTALEZA",
+      "products": 4
+    }
+  ],
+  "theme_templates_with_tabs": [],
+  "all_collections": [
+    {
+      "handle": "frontpage",
+      "title": "Página inicial",
+      "products": 1
+    },
+    {
+      "handle": "brasileirao",
+      "title": "BRASILEIRÃO",
+      "products": 296
+    },
+    {
+      "handle": "gremio",
+      "title": "GRÊMIO",
+      "products": 9
+    },
+    {
+      "handle": "flamengo",
+      "title": "FLAMENGO",
+      "products": 53
+    },
+    {
+      "handle": "palmeiras",
+      "title": "PALMEIRAS",
+      "products": 43
+    },
+    {
+      "handle": "cruzeiro",
+      "title": "CRUZEIRO",
+      "products": 17
+    },
+    {
+      "handle": "mirassol",
+      "title": "MIRASSOL",
+      "products": 0
+    },
+    {
+      "handle": "botafogo",
+      "title": "BOTAFOGO",
+      "products": 16
+    },
+    {
+      "handle": "bahia",
+      "title": "BAHIA",
+      "products": 4
+    },
+    {
+      "handle": "fluminense",
+      "title": "FLUMINENSE",
+      "products": 14
+    },
+    {
+      "handle": "sao-paulo",
+      "title": "SÃO PAULO",
+      "products": 19
+    },
+    {
+      "handle": "red-bull-bragantino",
+      "title": "RED BULL BRAGANTINO",
+      "products": 2
+    },
+    {
+      "handle": "corinthians",
+      "title": "CORINTHIANS",
+      "products": 40
+    },
+    {
+      "handle": "atletico-mg",
+      "title": "ATLETICO MG",
+      "products": 13
+    },
+    {
+      "handle": "vasco-da-gama",
+      "title": "VASCO DA GAMA",
+      "products": 14
+    },
+    {
+      "handle": "ceara",
+      "title": "CEARÁ",
+      "products": 2
+    },
+    {
+      "handle": "internacional",
+      "title": "INTERNACIONAL",
+      "products": 8
+    },
+    {
+      "handle": "vitoria",
+      "title": "VITÓRIA",
+      "products": 2
+    },
+    {
+      "handle": "santos",
+      "title": "SANTOS",
+      "products": 20
+    },
+    {
+      "handle": "fortaleza",
+      "title": "FORTALEZA",
+      "products": 4
+    },
+    {
+      "handle": "juventude",
+      "title": "JUVENTUDE",
+      "products": 2
+    },
+    {
+      "handle": "sport-recife",
+      "title": "SPORT RECIFE",
+      "products": 3
+    },
+    {
+      "handle": "coritiba",
+      "title": "CORITIBA",
+      "products": 3
+    },
+    {
+      "handle": "athletico-pr",
+      "title": "ATHLETICO PR",
+      "products": 3
+    },
+    {
+      "handle": "chapecoense",
+      "title": "CHAPECOENSE",
+      "products": 0
+    },
+    {
+      "handle": "remo",
+      "title": "REMO",
+      "products": 1
+    },
+    {
+      "handle": "criciuma",
+      "title": "CRICIÚMA",
+      "products": 2
+    },
+    {
+      "handle": "goias",
+      "title": "GOIAS",
+      "products": 0
+    },
+    {
+      "handle": "cuiaba",
+      "title": "CUIABÁ",
+      "products": 0
+    },
+    {
+      "handle": "america-mg",
+      "title": "AMÉRICA MG",
+      "products": 0
+    },
+    {
+      "handle": "paysandu",
+      "title": "PAYSANDU",
+      "products": 4
+    },
+    {
+      "handle": "juventus-da-mooca",
+      "title": "JUVENTUS DA MOOCA",
+      "products": 2
+    },
+    {
+      "handle": "times-sulamericanos",
+      "title": "TIMES SULAMERICANOS",
+      "products": 68
+    },
+    {
+      "handle": "boca-jrs",
+      "title": "BOCA JRS",
+      "products": 26
+    },
+    {
+      "handle": "racing",
+      "title": "RACING",
+      "products": 5
+    },
+    {
+      "handle": "estudiantes",
+      "title": "ESTUDIANTES",
+      "products": 2
+    },
+    {
+      "handle": "newells-old-boys",
+      "title": "NEWELL'S OLD BOYS",
+      "products": 3
+    },
+    {
+      "handle": "rosario-central",
+      "title": "ROSARIO CENTRAL",
+      "products": 2
+    },
+    {
+      "handle": "lanus",
+      "title": "LANÚS",
+      "products": 2
+    },
+    {
+      "handle": "velez-sarsfield",
+      "title": "VÉLEZ SÁRSFIELD",
+      "products": 3
+    },
+    {
+      "handle": "san-lorenzo",
+      "title": "SAN LORENZO",
+      "products": 2
+    },
+    {
+      "handle": "river-plate",
+      "title": "RIVER PLATE",
+      "products": 15
+    },
+    {
+      "handle": "indepiendente",
+      "title": "INDEPENDIENTE",
+      "products": 2
+    },
+    {
+      "handle": "platense",
+      "title": "PLATENSE",
+      "products": 1
+    },
+    {
+      "handle": "nacional",
+      "title": "NACIONAL",
+      "products": 0
+    },
+    {
+      "handle": "penarol",
+      "title": "PEÑAROL",
+      "products": 0
+    },
+    {
+      "handle": "universidad-catolica",
+      "title": "UNIVERSIDAD CATOLICA",
+      "products": 0
+    },
+    {
+      "handle": "universidad-de-chile",
+      "title": "UNIVERSIDAD DE CHILE",
+      "products": 1
+    },
+    {
+      "handle": "colo-colo",
+      "title": "COLO COLO",
+      "products": 2
+    },
+    {
+      "handle": "cerro-porteno",
+      "title": "CERRO PORTEÑO",
+      "products": 0
+    },
+    {
+      "handle": "olimpia",
+      "title": "OLIMPIA",
+      "products": 0
+    },
+    {
+      "handle": "libertad",
+      "title": "LIBERTAD",
+      "products": 0
+    },
+    {
+      "handle": "indepiendente-del-valle",
+      "title": "INDEPENDIENTE DEL VALLE",
+      "products": 0
+    },
+    {
+      "handle": "barcelona-de-guayaquil",
+      "title": "BARCELONA DE GUAYAQUIL",
+      "products": 0
+    },
+    {
+      "handle": "ldu",
+      "title": "LDU",
+      "products": 0
+    },
+    {
+      "handle": "emelec",
+      "title": "EMELEC",
+      "products": 0
+    },
+    {
+      "handle": "the-strongest",
+      "title": "THE STRONGEST",
+      "products": 0
+    },
+    {
+      "handle": "bolivar",
+      "title": "BOLÍVAR",
+      "products": 0
+    },
+    {
+      "handle": "america-de-cali",
+      "title": "AMÉRICA DE CALI",
+      "products": 0
+    },
+    {
+      "handle": "once-caldas",
+      "title": "ONCE CALDAS",
+      "products": 0
+    },
+    {
+      "handle": "atletico-nacional",
+      "title": "ATLÉTICO NACIONAL",
+      "products": 0
+    },
+    {
+      "handle": "millonarios",
+      "title": "MILLONARIOS",
+      "products": 0
+    },
+    {
+      "handle": "tolima",
+      "title": "TOLIMA",
+      "products": 0
+    },
+    {
+      "handle": "alianza-lima",
+      "title": "ALIANZA LIMA",
+      "products": 0
+    },
+    {
+      "handle": "times-norte-americanos",
+      "title": "TIMES NORTE AMERICANOS",
+      "products": 0
+    },
+    {
+      "handle": "tigres",
+      "title": "TIGRES",
+      "products": 5
+    },
+    {
+      "handle": "cruz-azul",
+      "title": "CRUZ AZUL",
+      "products": 2
+    },
+    {
+      "handle": "america-do-mx",
+      "title": "AMÉRICA DO MX",
+      "products": 8
+    },
+    {
+      "handle": "monterrey",
+      "title": "MONTERREY",
+      "products": 5
+    },
+    {
+      "handle": "chivas-guadalajara",
+      "title": "CHIVAS GUADALAJARA",
+      "products": 5
+    },
+    {
+      "handle": "pachuca",
+      "title": "PACHUCA",
+      "products": 2
+    },
+    {
+      "handle": "pumas",
+      "title": "PUMAS",
+      "products": 3
+    },
+    {
+      "handle": "inter-miami",
+      "title": "INTER MIAMI",
+      "products": 14
+    },
+    {
+      "handle": "new-york-city",
+      "title": "NEW YORK CITY",
+      "products": 0
+    },
+    {
+      "handle": "orlando-city",
+      "title": "ORLANDO CITY",
+      "products": 0
+    },
+    {
+      "handle": "ny-red-bull",
+      "title": "NY RED BULL",
+      "products": 0
+    },
+    {
+      "handle": "atlanta-united",
+      "title": "ATLANTA UNITED",
+      "products": 0
+    },
+    {
+      "handle": "cincinnati",
+      "title": "CINCINNATI",
+      "products": 0
+    },
+    {
+      "handle": "la-fc",
+      "title": "LA FC",
+      "products": 0
+    },
+    {
+      "handle": "seattle-sounders",
+      "title": "SEATTLE SOUNDERS",
+      "products": 0
+    },
+    {
+      "handle": "austin",
+      "title": "AUSTIN",
+      "products": 0
+    },
+    {
+      "handle": "la-galaxy",
+      "title": "LA GALAXY",
+      "products": 0
+    },
+    {
+      "handle": "liga-arabe",
+      "title": "LIGA ÁRABE",
+      "products": 40
+    },
+    {
+      "handle": "al-nassr",
+      "title": "AL-NASSR",
+      "products": 13
+    },
+    {
+      "handle": "al-hilal",
+      "title": "AL-HILAL",
+      "products": 14
+    },
+    {
+      "handle": "al-ahli",
+      "title": "AL-AHLI",
+      "products": 4
+    },
+    {
+      "handle": "al-ittihad",
+      "title": "AL-ITTIHAD",
+      "products": 9
+    },
+    {
+      "handle": "kits-infantis",
+      "title": "KITS INFANTIS",
+      "products": 254
+    },
+    {
+      "handle": "body-infantil",
+      "title": "BODY INFANTIL",
+      "products": 55
+    },
+    {
+      "handle": "produtos",
+      "title": "PRODUTOS",
+      "products": 1360
+    },
+    {
+      "handle": "retros",
+      "title": "RETRÔS",
+      "products": 291
+    },
+    {
+      "handle": "frio",
+      "title": "FRIO",
+      "products": 0
+    },
+    {
+      "handle": "feminino",
+      "title": "FEMININO",
+      "products": 95
+    },
+    {
+      "handle": "lancamentos-25-26",
+      "title": "LANÇAMENTOS 25/26",
+      "products": 779
+    },
+    {
+      "handle": "nba",
+      "title": "NBA",
+      "products": 0
+    },
+    {
+      "handle": "clubes-europeus",
+      "title": "CLUBES EUROPEUS",
+      "products": 714
+    },
+    {
+      "handle": "selecoes",
+      "title": "SELEÇOES",
+      "products": 144
+    },
+    {
+      "handle": "mais-vendidos",
+      "title": "MAIS VENDIDOS",
+      "products": 530
+    },
+    {
+      "handle": "selecoes-1",
+      "title": "SELEÇÕES",
+      "products": 268
+    },
+    {
+      "handle": "selecoes-da-america",
+      "title": "SELEÇÕES DAS AMÉRICAS",
+      "products": 125
+    },
+    {
+      "handle": "selecoes-da-asia",
+      "title": "SELEÇOES DA ASIA",
+      "products": 15
+    },
+    {
+      "handle": "selecoes-da-europa",
+      "title": "SELEÇÕES DA EUROPA",
+      "products": 118
+    },
+    {
+      "handle": "selecoes-da-africa",
+      "title": "SELEÇÕES DA AFRICA",
+      "products": 12
+    },
+    {
+      "handle": "selecoes-da-oceania",
+      "title": "SELEÇÕES DA OCEANIA",
+      "products": 3
+    },
+    {
+      "handle": "brasil",
+      "title": "BRASIL",
+      "products": 58
+    },
+    {
+      "handle": "argentina",
+      "title": "ARGENTINA",
+      "products": 23
+    },
+    {
+      "handle": "uruguai",
+      "title": "URUGUAI",
+      "products": 4
+    },
+    {
+      "handle": "chile",
+      "title": "CHILE",
+      "products": 0
+    },
+    {
+      "handle": "colombia",
+      "title": "COLÔMBIA",
+      "products": 2
+    },
+    {
+      "handle": "paraguai",
+      "title": "PARAGUAI",
+      "products": 2
+    },
+    {
+      "handle": "equador",
+      "title": "EQUADOR",
+      "products": 3
+    },
+    {
+      "handle": "venezuela",
+      "title": "VENEZUELA",
+      "products": 1
+    },
+    {
+      "handle": "bolivia",
+      "title": "BOLIVIA",
+      "products": 0
+    },
+    {
+      "handle": "peru",
+      "title": "PERU",
+      "products": 0
+    },
+    {
+      "handle": "costa-rica",
+      "title": "COSTA RICA",
+      "products": 0
+    },
+    {
+      "handle": "honduras",
+      "title": "HONDURAS",
+      "products": 0
+    },
+    {
+      "handle": "eua",
+      "title": "EUA",
+      "products": 3
+    },
+    {
+      "handle": "canada",
+      "title": "CANADÁ",
+      "products": 3
+    },
+    {
+      "handle": "mexico",
+      "title": "MÉXICO",
+      "products": 21
+    },
+    {
+      "handle": "nova-zelandia",
+      "title": "NOVA ZELÂNDIA",
+      "products": 0
+    },
+    {
+      "handle": "australia",
+      "title": "AUSTRALIA",
+      "products": 2
+    },
+    {
+      "handle": "egito",
+      "title": "EGITO",
+      "products": 0
+    },
+    {
+      "handle": "senegal",
+      "title": "SENEGAL",
+      "products": 4
+    },
+    {
+      "handle": "africa-do-sul",
+      "title": "AFRICA DO SUL",
+      "products": 2
+    },
+    {
+      "handle": "nigeria",
+      "title": "NIGERIA",
+      "products": 1
+    },
+    {
+      "handle": "camaroes",
+      "title": "CAMARÕES",
+      "products": 0
+    },
+    {
+      "handle": "marrocos",
+      "title": "MARROCOS",
+      "products": 3
+    },
+    {
+      "handle": "costa-do-marfim",
+      "title": "COSTA DO MARFIM",
+      "products": 2
+    },
+    {
+      "handle": "argelia",
+      "title": "ARGELIA",
+      "products": 0
+    },
+    {
+      "handle": "tunisia",
+      "title": "TUNISIA",
+      "products": 0
+    },
+    {
+      "handle": "gana",
+      "title": "GANA",
+      "products": 0
+    },
+    {
+      "handle": "catar",
+      "title": "CATAR",
+      "products": 0
+    },
+    {
+      "handle": "ira",
+      "title": "IRÃ",
+      "products": 0
+    },
+    {
+      "handle": "coreia-do-sul",
+      "title": "COREIA DO SUL",
+      "products": 4
+    },
+    {
+      "handle": "iraque",
+      "title": "IRAQUE",
+      "products": 0
+    },
+    {
+      "handle": "palestina",
+      "title": "PALESTINA",
+      "products": 0
+    },
+    {
+      "handle": "japao",
+      "title": "JAPÃO",
+      "products": 2
+    },
+    {
+      "handle": "arabia-saudita",
+      "title": "ARÁBIA SAUDITA",
+      "products": 1
+    },
+    {
+      "handle": "china",
+      "title": "CHINA",
+      "products": 0
+    },
+    {
+      "handle": "israel",
+      "title": "ISRAEL",
+      "products": 0
+    },
+    {
+      "handle": "alemanha",
+      "title": "ALEMANHA",
+      "products": 20
+    },
+    {
+      "handle": "eslovaquia",
+      "title": "ESLOVAQUIA",
+      "products": 0
+    },
+    {
+      "handle": "suica",
+      "title": "SUIÇA",
+      "products": 2
+    },
+    {
+      "handle": "suecia",
+      "title": "SUÉCIA",
+      "products": 0
+    },
+    {
+      "handle": "eslovenia",
+      "title": "ESLOVÊNIA",
+      "products": 0
+    },
+    {
+      "handle": "escocia",
+      "title": "ESCÓCIA",
+      "products": 4
+    },
+    {
+      "handle": "dinamarca",
+      "title": "DINAMARCA",
+      "products": 0
+    },
+    {
+      "handle": "grecia",
+      "title": "GRÉCIA",
+      "products": 0
+    },
+    {
+      "handle": "franca",
+      "title": "FRANÇA",
+      "products": 17
+    },
+    {
+      "handle": "ucrania",
+      "title": "UCRÂNIA",
+      "products": 1
+    },
+    {
+      "handle": "espanha",
+      "title": "ESPANHA",
+      "products": 17
+    },
+    {
+      "handle": "turquia",
+      "title": "TURQUIA",
+      "products": 2
+    },
+    {
+      "handle": "portugal",
+      "title": "PORTUGAL",
+      "products": 26
+    },
+    {
+      "handle": "irlanda",
+      "title": "IRLANDA",
+      "products": 2
+    },
+    {
+      "handle": "hungria",
+      "title": "HUNGRIA",
+      "products": 0
+    },
+    {
+      "handle": "holanda",
+      "title": "HOLANDA",
+      "products": 4
+    },
+    {
+      "handle": "polonia",
+      "title": "POLÔNIA",
+      "products": 0
+    },
+    {
+      "handle": "austria",
+      "title": "ÁUSTRIA",
+      "products": 0
+    },
+    {
+      "handle": "bosnia",
+      "title": "BÓSNIA",
+      "products": 0
+    },
+    {
+      "handle": "italia",
+      "title": "ITÁLIA",
+      "products": 12
+    },
+    {
+      "handle": "noruega",
+      "title": "NORUEGA",
+      "products": 0
+    },
+    {
+      "handle": "belgica",
+      "title": "BÉLGICA",
+      "products": 2
+    },
+    {
+      "handle": "pais-de-gales",
+      "title": "PAÍS DE GALES",
+      "products": 0
+    },
+    {
+      "handle": "albania",
+      "title": "ALBÂNIA",
+      "products": 0
+    },
+    {
+      "handle": "servia",
+      "title": "SÉRVIA",
+      "products": 0
+    },
+    {
+      "handle": "croacia",
+      "title": "CROÁCIA",
+      "products": 0
+    },
+    {
+      "handle": "republica-tcheca",
+      "title": "REPUBLICA TCHECA",
+      "products": 2
+    },
+    {
+      "handle": "outras-ligas",
+      "title": "OUTRAS LIGAS",
+      "products": 100
+    },
+    {
+      "handle": "psv",
+      "title": "PSV",
+      "products": 3
+    },
+    {
+      "handle": "feyenoord",
+      "title": "FEYENOORD",
+      "products": 3
+    },
+    {
+      "handle": "az",
+      "title": "AZ",
+      "products": 0
+    },
+    {
+      "handle": "ajax",
+      "title": "AJAX",
+      "products": 15
+    },
+    {
+      "handle": "celtic",
+      "title": "CELTIC",
+      "products": 2
+    },
+    {
+      "handle": "rangers",
+      "title": "RANGERS",
+      "products": 0
+    },
+    {
+      "handle": "galatasaray",
+      "title": "GALATASARAY",
+      "products": 3
+    },
+    {
+      "handle": "fenerbahce",
+      "title": "FENERBAHÇE",
+      "products": 3
+    },
+    {
+      "handle": "trabzonspor",
+      "title": "TRABZONSPOR",
+      "products": 0
+    },
+    {
+      "handle": "zenit",
+      "title": "ZENIT",
+      "products": 0
+    },
+    {
+      "handle": "cska",
+      "title": "CSKA",
+      "products": 0
+    },
+    {
+      "handle": "spartak-moscou",
+      "title": "SPARTAK MOSCOU",
+      "products": 0
+    },
+    {
+      "handle": "dinamo-moscou",
+      "title": "DINAMO MOSCOU",
+      "products": 0
+    },
+    {
+      "handle": "shakhtar-donetsk",
+      "title": "SHAKHTAR DONETSK",
+      "products": 0
+    },
+    {
+      "handle": "club-brugge",
+      "title": "CLUB BRUGGE",
+      "products": 0
+    },
+    {
+      "handle": "copenhague",
+      "title": "COPENHAGUE",
+      "products": 0
+    },
+    {
+      "handle": "anderlecht",
+      "title": "ANDERLECHT",
+      "products": 0
+    },
+    {
+      "handle": "young-boys",
+      "title": "YOUNG BOYS",
+      "products": 0
+    },
+    {
+      "handle": "basel",
+      "title": "BASEL",
+      "products": 0
+    },
+    {
+      "handle": "paok",
+      "title": "PAOK",
+      "products": 0
+    },
+    {
+      "handle": "olympiacos",
+      "title": "OLYMPIACOS",
+      "products": 0
+    },
+    {
+      "handle": "al-ahly",
+      "title": "AL-AHLY",
+      "products": 1
+    },
+    {
+      "handle": "besiktas",
+      "title": "BESIKTAS",
+      "products": 3
+    },
+    {
+      "handle": "liga-portuguesa",
+      "title": "LIGA PORTUGUESA",
+      "products": 0
+    },
+    {
+      "handle": "porto",
+      "title": "PORTO",
+      "products": 5
+    },
+    {
+      "handle": "benfica",
+      "title": "BENFICA",
+      "products": 6
+    },
+    {
+      "handle": "sporting",
+      "title": "SPORTING",
+      "products": 11
+    },
+    {
+      "handle": "braga",
+      "title": "BRAGA",
+      "products": 0
+    },
+    {
+      "handle": "ligue-1",
+      "title": "LIGUE 1",
+      "products": 36
+    },
+    {
+      "handle": "psg",
+      "title": "PSG",
+      "products": 22
+    },
+    {
+      "handle": "lyon",
+      "title": "LYON",
+      "products": 5
+    },
+    {
+      "handle": "olympique-de-marseille",
+      "title": "OLYMPIQUE DE MARSEILLE",
+      "products": 6
+    },
+    {
+      "handle": "lens",
+      "title": "LENS",
+      "products": 0
+    },
+    {
+      "handle": "rennes",
+      "title": "RENNES",
+      "products": 0
+    },
+    {
+      "handle": "losc-lille",
+      "title": "LOSC LILLE",
+      "products": 0
+    },
+    {
+      "handle": "monaco",
+      "title": "MÔNACO",
+      "products": 1
+    },
+    {
+      "handle": "paris-fc",
+      "title": "PARIS FC",
+      "products": 1
+    },
+    {
+      "handle": "bundesliga",
+      "title": "BUNDESLIGA",
+      "products": 60
+    },
+    {
+      "handle": "bayern-de-munique",
+      "title": "BAYERN DE MUNIQUE",
+      "products": 32
+    },
+    {
+      "handle": "borussia-dortmund",
+      "title": "BORUSSIA DORTMUND",
+      "products": 20
+    },
+    {
+      "handle": "bayern-leverkusen",
+      "title": "BAYERN LEVERKUSEN",
+      "products": 7
+    },
+    {
+      "handle": "stuttgart",
+      "title": "STUTTGART",
+      "products": 0
+    },
+    {
+      "handle": "eintracht",
+      "title": "EINTRACHT FRANKFURT",
+      "products": 0
+    },
+    {
+      "handle": "hoffenheim",
+      "title": "HOFFENHEIM",
+      "products": 0
+    },
+    {
+      "handle": "union-berlin",
+      "title": "UNION BERLIN",
+      "products": 0
+    },
+    {
+      "handle": "werder-bremer",
+      "title": "WERDER BREMEN",
+      "products": 0
+    },
+    {
+      "handle": "borussia-monchengladbach",
+      "title": "BORUSSIA MONCHENGLADBACH",
+      "products": 0
+    },
+    {
+      "handle": "hamburgo",
+      "title": "HAMBURGO",
+      "products": 1
+    },
+    {
+      "handle": "wolfsburg",
+      "title": "WOLFSBURG",
+      "products": 0
+    },
+    {
+      "handle": "schalke-04",
+      "title": "SCHALKE 04",
+      "products": 0
+    },
+    {
+      "handle": "liga-italiana",
+      "title": "LIGA ITALIANA",
+      "products": 128
+    },
+    {
+      "handle": "roma",
+      "title": "ROMA",
+      "products": 13
+    },
+    {
+      "handle": "milan",
+      "title": "MILAN",
+      "products": 33
+    },
+    {
+      "handle": "napoli",
+      "title": "NAPOLI",
+      "products": 17
+    },
+    {
+      "handle": "inter-de-milao",
+      "title": "INTER DE MILÃO",
+      "products": 26
+    },
+    {
+      "handle": "juventus",
+      "title": "JUVENTUS",
+      "products": 20
+    },
+    {
+      "handle": "lazio",
+      "title": "LAZIO",
+      "products": 6
+    },
+    {
+      "handle": "udinese",
+      "title": "UDINESE",
+      "products": 0
+    },
+    {
+      "handle": "torino",
+      "title": "TORINO",
+      "products": 0
+    },
+    {
+      "handle": "atalanta",
+      "title": "ATALANTA",
+      "products": 3
+    },
+    {
+      "handle": "parma",
+      "title": "PARMA",
+      "products": 5
+    },
+    {
+      "handle": "fiorentina",
+      "title": "FIORENTINA",
+      "products": 7
+    },
+    {
+      "handle": "venezia",
+      "title": "VENEZIA",
+      "products": 0
+    },
+    {
+      "handle": "palermo",
+      "title": "PALERMO",
+      "products": 0
+    },
+    {
+      "handle": "sampdoria",
+      "title": "SAMPDORIA",
+      "products": 0
+    },
+    {
+      "handle": "la-liga",
+      "title": "LA LIGA",
+      "products": 209
+    },
+    {
+      "handle": "real-madrid",
+      "title": "REAL MADRID",
+      "products": 65
+    },
+    {
+      "handle": "barcelona",
+      "title": "BARCELONA",
+      "products": 79
+    },
+    {
+      "handle": "atletico-de-madrid",
+      "title": "ATLETICO DE MADRID",
+      "products": 14
+    },
+    {
+      "handle": "villareal",
+      "title": "VILLAREAL",
+      "products": 3
+    },
+    {
+      "handle": "real-betis",
+      "title": "REAL BÉTIS",
+      "products": 16
+    },
+    {
+      "handle": "espanyol",
+      "title": "ESPANYOL",
+      "products": 3
+    },
+    {
+      "handle": "reaal-sociedad",
+      "title": "REAL SOCIEDAD",
+      "products": 2
+    },
+    {
+      "handle": "sevilla",
+      "title": "SEVILLA",
+      "products": 8
+    },
+    {
+      "handle": "celta-de-vigo",
+      "title": "CELTA DE VIGO",
+      "products": 5
+    },
+    {
+      "handle": "valencia",
+      "title": "VALENCIA",
+      "products": 6
+    },
+    {
+      "handle": "girona",
+      "title": "GIRONA",
+      "products": 0
+    },
+    {
+      "handle": "la-coruna",
+      "title": "LA CORUÑA",
+      "products": 0
+    },
+    {
+      "handle": "las-palmas",
+      "title": "LAS PALMAS",
+      "products": 0
+    },
+    {
+      "handle": "malaga",
+      "title": "MÁLAGA",
+      "products": 1
+    },
+    {
+      "handle": "premier-league",
+      "title": "PREMIER LEAGUE",
+      "products": 229
+    },
+    {
+      "handle": "arsenal",
+      "title": "ARSENAL",
+      "products": 39
+    },
+    {
+      "handle": "chelsea",
+      "title": "CHELSEA",
+      "products": 22
+    },
+    {
+      "handle": "manchester-city",
+      "title": "MANCHESTER CITY",
+      "products": 27
+    },
+    {
+      "handle": "manchester-united",
+      "title": "MANCHESTER UNITED",
+      "products": 37
+    },
+    {
+      "handle": "aston-villa",
+      "title": "ASTON VILLA",
+      "products": 9
+    },
+    {
+      "handle": "crystal-palace",
+      "title": "CRYSTAL PALACE",
+      "products": 3
+    },
+    {
+      "handle": "brighton",
+      "title": "BRIGHTON",
+      "products": 0
+    },
+    {
+      "handle": "tottenham",
+      "title": "TOTTENHAM",
+      "products": 17
+    },
+    {
+      "handle": "everton",
+      "title": "EVERTON",
+      "products": 4
+    },
+    {
+      "handle": "liverpool",
+      "title": "LIVERPOOL",
+      "products": 30
+    },
+    {
+      "handle": "brentford",
+      "title": "BRENTFORD",
+      "products": 2
+    },
+    {
+      "handle": "newcastle",
+      "title": "NEWCASTLE",
+      "products": 15
+    },
+    {
+      "handle": "fulham",
+      "title": "FULHAM",
+      "products": 0
+    },
+    {
+      "handle": "nottingham-forest",
+      "title": "NOTTINGHAM FOREST",
+      "products": 6
+    },
+    {
+      "handle": "west-ham",
+      "title": "WEST HAM",
+      "products": 5
+    },
+    {
+      "handle": "leeds",
+      "title": "LEEDS",
+      "products": 6
+    },
+    {
+      "handle": "wolves",
+      "title": "WOLVES",
+      "products": 4
+    },
+    {
+      "handle": "southampton",
+      "title": "SOUTHAMPTON",
+      "products": 0
+    },
+    {
+      "handle": "wrexham",
+      "title": "WREXHAM",
+      "products": 0
+    },
+    {
+      "handle": "leicester",
+      "title": "LEICESTER",
+      "products": 0
+    },
+    {
+      "handle": "versao-jogador",
+      "title": "VERSÃO JOGADOR",
+      "products": 193
+    },
+    {
+      "handle": "athletic-bilbao",
+      "title": "ATHLETIC BILBAO",
+      "products": 5
+    },
+    {
+      "handle": "rb-leipzig",
+      "title": "RB LEIPZIG",
+      "products": 0
+    },
+    {
+      "handle": "lancamentos-26-27",
+      "title": "LANÇAMENTOS 26/27",
+      "products": 188
+    },
+    {
+      "handle": "copa-do-mundo",
+      "title": "COPA DO MUNDO",
+      "products": 158
+    },
+    {
+      "handle": "inglaterra",
+      "title": "INGLATERRA",
+      "products": 7
+    },
+    {
+      "handle": "qatar",
+      "title": "QATAR",
+      "products": 2
+    },
+    {
+      "handle": "masculino",
+      "title": "Masculino",
+      "products": 30
+    },
+    {
+      "handle": "serie-a",
+      "title": "Serie A",
+      "products": 116
+    },
+    {
+      "handle": "atletico-mineiro",
+      "title": "Atlético Mineiro",
+      "products": 7
+    },
+    {
+      "handle": "vasco",
+      "title": "Vasco",
+      "products": 14
+    }
+  ]
+}

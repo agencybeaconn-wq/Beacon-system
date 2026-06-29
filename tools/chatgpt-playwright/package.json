@@ -1,0 +1,16 @@
+{
+  "name": "chatgpt-playwright",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Automação ChatGPT web via Playwright pra geração em massa de variações de criativos.",
+  "scripts": {
+    "postinstall": "playwright install chromium",
+    "login": "node login.mjs",
+    "generate": "node generate.mjs",
+    "batch": "node batch.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "slug": "mundomapping",
+  "url": "https://mundomapping.com/",
+  "scrapedAt": "2026-05-18T20:21:54.731Z",
+  "title": "Mundo MappingMundo Mapping -",
+  "description": "Contrate influenciadores digitais na melhor plataforma, de marketing de influÊncia. Para quem busca atingir resultados incriveis para sua marca.",
+  "ogImage": "",
+  "headings": 26,
+  "ctas": 7,
+  "visual": {
+    "fontPrimary": "BebasNeue",
+    "fonts": [
+      "BebasNeue",
+      "Montserrat"
+    ],
+    "bg": "rgb(255, 255, 255)",
+    "fg": "rgb(33, 37, 41)"
+  }
+}

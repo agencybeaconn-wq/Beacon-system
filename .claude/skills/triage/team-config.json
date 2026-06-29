@@ -1,0 +1,39 @@
+{
+  "_doc": "Config do time pra load balancing da triage. Edite os userIds pelos UUIDs reais do Supabase auth.users quando disponíveis. Se userId for null, a triage usa só nome+role (sem balancing real).",
+  "members": [
+    {
+      "userId": null,
+      "name": "Pedro",
+      "role": "junior",
+      "shopifyScope": ["basic"],
+      "notes": "Em treinamento. Demandas triviais e medium guiadas. Favorecer aqui quando der."
+    },
+    {
+      "userId": null,
+      "name": "Felipe",
+      "role": "senior",
+      "shopifyScope": ["theme", "advanced"],
+      "notes": "Sênior em Shopify. Theme-fix, bulk-descriptions, investigação."
+    },
+    {
+      "userId": null,
+      "name": "João Vithor",
+      "role": "senior",
+      "shopifyScope": ["all"],
+      "notes": "Sênior full-stack. Flexível — pega overflow quando Felipe/Pedro sobrecarregados."
+    },
+    {
+      "userId": null,
+      "name": "Você (Lead)",
+      "role": "lead",
+      "shopifyScope": ["strategic"],
+      "notes": "Só estratégico: deploy nova loja, integrações novas, crises. Evitar ao máximo."
+    }
+  ],
+  "balancing": {
+    "preferJuniorOverSenior": true,
+    "maxActiveTasksJunior": 5,
+    "maxActiveTasksSenior": 8,
+    "overflowTo": "senior"
+  }
+}

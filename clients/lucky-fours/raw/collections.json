@@ -1,0 +1,187 @@
+[
+  {
+    "id": 483765190953,
+    "title": "69",
+    "handle": "69",
+    "description": "",
+    "published_at": "2025-01-30T14:54:12-05:00",
+    "updated_at": "2026-04-20T16:12:35-04:00",
+    "image": null,
+    "products_count": 1
+  },
+  {
+    "id": 478955962665,
+    "title": "Automatic Watches",
+    "handle": "automatic-watches",
+    "description": "",
+    "published_at": "2024-09-26T12:36:43-04:00",
+    "updated_at": "2026-04-25T07:18:06-04:00",
+    "image": {
+      "id": 1747920716073,
+      "created_at": "2025-01-23T00:13:27-05:00",
+      "src": "https://cdn.shopify.com/s/files/1/0758/5333/2777/collections/5_4.webp?v=1737609207",
+      "alt": null
+    },
+    "products_count": 11
+  },
+  {
+    "id": 478412407081,
+    "title": "BOGO WATCHES",
+    "handle": "bogo-watches",
+    "description": "",
+    "published_at": "2024-09-14T14:28:34-04:00",
+    "updated_at": "2026-04-25T07:18:07-04:00",
+    "image": null,
+    "products_count": 83
+  },
+  {
+    "id": 475864826153,
+    "title": "BUY 1 GET 1 FREE",
+    "handle": "watches",
+    "description": "",
+    "published_at": "2024-07-23T13:25:46-04:00",
+    "updated_at": "2026-04-25T07:18:07-04:00",
+    "image": null,
+    "products_count": 79
+  },
+  {
+    "id": 476323545385,
+    "title": "Grealy Collection",
+    "handle": "grealy-collection",
+    "description": "",
+    "published_at": "2024-08-04T10:45:59-04:00",
+    "updated_at": "2026-04-25T07:18:07-04:00",
+    "image": {
+      "id": 1746188665129,
+      "created_at": "2024-08-04T23:58:15-04:00",
+      "src": "https://cdn.shopify.com/s/files/1/0758/5333/2777/collections/7_d56bb54e-552c-4658-af97-21962e7f61ff.png?v=1722830295",
+      "alt": null
+    },
+    "products_count": 19
+  },
+  {
+    "id": 478956093737,
+    "title": "Men's Watches",
+    "handle": "mens-watches",
+    "description": "",
+    "published_at": "2024-09-26T12:39:39-04:00",
+    "updated_at": "2026-04-25T07:18:07-04:00",
+    "image": {
+      "id": 1747920617769,
+      "created_at": "2025-01-23T00:12:37-05:00",
+      "src": "https://cdn.shopify.com/s/files/1/0758/5333/2777/collections/2_2.webp?v=1737609157",
+      "alt": null
+    },
+    "products_count": 61
+  },
+  {
+    "id": 480833470761,
+    "title": "NEW WATCHES",
+    "handle": "new-watches",
+    "description": "<p>NEW WATCHES</p>",
+    "published_at": "2024-11-15T13:50:56-05:00",
+    "updated_at": "2026-04-20T16:12:35-04:00",
+    "image": null,
+    "products_count": 2
+  },
+  {
+    "id": 475859386665,
+    "title": "Old Money Collection",
+    "handle": "poedagar-collection",
+    "description": "",
+    "published_at": "2024-07-23T10:43:21-04:00",
+    "updated_at": "2026-04-25T07:18:07-04:00",
+    "image": {
+      "id": 1746097570089,
+      "created_at": "2024-07-23T10:43:20-04:00",
+      "src": "https://cdn.shopify.com/s/files/1/0758/5333/2777/collections/Untitled_design_51_1.png?v=1721745801",
+      "alt": null
+    },
+    "products_count": 31
+  },
+  {
+    "id": 476272984361,
+    "title": "Poedagar Cart",
+    "handle": "poedagar-cart",
+    "description": "",
+    "published_at": "2024-08-02T19:44:07-04:00",
+    "updated_at": "2026-04-25T07:18:06-04:00",
+    "image": null,
+    "products_count": 2
+  },
+  {
+    "id": 476325118249,
+    "title": "Products",
+    "handle": "products",
+    "description": "",
+    "published_at": "2024-08-04T12:31:38-04:00",
+    "updated_at": "2026-04-25T07:18:07-04:00",
+    "image": null,
+    "products_count": 84
+  },
+  {
+    "id": 478956028201,
+    "title": "Quartz Watches",
+    "handle": "quartz-watches",
+    "description": "",
+    "published_at": "2024-09-26T12:37:19-04:00",
+    "updated_at": "2026-04-25T07:18:07-04:00",
+    "image": {
+      "id": 1747920650537,
+      "created_at": "2025-01-23T00:12:50-05:00",
+      "src": "https://cdn.shopify.com/s/files/1/0758/5333/2777/collections/4_5.webp?v=1737609170",
+      "alt": null
+    },
+    "products_count": 69
+  },
+  {
+    "id": 498352128297,
+    "title": "Sport Watches",
+    "handle": "sport-watches",
+    "description": "",
+    "published_at": "2025-12-05T12:09:40-05:00",
+    "updated_at": "2026-04-25T07:18:06-04:00",
+    "image": null,
+    "products_count": 13
+  },
+  {
+    "id": 483579461929,
+    "title": "TEST",
+    "handle": "test",
+    "description": "",
+    "published_at": "2025-01-24T00:45:16-05:00",
+    "updated_at": "2026-04-20T16:12:35-04:00",
+    "image": null,
+    "products_count": 0
+  },
+  {
+    "id": 475860762921,
+    "title": "Watch Accessories",
+    "handle": "watch-accessories",
+    "description": "",
+    "published_at": "2024-07-23T11:24:19-04:00",
+    "updated_at": "2026-04-25T07:18:06-04:00",
+    "image": {
+      "id": 1747920748841,
+      "created_at": "2025-01-23T00:17:59-05:00",
+      "src": "https://cdn.shopify.com/s/files/1/0758/5333/2777/collections/Buy_2_Get_1_FREE_14.webp?v=1737609480",
+      "alt": null
+    },
+    "products_count": 4
+  },
+  {
+    "id": 478956126505,
+    "title": "Women's Watches",
+    "handle": "womens-watches",
+    "description": "",
+    "published_at": "2024-09-26T12:39:58-04:00",
+    "updated_at": "2026-04-25T07:18:07-04:00",
+    "image": {
+      "id": 1747920683305,
+      "created_at": "2025-01-23T00:13:06-05:00",
+      "src": "https://cdn.shopify.com/s/files/1/0758/5333/2777/collections/3_4.webp?v=1737609186",
+      "alt": null
+    },
+    "products_count": 19
+  }
+]

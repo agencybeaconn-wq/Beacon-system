@@ -1,0 +1,634 @@
+[
+  {
+    "name": "Lever System",
+    "url": "https://pxhmzpwvxvlwngjbjkrg.supabase.co",
+    "ok": true,
+    "tables": [
+      {
+        "table": "academy_comment_likes",
+        "rows": 0
+      },
+      {
+        "table": "academy_comments",
+        "rows": 0
+      },
+      {
+        "table": "academy_enrollments",
+        "rows": 0
+      },
+      {
+        "table": "academy_expenses",
+        "rows": 0
+      },
+      {
+        "table": "academy_goals",
+        "rows": 0
+      },
+      {
+        "table": "academy_invite_redemptions",
+        "rows": 0
+      },
+      {
+        "table": "academy_invites",
+        "rows": 4
+      },
+      {
+        "table": "academy_lesson_materials",
+        "rows": 13
+      },
+      {
+        "table": "academy_lesson_progress",
+        "rows": 1
+      },
+      {
+        "table": "academy_lesson_students",
+        "rows": 8
+      },
+      {
+        "table": "academy_lessons",
+        "rows": 6
+      },
+      {
+        "table": "academy_modules",
+        "rows": 1
+      },
+      {
+        "table": "academy_revenue",
+        "rows": 4
+      },
+      {
+        "table": "academy_students",
+        "rows": 4
+      },
+      {
+        "table": "agency_access_levels",
+        "rows": 2
+      },
+      {
+        "table": "agency_clients",
+        "rows": 63
+      },
+      {
+        "table": "agency_expenses",
+        "rows": 8
+      },
+      {
+        "table": "agency_product_features",
+        "rows": 0
+      },
+      {
+        "table": "agency_products",
+        "rows": 7
+      },
+      {
+        "table": "agency_roles",
+        "rows": 8
+      },
+      {
+        "table": "briefings",
+        "rows": 16
+      },
+      {
+        "table": "campaigns",
+        "rows": 272
+      },
+      {
+        "table": "clarity_api_usage",
+        "rows": 1
+      },
+      {
+        "table": "clarity_insights_cache",
+        "rows": 1
+      },
+      {
+        "table": "client_assigned_tasks",
+        "rows": 19
+      },
+      {
+        "table": "client_daily_metrics",
+        "rows": 4
+      },
+      {
+        "table": "client_documents",
+        "rows": 9
+      },
+      {
+        "table": "client_invoices",
+        "rows": 73
+      },
+      {
+        "table": "client_latest_scores",
+        "rows": 0
+      },
+      {
+        "table": "client_pricing",
+        "rows": 322
+      },
+      {
+        "table": "client_quality_config",
+        "rows": 0
+      },
+      {
+        "table": "client_quality_runs",
+        "rows": 37
+      },
+      {
+        "table": "client_resources",
+        "rows": 30
+      },
+      {
+        "table": "client_smart_data",
+        "rows": 1
+      },
+      {
+        "table": "client_step_status",
+        "rows": 7
+      },
+      {
+        "table": "client_tasks",
+        "rows": 386
+      },
+      {
+        "table": "crm_kanban_columns",
+        "rows": 6
+      },
+      {
+        "table": "crm_leads",
+        "rows": 82
+      },
+      {
+        "table": "demand_requests",
+        "rows": 165
+      },
+      {
+        "table": "dw_customer_identity",
+        "rows": 1014
+      },
+      {
+        "table": "dw_customers",
+        "rows": 2449
+      },
+      {
+        "table": "dw_meta_accounts",
+        "rows": 47
+      },
+      {
+        "table": "dw_meta_ads",
+        "rows": 2338
+      },
+      {
+        "table": "dw_meta_adsets",
+        "rows": 1007
+      },
+      {
+        "table": "dw_meta_campaigns",
+        "rows": 350
+      },
+      {
+        "table": "dw_meta_insights_daily",
+        "rows": 9428
+      },
+      {
+        "table": "dw_order_items",
+        "rows": 5541
+      },
+      {
+        "table": "dw_orders",
+        "rows": 2618
+      },
+      {
+        "table": "dw_products",
+        "rows": 8830
+      },
+      {
+        "table": "dw_sync_state",
+        "rows": 18
+      },
+      {
+        "table": "dw_v_catalog_gap",
+        "rows": 7297
+      },
+      {
+        "table": "dw_v_cross_store_customers",
+        "rows": 0
+      },
+      {
+        "table": "dw_v_customer_rfm",
+        "rows": 1600
+      },
+      {
+        "table": "dw_v_geo_team_heatmap",
+        "rows": 716
+      },
+      {
+        "table": "dw_v_meta_vs_shopify_daily",
+        "rows": 0
+      },
+      {
+        "table": "dw_v_product_replication_gap",
+        "rows": 43
+      },
+      {
+        "table": "dw_v_sku_velocity",
+        "rows": 1050
+      },
+      {
+        "table": "dw_v_top_ads_30d",
+        "rows": 655
+      },
+      {
+        "table": "fb_connections",
+        "rows": 2
+      },
+      {
+        "table": "financial_transactions",
+        "rows": 0
+      },
+      {
+        "table": "fixed_costs",
+        "rows": 0
+      },
+      {
+        "table": "google_connections",
+        "rows": 1
+      },
+      {
+        "table": "insights",
+        "rows": 633
+      },
+      {
+        "table": "integrations_config",
+        "rows": 0
+      },
+      {
+        "table": "library_lists",
+        "rows": 5
+      },
+      {
+        "table": "library_videos",
+        "rows": 27
+      },
+      {
+        "table": "marketing_spend",
+        "rows": 0
+      },
+      {
+        "table": "meeting_reminders",
+        "rows": 0
+      },
+      {
+        "table": "member_access_levels",
+        "rows": 0
+      },
+      {
+        "table": "member_commissions",
+        "rows": 0
+      },
+      {
+        "table": "member_roles",
+        "rows": 4
+      },
+      {
+        "table": "notifications",
+        "rows": 920
+      },
+      {
+        "table": "onboarding",
+        "rows": 16
+      },
+      {
+        "table": "onboarding_phases",
+        "rows": 87
+      },
+      {
+        "table": "onboarding_tasks",
+        "rows": 516
+      },
+      {
+        "table": "onboarding_timeline",
+        "rows": 191
+      },
+      {
+        "table": "one_off_receivables",
+        "rows": 0
+      },
+      {
+        "table": "paperclip_action_log",
+        "rows": 30
+      },
+      {
+        "table": "partners_prolabore",
+        "rows": 3
+      },
+      {
+        "table": "product_costs",
+        "rows": 0
+      },
+      {
+        "table": "profiles",
+        "rows": 43
+      },
+      {
+        "table": "reviews",
+        "rows": 3855
+      },
+      {
+        "table": "sales_goals",
+        "rows": 4
+      },
+      {
+        "table": "sales_records",
+        "rows": 56
+      },
+      {
+        "table": "shipments",
+        "rows": 1
+      },
+      {
+        "table": "store_deployments",
+        "rows": 0
+      },
+      {
+        "table": "studio_ia_images",
+        "rows": 8
+      },
+      {
+        "table": "task_columns",
+        "rows": 5
+      },
+      {
+        "table": "task_comments",
+        "rows": 6
+      },
+      {
+        "table": "task_time_entries",
+        "rows": 22
+      },
+      {
+        "table": "team_members",
+        "rows": 46
+      },
+      {
+        "table": "training_lists",
+        "rows": 1
+      },
+      {
+        "table": "training_videos",
+        "rows": 0
+      },
+      {
+        "table": "v_agency_clients_visible",
+        "rows": 46
+      },
+      {
+        "table": "v_demand_requests_triaged",
+        "rows": 165
+      },
+      {
+        "table": "v_reviews_summary",
+        "rows": 26
+      },
+      {
+        "table": "variable_costs",
+        "rows": 0
+      },
+      {
+        "table": "webhook_events",
+        "rows": 24580
+      },
+      {
+        "table": "webhook_subscriptions",
+        "rows": 0
+      },
+      {
+        "table": "whatsapp_connections",
+        "rows": 1
+      },
+      {
+        "table": "workspace_members",
+        "rows": 0
+      },
+      {
+        "table": "workspaces",
+        "rows": 1
+      }
+    ],
+    "errors": [],
+    "edgeFunctions": {
+      "skipped": true,
+      "reason": "Requires Management API (PAT), not service_role"
+    }
+  },
+  {
+    "name": "Leverads",
+    "url": "https://edylotwjpfabakafqrgf.supabase.co",
+    "ok": true,
+    "tables": [
+      {
+        "table": "account_groups",
+        "rows": 1
+      },
+      {
+        "table": "account_settings",
+        "rows": 10
+      },
+      {
+        "table": "ad_accounts",
+        "rows": 24
+      },
+      {
+        "table": "ads",
+        "rows": 2560
+      },
+      {
+        "table": "adsets",
+        "rows": 2065
+      },
+      {
+        "table": "agency_clients",
+        "rows": 2
+      },
+      {
+        "table": "asset_folder_items",
+        "rows": 5
+      },
+      {
+        "table": "asset_folders",
+        "rows": 49
+      },
+      {
+        "table": "automation_rule_logs",
+        "rows": 0
+      },
+      {
+        "table": "automation_rules",
+        "rows": 25
+      },
+      {
+        "table": "budget_configs",
+        "rows": 0
+      },
+      {
+        "table": "campaign_drafts",
+        "rows": 14
+      },
+      {
+        "table": "campaigns",
+        "rows": 900
+      },
+      {
+        "table": "chat_messages",
+        "rows": 0
+      },
+      {
+        "table": "client_ad_accounts",
+        "rows": 2
+      },
+      {
+        "table": "client_goals",
+        "rows": 1
+      },
+      {
+        "table": "client_upload_links",
+        "rows": 6
+      },
+      {
+        "table": "client_uploads",
+        "rows": 3
+      },
+      {
+        "table": "fb_connections",
+        "rows": 6
+      },
+      {
+        "table": "google_tokens",
+        "rows": 0
+      },
+      {
+        "table": "identity_cache",
+        "rows": 12
+      },
+      {
+        "table": "insights",
+        "rows": 12231
+      },
+      {
+        "table": "meta_tokens",
+        "rows": 4
+      },
+      {
+        "table": "notification_settings",
+        "rows": 1
+      },
+      {
+        "table": "profiles",
+        "rows": 28
+      },
+      {
+        "table": "shared_dashboards",
+        "rows": 1
+      },
+      {
+        "table": "shopify_configs",
+        "rows": 1
+      },
+      {
+        "table": "shopify_daily_revenue",
+        "rows": 2
+      },
+      {
+        "table": "system_audit_logs",
+        "rows": 0
+      },
+      {
+        "table": "targeting_cache",
+        "rows": 0
+      },
+      {
+        "table": "team_members",
+        "rows": 0
+      },
+      {
+        "table": "user_authority",
+        "rows": 28
+      },
+      {
+        "table": "user_column_presets",
+        "rows": 0
+      },
+      {
+        "table": "workspaces",
+        "rows": 9
+      }
+    ],
+    "errors": [],
+    "edgeFunctions": {
+      "skipped": true,
+      "reason": "Requires Management API (PAT), not service_role"
+    }
+  },
+  {
+    "name": "Lever LP",
+    "url": "https://phfxxdezfhgpvsztjqlw.supabase.co",
+    "ok": true,
+    "tables": [
+      {
+        "table": "leads",
+        "rows": 82
+      }
+    ],
+    "errors": [],
+    "edgeFunctions": {
+      "skipped": true,
+      "reason": "Requires Management API (PAT), not service_role"
+    }
+  },
+  {
+    "name": "Lever Site - Licenças",
+    "url": "https://ykctllrqygchllhxnkjh.supabase.co",
+    "ok": true,
+    "tables": [
+      {
+        "table": "leads",
+        "rows": 0
+      },
+      {
+        "table": "licenses",
+        "rows": 56
+      },
+      {
+        "table": "melhor_envio_tokens",
+        "rows": 1
+      }
+    ],
+    "errors": [],
+    "edgeFunctions": {
+      "skipped": true,
+      "reason": "Requires Management API (PAT), not service_role"
+    }
+  },
+  {
+    "name": "AbCon",
+    "url": "https://blavhpegamfzvojkkrue.supabase.co",
+    "ok": true,
+    "tables": [
+      {
+        "table": "leads",
+        "rows": 3
+      },
+      {
+        "table": "sales",
+        "rows": 1
+      },
+      {
+        "table": "sellers",
+        "rows": 8
+      }
+    ],
+    "errors": [],
+    "edgeFunctions": {
+      "skipped": true,
+      "reason": "Requires Management API (PAT), not service_role"
+    }
+  }
+]

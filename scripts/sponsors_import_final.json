@@ -1,0 +1,546 @@
+[
+  {
+    "orig": "Camisa Corinthians 2025/26 III Jogador Com Patrocínios",
+    "handle": "camisa-nike-corinthians-202526-iii-jogador-com-patrocinios",
+    "info": {
+      "club": "Corinthians",
+      "edition": "Third",
+      "year": "25/26",
+      "model": "Jogador",
+      "brand": "Nike",
+      "fem": false,
+      "ml": false
+    },
+    "color": "Preta e Laranja",
+    "newTitle": "Corinthians Third 25/26 Jogador Com Patrocínios Nike Masculino - Preta e Laranja",
+    "priceBase": 269.9
+  },
+  {
+    "orig": "Camisa Feminina Corinthians 2025/26 III Torcedor Com Patrocínios",
+    "handle": "camisa-feminina-nike-corinthians-202526-iii-torcedor-com-patrocinios",
+    "info": {
+      "club": "Corinthians",
+      "edition": "Third",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Nike",
+      "fem": true,
+      "ml": false
+    },
+    "color": "Preta e Laranja",
+    "newTitle": "Corinthians Third 25/26 Torcedor Com Patrocínios Nike Feminina - Preta e Laranja",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Corinthians 2025/26 III Torcedor Com Patrocínios",
+    "handle": "camisa-nike-corinthians-202526-iii-torcedor-com-patrocinios",
+    "info": {
+      "club": "Corinthians",
+      "edition": "Third",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Nike",
+      "fem": false,
+      "ml": false
+    },
+    "color": "Preta e Laranja",
+    "newTitle": "Corinthians Third 25/26 Torcedor Com Patrocínios Nike Masculino - Preta e Laranja",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Corinthians 2024/25 II Torcedor Com Patrocínios",
+    "handle": "camisa-nike-corinthians-202425-ii-torcedor-com-patrocinios",
+    "info": {
+      "club": "Corinthians",
+      "edition": "Away",
+      "year": "24/25",
+      "model": "Torcedor",
+      "brand": "Nike",
+      "fem": false,
+      "ml": false
+    },
+    "color": "",
+    "newTitle": "Corinthians Away 24/25 Torcedor Com Patrocínios Nike Masculino",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Corinthians 2025/26 I Torcedor Com Patrocínios",
+    "handle": "camisa-nike-corinthians-202526-i-torcedor-com-patrocinios",
+    "info": {
+      "club": "Corinthians",
+      "edition": "Home",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Nike",
+      "fem": false,
+      "ml": false
+    },
+    "color": "Branca e Preta",
+    "newTitle": "Corinthians Home 25/26 Torcedor Com Patrocínios Nike Masculino - Branca e Preta",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Corinthians 2025/26 I Jogador Com Patrocínios",
+    "handle": "camisa-nike-corinthians-202526-i-jogador-com-patrocinios",
+    "info": {
+      "club": "Corinthians",
+      "edition": "Home",
+      "year": "25/26",
+      "model": "Jogador",
+      "brand": "Nike",
+      "fem": false,
+      "ml": false
+    },
+    "color": "Branca e Preta",
+    "newTitle": "Corinthians Home 25/26 Jogador Com Patrocínios Nike Masculino - Branca e Preta",
+    "priceBase": 269.9
+  },
+  {
+    "orig": "Camisa Corinthians 2024/25 II Jogador Com Patrocínios",
+    "handle": "camisa-nike-corinthians-202425-ii-jogador-com-patrocinios",
+    "info": {
+      "club": "Corinthians",
+      "edition": "Away",
+      "year": "24/25",
+      "model": "Jogador",
+      "brand": "Nike",
+      "fem": false,
+      "ml": false
+    },
+    "color": "Preto",
+    "newTitle": "Corinthians Away 24/25 Jogador Com Patrocínios Nike Masculino - Preto",
+    "priceBase": 269.9
+  },
+  {
+    "orig": "Camisa Feminina Corinthians 2025/26 I Torcedor Com Patrocínios",
+    "handle": "camisa-feminina-nike-corinthians-202526-i-torcedor-com-patrocinios",
+    "info": {
+      "club": "Corinthians",
+      "edition": "Home",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Nike",
+      "fem": true,
+      "ml": false
+    },
+    "color": "Branca e Preta",
+    "newTitle": "Corinthians Home 25/26 Torcedor Com Patrocínios Nike Feminina - Branca e Preta",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Corinthians 2025/26 II Jogador Com Patrocínios",
+    "handle": "camisa-nike-corinthians-202526-ii-jogador-com-patrocinios",
+    "info": {
+      "club": "Corinthians",
+      "edition": "Away",
+      "year": "25/26",
+      "model": "Jogador",
+      "brand": "Nike",
+      "fem": false,
+      "ml": false
+    },
+    "color": "Preta e Branca",
+    "newTitle": "Corinthians Away 25/26 Jogador Com Patrocínios Nike Masculino - Preta e Branca",
+    "priceBase": 269.9
+  },
+  {
+    "orig": "Camisa Feminina Flamengo 2025/26 III Torcedor Com Patrocínios",
+    "handle": "camisa-feminina-adidas-flamengo-202526-iii-torcedor-com-patrocinios",
+    "info": {
+      "club": "Flamengo",
+      "edition": "Third",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Adidas",
+      "fem": true,
+      "ml": false
+    },
+    "color": "Bege",
+    "newTitle": "Flamengo Third 25/26 Torcedor Com Patrocínios Adidas Feminina - Bege",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Flamengo 2025/26 III Torcedor Com Patrocínios",
+    "handle": "camisa-adidas-flamengo-202526-iii-torcedor-com-patrocinios",
+    "info": {
+      "club": "Flamengo",
+      "edition": "Third",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Adidas",
+      "fem": false,
+      "ml": false
+    },
+    "color": "Bege",
+    "newTitle": "Flamengo Third 25/26 Torcedor Com Patrocínios Adidas Masculino - Bege",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Flamengo 2014 I Retrô com Patrocinadores",
+    "handle": "camisa-adidas-flamengo-2014-i-retro-com-patrocinadores",
+    "info": {
+      "club": "Flamengo",
+      "edition": "Home",
+      "year": "",
+      "model": "Retrô",
+      "brand": "Adidas",
+      "fem": false,
+      "ml": false
+    },
+    "color": "Vermelho e Preto",
+    "newTitle": "[INCOMPLETE]",
+    "priceBase": 279.9
+  },
+  {
+    "orig": "Camisa Flamengo 2025/26 I Authentic Com Patrocínios",
+    "handle": "camisa-adidas-flamengo-202526-i-authentic-com-patrocinios",
+    "info": {
+      "club": "Flamengo",
+      "edition": "Home",
+      "year": "25/26",
+      "model": "Authentic",
+      "brand": "Adidas",
+      "fem": false,
+      "ml": false
+    },
+    "color": "Vermelho e Preto",
+    "newTitle": "Flamengo Home 25/26 Authentic Com Patrocínios Adidas Masculino - Vermelho e Preto",
+    "priceBase": 269.9
+  },
+  {
+    "orig": "Camisa Flamengo 2025/26 I Torcedor Com Patrocínios",
+    "handle": "camisa-adidas-flamengo-202526-i-torcedor-com-patrocinios",
+    "info": {
+      "club": "Flamengo",
+      "edition": "Home",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Adidas",
+      "fem": false,
+      "ml": false
+    },
+    "color": "Vermelho e Preto",
+    "newTitle": "Flamengo Home 25/26 Torcedor Com Patrocínios Adidas Masculino - Vermelho e Preto",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Flamengo 2025/26 II Torcedor Com Patrocínios",
+    "handle": "camisa-adidas-flamengo-202526-ii-torcedor-com-patrocinios",
+    "info": {
+      "club": "Flamengo",
+      "edition": "Away",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Adidas",
+      "fem": false,
+      "ml": false
+    },
+    "color": "Branco",
+    "newTitle": "Flamengo Away 25/26 Torcedor Com Patrocínios Adidas Masculino - Branco",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Feminina Flamengo 2025/26 I Torcedor Com Patrocínios",
+    "handle": "camisa-feminina-adidas-flamengo-202526-i-torcedor-com-patrocinios",
+    "info": {
+      "club": "Flamengo",
+      "edition": "Home",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Adidas",
+      "fem": true,
+      "ml": false
+    },
+    "color": "Vemelho e Preto",
+    "newTitle": "Flamengo Home 25/26 Torcedor Com Patrocínios Adidas Feminina - Vemelho e Preto",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Feminina Flamengo 2025/26 II Torcedor Com Patrocínios",
+    "handle": "camisa-feminina-adidas-flamengo-202526-ii-torcedor-com-patrocinios",
+    "info": {
+      "club": "Flamengo",
+      "edition": "Away",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Adidas",
+      "fem": true,
+      "ml": false
+    },
+    "color": "Branca",
+    "newTitle": "Flamengo Away 25/26 Torcedor Com Patrocínios Adidas Feminina - Branca",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Internacional 2025/26 I Torcedor Com Patrocínios",
+    "handle": "camisa-adidas-internacional-202526-i-torcedor-com-patrocinios",
+    "info": {
+      "club": "Internacional",
+      "edition": "Home",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Adidas",
+      "fem": false,
+      "ml": false
+    },
+    "color": "",
+    "newTitle": "Internacional Home 25/26 Torcedor Com Patrocínios Adidas Masculino",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Internacional Manga Longa 2025/26 I Com Patrocínios",
+    "handle": "camisa-adidas-internacional-manga-longa-202526-i-com-patrocinios",
+    "info": {
+      "club": "Internacional",
+      "edition": "Home",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Adidas",
+      "fem": false,
+      "ml": true
+    },
+    "color": "",
+    "newTitle": "Internacional Home 25/26 Manga Longa Torcedor Com Patrocínios Adidas Masculino",
+    "priceBase": 279.9
+  },
+  {
+    "orig": "Camisa Palmeiras 2025/26 II Torcedor Com Patrocínios",
+    "handle": "camisa-puma-palmeiras-202526-ii-torcedor-com-patrocinios",
+    "info": {
+      "club": "Palmeiras",
+      "edition": "Away",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Puma",
+      "fem": false,
+      "ml": false
+    },
+    "color": "Branca e Verde",
+    "newTitle": "Palmeiras Away 25/26 Torcedor Com Patrocínios Puma Masculino - Branca e Verde",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Palmeiras 2025/26 I Torcedor Com Patrocínios",
+    "handle": "camisa-puma-palmeiras-202526-i-torcedor-com-patrocinios",
+    "info": {
+      "club": "Palmeiras",
+      "edition": "Home",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Puma",
+      "fem": false,
+      "ml": false
+    },
+    "color": "Verde",
+    "newTitle": "Palmeiras Home 25/26 Torcedor Com Patrocínios Puma Masculino - Verde",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Feminina Internacional 2025/26 I Torcedor Com Patrocínios",
+    "handle": "camisa-feminina-adidas-internacional-202526-i-torcedor-com-patrocinios",
+    "info": {
+      "club": "Internacional",
+      "edition": "Home",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Adidas",
+      "fem": true,
+      "ml": false
+    },
+    "color": "",
+    "newTitle": "Internacional Home 25/26 Torcedor Com Patrocínios Adidas Feminina",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Corinthians 2025/26 II Torcedor Com Patrocínios",
+    "handle": "camisa-nike-corinthians-202526-ii-torcedor-com-patrocinios",
+    "info": {
+      "club": "Corinthians",
+      "edition": "Away",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Nike",
+      "fem": false,
+      "ml": false
+    },
+    "color": "Preta e Branca",
+    "newTitle": "Corinthians Away 25/26 Torcedor Com Patrocínios Nike Masculino - Preta e Branca",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Feminina Corinthians 2025/26 II Torcedor Com Patrocínios",
+    "handle": "camisa-feminina-nike-corinthians-202526-ii-torcedor-com-patrocinios",
+    "info": {
+      "club": "Corinthians",
+      "edition": "Away",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Nike",
+      "fem": true,
+      "ml": false
+    },
+    "color": "Preta e Branca",
+    "newTitle": "Corinthians Away 25/26 Torcedor Com Patrocínios Nike Feminina - Preta e Branca",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Internacional 2025/26 II Torcedor Com Patrocínios",
+    "handle": "camisa-adidas-internacional-202526-ii-torcedor-com-patrocinios",
+    "info": {
+      "club": "Internacional",
+      "edition": "Away",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Adidas",
+      "fem": false,
+      "ml": false
+    },
+    "color": "",
+    "newTitle": "Internacional Away 25/26 Torcedor Com Patrocínios Adidas Masculino",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Feminina Internacional 2025/26 II Torcedor Com Patrocínios",
+    "handle": "camisa-feminina-adidas-internacional-202526-ii-torcedor-com-patrocinios",
+    "info": {
+      "club": "Internacional",
+      "edition": "Away",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Adidas",
+      "fem": true,
+      "ml": false
+    },
+    "color": "",
+    "newTitle": "Internacional Away 25/26 Torcedor Com Patrocínios Adidas Feminina",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Feminina Cruzeiro 2025/26 I Torcedor Com Patrocínios",
+    "handle": "camisa-feminina-adidas-cruzeiro-202526-i-torcedor-com-patrocinios",
+    "info": {
+      "club": "Cruzeiro",
+      "edition": "Home",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Adidas",
+      "fem": true,
+      "ml": false
+    },
+    "color": "",
+    "newTitle": "Cruzeiro Home 25/26 Torcedor Com Patrocínios Adidas Feminina",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Cruzeiro 2025/26 I Torcedor Com Patrocínios",
+    "handle": "camisa-adidas-cruzeiro-202526-i-torcedor-com-patrocinios",
+    "info": {
+      "club": "Cruzeiro",
+      "edition": "Home",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Adidas",
+      "fem": false,
+      "ml": false
+    },
+    "color": "Azul e Branco",
+    "newTitle": "Cruzeiro Home 25/26 Torcedor Com Patrocínios Adidas Masculino - Azul e Branco",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Fluminense 2025/26 I Torcedor Com Patrocinios",
+    "handle": "camisa-umbro-fluminense-202526-i-torcedor-com-patrocinios",
+    "info": {
+      "club": "Fluminense",
+      "edition": "Home",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Umbro",
+      "fem": false,
+      "ml": false
+    },
+    "color": "",
+    "newTitle": "Fluminense Home 25/26 Torcedor Com Patrocínios Umbro Masculino",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Fluminense 2025/26 II Torcedor Fluminense Com Patrocinios",
+    "handle": "camisa-umbro-fluminense-202526-ii-torcedor-fluminense-com-patrocinios",
+    "info": {
+      "club": "Fluminense",
+      "edition": "Away",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Umbro",
+      "fem": false,
+      "ml": false
+    },
+    "color": "",
+    "newTitle": "Fluminense Away 25/26 Torcedor Com Patrocínios Umbro Masculino",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Feminina Fluminense 2025/26 I Torcedor Com Patrocinios",
+    "handle": "camisa-feminina-umbro-fluminense-202526-i-torcedor-com-patrocinios",
+    "info": {
+      "club": "Fluminense",
+      "edition": "Home",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Umbro",
+      "fem": true,
+      "ml": false
+    },
+    "color": "",
+    "newTitle": "Fluminense Home 25/26 Torcedor Com Patrocínios Umbro Feminina",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Feminina Fluminense 2025/26 II Torcedor Com Patrocínio",
+    "handle": "camisa-feminina-umbro-fluminense-202526-ii-torcedor-com-patrocinio",
+    "info": {
+      "club": "Fluminense",
+      "edition": "Away",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Umbro",
+      "fem": true,
+      "ml": false
+    },
+    "color": "",
+    "newTitle": "Fluminense Away 25/26 Torcedor Com Patrocínios Umbro Feminina",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Cruzeiro 2025/26 II Torcedor COM PATROCÍNIOS",
+    "handle": "camisa-adidas-cruzeiro-202526-ii-torcedor-com-patrocinios",
+    "info": {
+      "club": "Cruzeiro",
+      "edition": "Away",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Adidas",
+      "fem": false,
+      "ml": false
+    },
+    "color": "Branco e Azul",
+    "newTitle": "Cruzeiro Away 25/26 Torcedor Com Patrocínios Adidas Masculino - Branco e Azul",
+    "priceBase": 249.9
+  },
+  {
+    "orig": "Camisa Feminina Cruzeiro 2025/26 II Torcedor COM PATROCÍNIOS",
+    "handle": "camisa-feminina-adidas-cruzeiro-202526-ii-torcedor-com-patrocinios",
+    "info": {
+      "club": "Cruzeiro",
+      "edition": "Away",
+      "year": "25/26",
+      "model": "Torcedor",
+      "brand": "Adidas",
+      "fem": true,
+      "ml": false
+    },
+    "color": "",
+    "newTitle": "Cruzeiro Away 25/26 Torcedor Com Patrocínios Adidas Feminina",
+    "priceBase": 249.9
+  }
+]

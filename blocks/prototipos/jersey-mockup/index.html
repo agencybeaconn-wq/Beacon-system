@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Mockup Personalização — Brasil 2026/27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Big+Shoulders+Stencil+Display:wght@800;900&family=Black+Ops+One&family=Bungee&family=Oswald:wght@700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ececec;
+    --panel: #ffffff;
+    --ink: #0d2c2c;
+    --muted: #6b7280;
+    --accent: #7c3aed;
+    --jersey-text: #0a7e7a;
+    --jersey-font: 'Bebas Neue', sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: var(--ink); }
+
+  .app {
+    display: grid;
+    grid-template-columns: 80px 1fr 380px;
+    gap: 16px;
+    padding: 24px;
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+
+  /* ===== GALLERY THUMBS ===== */
+  .thumbs { display: flex; flex-direction: column; gap: 8px; }
+  .thumb {
+    width: 80px; height: 80px;
+    border-radius: 8px; overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    background: #fff;
+    transition: border-color .15s;
+    position: relative;
+  }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .thumb.active { border-color: var(--ink); }
+  .thumb.mockup-thumb { border: 2px dashed var(--accent); }
+  .thumb.mockup-thumb::after {
+    content: "PREVIEW";
+    position: absolute; bottom: 2px; left: 2px; right: 2px;
+    background: var(--accent); color: #fff;
+    font-size: 8px; text-align: center; padding: 1px 0;
+    border-radius: 3px; font-weight: 700;
+  }
+
+  /* ===== STAGE ===== */
+  .stage-wrap { background: var(--panel); border-radius: 16px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  .stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    container-type: inline-size;
+  }
+  .stage img.main-photo {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: contain;
+    user-select: none; pointer-events: none;
+  }
+  .mockup-layer { position: absolute; inset: 0; display: none; }
+  .mockup-layer.active { display: block; }
+  .mockup-layer img.base {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: contain;
+    user-select: none; pointer-events: none;
+  }
+
+  .box {
+    position: absolute;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--jersey-text);
+    font-family: var(--jersey-font);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    user-select: none; pointer-events: none;
+    text-shadow: 0 1px 0 rgba(0,0,0,.05);
+  }
+  .box.name {
+    top: 15%;
+    left: 21%;
+    width: 58%;
+    height: 8.5%;
+  }
+  .box.number {
+    top: 34%;
+    left: 36%;
+    width: 28%;
+    height: 22%;
+  }
+  .stage.dev .box {
+    outline: 2px dashed #ef4444;
+    background: rgba(239,68,68,.06);
+  }
+
+  /* ===== PANEL CLIENTE ===== */
+  .panel {
+    background: var(--panel);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    display: flex; flex-direction: column; gap: 16px;
+    height: fit-content;
+  }
+  .panel h2 { margin: 0 0 4px; font-size: 16px; }
+  .panel small { color: var(--muted); font-size: 12px; }
+
+  .toggle { display: flex; gap: 8px; }
+  .toggle button {
+    flex: 1; padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    border-radius: 8px;
+    cursor: pointer; font-size: 14px;
+    transition: all .15s;
+  }
+  .toggle button.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 13px; font-weight: 600; }
+  .field input[type="text"] {
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    text-transform: uppercase;
+    width: 100%;
+  }
+  .field input[type="text"]:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .counter { font-size: 11px; color: var(--muted); }
+  .counter.over { color: #ef4444; font-weight: 600; }
+
+  .field-disabled { opacity: .35; pointer-events: none; transition: opacity .2s; }
+
+  .disclaimer {
+    margin-top: 14px;
+    padding: 10px 12px;
+    background: #fff7e6;
+    border-left: 3px solid #f59e0b;
+    border-radius: 4px;
+    font-size: 11px;
+    color: #92400e;
+    line-height: 1.45;
+  }
+  .disclaimer strong { color: #78350f; }
+
+  /* ===== DEV PANEL (calibração) ===== */
+  details.dev-panel {
+    border-top: 1px solid #e5e7eb;
+    padding-top: 12px;
+    margin-top: 4px;
+  }
+  details.dev-panel summary { cursor: pointer; font-size: 12px; color: var(--muted); user-select: none; }
+  .dev-body { display: flex; flex-direction: column; gap: 14px; padding-top: 12px; }
+  .dev-section { display: flex; flex-direction: column; gap: 8px; }
+  .dev-section h3 { margin: 0; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+
+  .slider-row { display: grid; grid-template-columns: 60px 1fr 50px; gap: 8px; align-items: center; font-size: 12px; }
+  .slider-row input[type="range"] { width: 100%; }
+  .slider-row .val { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+
+  .fonts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .fonts button {
+    padding: 12px 6px;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all .15s;
+  }
+  .fonts button.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  .swatch-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .swatch { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px #d1d5db; cursor: pointer; }
+  .swatch.active { box-shadow: 0 0 0 2px var(--ink); }
+  .color-input { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+  .color-input input[type="color"] { width: 30px; height: 30px; border: 1px solid #d1d5db; border-radius: 6px; padding: 2px; cursor: pointer; background: #fff; }
+  .color-input code { font-size: 11px; color: var(--muted); padding: 4px 6px; background: #f3f4f6; border-radius: 4px; }
+
+  .copy-btn {
+    padding: 8px;
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .hint {
+    background: #f9fafb;
+    border-left: 3px solid var(--accent);
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="thumbs" id="thumbs"></div>
+
+  <div class="stage-wrap">
+    <div class="stage" id="stage">
+      <img class="main-photo" id="mainPhoto" src="frente.jpg" alt="">
+      <div class="mockup-layer" id="mockupLayer">
+        <img class="base" src="camisa-base.webp" alt="Camisa Brasil 2026/27 — costas">
+        <div class="box name" id="boxName"></div>
+        <div class="box number" id="boxNumber"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div>
+      <h2>Camisa Seleção Brasileira Jogador 2026/27 I</h2>
+      <small>R$ 349,99 — Personalização: +R$ 40</small>
+    </div>
+
+    <div class="toggle" id="toggleCustom">
+      <button data-val="0" class="active">Não</button>
+      <button data-val="1">Personalizar</button>
+    </div>
+
+    <div id="customFields" class="field-disabled">
+      <div class="field">
+        <label for="inpName">Nome</label>
+        <input id="inpName" type="text" maxlength="13" placeholder="Ex.: MATIAS">
+        <div class="counter" id="countName">0 / 13</div>
+      </div>
+
+      <div class="field" style="margin-top:12px">
+        <label for="inpNumber">Número</label>
+        <input id="inpNumber" type="text" maxlength="3" placeholder="Ex.: 10" inputmode="numeric">
+        <div class="counter" id="countNumber">0 / 3</div>
+      </div>
+
+      <div class="disclaimer">
+        <strong>Imagem meramente ilustrativa.</strong> A personalização real é feita pela nossa equipe seguindo o padrão oficial do produto — fonte, posição e cor podem ter pequenas variações.
+      </div>
+    </div>
+
+    <details class="dev-panel">
+      <summary>Painel do dev (Pedro)</summary>
+      <div class="dev-body">
+
+        <div class="dev-section">
+          <h3>Calibração dos boxes</h3>
+          <label style="display:flex;gap:8px;align-items:center;font-size:12px"><input type="checkbox" id="showBoxes"> Mostrar caixas-guia</label>
+
+          <div style="margin-top:6px;font-weight:600;font-size:12px">NOME</div>
+          <div class="slider-row"><span>Top</span><input type="range" id="nameTop" min="0" max="100" step="0.5" value="15"><span class="val" id="nameTopVal">15%</span></div>
+          <div class="slider-row"><span>Left</span><input type="range" id="nameLeft" min="0" max="100" step="0.5" value="21"><span class="val" id="nameLeftVal">21%</span></div>
+          <div class="slider-row"><span>Width</span><input type="range" id="nameWidth" min="10" max="80" step="0.5" value="58"><span class="val" id="nameWidthVal">58%</span></div>
+          <div class="slider-row"><span>Height</span><input type="range" id="nameHeight" min="2" max="20" step="0.5" value="8.5"><span class="val" id="nameHeightVal">8.5%</span></div>
+
+          <div style="margin-top:6px;font-weight:600;font-size:12px">NÚMERO</div>
+          <div class="slider-row"><span>Top</span><input type="range" id="numTop" min="0" max="100" step="0.5" value="34"><span class="val" id="numTopVal">34%</span></div>
+          <div class="slider-row"><span>Left</span><input type="range" id="numLeft" min="0" max="100" step="0.5" value="36"><span class="val" id="numLeftVal">36%</span></div>
+          <div class="slider-row"><span>Width</span><input type="range" id="numWidth" min="10" max="60" step="0.5" value="28"><span class="val" id="numWidthVal">28%</span></div>
+          <div class="slider-row"><span>Height</span><input type="range" id="numHeight" min="5" max="40" step="0.5" value="22"><span class="val" id="numHeightVal">22%</span></div>
+        </div>
+
+        <div class="dev-section">
+          <h3>Fonte (decisão da camisa)</h3>
+          <div class="fonts" id="fontPicker">
+            <button data-font="Bebas Neue" class="active" style="font-family:'Bebas Neue'">BLOCK</button>
+            <button data-font="Big Shoulders Stencil Display" style="font-family:'Big Shoulders Stencil Display'">STENCIL</button>
+            <button data-font="Saira Stencil One" style="font-family:'Saira Stencil One'">ATHLETIC</button>
+            <button data-font="Anton" style="font-family:'Anton'">CONDENSED</button>
+          </div>
+        </div>
+
+        <div class="dev-section">
+          <h3>Cor (decisão da camisa)</h3>
+          <div class="swatch-row" id="swatches">
+            <span class="swatch active" data-color="#0a7e7a" style="background:#0a7e7a" title="Teal Brasil 26/27"></span>
+            <span class="swatch" data-color="#014634" style="background:#014634" title="Verde escuro"></span>
+            <span class="swatch" data-color="#000000" style="background:#000" title="Preto"></span>
+            <span class="swatch" data-color="#ffffff" style="background:#fff" title="Branco"></span>
+          </div>
+          <div class="color-input">
+            <input type="color" id="customColor" value="#0a7e7a">
+            <code id="colorCode">#0a7e7a</code>
+          </div>
+        </div>
+
+        <button class="copy-btn" id="copyConfig">Copiar config completa (CSS + fonte + cor)</button>
+      </div>
+    </details>
+
+    <div class="hint">
+      Cliente vê só Nome e Número. Fonte e cor são fixadas <strong>por produto</strong> (decisão tua aqui no painel dev). Quando integrar na Voltz, vou salvar essas configs como metafields ou hardcode no Liquid por handle.
+    </div>
+  </div>
+
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const stage = $('stage');
+const mainPhoto = $('mainPhoto');
+const mockupLayer = $('mockupLayer');
+const boxName = $('boxName');
+const boxNumber = $('boxNumber');
+const inpName = $('inpName');
+const inpNumber = $('inpNumber');
+const countName = $('countName');
+const countNumber = $('countNumber');
+const customFields = $('customFields');
+const thumbsEl = $('thumbs');
+
+let state = {
+  active: false,
+  font: 'Bebas Neue',
+  color: '#0a7e7a',
+  selectedThumb: 0,
+};
+
+const baseGallery = [
+  { src: 'frente.jpg', label: 'Frente' },
+  { src: 'lateral.jpg', label: 'Lateral' },
+  { src: 'detalhe.jpg', label: 'Detalhe' },
+];
+
+function renderThumbs() {
+  thumbsEl.innerHTML = '';
+  const items = state.active
+    ? [{ src: 'camisa-base.webp', label: 'Sua camisa', mockup: true }, ...baseGallery]
+    : baseGallery;
+
+  items.forEach((it, i) => {
+    const t = document.createElement('div');
+    t.className = 'thumb' + (i === state.selectedThumb ? ' active' : '') + (it.mockup ? ' mockup-thumb' : '');
+    t.innerHTML = `<img src="${it.src}" alt="${it.label}">`;
+    t.addEventListener('click', () => {
+      state.selectedThumb = i;
+      if (it.mockup) {
+        mockupLayer.classList.add('active');
+        mainPhoto.style.visibility = 'hidden';
+      } else {
+        mockupLayer.classList.remove('active');
+        mainPhoto.style.visibility = 'visible';
+        mainPhoto.src = it.src;
+      }
+      renderThumbs();
+    });
+    thumbsEl.appendChild(t);
+  });
+}
+
+function setActive(active) {
+  state.active = active;
+  customFields.classList.toggle('field-disabled', !active);
+  if (active) {
+    state.selectedThumb = 0;
+    mockupLayer.classList.add('active');
+    mainPhoto.style.visibility = 'hidden';
+  } else {
+    state.selectedThumb = 0;
+    mockupLayer.classList.remove('active');
+    mainPhoto.style.visibility = 'visible';
+    mainPhoto.src = baseGallery[0].src;
+  }
+  renderThumbs();
+  fitAll();
+}
+
+function applyColor() {
+  boxName.style.color = state.color;
+  boxNumber.style.color = state.color;
+  $('colorCode').textContent = state.color;
+  $('customColor').value = state.color;
+}
+
+function applyFont() {
+  boxName.style.fontFamily = `'${state.font}', sans-serif`;
+  boxNumber.style.fontFamily = `'${state.font}', sans-serif`;
+  fitAll();
+}
+
+/**
+ * Ajusta font-size pra preencher o box ao máximo (vertical primeiro, depois horizontal).
+ * Roda toda vez que muda texto, fonte ou tamanho do box.
+ */
+function fitTextToBox(el) {
+  if (!el.textContent) return;
+  const box = el.getBoundingClientRect();
+  if (box.height < 4 || box.width < 4) return;
+  // começa com altura total do box
+  let size = box.height;
+  el.style.fontSize = size + 'px';
+  // se o texto vazou horizontal, vai diminuindo até caber
+  let guard = 60;
+  while ((el.scrollWidth > box.width + 1) && size > 6 && guard-- > 0) {
+    size *= 0.95;
+    el.style.fontSize = size + 'px';
+  }
+}
+function fitAll() {
+  requestAnimationFrame(() => {
+    fitTextToBox(boxName);
+    fitTextToBox(boxNumber);
+  });
+}
+
+function updateName() {
+  const v = inpName.value.toUpperCase();
+  boxName.textContent = v;
+  countName.textContent = `${v.length} / 13`;
+  countName.classList.toggle('over', v.length > 13);
+  fitAll();
+}
+function updateNumber() {
+  const v = inpNumber.value;
+  boxNumber.textContent = v;
+  countNumber.textContent = `${v.length} / 3`;
+  countNumber.classList.toggle('over', v.length > 3);
+  fitAll();
+}
+
+inpName.addEventListener('input', () => {
+  // só letras (incluindo acentuadas) e espaço
+  inpName.value = inpName.value.replace(/[^A-Za-zÀ-ÿ ]/g, '');
+  updateName();
+});
+inpNumber.addEventListener('input', () => {
+  // só dígitos
+  inpNumber.value = inpNumber.value.replace(/\D/g, '');
+  updateNumber();
+});
+
+document.querySelectorAll('#toggleCustom button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('#toggleCustom button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    setActive(b.dataset.val === '1');
+  });
+});
+
+document.querySelectorAll('#fontPicker button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('#fontPicker button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    state.font = b.dataset.font;
+    applyFont();
+  });
+});
+
+document.querySelectorAll('#swatches .swatch').forEach(s => {
+  s.addEventListener('click', () => {
+    document.querySelectorAll('#swatches .swatch').forEach(x => x.classList.remove('active'));
+    s.classList.add('active');
+    state.color = s.dataset.color;
+    applyColor();
+  });
+});
+
+$('customColor').addEventListener('input', e => {
+  state.color = e.target.value;
+  document.querySelectorAll('#swatches .swatch').forEach(x => x.classList.remove('active'));
+  applyColor();
+});
+
+$('showBoxes').addEventListener('change', e => {
+  stage.classList.toggle('dev', e.target.checked);
+});
+
+const sliders = [
+  { id: 'nameTop', target: boxName, prop: 'top' },
+  { id: 'nameLeft', target: boxName, prop: 'left' },
+  { id: 'nameWidth', target: boxName, prop: 'width' },
+  { id: 'nameHeight', target: boxName, prop: 'height' },
+  { id: 'numTop', target: boxNumber, prop: 'top' },
+  { id: 'numLeft', target: boxNumber, prop: 'left' },
+  { id: 'numWidth', target: boxNumber, prop: 'width' },
+  { id: 'numHeight', target: boxNumber, prop: 'height' },
+];
+sliders.forEach(s => {
+  const input = $(s.id);
+  const val = $(s.id + 'Val');
+  input.addEventListener('input', () => {
+    s.target.style[s.prop] = input.value + '%';
+    val.textContent = input.value + '%';
+    fitAll();
+  });
+});
+
+$('copyConfig').addEventListener('click', () => {
+  const config = `/* === CONFIG MOCKUP — Brasil 2026/27 === */
+.box {
+  color: ${state.color};
+  font-family: '${state.font}', sans-serif;
+}
+.box.name {
+  top: ${$('nameTop').value}%;
+  left: ${$('nameLeft').value}%;
+  width: ${$('nameWidth').value}%;
+  height: ${$('nameHeight').value}%;
+}
+.box.number {
+  top: ${$('numTop').value}%;
+  left: ${$('numLeft').value}%;
+  width: ${$('numWidth').value}%;
+  height: ${$('numHeight').value}%;
+}`;
+  navigator.clipboard.writeText(config);
+  $('copyConfig').textContent = 'Copiado!';
+  setTimeout(() => $('copyConfig').textContent = 'Copiar config completa (CSS + fonte + cor)', 1500);
+});
+
+// init
+applyColor();
+applyFont();
+updateName();
+updateNumber();
+renderThumbs();
+
+// re-fit em resize (responsividade)
+window.addEventListener('resize', fitAll);
+</script>
+
+</body>
+</html>

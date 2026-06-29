@@ -1,0 +1,50 @@
+Eligibles: 1242
+[0/1242]
+[100/1242]
+[200/1242]
+[300/1242]
+[400/1242]
+[500/1242]
+[600/1242]
+[700/1242]
+[800/1242]
+[900/1242]
+[1000/1242]
+[1100/1242]
+[1200/1242]
+
+Produtos com variants órfãs detectados: 18
+Total variants criadas: 39
+Erros: 0
+===
+Eligibles: 1242
+[0/1242] Agasalho de Viagem Ajax Masculino
+[50/1242] Camisa Ajax Amsterdam 2024/25 I Torcedor
+[100/1242] Camisa Arsenal FC 2024/25 I Torcedor
+[150/1242] Camisa Bayern de Munique 2025/26 II Torcedor
+[200/1242] Camisa Brasil 2019/20 I Torcedor Masculina
+[250/1242] Camisa Chelsea FC 2024/25 I Jogador
+[300/1242] Camisa Corinthians 2025/26 III Torcedor Com Patrocínios
+[350/1242] Camisa do Corinthians Feminina 2026/27 Treino
+[400/1242] Camisa Feminina Atlético Mineiro 2024/25 I Torcedor
+[450/1242] Camisa Feminina Flamengo 2025/26 II Torcedor
+[500/1242] Camisa Feminina Manchester United 2024/25 I Torcedor
+[550/1242] Camisa Feminina Uruguai 2026/27 I
+[600/1242] Camisa Fluminense 2026/27 Versão Torcedor II Masculina
+[650/1242] Camisa Inglaterra 2026/27 I Goleiro
+[700/1242] Camisa Japão 2026/27 I
+[750/1242] Camisa Manchester United 2025/26 II Torcedor
+[800/1242] Camisa México 2026 I Torcedor Feminina Copa do Mundo
+[850/1242] Camisa Palmeiras 2025/26 II Jogador
+[900/1242] Camisa Real Madrid 2025/26 II Torcedor
+[950/1242] Camisa Retro Flamengo 1987
+[1000/1242] Camisa Retrô Paris Saint Germain 2020/21 III
+[1050/1242] Camisa Seleção Brasileira 2026/27 I
+[1100/1242] Camisa Vasco 2026/27 I Jogador
+[1150/1242] Conjunto de Treino Seleção França Masculino
+[1200/1242] Regata Flamengo 2026/27 I
+
+Resultado:
+Produtos com variants atualizadas: 30
+Total variants atualizadas: 85
+Erros: 0

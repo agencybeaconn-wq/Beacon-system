@@ -1,0 +1,12 @@
+{%- when 'custom_image' -%}
+                <div class="product__custom-image quick-add-hidden" {{ block.shopify_attributes }}
+                  style="margin-top: {{ block.settings.margin_top }}px; margin-bottom: {{ block.settings.margin_bottom }}px;"
+                >
+                  {%- if block.settings.image != blank -%}
+                    {{ block.settings.image | image_url: width: 1200 | image_tag:
+                      loading: 'lazy',
+                      style: 'width: 100%; height: auto; display: block;'
+                    }}
+                  {%- endif -%}
+                </div>
+              

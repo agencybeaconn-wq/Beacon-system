@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Teste Lead Webhook</title>
+</head>
+
+<body style="background:#1a1a1a;color:#fff;font-family:Arial;padding:40px;text-align:center">
+  <h1>🧪 Teste do Pipeline de Leads</h1>
+
+  <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:30px">
+    <button onclick="testarVercel()"
+      style="padding:20px 30px;font-size:16px;background:#3b82f6;color:#fff;border:none;border-radius:12px;cursor:pointer">
+      📡 TESTAR VERCEL DIRETO
+    </button>
+    <button onclick="testarPipeline()"
+      style="padding:20px 30px;font-size:16px;background:#22c55e;color:#fff;border:none;border-radius:12px;cursor:pointer">
+      🚀 TESTAR PIPELINE COMPLETO
+    </button>
+  </div>
+
+  <pre id="resultado"
+    style="margin-top:30px;text-align:left;background:#111;padding:20px;border-radius:8px;min-height:150px;white-space:pre-wrap;font-size:14px"></pre>
+
+  <script>
+    async function testarVercel() {
+      var el = document.getElementById('resultado');
+      el.textContent = '📡 Testando Vercel function diretamente...\n(Chamando app.leverag.digital/api/notify-lead)';
+      try {
+        var res = await fetch('https://app.leverag.digital/api/notify-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            instance_name: 'userdcfdce54',
+            number: '5531995194872',
+            text: '🧪 *Teste direto pelo Vercel!*\n\nSe você recebeu essa mensagem, o pipeline de leads está funcionando! ✅'
+          })
+        });
+        var status = res.status;
+        var texto = await res.text();
+        el.textContent = '📡 VERCEL DIRETO\n\nStatus HTTP: ' + status + '\n\nResposta:\n' + texto;
+        if (status === 200) {
+          el.textContent += '\n\n✅ SUCESSO! Cheque o WhatsApp do comercial!';
+        } else {
+          el.textContent += '\n\n❌ Erro ' + status + ' - veja a resposta acima';
+        }
+      } catch (e) {
+        el.textContent = '❌ ERRO: ' + e.message;
+      }
+    }
+
+    async function testarPipeline() {
+      var el = document.getElementById('resultado');
+      el.textContent = '🚀 Testando pipeline completo...\n(Edge Function → CRM → Trigger → Vercel → WhatsApp)';
+      var ts = Date.now();
+      try {
+        var res = await fetch('https://pxhmzpwvxvlwngjbjkrg.supabase.co/functions/v1/receive-external-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            record: {
+              name: 'TESTE PIPELINE ' + ts,
+              email: 'teste.' + ts + '@pipeline.com',
+              whatsapp: '55' + String(ts).slice(-10),
+              company_website: 'teste-pipeline.com',
+              revenue_range: 'Ate 50k',
+              niches: 'Teste Automatico'
+            }
+          })
+        });
+        var texto = await res.text();
+        el.textContent = '🚀 PIPELINE COMPLETO\n\nStatus HTTP: ' + res.status + '\n\nResposta:\n' + texto + '\n\n⏳ Lead inserido! Aguardando trigger disparar o WhatsApp (~10s)...\nCheque o WhatsApp do +55 31 99519-4872';
+      } catch (e) {
+        el.textContent = '❌ ERRO: ' + e.message;
+      }
+    }
+  </script>
+</body>
+
+</html>

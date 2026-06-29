@@ -1,0 +1,9 @@
+{
+    "imports": {
+        "https://esm.sh/@supabase/supabase-js@2": "https://esm.sh/@supabase/supabase-js@2.39.7",
+        "https://deno.land/std@0.168.0/http/server.ts": "https://deno.land/std@0.168.0/http/server.ts",
+        "std/": "https://deno.land/std@0.177.0/",
+        "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.39.7",
+        "@google/generative-ai": "https://esm.sh/@google/generative-ai@0.21.0"
+    }
+}

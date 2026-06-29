@@ -1,0 +1,142 @@
+# BLOCK: Quantity Selector Hide for Customized Items
+
+## META
+- **Origem:** TG Jerseys / LEVER EVER TG JERSEYS (theme 157588324582)
+- **Data:** 2026-04-08
+- **Store:** store-tg-jersey.myshopify.com
+
+## O QUE FAZ
+Controla quando o seletor de quantidade interativo (+/-) aparece versus quando mostra apenas o numero estatico. Itens normais (sem personalizacao) mostram botoes +/- para o cliente ajustar a quantidade diretamente no carrinho. Itens personalizados (com nome, numero ou patches) mostram apenas "Qty: 1" sem botoes, porque alterar a quantidade quebraria o pareamento entre a camisa e seus patches/personalizacao. Itens gratuitos ($0) tambem mostram quantidade estatica.
+
+## ONDE INSERIR
+- **Arquivo alvo:** `snippets/cart-drawer.liquid`
+- **Posicao:** Dentro do loop `{% for item in cart.items %}`, na area de propriedades (`<dl class="cart-item__properties">`), como PRIMEIRO item da lista
+- **Como encontrar:** Procurar por `cart-item__properties` ou pela `<dl>` dentro do loop de itens do carrinho. A deteccao de `is_customized` deve estar no TOPO do loop (antes do `<tr>`). O seletor condicional vai dentro do `<dl>`, antes das opcoes de variante.
+
+## DEPENDE DE
+- `cart-layout-css.block` (Block 1) — CSS para `.cart-item__quantity-wrapper`, `.cart-qty-btn`, `.cart-qty-input`
+- `cart-item-template.block` (Block 2) — Estrutura geral do template onde este bloco se encaixa
+
+## CONTEXTO PARA O CLAUDE QUE VAI RECEBER
+Este bloco tem 3 partes: deteccao, rendering condicional, e handler JS.
+
+**Parte 1 - Deteccao de `is_customized` (Liquid, no topo do loop):**
+Verifica 7 propriedades: `Nome`, `Numero`, `Numero` (com acento), `Patches`, `_pairing_id`, `Name`, `Number`. Se QUALQUER uma nao for blank, `is_customized = true`. Isso cobre lojas PT e EN.
+
+**Parte 2 - Rendering condicional (Liquid, dentro do `<dl>`):**
+- `item.final_price > 0 AND is_customized == false` -> botoes +/- interativos
+- Qualquer outro caso -> texto estatico `{{ item.quantity }}`
+
+**Parte 3 - Handler JS dos botoes +/- (script no final do arquivo):**
+- Event delegation no `document` para clicks em `.cart-qty-btn`
+- Le `data-index` e `data-qty` do botao
+- Calcula nova quantidade (minus: max(0, qty-1), plus: qty+1)
+- Usa o metodo `updateQuantity(index, newQty, event)` do componente `cart-drawer-items` ou `cart-items` do Dawn
+
+**Classes e data attributes criticos:**
+- `.cart-qty-btn` — classe dos botoes +/-
+- `.cart-qty-btn--minus` e `.cart-qty-btn--plus` — modificadores para direcao
+- `data-index` — indice do item (1-based, nao 0-based!)
+- `data-qty` — quantidade atual (para calcular nova)
+- `data-quantity-variant-id` — ID da variante (no input)
+- `.cart-item__quantity-wrapper` — container flex dos botoes
+
+**O que pode dar errado:**
+- O Dawn padrao tem seu proprio sistema de quantidade (`quantity-popover` ou inputs com `name="updates[]"`). Este bloco SUBSTITUI esse sistema. Se o JS do Dawn espera encontrar os inputs originais de quantidade, pode quebrar.
+- O `data-index` e 1-based (`item.index | plus: 1`). Se o JS do tema alvo usa 0-based, ajustar.
+- O `updateQuantity()` e um metodo do custom element `cart-drawer-items` do Dawn. Se o tema alvo nao tem esse componente, o handler JS nao vai funcionar — precisa adaptar para usar `fetch('/cart/change.js')` diretamente.
+- A coluna `cart-item__quantity-hidden` (com `display:none`) no Block 2 e mantida para compatibilidade. Ela contem o div de erro. Se removida, erros de estoque nao serao exibidos.
+
+## CODIGO DE REFERENCIA
+
+```liquid
+<!-- Step 1: Detect is_customized (at top of loop) -->
+{%- liquid
+  assign is_customized = false
+  if item.properties['Nome'] != blank or item.properties['Numero'] != blank or item.properties['Numero'] != blank or item.properties['Patches'] != blank or item.properties['_pairing_id'] != blank or item.properties['Name'] != blank or item.properties['Number'] != blank
+    assign is_customized = true
+  endif
+-%}
+
+<!-- Step 2: Conditional rendering -->
+<!-- If paid + NOT customized: show interactive +/- buttons -->
+{%- if item.final_price > 0 and is_customized == false -%}
+  <div class="product-option quantity-line">
+    <dt>Qty:</dt>
+    <dd>
+      <div class="cart-item__quantity-wrapper">
+        <button
+          type="button"
+          class="cart-qty-btn cart-qty-btn--minus"
+          aria-label="Decrease quantity"
+          data-index="{{ item.index | plus: 1 }}"
+          data-qty="{{ item.quantity }}"
+        >
+          <svg width="10" height="2" viewBox="0 0 10 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <input
+          type="number"
+          id="Drawer-quantity-{{ item.index | plus: 1 }}"
+          class="cart-qty-input"
+          name="updates[]"
+          value="{{ item.quantity }}"
+          min="0"
+          data-index="{{ item.index | plus: 1 }}"
+          data-quantity-variant-id="{{ item.variant.id }}"
+          aria-label="Quantity for {{ item.product.title | escape }}"
+        >
+        <button
+          type="button"
+          class="cart-qty-btn cart-qty-btn--plus"
+          aria-label="Increase quantity"
+          data-index="{{ item.index | plus: 1 }}"
+          data-qty="{{ item.quantity }}"
+        >
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 1V9M1 5H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </dd>
+  </div>
+{%- else -%}
+  <!-- If customized or free: show static quantity (no +/- buttons) -->
+  <div class="product-option quantity-line">
+    <dt>Qty:</dt>
+    <dd>{{ item.quantity }}</dd>
+  </div>
+{%- endif -%}
+```
+
+```javascript
+// Step 3: Quantity buttons JS handler
+// Place at the bottom of cart-drawer.liquid, before </cart-drawer>
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('.cart-qty-btn');
+  if (!btn) return;
+
+  const index = btn.dataset.index;
+  const currentQty = parseInt(btn.dataset.qty) || 0;
+  const isMinus = btn.classList.contains('cart-qty-btn--minus');
+  const newQty = isMinus ? Math.max(0, currentQty - 1) : currentQty + 1;
+
+  // Use Dawn's built-in cart update method
+  const cartItems = btn.closest('cart-drawer-items') || btn.closest('cart-items');
+  if (cartItems && !cartItems.isUpdating) {
+    cartItems.updateQuantity(index, newQty, e);
+  }
+});
+```
+
+## COMO VALIDAR
+- [ ] Item normal (sem personalizacao) mostra botoes +/- funcionais
+- [ ] Clicar + aumenta quantidade e cart drawer atualiza
+- [ ] Clicar - diminui quantidade; se chegar a 0, item e removido
+- [ ] Item com Nome/Numero mostra quantidade estatica (sem botoes)
+- [ ] Item com Patches mostra quantidade estatica
+- [ ] Item gratuito ($0) mostra quantidade estatica
+- [ ] Nao ha erros no console ao clicar +/-
+- [ ] Apos atualizar quantidade, o `data-qty` do botao reflete o novo valor (apos re-render)
+- [ ] Testar em mobile — botoes sao tocaveis

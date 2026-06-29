@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Big+Shoulders+Display:wght@800;900&family=Bowlby+One&family=Russo+One&family=Saira+Condensed:wght@800;900&family=Squada+One&family=Teko:wght@500;600;700&display=swap');
+
+/* Fonte custom oficial estilo camisa Brasil — uploadada como asset */
+@font-face {
+  font-family: 'BrasilNomeKit';
+  src: url('/cdn/shop/t/23/assets/brasil-nome-kit.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Garante que o slide alvo seja relative (Voltz/Dawn já é, mas reforço) */
+.product__media-list .product__media-item { position: relative; }
+
+.jersey-mockup-overlay {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  z-index: 5;
+  display: none;
+  container-type: inline-size;
+}
+.jersey-mockup-overlay[data-jersey-active="1"] { display: block; }
+
+.jersey-mockup-overlay__base {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+
+.jersey-mockup-overlay__box {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--jersey-text-color, #0a7e7a);
+  font-family: var(--jersey-font, 'Bebas Neue'), sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 0.95;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  overflow: hidden;
+  user-select: none;
+  pointer-events: none;
+  /* Desativa kerning automático — força espaçamento uniforme entre todos os pares (fix LU colado) */
+  font-kerning: none;
+  font-feature-settings: "kern" 0, "liga" 0, "calt" 0;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+}
+.jersey-mockup-overlay__box--name {
+  top: 14%;
+  left: 19%;
+  width: 62%;
+  height: 10%;
+}
+.jersey-mockup-overlay__box--number {
+  top: 27%;
+  left: 32%;
+  width: 36%;
+  height: 28%;
+}
+
+/* SVG textPath pra parábola — só usado quando data-jersey-curve > 0 */
+.jersey-mockup-overlay__name-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.jersey-mockup-overlay__name-svg text {
+  font-family: var(--jersey-font, 'Bebas Neue'), sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  fill: var(--jersey-text-color, #0a7e7a);
+  letter-spacing: 0.4px;
+}
+
+.jersey-mockup-overlay__disclaimer {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 4px;
+  padding: 8px 10px;
+  font-size: 11px;
+  color: #000 !important;
+  font-weight: 800 !important;
+  line-height: 1.4;
+}
+.jersey-mockup-overlay__disclaimer strong,
+.jersey-mockup-overlay__disclaimer * { color: #000 !important; font-weight: 800 !important; }

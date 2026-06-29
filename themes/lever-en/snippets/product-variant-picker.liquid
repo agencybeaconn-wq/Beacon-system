@@ -1,0 +1,127 @@
+{% comment %}
+  Renders product variant-picker
+
+  Accepts:
+  - product: {Object} product object.
+  - block: {Object} passing the block information.
+  - product_form_id: {String} Id of the product form to which the variant picker is associated.
+  Usage:
+  {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+{% endcomment %}
+{%- unless product.has_only_default_variant -%}
+  <variant-selects
+    id="variant-selects-{{ section.id }}"
+    data-section="{{ section.id }}"
+    {{ block.shopify_attributes }}
+  >
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        assign swatch_count = option.values | map: 'swatch' | compact | size
+        assign picker_type = block.settings.picker_type
+
+        if swatch_count > 0 and block.settings.swatch_shape != 'none'
+          if block.settings.picker_type == 'dropdown'
+            assign picker_type = 'swatch_dropdown'
+          else
+            assign picker_type = 'swatch'
+          endif
+        endif
+      -%}
+      {%- if picker_type == 'swatch' -%}
+        <fieldset class="js product-form__input product-form__input--swatch">
+          <legend class="form__label">
+            {{ option.name }}:
+            <span data-selected-value>
+              {{- option.selected_value -}}
+            </span>
+          </legend>
+          {% render 'product-variant-options',
+            product: product,
+            option: option,
+            block: block,
+            picker_type: picker_type
+          %}
+        </fieldset>
+      {%- elsif picker_type == 'button' -%}
+        <fieldset class="js product-form__input product-form__input--pill">
+          <legend class="form__label" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <span>{{ option.name }}</span>
+            {%- if option.name == 'Tamanho' or option.name == 'Size' -%}
+               <button 
+                id="abrirTabela-{{ section.id }}"
+                type="button"
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  background: none;
+                  border: none;
+                  padding: 0;
+                  font-size: 1.5rem;
+                  font-weight: 400;
+                  gap: 0.6rem;
+                  cursor: pointer;
+                  color: #000000;
+                  text-decoration: underline;
+                  text-underline-offset: 0.3rem;
+                "
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1707 1707" width="20" height="20" style="flex-shrink: 0;">
+                  <path fill="currentColor" d="M80 857c0-25 20-46 45-46h1456c25 0 46 21 46 46v397c0 25-21 45-46 45h-85v-117c0-22-18-40-40-40s-40 18-40 40v117h-121v-211c0-23-18-40-40-40s-40 17-40 40v211h-121v-117c0-22-18-40-40-40s-40 18-40 40v117h-121v-211c0-23-18-40-40-40s-40 17-40 40v211h-121v-117c0-22-17-40-40-40-22 0-40 18-40 40v117h-120v-211c0-23-18-40-40-40-23 0-40 17-40 40v211h-121v-117c0-22-18-40-40-40s-40 18-40 40v117h-86c-25 0-45-21-45-45zm259-213c19 12 43 7 55-12 12-18 7-43-12-55l-74-48h1091l-75 48c-18 12-23 37-12 55 12 19 37 24 56 12l186-120c14-7 21-21 21-36-1-14-8-27-21-34l-186-120c-19-12-44-6-56 12-11 19-6 43 12 55l75 48h-1091l74-48c19-12 24-36 12-55-12-18-36-24-55-12l-186 120c-13 7-20 20-21 34 0 15 7 28 20 36zm1368 610v-397c0-69-57-126-126-126h-1456c-69 0-125 57-125 126v397c0 69 56 125 125 125h1456c69 0 126-57 126-125z"/>
+                </svg>
+                <span>Size Chart</span>
+              </button>
+            {%- endif -%}
+          </legend>
+          {% render 'product-variant-options',
+            product: product,
+            option: option,
+            block: block,
+            picker_type: picker_type
+          %}
+        </fieldset>
+        {%- if option.name == 'Tamanho' or option.name == 'Size' -%}
+          {% render 'size-chart' %}
+        {%- endif -%}
+      {%- else -%}
+        <div class="product-form__input product-form__input--dropdown">
+          <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
+            {{ option.name }}
+          </label>
+          <div class="select">
+            {%- if picker_type == 'swatch_dropdown' -%}
+              <span
+                data-selected-value
+                class="dropdown-swatch"
+              >
+                {% render 'swatch', swatch: option.selected_value.swatch, shape: block.settings.swatch_shape %}
+              </span>
+            {%- endif -%}
+            <select
+              id="Option-{{ section.id }}-{{ forloop.index0 }}"
+              class="select__select"
+              name="options[{{ option.name | escape }}]"
+              form="{{ product_form_id }}"
+            >
+              {% render 'product-variant-options',
+                product: product,
+                option: option,
+                block: block,
+                picker_type: picker_type
+              %}
+            </select>
+            <span class="svg-wrapper">
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+
+    <script type="application/json" data-selected-variant>
+      {{ product.selected_or_first_available_variant | json }}
+    </script>
+
+    {%- comment -%} Customization Drawer for Name/Number Personalization {%- endcomment -%}
+    {% render 'customization-inputs', section_id: section.id, product_form_id: product_form_id, product: product %}
+  </variant-selects>
+{%- endunless -%}

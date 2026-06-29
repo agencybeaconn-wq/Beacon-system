@@ -1,0 +1,930 @@
+[
+  {
+    "id": 7038404591688,
+    "title": "Agasalho de Viagem Seleção Brasil Masculino",
+    "vendor": "Lever Ecomm",
+    "handle": "copia-de-agasalho-de-viagem-selecao-brasil-masculino-azul",
+    "tags": "",
+    "status": "active"
+  },
+  {
+    "id": 7038404558920,
+    "title": "Agasalho de Viagem Seleção Brasil Masculino Com Patrocinio",
+    "vendor": "Lever Ecomm",
+    "handle": "copia-de-agasalho-de-viagem-selecao-brasil-masculino-verde-e-azul",
+    "tags": "",
+    "status": "active"
+  },
+  {
+    "id": 7058404442184,
+    "title": "Álbum Copa do Mundo 2026 + 10 pacotes",
+    "vendor": "Lever Ecomm",
+    "handle": "album-copa-do-mundo-2026-10-pacotes",
+    "tags": "Acessórios, excluded-from-promo, fora pague 2",
+    "status": "active"
+  },
+  {
+    "id": 7058404212808,
+    "title": "Bandeira do Brasil Copa do Mundo em tecido",
+    "vendor": "Lever Ecomm",
+    "handle": "bandeira-do-brasil-copa-do-mundo-em-tecido",
+    "tags": "Acessórios, excluded-from-promo, fora pague 2",
+    "status": "active"
+  },
+  {
+    "id": 7058402738248,
+    "title": "Bola Copa do Mundo FIFA 2026/27 Competição",
+    "vendor": "Lever Ecomm",
+    "handle": "bola-copa-do-mundo-fifa-2026-27-competicao",
+    "tags": "Acessórios, copa, excluded-from-promo",
+    "status": "active"
+  },
+  {
+    "id": 7058402443336,
+    "title": "Bola Copa do Mundo FIFA 2026/27 Trionda League",
+    "vendor": "Lever Ecomm",
+    "handle": "bola-copa-do-mundo-fifa-2026-27-trionda-league",
+    "tags": "Acessórios, copa, excluded-from-promo",
+    "status": "active"
+  },
+  {
+    "id": 7058403852360,
+    "title": "Boné Brasil Jordan Club Unissex",
+    "vendor": "Lever Ecomm",
+    "handle": "bone-brasil-jordan-club-unissex",
+    "tags": "Acessórios, excluded-from-promo, fora pague 2",
+    "status": "active"
+  },
+  {
+    "id": 7058404114504,
+    "title": "Boné Brasil Jordan Pro Unissex",
+    "vendor": "Lever Ecomm",
+    "handle": "bone-brasil-jordan-pro-unissex",
+    "tags": "Acessórios, excluded-from-promo, fora pague 2",
+    "status": "active"
+  },
+  {
+    "id": 7038479990856,
+    "title": "Camisa de Goleiro Brasil 26/27 Torcedor Feminina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-de-goleiro-brasil-26-27-torcedor-feminina",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7038172168264,
+    "title": "Camisa de Goleiro Brasil 26/27 Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-de-goleiro-brasil-jordan-2026-27-torcedor-pro-masculina",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7038481399880,
+    "title": "Camisa de Goleiro Brasil Nike 2026 Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-de-goleiro-brasil-nike-2026-torcedor-masculina",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037832855624,
+    "title": "Camisa de Treino Seleção Brasil Nike",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-de-treino-selecao-brasil-nike-preto",
+    "tags": "FILTRO500",
+    "status": "active"
+  },
+  {
+    "id": 7037834690632,
+    "title": "Camisa Nike Brasil 1958 Retrô Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-brasil-torcedor-2025-2026-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037834592328,
+    "title": "Camisa Nike Brasil 1970 I Retrô Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-retro-brasil-goleiro-2002-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037834723400,
+    "title": "Camisa Nike Brasil 1997 Retrô Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-retro-brasil-1958-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835083848,
+    "title": "Camisa Nike Brasil 1998 Goleiro Retrô Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "jaqueta-nike-brasil-retro-2010-2011-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835411528,
+    "title": "Camisa Nike Brasil 1998/99 II Retrô Manga Longa Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-versao-torcedor-manga-longa-2022-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037834559560,
+    "title": "Camisa Nike Brasil 2002 Goleiro Retrô Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-torcedor-i-2024-25-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835247688,
+    "title": "Camisa Nike Brasil 2002 I Retrô Manga Longa Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-retro-1998-manga-longa-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037834952776,
+    "title": "Camisa Nike Brasil 2004/05 Retrô Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-pre-jogo-2021-2022-masculina-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835345992,
+    "title": "Camisa Nike Brasil 2010/2011 Jogador Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-home-2022-2023-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037834854472,
+    "title": "Camisa Nike Brasil 2014 Retrô Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "jaqueta-nike-brasil-off-white-2025-2026-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037833379912,
+    "title": "Camisa Nike Brasil 2018 Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-2018",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037833445448,
+    "title": "Camisa Nike Brasil 2019 Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-2019",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037834756168,
+    "title": "Camisa Nike Brasil 2019/20 I Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-retro-1997-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037833347144,
+    "title": "Camisa Nike Brasil 2020 Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-2020",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037834920008,
+    "title": "Camisa Nike Brasil 2021/22 Pré-Jogo Masculina Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-pre-jogo-2021-2022-masculina",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037834887240,
+    "title": "Camisa Nike Brasil 2021/22 Treino Masculina Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-de-treino-retro-brasil-2021-2022",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835378760,
+    "title": "Camisa Nike Brasil 2022 I Torcedor Manga Longa Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-2010-2011-versao-jogador-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037833150536,
+    "title": "Camisa Nike Brasil 2022 Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-retro-cruzeiro-1993-94-ii",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037833904200,
+    "title": "Camisa Nike Brasil 2022 Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-2022",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037836099656,
+    "title": "Camisa Nike Brasil 2022/23 I Torcedor Feminina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-feminina-2024-2025-torcedor-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835313224,
+    "title": "Camisa Nike Brasil 2022/23 I Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-retro-2002-manga-longa-azul-copia-1",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835182152,
+    "title": "Camisa Nike Brasil 2022/23 II Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-ii-2026-2027-versao-torcedor-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037833314376,
+    "title": "Camisa Nike Brasil 2023 Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-2023",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037834788936,
+    "title": "Camisa Nike Brasil 2024 I Masculina Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-2025",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037833216072,
+    "title": "Camisa Nike Brasil 2024 I Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-black-2022-copia",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037834526792,
+    "title": "Camisa Nike Brasil 2024 II Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-edicao-especial-brasil-jogador-2024-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037833510984,
+    "title": "Camisa Nike Brasil 2024 Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-2024",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037836165192,
+    "title": "Camisa Nike Brasil 2024/2025 I Torcedor Feminina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-i-2025-2026-torcedor-feminina-copia-1",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037834625096,
+    "title": "Camisa Nike Brasil 2025 I Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-do-brasil-retro-1970-masculina-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037836132424,
+    "title": "Camisa Nike Brasil 2025/2026 I Torcedor Feminina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-i-2022-23-torcedor-feminina-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7038404165704,
+    "title": "Camisa Nike Brasil 2026 Copa do Mundo I Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-retro-brasil-1998-copia-1",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7038179213384,
+    "title": "Camisa Nike Brasil 2026 II Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-2026-ii-torcedor-masculina",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037834362952,
+    "title": "Camisa Nike Brasil 2026 Jogador Copa do Mundo II Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-brasil-reserva-26-27-versao-jogador-copa-do-mundo",
+    "tags": "25/26, brasil, jogador, masculina",
+    "status": "active"
+  },
+  {
+    "id": 7057272176712,
+    "title": "Camisa Nike Brasil 2026 Neymar Jr Copa do Mundo I Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-2026-neymar-jr-copa-do-mundo-i-torcedor-masculina",
+    "tags": "25/26, brasil, camisa",
+    "status": "active"
+  },
+  {
+    "id": 7057272275016,
+    "title": "Camisa Nike Brasil 2026 Neymar Jr Copa do Mundo II Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-2026-neymar-jr-copa-do-mundo-ii-torcedor-masculina",
+    "tags": "25/26, brasil, camisa",
+    "status": "active"
+  },
+  {
+    "id": 7037835477064,
+    "title": "Camisa Nike Brasil 2026/27 I Jogador Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-authentic-selecao-brasil-ii-2026-masculina-nike-jogador-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835575368,
+    "title": "Camisa Nike Brasil Edição Especial 2026 Masculina Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "jaqueta-de-treino-com-capuz-nike-brasil-2026-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037836034120,
+    "title": "Camisa Nike Brasil Feminina 2024/2025 I Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-feminina-2024-2025-torcedor",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037836230728,
+    "title": "Camisa Nike Brasil Feminino 2026 I Torcedor Copa do Mundo",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-2026-copa-do-mundo-copia",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "draft"
+  },
+  {
+    "id": 7037835608136,
+    "title": "Camisa Nike Brasil Goleiro 1998/99 Retrô Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-selecao-brasileira-edicao-especial-2026-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037833642056,
+    "title": "Camisa Nike Brasil Jogador 2023 Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-adidas-brasil-2025-copia",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037832888392,
+    "title": "Camisa Nike Brasil Reedição Total 90 Ronaldinho Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-reedicao-total-90-ronaldinho-masculina",
+    "tags": "FILTRO500",
+    "status": "active"
+  },
+  {
+    "id": 7037835214920,
+    "title": "Camisa Nike Brasil Retrô 1998 Manga longa Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-ii-2022-23-torcedor-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835280456,
+    "title": "Camisa Nike Brasil Retrô 2002 Manga Longa Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-retro-2002-manga-longa-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037833478216,
+    "title": "Camisa Nike Brasil Retrô 2004 Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-2019-copia",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037833248840,
+    "title": "Camisa Nike Brasil Treino Torcedor Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-treino",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7038438473800,
+    "title": "Camisa Nike Feminina Brasil 2026 Torcedor Copa do Mundo I",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-brasil-titular-26-27-versao-feminina-copa-do-mundo",
+    "tags": "25/26, brasil, feminina",
+    "status": "active"
+  },
+  {
+    "id": 7038404362312,
+    "title": "Camisa Nike Feminina Brasil 2026 Torcedor Copa do Mundo II",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-brasil-reserva-26-27-versao-feminina-copa-do-mundo",
+    "tags": "25/26, brasil, feminina",
+    "status": "active"
+  },
+  {
+    "id": 7037834133576,
+    "title": "Camisa Nike Retrô Brasil 1958 Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-retro-brasil-1958",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037833773128,
+    "title": "Camisa Nike Retrô Brasil 1984 Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-retro-nike-brasil-2002-copia",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037833969736,
+    "title": "Camisa Nike Retrô Brasil 1988 Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "jaqueta-nike-retro-brasil-1998-copia",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037833838664,
+    "title": "Camisa Nike Retrô Brasil 1998 Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-umbro-retro-brasil-1992-copia",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037834068040,
+    "title": "Camisa Nike Retrô Brasil 2002 Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-retro-brasil-2006-copia-1",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037833183304,
+    "title": "Camisa Nike Retrô Brasil 2004 I Manga longa",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-retro-brasil-2004-i-manga-longa",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037834002504,
+    "title": "Camisa Nike Retrô Brasil 2006 Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-retro-brasil-1988-copia-1",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037832921160,
+    "title": "Camisa Nike Seleção Brasileira Feminina 2024/25 I Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-selecao-brasileira-feminina-i-2024-25",
+    "tags": "FILTRO500",
+    "status": "active"
+  },
+  {
+    "id": 7037832953928,
+    "title": "Camisa Nike Seleção Brasileira Feminina 2024/25 II Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-selecao-brasileira-feminina-ii-2024-25",
+    "tags": "FILTRO500",
+    "status": "active"
+  },
+  {
+    "id": 7037833740360,
+    "title": "Camisa Retrô Nike Brasil 2002 Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "jaqueta-nike-brasil-2018-copia",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037832757320,
+    "title": "Camisa Retrô Nike Seleção Brasileira 2006 Nike II",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-selecao-brasileira-ii-2006-nike-retro-azul",
+    "tags": "",
+    "status": "active"
+  },
+  {
+    "id": 7038404689992,
+    "title": "Camisa Retrô Nike Seleção Brasileira Feminina 2019 III",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-selecao-brasileira-feminina-iii-19-20-nike-retro-branco-e-azul",
+    "tags": "",
+    "status": "active"
+  },
+  {
+    "id": 7037833085000,
+    "title": "Camisa Retrô Seleção Brasil 1991/92 I",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-retro-selecao-brasil-1991-92-i",
+    "tags": "amoraofutebol, Personalizar",
+    "status": "active"
+  },
+  {
+    "id": 7037833117768,
+    "title": "Camisa Retrô Seleção Brasil 1994 I",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-retro-selecao-brasil-1994-i",
+    "tags": "amoraofutebol, Personalizar",
+    "status": "active"
+  },
+  {
+    "id": 7037833052232,
+    "title": "Camisa Retrô Seleção Brasil 1998/99 I",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-retro-selecao-brasil-1998-99-i",
+    "tags": "amoraofutebol, Personalizar",
+    "status": "active"
+  },
+  {
+    "id": 7037832986696,
+    "title": "Camisa Retrô Seleção Brasil 2002/03 I",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-retro-selecao-brasil-2002-03-i",
+    "tags": "amoraofutebol, Personalizar",
+    "status": "active"
+  },
+  {
+    "id": 7037833019464,
+    "title": "Camisa Retrô Seleção Brasil 2002/03 II",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-retro-selecao-brasil-2002-03-ii",
+    "tags": "amoraofutebol, Personalizar",
+    "status": "active"
+  },
+  {
+    "id": 7037833609288,
+    "title": "Camisa Retrô Umbro Brasil 1991/1993 Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-retro-umbro-brasil-1991-1993",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037833576520,
+    "title": "Camisa Retrô Umbro Brasil 1993/1994 Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-retro-umbro-brasil-1993-1994",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037832790088,
+    "title": "Camisa Seleção Brasil Comissão Técnica Nike - Preta",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-selecao-brasil-comissao-tecnica-nike-preta",
+    "tags": "FILTRO500",
+    "status": "draft"
+  },
+  {
+    "id": 7037832822856,
+    "title": "Camisa Seleção Brasileira 19/20 Nike",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-selecao-brasileira-19-20-amarela-nike",
+    "tags": "FILTRO500",
+    "status": "active"
+  },
+  {
+    "id": 7038404722760,
+    "title": "Camisa Seleção Brasileira Goleiro Manga Longa 2026 Torcedor Nike",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-selecao-brasileira-goleiro-manga-longa-26-27-torcedor-nike",
+    "tags": "",
+    "status": "active"
+  },
+  {
+    "id": 7038404132936,
+    "title": "Camisa Seleção México 2026/27 II Torcedor Adidas Masculino",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-feminino-2026-copa-do-mundo-copia",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037833805896,
+    "title": "Camisa Umbro Retrô Brasil 1992 Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-umbro-retro-brasil-1992",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7038171840584,
+    "title": "Camiseta Brasil Air Jordan 85 Crew Masculina)",
+    "vendor": "Lever Ecomm",
+    "handle": "camiseta-brasil-air-jordan-85-crew-masculina",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7038172102728,
+    "title": "Camiseta Brasil Jordan Manga Longa Goalie Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camiseta-brasil-jordan-manga-longa-goalie-masculina",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7058403491912,
+    "title": "Chapéu Bucket Brasil Nike Apex Unissex",
+    "vendor": "Lever Ecomm",
+    "handle": "chapeu-bucket-brasil-nike-apex-unissex",
+    "tags": "Acessórios, excluded-from-promo, fora pague 2",
+    "status": "active"
+  },
+  {
+    "id": 7038404624456,
+    "title": "Conjunto de Treino Seleção Brasil Masculino",
+    "vendor": "Lever Ecomm",
+    "handle": "conjunto-de-treino-selecao-brasil-masculino-azul-marinho",
+    "tags": "",
+    "status": "active"
+  },
+  {
+    "id": 7037835706440,
+    "title": "Conjunto Infantil Nike Brasil 2002 II",
+    "vendor": "Lever Ecomm",
+    "handle": "conjunto-infantil-brasil-2002",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835673672,
+    "title": "Conjunto Infantil Nike Brasil 2004 II",
+    "vendor": "Lever Ecomm",
+    "handle": "conjunto-infantil-brasil-2025-2026-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835771976,
+    "title": "Conjunto Infantil Nike Brasil 2023/2024 II",
+    "vendor": "Lever Ecomm",
+    "handle": "conjunto-infantil-brasil-ii-2024-25-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835739208,
+    "title": "Conjunto Infantil Nike Brasil 2024/25 II",
+    "vendor": "Lever Ecomm",
+    "handle": "conjunto-infantil-brasil-2002-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835640904,
+    "title": "Conjunto Infantil Nike Brasil 2025/2026 I",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-retro-brasil-1998-1999-goleiro-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037834231880,
+    "title": "Conjunto Infantil Nike Brasil 2026 Copa do Mundo II",
+    "vendor": "Lever Ecomm",
+    "handle": "kit-infantil-brasil-reserva-26-27-copa-do-mundo",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037836263496,
+    "title": "Conjunto Infantil Nike Brasil 2026 I Copa do Mundo",
+    "vendor": "Lever Ecomm",
+    "handle": "conjunto-infantil-nike-brasil-2026-copa-do-mundo",
+    "tags": "camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037835903048,
+    "title": "Conjunto Infantil Nike Brasil Feminino 2002/2003 II",
+    "vendor": "Lever Ecomm",
+    "handle": "conjunto-infantil-brasil-ii-2024-25-copia-2",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835935816,
+    "title": "Conjunto Infantil Nike Brasil Feminino 2023/2024 I",
+    "vendor": "Lever Ecomm",
+    "handle": "conjunto-infantil-brasil-feminino-ii-2002-2003-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835968584,
+    "title": "Conjunto Infantil Nike Brasil Feminino 2024/2025 Edição Especial",
+    "vendor": "Lever Ecomm",
+    "handle": "conjunto-infantil-brasil-feminino-2023-2024-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835804744,
+    "title": "Conjunto Infantil Nike Edição Especial Brasil 2024/2025",
+    "vendor": "Lever Ecomm",
+    "handle": "conjunto-infantil-nike-brasil-i-2025-2026-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835837512,
+    "title": "Conjunto Infantil Nike Edição Especial Brasil II2024/2025",
+    "vendor": "Lever Ecomm",
+    "handle": "conjunto-infantil-edicao-especial-brasil-2024-2025-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7038438441032,
+    "title": "Conjunto Infantil Nike Feminino Brasil 2026 Copa do Mundo I Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "kit-infantil-feminino-brasil-titular-26-27-copa-do-mundo",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037834428488,
+    "title": "Conjunto Infantil Nike Feminino Brasil 2026 Copa do Mundo II Torcedor",
+    "vendor": "Lever Ecomm",
+    "handle": "kit-infantil-feminino-brasil-reserva-26-27-copa-do-mundo",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7058404573256,
+    "title": "Copo de Papel Copa do Mundo Brasil 300ml c/8 Unidades",
+    "vendor": "Lever Ecomm",
+    "handle": "copo-de-papel-copa-do-mundo-brasil-300ml-c-8-unidades",
+    "tags": "Acessórios, excluded-from-promo, fora pague 2",
+    "status": "active"
+  },
+  {
+    "id": 7058404311112,
+    "title": "Envelope Figurinha Copa do Mundo 2026 c/1 Unidade",
+    "vendor": "Lever Ecomm",
+    "handle": "envelope-figurinha-copa-do-mundo-2026-c-1-unidade",
+    "tags": "Acessórios, excluded-from-promo, fora pague 2",
+    "status": "active"
+  },
+  {
+    "id": 7038171775048,
+    "title": "Jaqueta Brasil Jordan Academy Pro 2026 Treino Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "jaqueta-brasil-jordan-academy-pro-2026-treino-masculina",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835051080,
+    "title": "Jaqueta Nike Brasil 2010/11 Retrô Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "jaqueta-nike-brasil-academy-pro-masculina-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7038404526152,
+    "title": "Jaqueta Nike Brasil 2018",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-jogador-2023-copia",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037834821704,
+    "title": "Jaqueta Nike Brasil 2025/26 Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "jaqueta-nike-brasil-off-white-2025-2026",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835018312,
+    "title": "Jaqueta Nike Brasil Academy Pro Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-retro-brasil-2004-2005-masculina-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037833936968,
+    "title": "Jaqueta Nike Retrô Brasil 1998",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-2022-copia",
+    "tags": "amoraofutebol, camisa, retro",
+    "status": "active"
+  },
+  {
+    "id": 7037835116616,
+    "title": "Jaqueta Nike Treino Brasil 2022/23 Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-retro-brasil-1998-goleiro-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7037835509832,
+    "title": "Jaqueta Nike Treino Brasil 2026 Masculina",
+    "vendor": "Lever Ecomm",
+    "handle": "camisa-nike-brasil-2026-2027-versao-jogador-copia",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7058403164232,
+    "title": "Kit Bolas Copa do Mundo FIFA Historical Club",
+    "vendor": "Lever Ecomm",
+    "handle": "kit-bolas-copa-do-mundo-fifa-historical-club",
+    "tags": "Acessórios, copa, excluded-from-promo",
+    "status": "active"
+  },
+  {
+    "id": 7058404704328,
+    "title": "Kit Torcedor Brasil Copa do Mundo 2026",
+    "vendor": "Lever Ecomm",
+    "handle": "kit-torcedor-brasil-copa-do-mundo-2026",
+    "tags": "Acessórios, excluded-from-promo, fora pague 2",
+    "status": "active"
+  },
+  {
+    "id": 7038171873352,
+    "title": "Shorts Brasil Jordan Brooklyn Knit Feminino",
+    "vendor": "Lever Ecomm",
+    "handle": "shorts-brasil-jordan-brooklyn-knit-feminino",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  },
+  {
+    "id": 7038171938888,
+    "title": "Shorts Brasil Jordan Mesh Diamond Masculino",
+    "vendor": "Lever Ecomm",
+    "handle": "shorts-brasil-jordan-mesh-diamond-masculino",
+    "tags": "25/26, brasil, infantil",
+    "status": "active"
+  }
+]

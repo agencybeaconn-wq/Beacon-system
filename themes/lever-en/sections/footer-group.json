@@ -1,0 +1,65 @@
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "image_BGMB8J": {
+          "type": "image",
+          "settings": {
+            "image_width": 115,
+            "alignment": "center"
+          }
+        },
+        "link_list_whUXAb": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Main Menu",
+            "menu": "main-menu"
+          }
+        },
+        "link_list_BKVgGa": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Information",
+            "menu": "footer"
+          }
+        },
+        "text_6RTLie": {
+          "type": "text",
+          "settings": {
+            "heading": "Support Time",
+            "subtext": "<p>Mon to Fri: 08am to 06pm.<\/p><p>Email: support@gmail.com<br\/>Whatsapp: <\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "image_BGMB8J",
+        "link_list_whUXAb",
+        "link_list_BKVgGa",
+        "text_6RTLie"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "newsletter_enable": true,
+        "newsletter_heading": "<strong>Newsletter:<\/strong> Subscribe for exclusive deals and updates!",
+        "enable_follow_on_shop": true,
+        "show_social": true,
+        "enable_country_selector": true,
+        "enable_language_selector": false,
+        "payment_enable": true,
+        "show_policy": false,
+        "legal_text_content": "",
+        "company_info": "",
+        "margin_top": 0,
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "footer_heading_color": "#ffffff"
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

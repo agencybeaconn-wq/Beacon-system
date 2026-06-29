@@ -1,0 +1,4 @@
+# Disable JWT verification to allow CORS preflight (OPTIONS) requests
+# Auth is validated manually inside the function
+[functions.gemini-image-gen]
+verify_jwt = false

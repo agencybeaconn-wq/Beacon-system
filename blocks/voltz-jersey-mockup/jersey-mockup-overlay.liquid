@@ -1,0 +1,49 @@
+{% comment %}
+  Lever — Mockup de personalização (camisa de costas com nome+número live).
+  Renderiza um overlay sobre o primeiro slide da galeria apenas em produtos compatíveis.
+  Ativado/desativado pelo toggle "Personalizar" via assets/jersey-mockup.js.
+{% endcomment %}
+
+{%- comment -%} === MAPA: handle → imagem-base + cor === {%- endcomment -%}
+{%- assign jersey_amarela = 'camisa-brasil-i-2026-jogador-nike-masculina,camisa-brasil-i-2026-27-torcedor-pro-masculina,camisa-brasil-nike-i-2026-27-torcedora-pro-feminina,camisa-brasil-nike-i-2026-27-torcedora-pro-feminina-1,camisa-brasil-nike-i-2026-27-torcedor-pro-crianca' | split: ',' -%}
+{%- assign jersey_azul = 'camisa-brasil-ii-copa-do-mundo-2026-torcedor-masculino-copia,camisa-brasil-jordan-ii-2026-27-torcedora-pro-feminina,camisa-brasil-jordan-ii-2026-27-jogadora-feminina,camisa-brasil-jordan-ii-2026-27-torcedor-pro-crianca,camisa-brasil-jordan-ii-2026-27-jogador-masculina' | split: ',' -%}
+
+{%- assign mockup_image = nil -%}
+{%- assign mockup_color = '#0a7e7a' -%}
+{%- assign mockup_stroke = '#063836' -%}
+{%- if jersey_amarela contains product.handle -%}
+  {%- assign mockup_image = 'jersey-mockup-base-brasil-2026.webp' -%}
+  {%- assign mockup_color = '#0a7e7a' -%}
+  {%- assign mockup_stroke = '#063836' -%}
+{%- elsif jersey_azul contains product.handle -%}
+  {%- assign mockup_image = 'jersey-mockup-base-brasil-2026-ii.webp' -%}
+  {%- assign mockup_color = '#fbbf24' -%}
+  {%- assign mockup_stroke = '#7a4f00' -%}
+{%- endif -%}
+
+{%- comment -%} === ITERAR AQUI: fonte + parábola === {%- endcomment -%}
+{%- assign mockup_font = 'BrasilNomeKit' -%}
+{%- assign mockup_curve = 0 -%}
+
+{%- if mockup_image -%}
+  <div
+    class="jersey-mockup-overlay"
+    data-jersey-mockup-overlay
+    data-jersey-active="0"
+    data-jersey-curve="{{ mockup_curve }}"
+    aria-hidden="true"
+    style="--jersey-text-color: {{ mockup_color }}; --jersey-stroke-color: {{ mockup_stroke }}; --jersey-font: '{{ mockup_font }}';"
+  >
+    <img
+      class="jersey-mockup-overlay__base"
+      src="{{ mockup_image | asset_url }}"
+      alt="Mockup da personalização"
+      loading="lazy"
+    >
+    <div class="jersey-mockup-overlay__box jersey-mockup-overlay__box--name" data-jersey-name></div>
+    <div class="jersey-mockup-overlay__box jersey-mockup-overlay__box--number" data-jersey-number></div>
+    <div class="jersey-mockup-overlay__disclaimer">
+      <strong>!! Imagem meramente ilustrativa !!</strong> A personalização real segue o padrão oficial do produto.
+    </div>
+  </div>
+{%- endif -%}

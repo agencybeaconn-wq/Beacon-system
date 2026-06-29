@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.timpson.co.uk)",
+      "Bash(node inspect.js)",
+      "Bash(node test_flow.js)",
+      "Bash(node test_result.js)",
+      "Bash(rm -f catalogo_raw.json)",
+      "Bash(node scraper.js)",
+      "Bash(taskkill /f /im chrome.exe)",
+      "Bash(node -e \"const d=JSON.parse\\(require\\(''fs''\\).readFileSync\\(''catalogo_raw.json'',''utf-8''\\)\\); console.log\\(''Marcas:'', d.length\\); let total=0; d.forEach\\(m => m.modelos.forEach\\(mo => mo.anos.forEach\\(a => total += a.chaves.length\\)\\)\\); console.log\\(''Total chaves:'', total\\); console.log\\(''Amostra:'', JSON.stringify\\(d[0].modelos[0], null, 2\\)\\)\")",
+      "Bash(npm install:*)",
+      "Bash(node setup_db.js)",
+      "Bash(node upload_supabase.js)"
+    ]
+  }
+}

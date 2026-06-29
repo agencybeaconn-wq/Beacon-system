@@ -1,0 +1,260 @@
+<style>
+/* Patch Section Styles */
+/* Patch Section Styles */
+.patch-section-header {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: rgb(var(--color-foreground));
+  letter-spacing: 0.04rem;
+}
+
+.patch-free-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #15803d;
+  letter-spacing: 0;
+  width: fit-content;
+}
+
+.patch-free-badge svg {
+  stroke: #16a34a;
+  flex-shrink: 0;
+}
+
+.product-form__option-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+
+.product-form__option-name {
+  font-size: 1.3rem;
+  letter-spacing: 0.04rem;
+  line-height: calc(1 + 0.5 / var(--font-body-scale));
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.patch-section-wrapper {
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  margin-bottom: 2rem;
+  margin-top: 1.5rem;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 1;
+  position: relative;
+}
+
+.patch-section-toggle {
+  padding: 0.6rem 1.5rem;
+  background-color: transparent;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(var(--color-foreground), 0.2);
+  border-radius: var(--variant-pills-radius);
+  position: relative;
+  z-index: 2;
+}
+
+.patch-section-toggle:hover {
+  border-color: rgb(var(--color-foreground));
+}
+
+.patch-section-toggle.is-open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-color: transparent; /* Remove bottom border visually */
+  border-color: rgba(var(--color-foreground), 0.2); /* Ensure active state has solid border */
+  border-bottom: none; /* Physically remove it so selector border takes over or they merge */
+  padding-bottom: 0.7rem; /* Adjust padding to compensate if needed */
+}
+
+.patch-section-description {
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: rgb(var(--color-foreground));
+}
+
+.patch-products-selector {
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--color-foreground), 0.2); /* Match active toggle border */
+  border-top: none;
+  background-color: rgb(var(--color-background));
+  margin-top: 0; /* Connect to toggle */
+  border-bottom-left-radius: var(--variant-pills-radius);
+  border-bottom-right-radius: var(--variant-pills-radius);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  position: relative;
+  top: -1px; /* Slight overlap to ensure connection */
+}
+
+.patch-position-section {
+  margin-bottom: 2rem;
+}
+
+.patch-position-section:last-child {
+  margin-bottom: 0;
+}
+
+.patch-position-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground), 0.75);
+  letter-spacing: 0.1rem;
+}
+
+.patch-pills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+}
+
+.patch-product-item {
+  position: relative;
+  width: 100%;
+}
+
+@media screen and (min-width: 750px) {
+  .patch-product-item {
+    width: calc(50% - 0.5rem);
+  }
+}
+
+.patch-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Estilo de item de patch com imagem */
+.patch-item-label {
+  display: block;
+  cursor: pointer;
+  border: 1px solid rgba(var(--color-foreground), 0.08);
+  border-radius: var(--variant-pills-radius);
+  padding: 1rem;
+  background-color: rgb(var(--color-background));
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  user-select: none;
+  -webkit-user-select: none;
+  height: 100%;
+  transform: scale(1);
+}
+
+.patch-item-label:hover {
+  border-color: rgba(var(--color-foreground), 0.3);
+  background-color: rgba(var(--color-foreground), 0.02);
+}
+
+.patch-checkbox:checked + .patch-item-label {
+  border: 0.2rem solid rgb(var(--color-foreground));
+  background-color: rgb(var(--color-background));
+  box-shadow: none;
+  transform: scale(0.98);
+}
+
+.patch-checkbox:disabled + .patch-item-label {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: rgba(var(--color-foreground), 0.04);
+}
+
+.patch-item-content {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  width: 100%;
+}
+
+.patch-product-image {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border-radius: var(--media-radius);
+  flex-shrink: 0;
+  background-color: rgba(var(--color-foreground), 0.04);
+  border: none;
+}
+
+.patch-image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: rgba(var(--color-foreground), 0.3);
+}
+
+.patch-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.patch-item-name {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: rgb(var(--color-foreground));
+  line-height: 1.3;
+}
+
+.patch-item-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: rgba(var(--color-foreground), 0.75);
+  display: inline-block;
+  width: fit-content;
+  letter-spacing: 0.03rem;
+}
+
+.patch-item-price--free {
+  color: #15803d;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 20px;
+  padding: 2px 9px;
+}
+
+.patch-item-error {
+  font-size: 1.1rem;
+  color: #ff9800;
+  font-weight: 500;
+}
+
+.patch-products-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  color: rgba(var(--color-foreground), 0.6);
+}
+
+.patch-arrow-down,
+.patch-arrow-up {
+  font-size: 1.2rem;
+  transition: transform 0.2s;
+}
+</style>
+

@@ -1,0 +1,12 @@
+[
+  {
+    "prompt": "Transforme essa camisa em uma cena editorial: modelo masculino, estúdio com fundo cinza-claro, iluminação dramática lateral, pose confiante, foco na camisa. Foto vertical 4:5, qualidade fotográfica realista.",
+    "refs": ["./inputs/camisa-brasil.png"],
+    "out": "./output/brasil-editorial-01.png"
+  },
+  {
+    "prompt": "Mesma camisa, agora cenário urbano: modelo andando numa rua de São Paulo ao entardecer, motion blur leve no fundo, sensação de movimento, mantenha a estampa da camisa fiel ao original.",
+    "refs": ["./inputs/camisa-brasil.png"],
+    "out": "./output/brasil-urbano-01.png"
+  }
+]

@@ -1,0 +1,12 @@
+---
+name: clarity
+description: Consulta dados do Microsoft Clarity (heatmap, sessions, dead clicks, rage clicks, scroll depth) de uma loja conectada. Usa cache de 6h pra economizar quota (Clarity API limita a 10 req/dia).
+argument-hint: <cliente> [--days=1|2|3] [--dimension=Browser|Device|Country|OS|Source|Medium|Campaign|Channel|URL] [--metric=Traffic|ScrollDepth|...] [--force] [--usage]
+---
+
+# Microsoft Clarity Insights
+
+Lê dados do Clarity Data Export API via edge function `clarity-proxy` (com cache).
+
+## Uso
+

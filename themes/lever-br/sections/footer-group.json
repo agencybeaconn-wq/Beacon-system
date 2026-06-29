@@ -1,0 +1,83 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "image_BGMB8J": {
+          "type": "image",
+          "settings": {
+            "image_width": 230,
+            "alignment": "center",
+            "show_app_stores": false,
+            "app_stores_heading": "BAIXE NOSSO APLICATIVO",
+            "show_app_stores_line": false,
+            "google_play_url": "",
+            "app_store_url": "",
+            "column_width": 23
+          }
+        },
+        "link_list_BKVgGa": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Menu Principal",
+            "menu": "main-menu-1",
+            "column_width": 23
+          }
+        },
+        "link_list_whUXAb": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Nossas Políticas",
+            "menu": "footer-1",
+            "column_width": 23
+          }
+        },
+        "text_6RTLie": {
+          "type": "text",
+          "settings": {
+            "heading": "Horário de atendimento",
+            "subtext": "<p>Seg à Sex: 08h as 18h.</p><p>Email: suporte@sualoja.com.br</p><p>Whatsapp: +55 (XX) XXXXX-XXXX</p>",
+            "column_width": 23
+          }
+        }
+      },
+      "block_order": [
+        "image_BGMB8J",
+        "link_list_BKVgGa",
+        "link_list_whUXAb",
+        "text_6RTLie"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "newsletter_enable": true,
+        "newsletter_heading": "Inscreva-se para receber novidades!",
+        "enable_follow_on_shop": false,
+        "show_social": true,
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "payment_enable": false,
+        "show_policy": false,
+        "legal_text_content": "<p>Todo o conteúdo deste site, incluindo layout, design, códigos, logotipos, imagens, textos e funcionalidades (Tema Beacon), é de propriedade exclusiva da <strong>Beacon</strong> e/ou de seus parceiros. É estritamente proibida a reprodução total ou parcial, cópia, distribuição, alteração ou uso não autorizado de qualquer elemento de identidade visual ou código-fonte, sem expressa autorização por escrito. A violação de qualquer direito de propriedade intelectual implicará na responsabilização cível e criminal dos infratores nos termos da Lei.</p>",
+        "company_info": "",
+        "margin_top": 0,
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "footer_heading_color": "#ff5500"
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

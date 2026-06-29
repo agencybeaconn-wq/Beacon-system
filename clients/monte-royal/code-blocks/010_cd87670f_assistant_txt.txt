@@ -1,0 +1,163 @@
+// Vincula cada variante de produto à sua imagem correspondente.
+// Usa o products.json do scrape pra descobrir qual variant_id mapeia pra qual image src.
+// Depois encontra a media no produto Shopify por sufixo de filename e faz productVariantsBulkUpdate(mediaId).
+//
+// Uso: node clients/lucky-fours/link-variants-images.mjs [--apply]
+
+import 'dotenv/config';
+import fs from 'fs';
+import path from 'path';
+import { getCreds, shopifyGraphQL, delay } from '../../.claude/lib/shopify-api.mjs';
+import { fetchClient } from '../../.claude/lib/supabase-rest.mjs';
+
+const apply = process.argv.includes('--apply');
+
+function filenameFromUrl(url) {
+  // pega o último segmento sem query
+  return url.split('?')[0].split('/').pop();
+}
+
+async function main() {
+  const data = JSON.parse(fs.readFileSync('clients/lucky-fours/raw/products.json', 'utf8'));
+  const products = data.products || data;
+
+  // Index produtos por handle (do scrape)
+  const byHandle = {};
+  for (const p of products) byHandle[p.handle] = p;
+
+  const c = await fetchClient('MontRoyal');
+  const creds = await getCreds(c.id);
+
+  // Buscar todos produtos do MontRoyal com suas medias e variantes
+  console.log(`\n=== link-variants-images ${apply ? '[APPLY]' : '[DRY-RUN]'} ===\n`);
+  console.log('Buscando produtos do MontRoyal...');
+  const allProds = [];
+  let cursor = null;
+  while (true) {
+    const q = `query($c: String) {
+      products(first: 50, after: $c) {
+        pageInfo { hasNextPage endCursor }
+        edges { node {
+          id handle title
+          media(first: 50) { nodes { id ... on MediaImage { image { url } } } }
+          variants(first: 100) {
+            nodes { id title selectedOptions { name value } image { url } }
+          }
+        } }
+      }
+    }`;
+    const r = await shopifyGraphQL(creds.shop, creds.token, q, { c: cursor });
+    if (r.errors) { console.error('GraphQL', JSON.stringify(r.errors)); return; }
+    for (const e of r.data.products.edges) allProds.push(e.node);
+    if (!r.data.products.pageInfo.hasNextPage) break;
+    cursor = r.data.products.pageInfo.endCursor;
+    await delay(300);
+  }
+  console.log(`  ${allProds.length} produtos no MontRoyal`);
+
+  let totalVariants = 0, totalLinked = 0, totalSkippedHasImg = 0, totalNoMatch = 0;
+  const updates = []; // { productId, variantId, mediaId }
+
+  for (const prod of allProds) {
+    const scraped = byHandle[prod.handle];
+    if (!scraped) continue;
+
+    // Mapa filename → mediaId no Shopify (já importado)
+    const filenameToMediaId = {};
+    for (const m of prod.media.nodes) {
+      if (!m.image?.url) continue;
+      const fn = filenameFromUrl(m.image.url);
+      filenameToMediaId[fn] = m.id;
+    }
+
+    // Mapa scraped.variant_id → image filename
+    const scrapedVariantImg = {};
+    for (const img of (scraped.images || [])) {
+      const fn = filenameFromUrl(img.src);
+      for (const vid of (img.variant_ids || [])) {
+        scrapedVariantImg[vid] = fn;
+      }
+    }
+
+    // Mapa scraped.variant_id → variant.title (Color value)
+    const scrapedVariantTitle = {};
+    for (const v of (scraped.variants || [])) {
+      // Se tem multiple options, usa option1 que é Color geralmente
+      scrapedVariantTitle[v.id] = v.option1 || v.title;
+    }
+
+    // Pra cada variante shopify, descobrir qual filename ela deveria ter
+    for (const sv of prod.variants.nodes) {
+      totalVariants++;
+      // Se já tem imagem, skip
+      if (sv.image) { totalSkippedHasImg++; continue; }
+      // Procura no scraped por título
+      const colorOpt = sv.selectedOptions.find(o => /color|cor/i.test(o.name));
+      if (!colorOpt) continue;
+
+      // Encontra variant_id scraped que tem o mesmo title
+      const scrapedVid = Object.entries(scrapedVariantTitle).find(([vid, t]) => t === colorOpt.value)?.[0];
+      if (!scrapedVid) { totalNoMatch++; continue; }
+
+      const fn = scrapedVariantImg[scrapedVid];
+      if (!fn) { totalNoMatch++; continue; }
+
+      // Match exato; mas o filename do Shopify importado pode ter sufixo cdn diferente
+      // tenta exato; senão tenta sufixo
+      let mediaId = filenameToMediaId[fn];
+      if (!mediaId) {
+        // procurar por substring (uuid suffix)
+        const uuidMatch = fn.match(/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/);
+        if (uuidMatch) {
+          const found = Object.entries(filenameToMediaId).find(([k, v]) => k.includes(uuidMatch[1]));
+          if (found) mediaId = found[1];
+        }
+      }
+      if (!mediaId) { totalNoMatch++; continue; }
+
+      updates.push({ productId: prod.id, variantId: sv.id, mediaId });
+      totalLinked++;
+    }
+  }
+
+  console.log(`\nVariantes total: ${totalVariants}`);
+  console.log(`  já tinham imagem: ${totalSkippedHasImg}`);
+  console.log(`  sem match: ${totalNoMatch}`);
+  console.log(`  a linkar: ${totalLinked}`);
+
+  if (!apply) {
+    console.log(`\n[DRY-RUN] Sample 5:`);
+    updates.slice(0, 5).forEach(u => console.log(`  ${u.variantId.slice(-15)} ↔ ${u.mediaId.slice(-15)}`));
+    return;
+  }
+
+  // Agrupar por product e fazer productVariantsBulkUpdate
+  const byProduct = {};
+  for (const u of updates) {
+    (byProduct[u.productId] = byProduct[u.productId] || []).push(u);
+  }
+
+  console.log(`\n→ Atualizando ${Object.keys(byProduct).length} produtos...`);
+  let okPM = 0, failPM = 0;
+  for (const [pid, ups] of Object.entries(byProduct)) {
+    const variants = ups.map(u => ({ id: u.variantId, mediaId: u.mediaId }));
+    const q = `mutation($productId: ID!, $variants: [ProductVariantsBulkInput!]!) {
+      productVariantsBulkUpdate(productId: $productId, variants: $variants) {
+        userErrors { field message }
+      }
+    }`;
+    const r = await shopifyGraphQL(creds.shop, creds.token, q, { productId: pid, variants });
+    const errs = r.data?.productVariantsBulkUpdate?.userErrors || [];
+    if (errs.length) {
+      failPM++;
+      console.error(`  ✗ ${pid.slice(-15)}: ${errs.map(e => e.message).join('; ').slice(0, 150)}`);
+    } else {
+      okPM++;
+    }
+    await delay(300);
+  }
+  console.log(`\nResultado: ok=${okPM} fail=${failPM}`);
+}
+
+main().catch(e => { console.error('FATAL:', e); process.exit(1); });
+

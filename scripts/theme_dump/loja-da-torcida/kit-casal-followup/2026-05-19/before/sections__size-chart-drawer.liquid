@@ -1,0 +1,559 @@
+<div id="sizePanelOverlay-global" class="size-drawer-overlay">
+  <div class="size-drawer" id="SizeDrawer" role="dialog" aria-modal="true" aria-label="{{ section.settings.heading | escape }}" tabindex="-1">
+    <div class="drawer__inner">
+      <div class="drawer__header">
+        <h2 class="drawer__heading">{{ section.settings.heading }}</h2>
+        <button class="drawer__close" aria-label="Fechar">
+          <span class="svg-wrapper">
+            {{- 'icon-close.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      </div>
+
+      <div class="drawer__contents size-panel-content">
+        <!-- AVISO ESPECÍFICO -->
+        {% if section.settings.notice_text != blank %}
+          <div class="size-notice">
+            {{ section.settings.notice_text }}
+          </div>
+        {% endif %}
+
+        <!-- COLAPSÁVEIS (BLOCOS) -->
+        <div class="collapsible-container">
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'size_table' -%}
+                <div class="collapsible-field" {{ block.shopify_attributes }}>
+                  <button class="field-header" data-target="block-{{ block.id }}">
+                    <span class="field-header-text">{{ block.settings.title }}</span>
+                    <span class="field-header-arrow">
+                      <span class="svg-wrapper">
+                        {{- 'icon-caret.svg' | inline_asset_content -}}
+                      </span>
+                    </span>
+                  </button>
+                  <div class="field-content" id="block-{{ block.id }}">
+                    <div class="table-scroll-wrapper">
+                      {%- assign headers_string = block.settings.col_headers | default: '' -%}
+                      {%- assign headers = headers_string | split: ',' -%}
+                      
+                      {%- if headers.size > 0 or block.settings.row_1_name != blank -%}
+                        <table class="size-table">
+                          <thead>
+                            <tr>
+                              <th>{{ block.settings.measure_label | default: 'Medida' }}</th>
+                              {%- for header in headers -%}
+                                <th>{{ header | strip }}</th>
+                              {%- endfor -%}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {%- for i in (1..5) -%}
+                              {%- assign row_name_key = 'row_' | append: i | append: '_name' -%}
+                              {%- assign row_vals_key = 'row_' | append: i | append: '_values' -%}
+                              
+                              {%- assign row_name = block.settings[row_name_key] -%}
+                              {%- assign row_vals_string = block.settings[row_vals_key] | default: '' -%}
+                              {%- assign row_vals = row_vals_string | split: ',' -%}
+                              
+                              {%- if row_name != blank -%}
+                                <tr>
+                                  <td>{{ row_name }}</td>
+                                  {%- for val in row_vals -%}
+                                    <td>{{ val | strip }}</td>
+                                  {%- endfor -%}
+                                  {%- comment -%} Se o usuário não preencher todos os valores da linha conforme o número de colunas, preenche td vazia para não quebrar layout {%- endcomment -%}
+                                  {%- if row_vals.size < headers.size -%}
+                                    {%- assign diff = headers.size | minus: row_vals.size -%}
+                                    {%- for j in (1..diff) -%}
+                                      <td>-</td>
+                                    {%- endfor -%}
+                                  {%- endif -%}
+                                </tr>
+                              {%- endif -%}
+                            {%- endfor -%}
+                          </tbody>
+                        </table>
+                      {%- endif -%}
+                    </div>
+                    {% if block.settings.table_note != blank %}
+                      <p class="table-note" style="margin-top: 1rem; font-size: 1.2rem; color: #666;">{{ block.settings.table_note }}</p>
+                    {% endif %}
+                  </div>
+                </div>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+
+        <!-- Guia de medidas -->
+        <div class="measurement-guide">
+          {% if section.settings.guide_title != blank %}
+            <h3>{{ section.settings.guide_title }}</h3>
+          {% endif %}
+          {% if section.settings.guide_text != blank %}
+            <div style="margin-bottom: 1rem;">{{ section.settings.guide_text }}</div>
+          {% endif %}
+          
+          {% if section.settings.guide_image != blank %}
+            {{ section.settings.guide_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: section.settings.guide_title }}
+          {% else %}
+            <img src="https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Tabela%20de%20Medidas/medidass.webp" alt="Como Medir" loading="lazy" width="600" height="auto">
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ============================================
+   DRAWER & OVERLAY (Standardized)
+   ============================================ */
+.size-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 2147483640;
+  background: rgba(var(--color-foreground), 0.5);
+  transition: opacity var(--duration-default) ease, visibility var(--duration-default) ease;
+  opacity: 0;
+}
+
+.size-drawer-overlay.active {
+  visibility: visible;
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.size-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 100vw;
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+.size-drawer .drawer__inner {
+  height: 100%;
+  width: 100vw;
+  max-width: 100vw;
+  background: #ffffff !important;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform var(--duration-default) ease;
+  pointer-events: auto;
+}
+
+@media screen and (min-width: 750px) {
+  .size-drawer .drawer__inner {
+    width: 55rem;
+    max-width: 55rem;
+  }
+}
+
+.size-drawer-overlay.active .drawer__inner {
+  transform: translateX(0);
+}
+
+.size-drawer .drawer__header {
+  position: relative;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff !important;
+  color: #000000 !important;
+  z-index: 2;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: none !important;
+}
+
+.size-drawer .drawer__heading {
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  color: #000000 !important;
+}
+
+.size-drawer .drawer__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  min-width: 4.4rem;
+  min-height: 4.4rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 1rem;
+  color: #000000 !important;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.size-drawer .drawer__close svg {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.size-drawer .drawer__contents {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 2rem 1.5rem;
+  background: #fff;
+}
+
+/* ============================================
+   CONTENT STYLES
+   ============================================ */
+
+.size-notice {
+  background-color: #fff5f5;
+  border: 1px solid #ffebeb;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  font-size: 1.4rem;
+  line-height: 1.6;
+  color: #8b4d4d;
+}
+
+.size-notice p { margin: 0 0 1rem 0; }
+.size-notice p:last-child { margin-bottom: 0; }
+.size-notice strong { color: #6b2d2d; font-weight: 700; }
+
+.collapsible-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.collapsible-field {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.field-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.6rem 2rem;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-heading-family);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  text-align: left;
+  transition: background 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+}
+
+.field-header:hover { background: #fafafa; }
+
+.field-header-arrow {
+  transition: transform 0.3s ease;
+  line-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #737373;
+}
+
+.field-header-arrow .svg-wrapper {
+  width: 0.8rem;
+  height: 0.8rem;
+  display: flex;
+}
+
+.field-header.expanded .field-header-arrow { transform: rotate(180deg); }
+
+.field-content {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease-in-out;
+}
+
+.field-content.expanded {
+  padding: 1.5rem 1.6rem 2rem;
+  opacity: 1;
+  max-height: none !important;
+}
+
+.table-scroll-wrapper {
+  width: 100%;
+  overflow-x: auto !important;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  -webkit-overflow-scrolling: touch;
+}
+
+.size-drawer .size-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.2rem;
+  border: none;
+}
+
+.size-drawer .size-table th, 
+.size-drawer .size-table td {
+  padding: 1rem;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  white-space: nowrap;
+}
+
+.size-drawer .size-table th { 
+  background: #f9f9f9; 
+  font-weight: 600; 
+}
+
+.size-drawer .size-table td:first-child { 
+  background: #f9f9f9; 
+  font-weight: 500; 
+  text-align: left; 
+}
+
+.measurement-guide {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.measurement-guide h3 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.measurement-guide img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+</style>
+
+<script>
+(function () {
+  const STATE = { initialized: false };
+
+  function boot() {
+    if (STATE.initialized) return;
+    STATE.initialized = true;
+
+    // Use a static global ID for the overlay
+    const overlayId = 'sizePanelOverlay-global';
+    const overlay = document.getElementById(overlayId);
+    if (!overlay) return;
+
+    const closeBtn = overlay.querySelector('.drawer__close');
+
+    // Move overlay to body to ensure correct stacking globally
+    if (overlay.parentNode !== document.body) {
+      const existingOverlay = document.body.querySelector(`#${overlayId}`);
+      if (existingOverlay && existingOverlay !== overlay) {
+          existingOverlay.remove();
+      }
+      document.body.appendChild(overlay);
+    }
+
+    function openPanel() {
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePanel() {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Attach listener to all possible "abrirTabela" buttons
+    // including dynamically rendered ones via Shopify section interactions
+    document.addEventListener('click', (e) => {
+      // Find closest button with id="abrirTabela-global"
+      const openBtn = e.target.closest('#abrirTabela-global');
+      if (openBtn) {
+        e.preventDefault();
+        openPanel();
+      }
+    });
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        closePanel();
+      });
+    }
+
+    // Close on click outside
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        closePanel();
+      }
+    });
+
+    // Close on ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('active')) {
+        closePanel();
+      }
+    });
+
+    // Collapsibles Logic
+    function toggleField(fieldId) {
+      const headerBtn = overlay.querySelector(`[data-target="${CSS.escape(fieldId)}"]`);
+      const content   = overlay.querySelector('#' + CSS.escape(fieldId));
+      if (!headerBtn || !content) return;
+
+      const isExpanded = content.classList.contains('expanded');
+
+      if (isExpanded) {
+        content.classList.remove('expanded');
+        headerBtn.classList.remove('expanded');
+        content.style.maxHeight = '0';
+      } else {
+        content.classList.add('expanded');
+        headerBtn.classList.add('expanded');
+        content.style.maxHeight = content.scrollHeight + 'px';
+      }
+    }
+
+    overlay.querySelectorAll('.field-header').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = btn.getAttribute('data-target');
+        if (targetId) toggleField(targetId);
+      });
+    });
+
+    // Global Exposure
+    window.openSizePanel  = openPanel;
+    window.closeSizePanel = closePanel;
+  }
+
+  // Shopify Theme Editor Support
+  document.addEventListener('shopify:section:select', function(event) {
+    if (event.target.id === 'shopify-section-size-chart-drawer' || event.target.querySelector('#sizePanelOverlay-global')) {
+      if(window.openSizePanel) window.openSizePanel();
+    }
+  });
+  
+  document.addEventListener('shopify:section:deselect', function(event) {
+    if (event.target.id === 'shopify-section-size-chart-drawer' || event.target.querySelector('#sizePanelOverlay-global')) {
+      if(window.closeSizePanel) window.closeSizePanel();
+    }
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Tabela de Medidas",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título da Gaveta",
+      "default": "TABELA DE MEDIDAS"
+    },
+    {
+      "type": "richtext",
+      "id": "notice_text",
+      "label": "Texto de Aviso (Vermelho)",
+      "default": "<p><strong>Versão Jogador (Authentic):</strong> é extremamente justa. Recomendamos <strong>1 tamanho acima</strong> do que você costuma usar.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Guia de Medidas (Rodapé)"
+    },
+    {
+      "type": "text",
+      "id": "guide_title",
+      "label": "Título do Guia",
+      "default": "Como tirar suas medidas:"
+    },
+    {
+      "type": "richtext",
+      "id": "guide_text",
+      "label": "Texto do Guia",
+      "default": "<p>Compare com uma camisa que você já tenha. Meça a largura de axila a axila (peito) e o comprimento da gola até a barra.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "guide_image",
+      "label": "Imagem Guia"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "size_table",
+      "name": "Tabela de Abas",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Nome da Aba",
+          "default": "Camisas"
+        },
+        {
+          "type": "text",
+          "id": "measure_label",
+          "label": "Título da Primeira Coluna",
+          "default": "Medida (cm)"
+        },
+        {
+          "type": "text",
+          "id": "col_headers",
+          "label": "Tamanhos (Colunas)",
+          "info": "Separe por vírgula. Ex: P, M, G, GG",
+          "default": "P, M, G, GG"
+        },
+        { "type": "header", "content": "Linha 1" },
+        { "type": "text", "id": "row_1_name", "label": "Nome da Medida 1", "default": "Comprimento" },
+        { "type": "text", "id": "row_1_values", "label": "Valores da Medida 1", "info": "Separe por vírgula", "default": "70, 72, 74, 76" },
+        { "type": "header", "content": "Linha 2" },
+        { "type": "text", "id": "row_2_name", "label": "Nome da Medida 2" },
+        { "type": "text", "id": "row_2_values", "label": "Valores da Medida 2", "info": "Separe por vírgula" },
+        { "type": "header", "content": "Linha 3" },
+        { "type": "text", "id": "row_3_name", "label": "Nome da Medida 3" },
+        { "type": "text", "id": "row_3_values", "label": "Valores da Medida 3", "info": "Separe por vírgula" },
+        { "type": "header", "content": "Linha 4" },
+        { "type": "text", "id": "row_4_name", "label": "Nome da Medida 4" },
+        { "type": "text", "id": "row_4_values", "label": "Valores da Medida 4", "info": "Separe por vírgula" },
+        { "type": "header", "content": "Linha 5" },
+        { "type": "text", "id": "row_5_name", "label": "Nome da Medida 5" },
+        { "type": "text", "id": "row_5_values", "label": "Valores da Medida 5", "info": "Separe por vírgula" },
+        { "type": "header", "content": "Rodapé" },
+        {
+          "type": "text",
+          "id": "table_note",
+          "label": "Nota Rodapé da Tabela (Opcional)",
+          "info": "Texto pequeno que aparece logo abaixo da tabela configurada"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

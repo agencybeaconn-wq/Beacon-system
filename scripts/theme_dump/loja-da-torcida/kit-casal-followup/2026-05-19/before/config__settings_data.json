@@ -1,0 +1,466 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "lever_license_key": "LEVER-TORC-LOJA",
+    "lever_protection_enabled": true,
+    "lever_block_right_click": true,
+    "lever_block_text_selection": true,
+    "lever_block_inspect": true,
+    "logo": "shopify://shop_images/Mask_group_1.png",
+    "logo_width": 90,
+    "favicon": "shopify://shop_images/LOGO1_1a163260-58cd-438e-8bed-30ccd5e6c670.png",
+    "type_header_font": "poppins_n9",
+    "heading_scale": 100,
+    "type_body_font": "poppins_n4",
+    "body_scale": 100,
+    "page_width": 1600,
+    "spacing_sections": 0,
+    "spacing_grid_horizontal": 8,
+    "spacing_grid_vertical": 8,
+    "animations_reveal_on_scroll": false,
+    "animations_hover_elements": "none",
+    "buttons_border_thickness": 1,
+    "buttons_border_opacity": 100,
+    "buttons_radius": 30,
+    "buttons_shadow_opacity": 0,
+    "buttons_shadow_horizontal_offset": 0,
+    "buttons_shadow_vertical_offset": 4,
+    "buttons_shadow_blur": 5,
+    "variant_pills_border_thickness": 1,
+    "variant_pills_border_opacity": 55,
+    "variant_pills_radius": 40,
+    "variant_pills_shadow_opacity": 0,
+    "variant_pills_shadow_horizontal_offset": 0,
+    "variant_pills_shadow_vertical_offset": 4,
+    "variant_pills_shadow_blur": 5,
+    "inputs_border_thickness": 1,
+    "inputs_border_opacity": 55,
+    "inputs_radius": 12,
+    "inputs_shadow_opacity": 0,
+    "inputs_shadow_horizontal_offset": 0,
+    "inputs_shadow_vertical_offset": 2,
+    "inputs_shadow_blur": 5,
+    "card_style": "standard",
+    "card_image_padding": 0,
+    "card_text_alignment": "left",
+    "card_color_scheme": "scheme-2",
+    "card_border_thickness": 0,
+    "card_border_opacity": 10,
+    "card_corner_radius": 16,
+    "card_shadow_opacity": 0,
+    "card_shadow_horizontal_offset": 0,
+    "card_shadow_vertical_offset": 4,
+    "card_shadow_blur": 5,
+    "collection_card_style": "standard",
+    "collection_card_image_padding": 0,
+    "collection_card_text_alignment": "left",
+    "collection_card_color_scheme": "scheme-2",
+    "collection_card_border_thickness": 0,
+    "collection_card_border_opacity": 10,
+    "collection_card_corner_radius": 16,
+    "collection_card_shadow_opacity": 0,
+    "collection_card_shadow_horizontal_offset": 0,
+    "collection_card_shadow_vertical_offset": 4,
+    "collection_card_shadow_blur": 5,
+    "blog_card_style": "standard",
+    "blog_card_image_padding": 0,
+    "blog_card_text_alignment": "left",
+    "blog_card_color_scheme": "scheme-2",
+    "blog_card_border_thickness": 0,
+    "blog_card_border_opacity": 10,
+    "blog_card_corner_radius": 16,
+    "blog_card_shadow_opacity": 0,
+    "blog_card_shadow_horizontal_offset": 0,
+    "blog_card_shadow_vertical_offset": 4,
+    "blog_card_shadow_blur": 5,
+    "text_boxes_border_thickness": 0,
+    "text_boxes_border_opacity": 10,
+    "text_boxes_radius": 16,
+    "text_boxes_shadow_opacity": 0,
+    "text_boxes_shadow_horizontal_offset": 0,
+    "text_boxes_shadow_vertical_offset": 4,
+    "text_boxes_shadow_blur": 5,
+    "media_border_thickness": 1,
+    "media_border_opacity": 5,
+    "media_radius": 16,
+    "media_shadow_opacity": 0,
+    "media_shadow_horizontal_offset": 0,
+    "media_shadow_vertical_offset": 4,
+    "media_shadow_blur": 5,
+    "popup_border_thickness": 1,
+    "popup_border_opacity": 10,
+    "popup_corner_radius": 16,
+    "popup_shadow_opacity": 5,
+    "popup_shadow_horizontal_offset": 0,
+    "popup_shadow_vertical_offset": 4,
+    "popup_shadow_blur": 5,
+    "drawer_border_thickness": 1,
+    "drawer_border_opacity": 10,
+    "drawer_shadow_opacity": 0,
+    "drawer_shadow_horizontal_offset": 0,
+    "drawer_shadow_vertical_offset": 4,
+    "drawer_shadow_blur": 5,
+    "badge_position": "bottom left",
+    "badge_corner_radius": 40,
+    "sale_badge_color_scheme": "scheme-3",
+    "sold_out_badge_color_scheme": "scheme-2",
+    "sale_badge_text": "Leve 3 Pague 2",
+    "sale_badge_icon": "none",
+    "brand_headline": "",
+    "brand_description": "<p></p>",
+    "brand_image": "",
+    "brand_image_width": 100,
+    "social_facebook_link": "",
+    "social_instagram_link": "",
+    "social_youtube_link": "",
+    "social_tiktok_link": "",
+    "social_twitter_link": "",
+    "social_snapchat_link": "",
+    "social_pinterest_link": "",
+    "social_tumblr_link": "",
+    "social_vimeo_link": "",
+    "predictive_search_enabled": true,
+    "predictive_search_show_vendor": false,
+    "predictive_search_show_price": false,
+    "currency_code_enabled": false,
+    "cart_type": "drawer",
+    "show_vendor": false,
+    "show_cart_note": false,
+    "cart_drawer_collection": "todos-os-produtos",
+    "cart_color_scheme": "scheme-1",
+    "milestone_1_quantity": 3,
+    "milestone_1_badge": "Leve 3",
+    "milestone_1_icon": "star",
+    "milestone_1_custom_svg": "<svg version=\"1.1\" id=\"fi_850924\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewbox=\"0 0 512 512\" style=\"enable-background:new 0 0 512 512;\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\">\n<g>\n\t<g>\n\t\t<path d=\"M283.562,155.007c-10.015,0-18.162,8.148-18.162,18.163v46.98c0,10.015,8.147,18.162,18.162,18.162\n\t\t\tc10.016,0,18.163-8.147,18.163-18.162v-46.98C301.725,163.155,293.577,155.007,283.562,155.007z\"></path>\n\t</g>\n</g>\n<g>\n\t<g>\n\t\t<path d=\"M507.493,166.744l-86.5-84.691c-20.142-19.722-46.76-30.583-74.95-30.583h-7.407c-0.773-0.634-1.621-1.2-2.54-1.684\n\t\t\tl-22.649-11.923c-7.332-3.861-16.401-1.044-20.261,6.286c-1.231,2.339-1.776,4.854-1.719,7.322h-70.935\n\t\t\tc0.057-2.467-0.488-4.983-1.719-7.322c-3.859-7.331-12.932-10.146-20.261-6.286l-22.649,11.923\n\t\t\tc-0.919,0.484-1.767,1.05-2.54,1.684h-7.407c-28.19,0-54.809,10.861-74.95,30.583l-86.5,84.691\n\t\t\tc-5.77,5.649-6.032,14.851-0.595,20.819l56.561,62.091c5.264,5.779,14.083,6.546,20.267,1.764l35.118-27.164l3.559,236.84\n\t\t\tc0.123,8.195,6.802,14.774,14.998,14.774h243.174c8.196,0,14.875-6.579,14.998-14.774l3.559-236.84l35.118,27.164\n\t\t\tc6.183,4.782,15.002,4.016,20.267-1.764l56.561-62.091C513.526,181.595,513.263,172.393,507.493,166.744z M210.274,253.312\n\t\t\tc0,8.284-6.716,15-15,15s-15-6.716-15-15V140.007c0-8.284,6.716-15,15-15s15,6.716,15,15V253.312z M331.725,220.15\n\t\t\tc0,26.557-21.605,48.162-48.163,48.162c-26.557,0-48.162-21.605-48.162-48.162v-46.98c0-26.557,21.605-48.163,48.162-48.163\n\t\t\tc26.558,0,48.163,21.605,48.163,48.163V220.15z\"></path>\n\t</g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n<g>\n</g>\n</svg>",
+    "milestone_2_icon": "custom",
+    "milestone_2_custom_svg": "<svg id=\"fi_18899933\" enable-background=\"new 0 0 64 64\" viewbox=\"0 0 64 64\" xmlns=\"http://www.w3.org/2000/svg\"><g><path d=\"m63.92 31.99c0 .1 0 .19-.01.29-.05 7.45-2.68 14.29-7.05 19.68-1.32 1.64-2.8 3.15-4.44 4.5l-.01.01c-.34.29-.68.56-1.04.83h-.01c-.39.31-.8.61-1.21.91-.03.02-.07.04-.11.06-5.13 3.51-11.34 5.56-18.04 5.56-1.45 0-2.88-.1-4.28-.29 0 0 0 0-.01 0-3.88-.51-7.53-1.73-10.82-3.49l-.02-.01c-3.05-1.64-5.8-3.78-8.14-6.27-.61-.63-1.17-1.3-1.71-1.98-2.44-3.06-4.33-6.58-5.51-10.41-.75-2.38-1.21-4.86-1.36-7.44-.04-.65-.07-1.3-.07-1.95 0-7.11 2.33-13.65 6.27-18.95 1.7-2.29 3.72-4.36 5.98-6.11.2-.16.39-.31.6-.45.02-.01.04-.03.07-.04 2.13-1.58 4.46-2.91 6.96-3.92 3.71-1.53 7.78-2.36 12.04-2.36 13.71 0 25.39 8.61 29.91 20.71 1.3 3.45 2.01 7.21 2.01 11.12z\" fill=\"#f1f3f7\"></path><g><path d=\"m30.51 2.6c-.02-.09-.09-.16-.16-.18-.02-.01-.03-.01-.05-.01-3.33-1.01-6.91-.94-10.35.11-2.51 1.01-4.84 2.34-6.96 3.92-.02.01-.04.03-.07.04-.21.14-.4.29-.6.45l-3.26 4.77c-.01.02-.02.04-.03.06-.03.11-.07.22-.1.32-.48 1.75-.53 3.92-.17 6.95.01.11.03.23.04.34s.08.21.16.27c.07.05.15.08.24.08h.07l11.59-1.82c.05-.03.1-.06.15-.09 0-.01.01-.01.01-.01 3.69-4.45 6.94-7.16 10.53-8.76.1-.04.2-.09.29-.13.12-.05.18-.18.15-.3zm-9.97 14.52-10.98 1.73c-.01-.05-.01-.11-.02-.16-.33-2.91-.25-4.98.24-6.6l.28-.41c.47-.68 1.04-1.5 1.56-2.27.16-.25.33-.48.48-.7.64-.93 1.13-1.63 1.13-1.63 4.92-4.05 11.11-5.52 16.58-3.97l1.29 5.25c-3.62 1.63-6.9 4.36-10.56 8.76z\" fill=\"#c6c1c1\"></path></g><g><path d=\"m62.47 22.9c-.16-.39-.33-.78-.49-1.16-2.61-5.94-6.4-10.15-11.58-12.84-.03-.02-.07-.03-.1-.05-.13-.06-.29-.05-.41.03l-5.59 3.79c-.17.12-.23.36-.12.54.07.11.12.21.17.31 2.27 4.04 3.35 8.74 3.06 13.31-.01.1.02.18.07.26.03.03.05.08.09.1l8.13 6.26c.08.05.15.09.24.09h.07c2.41-.32 4.67-2 6.26-4.64.05-.08.1-.15.14-.23.04-.07.05-.13.05-.21l.04-5.41c.01-.05 0-.1-.03-.15zm-.82 5.45c-1.43 2.43-3.45 4-5.57 4.35l-2.09-1.61-.02-.01-.02-.02-4-3.1-.07-.04-.02-.01-1.61-1.23c.26-4.65-.87-9.43-3.17-13.53l5.06-3.45c5.25 2.77 9.39 7.81 11.92 14.08.06 1.49-.08 3.02-.41 4.57z\" fill=\"#c6c1c1\"></path></g><g><path d=\"m54.63 52.87v.18c0 .08-.02.14-.07.21l-2.15 3.2-.01.01-.27.41c-.02.04-.05.08-.1.11-.28.19-.56.39-.86.57-.35.23-.69.44-1.04.65-.03.02-.07.04-.11.06-4.44 2.62-9.28 3.95-14.46 3.95-.84 0-1.69-.04-2.55-.11h-.01c-.03 0-.08-.01-.11-.01-.15-.01-.29-.12-.35-.27l-1.93-5.55-.1-.28c-.01-.03-.02-.07-.01-.1-.03-.18.08-.36.26-.42.21-.08.44.04.51.25l.12.36 1.83 5.23c6.66.52 12.8-1.15 18.26-4.95l2.32-3.46c.09-2.45-.47-4.71-1.65-6.71l-1.04.09-.01.01-7.93.69-1.51.13c-.07.01-.12 0-.18-.03-.14-.04-.24-.17-.26-.34-.01-.13.04-.25.13-.34.03-.03.09-.06.14-.08.03-.02.07-.03.1-.03l10.78-.94c.07 0 .14.01.2.04.08.03.14.09.18.15 1.34 2.19 1.97 4.64 1.88 7.32z\" fill=\"#c6c1c1\"></path></g><g><path d=\"m41.35 46.42-.21-1.17v-.01l-.01-.05-1.9-10.31c-.02-.11-.09-.19-.17-.26-.03-.02-.07-.03-.1-.04l-15.03-5.08c-.08-.02-.14-.03-.21-.01-.08.01-.15.05-.21.11l-9.46 9.11c-.03.02-.05.05-.07.09-.04.06-.07.13-.07.21.12 5.56 1.27 9.68 3.58 12.68 0 .02.02.03.03.05 3.61 3.03 7.96 4.57 12.93 4.57h.16c.1-.01.2-.01.29-.01.04 0 .1-.01.15-.03.11-.04.23-.1.34-.15 3.65-1.61 7.02-4.54 9.99-8.68.03-.04.07-.1.08-.16.01-.04.01-.1 0-.15v-.02zm-10.52 9.05c-4.96.05-9.21-1.4-12.71-4.31-2.13-2.76-3.23-6.69-3.36-12.01l9.14-8.82 14.58 4.92 2.17 11.82c-2.93 4.06-6.24 6.88-9.82 8.4z\" fill=\"#c6c1c1\"></path></g><g><path d=\"m1.46 36.47c-.06 0-.12-.01-.18-.04-.2-.1-.29-.34-.19-.54 1.14-2.32 2.72-3.88 4.71-4.63.21-.08.44.03.52.24s-.03.44-.24.52c-1.79.68-3.23 2.1-4.27 4.23-.05.14-.19.22-.35.22z\" fill=\"#c6c1c1\"></path></g><path d=\"m14.76 39.16c3.59-3.77 7.26-6.65 9.32-8.82-.92-4.64-1.7-11.04-3.54-13.22-4.03-.9-8.72.49-11.77 1.91-2.28 4.82-2.75 9.1-2.81 12.6 2.26 3.01 5.54 6.57 8.8 7.53z\" fill=\"#333842\"></path><path d=\"m47.83 26.85c-2.86 1.96-7.24 5.41-9 8.1.92 4.64 1.76 8.98 2.8 11.77 4.03.9 7.73.47 10.78-.95 2.28-4.82 3.5-9.15 3.56-12.64-3.11-3.39-5.11-4.89-8.14-6.28z\" fill=\"#f0582f\"></path><path d=\"m47.83 26.85c-2.86 1.96-7.24 5.41-9 8.1.92 4.64 1.21 9.45 2.25 12.24 4.03.9 8.28 0 11.33-1.42 2.28-4.82 3.5-9.15 3.56-12.64-3.11-3.39-5.11-4.89-8.14-6.28z\" fill=\"#333842\"></path><g><path d=\"m14.08 55.77c-.04.18-.21.3-.39.3-.03 0-.07 0-.1-.01-.11-.02-.21-.05-.31-.09-1.45-.42-3.04-1.28-4.57-2.21-.61-.63-1.17-1.3-1.71-1.98.08 0 .14.02.21.06 2.17 1.43 4.44 2.81 6.33 3.35.09.03.16.05.25.08.22.07.36.29.29.5z\" fill=\"#c6c1c1\"></path></g><g fill=\"#333842\"><path d=\"m44.48 13.56c-4.19-2.81-8.79-4.34-12.93-4.52l-1.5-6.54c7.79-3.02 16.6.26 20.86 6.67z\"></path><path d=\"m33.47 61.86c-.13.09-.28.17-.46.26-1.31.64-3.65 1.14-5.3 1.43 0 0 0 0-.01 0-3.88-.51-7.53-1.73-10.82-3.49l-.02-.01-3.57-4.07h-.01l-.12-.4.38-.37 3.97-3.54.61-.51c4.41 3.64 9.34 4.31 12.4 4.31.25-.01.66-.15.66-.15l.27.84 1.8 5.16z\"></path><path d=\"m13.23 7.07s-.49.7-1.13 1.63c-.15.23-.31.45-.48.7-.52.77-1.1 1.59-1.56 2.27l-1.13.41-2.58.95c1.7-2.29 3.72-4.36 5.98-6.11.2-.16.39-.31.6-.45.02-.01.04-.03.07-.04z\"></path><path d=\"m1.49 41.38c-.73-2.38-1.19-4.86-1.34-7.44l1.19 1.49.55.68v.01c.02.26.1 4.37-.4 5.26z\"></path><path d=\"m56.86 51.97c-1.32 1.64-2.8 3.15-4.44 4.5l-.01.01-.27.41c-.02.04-.05.08-.1.11-.28.19-.56.39-.86.57.05-.09.12-.17.17-.26h.01c1.34-1.96 2.86-4.27 2.86-4.27l.4-.16z\"></path><path d=\"m63.92 31.99c0 .1 0 .19-.01.29l-1.64-3.4-.62-.54c.37-.85.53-4.39.34-6.61-.02-.32-.05-.63-.08-.88 1.3 3.47 2.01 7.23 2.01 11.14z\"></path></g></g></svg>",
+    "message_0": "<p>Adicione <strong>3 camisas</strong> e ganhe 1 grátis!</p>",
+    "message_1": "<p>Faltam <strong>2 camisas</strong> para ganhar 1 grátis!</p>",
+    "message_2": "<p>Falta <strong>1 camisa</strong> para ganhar 1 grátis!</p>",
+    "message_3": "<p>Parabéns! Aproveitou <strong>Compre 2 Leve 3</strong>. Adicione mais 2 e leve 5!</p>",
+    "message_4": "<p>Falta <strong>1 camisa</strong> para aproveitar <strong>Compre 3 Leve 5</strong>!</p>",
+    "message_5": "<p>Incrível! Aproveitou <strong>Compre 3 Leve 5</strong> — 2 camisas grátis!</p>",
+    "pix_discount_enabled": false,
+    "rate_4": "4",
+    "rate_5": "5",
+    "rate_6": "6",
+    "rate_7": "7",
+    "rate_8": "8",
+    "rate_9": "9",
+    "rate_10": "10",
+    "rate_11": "11",
+    "rate_12": "12",
+    "custom_badge_1_enabled": false,
+    "custom_badge_2_enabled": false,
+    "message_6_plus": "<p>Você já tem o máximo de descontos ativos!</p>",
+    "type_custom_font": "none",
+    "sections": {
+      "main-password-header": {
+        "type": "main-password-header",
+        "settings": {
+          "color_scheme": "scheme-1"
+        }
+      },
+      "main-password-footer": {
+        "type": "main-password-footer",
+        "settings": {
+          "color_scheme": "scheme-1"
+        }
+      },
+      "custom-player-rules": {
+        "type": "custom-player-rules",
+        "settings": {}
+      }
+    },
+    "content_for_index": [],
+    "blocks": {
+      "8329602812678528339": {
+        "type": "shopify://apps/bk-reviews/blocks/bk-reviews-embed/592f39b6-a0c6-4829-a095-8e5558e58026",
+        "disabled": false,
+        "settings": {}
+      },
+      "2200952712151285029": {
+        "type": "shopify://apps/microsoft-clarity/blocks/brandAgents_js/31c3d126-8116-4b4a-8ba1-baeda7c4aeea",
+        "disabled": false,
+        "settings": {}
+      },
+      "2567389343055140935": {
+        "type": "shopify://apps/microsoft-clarity/blocks/clarity_js/31c3d126-8116-4b4a-8ba1-baeda7c4aeea",
+        "disabled": false,
+        "settings": {}
+      }
+    },
+    "color_schemes": {
+      "scheme-1": {
+        "settings": {
+          "background": "#ffffff",
+          "background_gradient": "",
+          "text": "#0d0d0d",
+          "button": "#010ce2",
+          "button_label": "#ffc900",
+          "secondary_button_label": "#ffc900",
+          "shadow": "#171717"
+        }
+      },
+      "scheme-2": {
+        "settings": {
+          "background": "#25503e",
+          "background_gradient": "",
+          "text": "#ffffff",
+          "button": "#ffffff",
+          "button_label": "#ffffff",
+          "secondary_button_label": "#ffffff",
+          "shadow": "#ffffff"
+        }
+      },
+      "scheme-3": {
+        "settings": {
+          "background": "#ffc900",
+          "background_gradient": "",
+          "text": "#ffffff",
+          "button": "#010ce2",
+          "button_label": "#ffffff",
+          "secondary_button_label": "#010ce2",
+          "shadow": "#121212"
+        }
+      },
+      "scheme-4": {
+        "settings": {
+          "background": "#1b704c",
+          "background_gradient": "",
+          "text": "#ffffff",
+          "button": "#ffffff",
+          "button_label": "#1b704c",
+          "secondary_button_label": "#ffffff",
+          "shadow": "#121212"
+        }
+      },
+      "scheme-db057c15-704d-4dd6-9157-aafe7f4c83e3": {
+        "settings": {
+          "background": "#010ce2",
+          "background_gradient": "",
+          "text": "#ffffff",
+          "button": "#ffc900",
+          "button_label": "#ffffff",
+          "secondary_button_label": "#ffc900",
+          "shadow": "#171717"
+        }
+      },
+      "scheme-a1d74bfd-b251-40c8-ba00-e259f312233e": {
+        "settings": {
+          "background": "#010ce2",
+          "background_gradient": "",
+          "text": "#25503e",
+          "button": "#ffc900",
+          "button_label": "#1b704c",
+          "secondary_button_label": "#1b704c",
+          "shadow": "#1b704c"
+        }
+      }
+    },
+    "show_installments": false,
+    "installment_count": 3,
+    "milestone_2_quantity": 5,
+    "milestone_2_badge": "Leve 5"
+  },
+  "presets": {
+    "Dawn": {
+      "logo_width": 90,
+      "color_schemes": {
+        "scheme-1": {
+          "settings": {
+            "background": "#FFFFFF",
+            "background_gradient": "",
+            "text": "#121212",
+            "button": "#121212",
+            "button_label": "#FFFFFF",
+            "secondary_button_label": "#121212",
+            "shadow": "#121212"
+          }
+        },
+        "scheme-2": {
+          "settings": {
+            "background": "#F3F3F3",
+            "background_gradient": "",
+            "text": "#121212",
+            "button": "#121212",
+            "button_label": "#F3F3F3",
+            "secondary_button_label": "#121212",
+            "shadow": "#121212"
+          }
+        },
+        "scheme-3": {
+          "settings": {
+            "background": "#242833",
+            "background_gradient": "",
+            "text": "#FFFFFF",
+            "button": "#FFFFFF",
+            "button_label": "#000000",
+            "secondary_button_label": "#FFFFFF",
+            "shadow": "#121212"
+          }
+        },
+        "scheme-4": {
+          "settings": {
+            "background": "#121212",
+            "background_gradient": "",
+            "text": "#FFFFFF",
+            "button": "#FFFFFF",
+            "button_label": "#121212",
+            "secondary_button_label": "#FFFFFF",
+            "shadow": "#121212"
+          }
+        },
+        "scheme-5": {
+          "settings": {
+            "background": "#334FB4",
+            "background_gradient": "",
+            "text": "#FFFFFF",
+            "button": "#FFFFFF",
+            "button_label": "#334FB4",
+            "secondary_button_label": "#FFFFFF",
+            "shadow": "#121212"
+          }
+        }
+      },
+      "type_header_font": "assistant_n4",
+      "heading_scale": 100,
+      "type_body_font": "assistant_n4",
+      "body_scale": 100,
+      "page_width": 1200,
+      "spacing_sections": 0,
+      "spacing_grid_horizontal": 8,
+      "spacing_grid_vertical": 8,
+      "animations_reveal_on_scroll": true,
+      "animations_hover_elements": "none",
+      "buttons_border_thickness": 1,
+      "buttons_border_opacity": 100,
+      "buttons_radius": 0,
+      "buttons_shadow_opacity": 0,
+      "buttons_shadow_horizontal_offset": 0,
+      "buttons_shadow_vertical_offset": 4,
+      "buttons_shadow_blur": 5,
+      "variant_pills_border_thickness": 1,
+      "variant_pills_border_opacity": 55,
+      "variant_pills_radius": 40,
+      "variant_pills_shadow_opacity": 0,
+      "variant_pills_shadow_horizontal_offset": 0,
+      "variant_pills_shadow_vertical_offset": 4,
+      "variant_pills_shadow_blur": 5,
+      "inputs_border_thickness": 1,
+      "inputs_border_opacity": 55,
+      "inputs_radius": 0,
+      "inputs_shadow_opacity": 0,
+      "inputs_shadow_horizontal_offset": 0,
+      "inputs_shadow_vertical_offset": 4,
+      "inputs_shadow_blur": 5,
+      "card_style": "standard",
+      "card_image_padding": 0,
+      "card_text_alignment": "left",
+      "card_color_scheme": "scheme-2",
+      "card_border_thickness": 0,
+      "card_border_opacity": 10,
+      "card_corner_radius": 0,
+      "card_shadow_opacity": 0,
+      "card_shadow_horizontal_offset": 0,
+      "card_shadow_vertical_offset": 4,
+      "card_shadow_blur": 5,
+      "collection_card_style": "standard",
+      "collection_card_image_padding": 0,
+      "collection_card_text_alignment": "left",
+      "collection_card_color_scheme": "scheme-2",
+      "collection_card_border_thickness": 0,
+      "collection_card_border_opacity": 10,
+      "collection_card_corner_radius": 0,
+      "collection_card_shadow_opacity": 0,
+      "collection_card_shadow_horizontal_offset": 0,
+      "collection_card_shadow_vertical_offset": 4,
+      "collection_card_shadow_blur": 5,
+      "blog_card_style": "standard",
+      "blog_card_image_padding": 0,
+      "blog_card_text_alignment": "left",
+      "blog_card_color_scheme": "scheme-2",
+      "blog_card_border_thickness": 0,
+      "blog_card_border_opacity": 10,
+      "blog_card_corner_radius": 0,
+      "blog_card_shadow_opacity": 0,
+      "blog_card_shadow_horizontal_offset": 0,
+      "blog_card_shadow_vertical_offset": 4,
+      "blog_card_shadow_blur": 5,
+      "text_boxes_border_thickness": 0,
+      "text_boxes_border_opacity": 10,
+      "text_boxes_radius": 0,
+      "text_boxes_shadow_opacity": 0,
+      "text_boxes_shadow_horizontal_offset": 0,
+      "text_boxes_shadow_vertical_offset": 4,
+      "text_boxes_shadow_blur": 5,
+      "media_border_thickness": 1,
+      "media_border_opacity": 5,
+      "media_radius": 0,
+      "media_shadow_opacity": 0,
+      "media_shadow_horizontal_offset": 0,
+      "media_shadow_vertical_offset": 4,
+      "media_shadow_blur": 5,
+      "popup_border_thickness": 1,
+      "popup_border_opacity": 10,
+      "popup_corner_radius": 0,
+      "popup_shadow_opacity": 5,
+      "popup_shadow_horizontal_offset": 0,
+      "popup_shadow_vertical_offset": 4,
+      "popup_shadow_blur": 5,
+      "drawer_border_thickness": 1,
+      "drawer_border_opacity": 10,
+      "drawer_shadow_opacity": 0,
+      "drawer_shadow_horizontal_offset": 0,
+      "drawer_shadow_vertical_offset": 4,
+      "drawer_shadow_blur": 5,
+      "badge_position": "bottom left",
+      "badge_corner_radius": 40,
+      "sale_badge_color_scheme": "scheme-4",
+      "sold_out_badge_color_scheme": "scheme-3",
+      "brand_headline": "",
+      "brand_description": "<p></p>",
+      "brand_image_width": 100,
+      "social_twitter_link": "",
+      "social_facebook_link": "",
+      "social_pinterest_link": "",
+      "social_instagram_link": "",
+      "social_tiktok_link": "",
+      "social_tumblr_link": "",
+      "social_snapchat_link": "",
+      "social_youtube_link": "",
+      "social_vimeo_link": "",
+      "predictive_search_enabled": true,
+      "predictive_search_show_vendor": false,
+      "predictive_search_show_price": false,
+      "currency_code_enabled": true,
+      "cart_type": "notification",
+      "show_vendor": false,
+      "show_cart_note": false,
+      "cart_drawer_collection": "",
+      "cart_color_scheme": "scheme-1",
+      "sections": {
+        "main-password-header": {
+          "type": "main-password-header",
+          "settings": {
+            "color_scheme": "scheme-1"
+          }
+        },
+        "main-password-footer": {
+          "type": "main-password-footer",
+          "settings": {
+            "color_scheme": "scheme-1"
+          }
+        }
+      }
+    }
+  }
+}

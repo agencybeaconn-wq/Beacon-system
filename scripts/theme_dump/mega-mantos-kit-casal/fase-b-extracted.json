@@ -1,0 +1,88 @@
+{
+  "Kit I": {
+    "pid": "gid://shopify/Product/14999989354607",
+    "title": "Kit Casal Torcedor Brasil 2026/27 I",
+    "vendor": "Loja Mega Manto",
+    "type": "",
+    "options_current": [
+      {
+        "id": "gid://shopify/ProductOption/17385706061935",
+        "name": "Tamanho",
+        "values": [
+          "P",
+          "M",
+          "G",
+          "GG",
+          "2GG",
+          "3GG",
+          "4GG"
+        ],
+        "position": 1
+      },
+      {
+        "id": "gid://shopify/ProductOption/17385706094703",
+        "name": "Personalizar Camisa (Nome e Número)",
+        "values": [
+          "Não Personalizar",
+          "Personalizar"
+        ],
+        "position": 2
+      }
+    ],
+    "base_price": 330,
+    "perso_add": 30,
+    "size_adds": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 0,
+      "2GG": 0,
+      "3GG": 0,
+      "4GG": 0
+    },
+    "total_variants_current": 14
+  },
+  "Kit II": {
+    "pid": "gid://shopify/Product/14999990534255",
+    "title": "Kit Casal Torcedor Brasil 2026/27 II",
+    "vendor": "Loja Mega Manto",
+    "type": "",
+    "options_current": [
+      {
+        "id": "gid://shopify/ProductOption/17385707503727",
+        "name": "Tamanho",
+        "values": [
+          "P",
+          "M",
+          "G",
+          "GG",
+          "2GG",
+          "3GG",
+          "4GG"
+        ],
+        "position": 1
+      },
+      {
+        "id": "gid://shopify/ProductOption/17385707536495",
+        "name": "Personalizar Camisa (Nome e Número)",
+        "values": [
+          "Não Personalizar",
+          "Personalizar"
+        ],
+        "position": 2
+      }
+    ],
+    "base_price": 330,
+    "perso_add": 30,
+    "size_adds": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 0,
+      "2GG": 0,
+      "3GG": 0,
+      "4GG": 0
+    },
+    "total_variants_current": 14
+  }
+}

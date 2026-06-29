@@ -1,0 +1,95 @@
+{%- comment -%}
+  clone-theme — reviews wall (4 cards).
+  Cada bloco: foto/vídeo + autor + verified + data + stars + texto.
+  Todos campos editáveis no Theme Editor — defaults vazios pro user preencher.
+{%- endcomment -%}
+
+<section class="clone-reviews">
+  <div class="clone-reviews__top">
+    <div class="clone-reviews__rating">
+      <span class="clone-reviews__rating-stars">★★★★★</span>
+      {% if section.settings.total_reviews != blank %}
+        <span>{{ section.settings.total_reviews }} {{ section.settings.label | default: 'Reviews' }} ▾</span>
+      {% endif %}
+    </div>
+    {% if section.settings.show_filter %}
+      <button class="clone-reviews__filter" type="button" aria-label="Filter reviews">⇅</button>
+    {% endif %}
+  </div>
+
+  <div class="clone-reviews__grid">
+    {% for block in section.blocks %}
+      <article class="clone-reviews__card" {{ block.shopify_attributes }}>
+        <div class="clone-reviews__media">
+          {% if block.settings.image != blank %}
+            {{ block.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', alt: block.settings.author }}
+          {% else %}
+            <div style="width:100%;height:100%;background:linear-gradient(180deg,#e8e8e8 0%,#cfcfcf 100%);"></div>
+          {% endif %}
+          {% if block.settings.has_video %}
+            <div class="clone-reviews__play"><div class="clone-reviews__play-icon">▶</div></div>
+          {% endif %}
+        </div>
+        <div class="clone-reviews__info">
+          <div class="clone-reviews__head">
+            {% if block.settings.author != blank %}
+              <span class="clone-reviews__author">{{ block.settings.author }}</span>
+            {% endif %}
+            {% if block.settings.verified %}
+              <span class="clone-reviews__verified">{{ section.settings.verified_label | default: 'Verified' }}</span>
+            {% endif %}
+          </div>
+          {% if block.settings.date != blank %}
+            <div class="clone-reviews__date">{{ block.settings.date }}</div>
+          {% endif %}
+          {% if block.settings.show_stars %}
+            <div class="clone-reviews__stars">★★★★★</div>
+          {% endif %}
+          {% if block.settings.text != blank %}
+            <p class="clone-reviews__text">{{ block.settings.text }}</p>
+          {% endif %}
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Clone Reviews",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Topo da seção" },
+    { "type": "text", "id": "total_reviews", "label": "Total de reviews (texto)", "info": "Ex: 9,750" },
+    { "type": "text", "id": "label", "label": "Label depois do número", "default": "Reviews" },
+    { "type": "text", "id": "verified_label", "label": "Texto do badge 'verified'", "default": "Verified" },
+    { "type": "checkbox", "id": "show_filter", "default": true, "label": "Mostrar ícone de filtro" }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Foto (ou thumbnail de vídeo)" },
+        { "type": "checkbox", "id": "has_video", "default": false, "label": "Indicar vídeo (overlay play)" },
+        { "type": "text", "id": "author", "label": "Nome do autor" },
+        { "type": "checkbox", "id": "verified", "default": true, "label": "Mostrar 'Verified'" },
+        { "type": "text", "id": "date", "label": "Data (texto livre)" },
+        { "type": "checkbox", "id": "show_stars", "default": true, "label": "Mostrar 5 estrelas" },
+        { "type": "textarea", "id": "text", "label": "Texto da review" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [{
+    "name": "Clone Reviews",
+    "category": "Custom",
+    "blocks": [
+      { "type": "review" },
+      { "type": "review" },
+      { "type": "review" },
+      { "type": "review" }
+    ]
+  }]
+}
+{% endschema %}

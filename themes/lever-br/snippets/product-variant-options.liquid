@@ -1,0 +1,284 @@
+{% comment %}
+  Renders product variant options
+
+  Accepts:
+  - product: {Object} product object.
+  - option: {Object} current product_option object.
+  - block: {Object} block object.
+  - picker_type: {String} type of picker to dispay
+
+
+  Usage:
+  {% render 'product-variant-options',
+    product: product,
+    option: option,
+    block: block
+    picker_type: picker_type
+  %}
+{% endcomment %}
+{%- liquid
+  assign product_form_id = 'product-form-' | append: section.id
+
+  # Detecta produto feminino (tag OR title) — 3GG/4GG sempre riscados em fem
+  assign is_fem = false
+  if product.tags contains 'feminino' or product.tags contains 'Feminino' or product.tags contains 'feminina' or product.tags contains 'Feminina'
+    assign is_fem = true
+  endif
+  assign title_lower = product.title | downcase
+  if title_lower contains 'feminin' or title_lower contains 'woman' or title_lower contains 'mulher'
+    assign is_fem = true
+  endif
+
+  # Detecta se é option de tamanho
+  assign is_size_option = false
+  if option.name == 'Tamanho' or option.name == 'Size' or option.name == 'Tamanho Masculino' or option.name == 'Tamanho Feminino'
+    assign is_size_option = true
+  endif
+
+  # Detecta quais tamanhos existem nos values reais do produto
+  # Usa join (toString automático nos objetos Dawn) + boundary | pra evitar match parcial
+  assign sizes_joined = option.values | join: '|'
+  assign sizes_padded = '|' | append: sizes_joined | append: '|'
+  assign has_pp = false
+  assign has_3gg = false
+  assign has_4gg = false
+  assign has_5gg = false
+  if sizes_padded contains '|PP|'
+    assign has_pp = true
+  endif
+  if sizes_padded contains '|3GG|'
+    assign has_3gg = true
+  endif
+  if sizes_padded contains '|4GG|'
+    assign has_4gg = true
+  endif
+  if sizes_padded contains '|5GG|'
+    assign has_5gg = true
+  endif
+
+  # Lê toggles globais (Theme Settings → Tamanhos Disponíveis)
+  assign s_pp_on  = settings.size_pp_active
+  assign s_2gg_on = settings.size_2gg_active
+  assign s_3gg_masc = settings.size_3gg_masc_active
+  assign s_3gg_fem  = settings.size_3gg_fem_active
+  assign s_4gg_masc = settings.size_4gg_masc_active
+  assign s_4gg_fem  = settings.size_4gg_fem_active
+  assign s_5gg_on = settings.size_5gg_active
+  # Resultado final por gender (3GG/4GG cosplay-fantasma se toggle off)
+  if is_fem
+    assign s_3gg_on = s_3gg_fem
+    assign s_4gg_on = s_4gg_fem
+  else
+    assign s_3gg_on = s_3gg_masc
+    assign s_4gg_on = s_4gg_masc
+  endif
+-%}
+
+{%- comment -%} Pre-loop fake injections: PP no início pra respeitar ordem PP→P→M→G→GG→2GG→3GG→4GG→5GG {%- endcomment -%}
+{%- if picker_type == 'button' and is_size_option and has_pp == false -%}
+  <input type="radio" id="{{ section.id }}-{{ option.position }}-fake-PP" name="fake-{{ section.id }}-{{ option.position }}-PP" value="PP" {% unless s_pp_on %}class="disabled" disabled{% endunless %} aria-hidden="true" tabindex="-1">
+  <label for="{{ section.id }}-{{ option.position }}-fake-PP" aria-hidden="true">PP</label>
+{%- endif -%}
+
+{%- for value in option.values -%}
+  {%- liquid
+    assign swatch_focal_point = null
+    if value.swatch.image
+      assign image_url = value.swatch.image | image_url: width: 50
+      assign swatch_value = 'url(' | append: image_url | append: ')'
+      assign swatch_focal_point = value.swatch.image.presentation.focal_point
+    elsif value.swatch.color
+      assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+    else
+      assign swatch_value = null
+    endif
+
+    assign option_disabled = true
+    if value.available
+      assign option_disabled = false
+    endif
+
+    # Force disabled por toggle (s_3gg_on / s_4gg_on já consideram fem/masc; settings.size_XX_active universal)
+    if is_size_option
+      if value == 'PP' and s_pp_on == false
+        assign option_disabled = true
+      endif
+      if value == '2GG' and s_2gg_on == false
+        assign option_disabled = true
+      endif
+      if value == '3GG' and s_3gg_on == false
+        assign option_disabled = true
+      endif
+      if value == '4GG' and s_4gg_on == false
+        assign option_disabled = true
+      endif
+      if value == '5GG' and s_5gg_on == false
+        assign option_disabled = true
+      endif
+    endif
+  -%}
+
+  {%- capture input_id -%}
+    {{ section.id }}-{{ option.position }}-{{ forloop.index0 -}}
+  {%- endcapture -%}
+
+  {%- capture input_name -%}
+    {{ option.name }}-{{ option.position }}
+  {%- endcapture -%}
+
+  {%- capture input_dataset -%}
+    data-product-url="{{ value.product_url }}"
+    data-option-value-id="{{ value.id }}"
+  {%- endcapture -%}
+
+  {%- capture label_unavailable -%}
+    <span class="visually-hidden label-unavailable">
+      {{- 'products.product.variant_sold_out_or_unavailable' | t -}}
+    </span>
+  {%- endcapture -%}
+
+  {% assign escaped_value = value | escape %}
+
+  {%- if picker_type == 'swatch' -%}
+    {%- capture help_text -%}
+      <span class="visually-hidden">{{ escaped_value }}</span>
+      {{ label_unavailable }}
+    {%- endcapture -%}
+
+    {%
+      render 'swatch-input',
+      id: input_id,
+      name: input_name,
+      value: escaped_value,
+      swatch: value.swatch,
+      product_form_id: product_form_id,
+      checked: value.selected,
+      visually_disabled: option_disabled,
+      shape: block.settings.swatch_shape,
+      help_text: help_text,
+      additional_props: input_dataset
+    %}
+  {%- elsif picker_type == 'button' -%}
+    <input
+      type="radio"
+      id="{{ input_id }}"
+      name="{{ input_name | escape }}"
+      value="{{ escaped_value }}"
+      form="{{ product_form_id }}"
+      {% if value.selected %}
+        checked
+      {% endif %}
+      {% if option_disabled %}
+        class="disabled"
+      {% endif %}
+      {{ input_dataset }}
+    >
+    <label for="{{ input_id }}">
+      {{ value -}}
+      {%- comment -%} extra-price-indicator {%- endcomment -%}
+      {%- if is_size_option -%}
+        {%- assign val_str = value | escape -%}
+        {%- case val_str -%}
+          {%- when '2GG' -%}<span class="extra-price">+R$&nbsp;10</span>
+          {%- when '3GG' -%}<span class="extra-price">+R$&nbsp;20</span>
+          {%- when '4GG' -%}<span class="extra-price">+R$&nbsp;20</span>
+          {%- when '5GG' -%}<span class="extra-price">+R$&nbsp;20</span>
+        {%- endcase -%}
+      {%- elsif option.name == 'Personalizar' or option.name == 'Personalização' -%}
+        {%- assign val_str = value | escape -%}
+        {%- if val_str == 'Personalizar' or val_str == 'Só Masculina' or val_str == 'Só Feminina' -%}<span class="extra-price">+R$&nbsp;30</span>
+        {%- elsif val_str == 'Ambos' -%}<span class="extra-price">+R$&nbsp;60</span>
+        {%- endif -%}
+      {%- endif -%}
+      {{ label_unavailable }}
+    </label>
+  {%- elsif picker_type == 'dropdown' or picker_type == 'swatch_dropdown' -%}
+    <option
+      id="{{ input_id }}"
+      value="{{ escaped_value }}"
+      {% if value.selected %}
+        selected="selected"
+      {% endif %}
+      {% if swatch_value and picker_type == 'swatch_dropdown' %}
+        data-option-swatch-value="{{ swatch_value }}"
+        {% if swatch_focal_point %}
+          data-option-swatch-focal-point="{{ swatch_focal_point }}"
+        {% endif %}
+      {% endif %}
+      {{ input_dataset }}
+    >
+      {% if option_disabled -%}
+        {{- 'products.product.value_unavailable' | t: option_value: value -}}
+      {%- else -%}
+        {{- value -}}
+      {%- endif %}
+    </option>
+  {%- endif -%}
+{%- endfor -%}
+
+{%- comment -%} Pos-loop fake injections: 3GG/4GG/5GG riscado SEMPRE que variant nao existe no produto. Filosofia: nao cadastrado = fantasma (escassez), cadastrado = real (Dawn cuida) {%- endcomment -%}
+{%- if picker_type == 'button' and is_size_option -%}
+  {%- unless has_3gg -%}
+    <input type="radio" id="{{ section.id }}-{{ option.position }}-fake-3GG" name="fake-{{ section.id }}-{{ option.position }}-3GG" value="3GG" class="disabled" disabled aria-hidden="true" tabindex="-1">
+    <label for="{{ section.id }}-{{ option.position }}-fake-3GG" aria-hidden="true">3GG<span class="extra-price">+R$&nbsp;20</span></label>
+  {%- endunless -%}
+  {%- unless has_4gg -%}
+    <input type="radio" id="{{ section.id }}-{{ option.position }}-fake-4GG" name="fake-{{ section.id }}-{{ option.position }}-4GG" value="4GG" class="disabled" disabled aria-hidden="true" tabindex="-1">
+    <label for="{{ section.id }}-{{ option.position }}-fake-4GG" aria-hidden="true">4GG<span class="extra-price">+R$&nbsp;20</span></label>
+  {%- endunless -%}
+  {%- unless has_5gg -%}
+    <input type="radio" id="{{ section.id }}-{{ option.position }}-fake-5GG" name="fake-{{ section.id }}-{{ option.position }}-5GG" value="5GG" class="disabled" disabled aria-hidden="true" tabindex="-1">
+    <label for="{{ section.id }}-{{ option.position }}-fake-5GG" aria-hidden="true">5GG<span class="extra-price">+R$&nbsp;20</span></label>
+  {%- endunless -%}
+{%- endif -%}
+
+{%- comment -%} CSS bolinhas alinhadas (referencia: Mantos PH Kit Casal — todas mesmo tamanho, mesma linha, mesmo com +R$X) {%- endcomment -%}
+<style>
+  /* Fieldset: garante alinhamento vertical das bolinhas na mesma linha */
+  .product-form__input--pill {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 0.8rem !important;
+  }
+  /* Label: TODAS as bolinhas mesmo tamanho fixo, mesmo P/M/G/GG sem +R$X */
+  .product-form__input--pill label {
+    display: inline-flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 5rem !important;
+    min-width: 5rem !important;
+    height: 5rem !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+    line-height: 1.1 !important;
+    gap: 0.2rem !important;
+    padding: 0.6rem 1.2rem !important;
+    margin: 0 !important;
+    border-radius: 0.8rem !important;
+  }
+  .product-form__input--pill label .extra-price,
+  .kit-casal-bloco label .extra-price {
+    display: block;
+    font-size: 1rem;
+    font-weight: 500;
+    color: inherit;
+    line-height: 1.1;
+  }
+  .product-form__input--pill input[type="radio"].disabled + label .extra-price {
+    color: #b0b0b0;
+    text-decoration: line-through;
+    text-decoration-color: #d63838;
+  }
+  /* Escassez via tamanhos riscados (feedback_scarcity_via_sold_out_sizes) */
+  .product-form__input--pill input[type="radio"].disabled + label {
+    color: #b0b0b0 !important;
+    text-decoration: line-through;
+    text-decoration-color: #d63838;
+    text-decoration-thickness: 1.5px;
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.85;
+  }
+</style>

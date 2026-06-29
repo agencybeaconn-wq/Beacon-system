@@ -1,0 +1,48 @@
+{%- comment -%}
+  Bloco de seletor de patches para ser usado dentro de main-product
+  Renderiza a interface de seleção de patches baseada no título do produto
+{%- endcomment -%}
+
+{%- liquid
+  assign product_title = product.title | default: ''
+  if block.settings.section_title != blank
+    assign section_title = block.settings.section_title
+  else
+    assign section_title = 'Adicionar Patches'
+  endif
+-%}
+
+{%- unless product_title == blank -%}
+  {%- render 'patch-styles' -%}
+  
+  <div class="patch-section-wrapper" data-patch-section{% if block.shopify_attributes %} {{ block.shopify_attributes }}{% endif %}>
+    <div class="patch-section-header">
+      <h4 class="patch-section-title">{{ section_title }}</h4>
+    </div>
+    
+    <!-- Container com borda que expande -->
+    <div class="patch-section-container">
+      <div class="patch-section-toggle" role="button" tabindex="0" aria-expanded="false">
+        <div class="patch-section-description">
+          Escolha seus patches...
+        </div>
+        <div class="patch-arrows">
+          <svg class="patch-arrow-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
+        </div>
+      </div>
+      
+      <div id="patch-products-selector" class="patch-products-selector">
+        <div class="patch-products-loading" style="display: none;">
+          <!-- Modern CSS spinner -->
+          <div class="patch-spinner"></div>
+        </div>
+        <div id="patch-products-list"></div>
+      </div>
+    </div>
+  </div>
+  
+  {%- render 'patch-script', product: product, pr_se_id: pr_se_id -%}
+{%- endunless -%}
+

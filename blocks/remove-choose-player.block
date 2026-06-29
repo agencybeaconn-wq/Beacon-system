@@ -1,0 +1,179 @@
+# BLOCK: Remove Choose Player (Manual Only)
+
+## META
+- **Origem:** TG Jerseys / LEVER EVER TG JERSEYS (theme 157588324582)
+- **Data:** 2026-04-08
+- **Store:** store-tg-jersey.myshopify.com
+
+## O QUE FAZ
+Remove o seletor de modo "Choose Player" / "Custom" do drawer de personalizacao, deixando apenas os campos manuais de Nome e Numero. Antes, o cliente podia escolher entre selecionar um jogador de um dropdown (que preenchia automaticamente nome e numero) ou digitar manualmente. Agora, so o modo manual esta disponivel — o cliente digita o nome (auto-uppercase, max 15 caracteres) e o numero (apenas digitos, max 3) diretamente nos campos de input.
+
+## ONDE INSERIR
+- **Arquivo alvo:** `snippets/customization-inputs.liquid`
+- **Posicao:** Dentro do HTML do drawer de personalizacao (`.customization-drawer__content`) e dentro da funcao `setupEventListeners()`
+- **Como encontrar:** Procurar por `.mode-selector`, `.mode-btn`, `data-mode="player"`, `player-select`, ou `Select a player`. Se encontrar qualquer um desses, o tema tem o seletor de modo e precisa ser simplificado.
+
+## DEPENDE DE
+- `patch-as-property.block` (Block 3) — O botao confirm chama a logica de add-to-cart do Block 3
+
+## CONTEXTO PARA O CLAUDE QUE VAI RECEBER
+Este bloco documenta uma REMOCAO de funcionalidade. O objetivo e simplificar o drawer de personalizacao removendo o modo "Choose Player".
+
+**O que foi REMOVIDO (HTML):**
+- `<div class="mode-selector">` com dois botoes: `data-mode="player"` e `data-mode="custom"`
+- `<div class="mode-content" data-mode-content="player">` com um `<select>` de jogadores
+- `<div class="mode-content" data-mode-content="custom">` (o wrapper que escondia os campos manuais)
+
+**O que foi REMOVIDO (JS):**
+- Toggle de `.mode-btn` (add/remove `.active`, show/hide `[data-mode-content]`)
+- Handler do `playerSelect` que fazia `change` -> split por `|` -> auto-fill nome e numero
+- Referencia a `document.getElementById('player-select-${sectionId}')`
+
+**O que FICOU (HTML resultante):**
+- `<div class="customization-fields-wrapper">` direto, sem mode selector
+- Campo de nome: `input#custom-name-${sectionId}` com `name="properties[Nome]"`, placeholder "Ex: JOHN", maxlength 15
+- Campo de numero: `input#custom-number-${sectionId}` com `name="properties[Numero]"`, placeholder "Ex: 10", maxlength 3
+- Labels com icones SVG inline
+- Hints de max caracteres
+
+**O que FICOU (JS resultante):**
+- `setupEventListeners()` com: close button, overlay click, auto-uppercase no nome, validacao de digitos no numero, Escape para fechar, confirm button (chama Block 3), `initPatchesHandler()`
+- SEM toggle de modo, SEM player select
+
+**O que pode dar errado:**
+- Se o tema alvo NAO tem o mode selector, este bloco nao e necessario — ja esta no estado correto.
+- As variaveis `${sectionId}` e `${productFormId}` sao template literals de JS (geradas por `initCustomizationSystem()`). No Liquid, elas devem ser substituidas por valores reais ou mantidas como template literals dentro de backticks JS.
+- O atributo `form="${productFormId}"` nos inputs e ESSENCIAL para que as propriedades sejam capturadas pelo Block 3. Sem ele, Nome e Numero nao vao para o carrinho.
+- Os nomes de propriedade `properties[Nome]` e `properties[Numero]` sao em portugues. Para lojas em ingles, trocar para `properties[Name]` e `properties[Number]`.
+
+## CODIGO DE REFERENCIA
+
+```liquid
+<!-- CURRENT CODE (after removal -- only manual input, no mode selector): -->
+<div class="customization-fields-wrapper">
+  <div class="customization-form">
+    <div class="customization-field">
+      <label for="custom-name-${sectionId}" class="customization-label">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        Name on Shirt
+      </label>
+      <input
+        type="text"
+        id="custom-name-${sectionId}"
+        name="properties[Nome]"
+        placeholder="Ex: JOHN"
+        maxlength="15"
+        form="${productFormId}"
+        class="customization-input"
+      >
+      <span class="customization-hint">Max 15 characters</span>
+    </div>
+
+    <div class="customization-field">
+      <label for="custom-number-${sectionId}" class="customization-label">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+          <path d="M12 8v8"/>
+          <path d="M8 12h8"/>
+        </svg>
+        Number
+      </label>
+      <input
+        type="text"
+        id="custom-number-${sectionId}"
+        name="properties[Numero]"
+        placeholder="Ex: 10"
+        maxlength="3"
+        form="${productFormId}"
+        class="customization-input customization-input--number"
+      >
+      <span class="customization-hint">Max 3 digits</span>
+    </div>
+  </div>
+</div>
+```
+
+```javascript
+// setupEventListeners after removal -- no player-related code
+function setupEventListeners() {
+  const drawer = document.getElementById(drawerId);
+  const overlay = document.getElementById(overlayId);
+  if (!drawer || !overlay || drawer.dataset.initialized === 'true') return;
+
+  drawer.dataset.initialized = 'true';
+
+  const closeBtn = drawer.querySelector('.customization-drawer__close');
+  const confirmBtn = drawer.querySelector('.customization-drawer__confirm');
+
+  // Close button
+  closeBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    closeDrawer();
+  });
+
+  // Overlay click
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) {
+      e.preventDefault();
+      e.stopPropagation();
+      closeDrawer();
+    }
+  });
+
+  // Auto-uppercase name input
+  const nameInput = document.getElementById(`custom-name-${sectionId}`);
+  if (nameInput) {
+    nameInput.addEventListener('input', function() {
+      this.value = this.value.toUpperCase();
+      if (typeof window.updateCustomizationTotal === 'function') {
+        window.updateCustomizationTotal();
+      }
+    });
+  }
+
+  // Number input validation
+  const numberInput = document.getElementById(`custom-number-${sectionId}`);
+  if (numberInput) {
+    numberInput.addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9]/g, '');
+      if (typeof window.updateCustomizationTotal === 'function') {
+        window.updateCustomizationTotal();
+      }
+    });
+  }
+
+  // Escape key to close
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && drawer.classList.contains('is-open')) {
+      closeDrawer();
+    }
+  });
+
+  // Confirm button handler -- see Block 3 for the add-to-cart logic
+  confirmBtn.addEventListener('click', async function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    // ... add-to-cart logic from Block 3 ...
+  });
+
+  // Initialize patches
+  initPatchesHandler();
+}
+```
+
+## COMO VALIDAR
+- [ ] Abrir drawer de personalizacao — NAO ha botoes "Choose Player" / "Custom"
+- [ ] Campos de Nome e Numero aparecem diretamente, sem toggle
+- [ ] Nome auto-converte para uppercase ao digitar
+- [ ] Numero aceita apenas digitos (letras sao filtradas)
+- [ ] Nome limita a 15 caracteres
+- [ ] Numero limita a 3 caracteres
+- [ ] Botao fechar (X) fecha o drawer
+- [ ] Clicar no overlay fecha o drawer
+- [ ] Tecla Escape fecha o drawer
+- [ ] Confirmar com nome e numero -> item adicionado ao carrinho com propriedades corretas
+- [ ] Console nao mostra erros de referencia a `player-select` ou `mode-btn`

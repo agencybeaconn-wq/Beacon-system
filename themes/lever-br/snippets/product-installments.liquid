@@ -1,0 +1,243 @@
+{% comment %}
+  Renders the Pix discount text, installment text, and the payment options modal.
+  Accepts:
+  - product: {Object} Product object
+  - use_variant: {Boolean} Whether to use the selected variant price
+  - modal_id: {String} A unique ID for the modal (important if rendering multiple times on the same page)
+
+  Usage:
+  {% render 'product-installments', product: product, use_variant: true, modal_id: 'InstallmentModalMobile' %}
+{% endcomment %}
+
+{%- liquid
+  assign target = product
+  if use_variant
+    assign target = product.selected_or_first_available_variant
+  endif
+
+  assign price = target.price | default: 1999
+  assign max_installments = settings.installment_max | default: 12
+  assign pix_discount = settings.pix_discount | default: 5
+
+  assign rate_key = 'rate_' | append: max_installments
+  assign current_rate = settings[rate_key] | replace: ',', '.' | plus: 0.0
+
+  assign pix_discount_decimal = pix_discount | divided_by: 100.0
+  assign pix_amount_to_subtract = price | times: pix_discount_decimal
+  assign pix_price_final = price | minus: pix_amount_to_subtract
+
+  assign final_installment_price = price
+  if current_rate > 0
+    assign interest_amount = price | times: current_rate | divided_by: 100.0
+    assign final_installment_price = price | plus: interest_amount
+  endif
+  assign monthly_payment = final_installment_price | divided_by: max_installments
+-%}
+
+{% if settings.installment_enabled and price > 0 %}
+  <div class="product-installments-wrapper" style="margin-top: 0.5rem; margin-bottom: 2rem;">
+    {% if settings.pix_discount_enabled %}
+      <div class="pix-discount-highlight" style="display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.4rem;">
+        <span class="pix-price" style="font-size: 1.8rem; font-weight: 800; color: #1a5e3b;">
+          {{ pix_price_final | money }}
+        </span>
+        <span class="pix-text" style="font-size: 1.4rem; color: #1a1a1a;">
+          <span style="font-weight: 700;">{{ pix_discount }}%</span> de desconto no Pix
+        </span>
+      </div>
+    {% endif %}
+
+    <div class="installment-highlight" style="font-size: 1.4rem; color: rgba(var(--color-foreground), 0.75); margin-bottom: 0.5rem;">
+      ou em até <span style="font-weight: 700;">{{ max_installments }}x</span> de <span style="font-weight: 700;">{{ monthly_payment | money }}</span>
+    </div>
+
+    <button type="button" class="link link--text underlined-link" style="font-size: 1.3rem; margin-top: -0.2rem; margin-bottom: 0.5rem; color: #555; text-align: left; padding-left: 0; outline: none; border: none; background: transparent; cursor: pointer;" onclick="document.getElementById('{{ modal_id }}').showModal()">
+      Ver outras opções
+    </button>
+
+    <dialog id="{{ modal_id }}" class="installment-modal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="document.getElementById('{{ modal_id }}').close()">&times;</button>
+        <h3 class="modal-title">Formas de Pagamento</h3>
+        
+        {% if settings.pix_discount_enabled %}
+          <div class="pix-discount-info">
+            <div class="pix-badge-wrapper">
+              <img src="https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Pix%20Png/pix-106.svg" alt="Pix" width="45" height="15">
+              <span class="pix-discount-text"><strong>{{ pix_discount }}% de desconto</strong> no Pix</span>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="installment-table-wrapper">
+          <table class="installment-table">
+            <tbody>
+              {%- for i in (1..max_installments) -%}
+                {%- liquid
+                  assign current_loop_rate_key = 'rate_' | append: i
+                  assign current_loop_rate = settings[current_loop_rate_key] | replace: ',', '.' | plus: 0.0
+                  
+                  assign loop_final_price = price
+                  assign interest_text = 'sem juros'
+                  
+                  if current_loop_rate > 0
+                    assign loop_interest = price | times: current_loop_rate | divided_by: 100.0
+                    assign loop_final_price = price | plus: loop_interest
+                    assign interest_text = 'com juros'
+                  endif
+                  
+                  assign loop_monthly = loop_final_price | divided_by: i
+                -%}
+                <tr>
+                  <td class="installment-qty">{{ i }}x de</td>
+                  <td class="installment-value">{{ loop_monthly | money }}</td>
+                  <td class="installment-fee">{{ interest_text }}</td>
+                </tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </dialog>
+  </div>
+
+  <style>
+    .installment-modal {
+      border: none;
+      border-radius: 16px !important;
+      padding: 0;
+      width: 95%;
+      max-width: 450px;
+      box-shadow: 0 15px 45px rgba(0,0,0,0.15);
+      margin: auto;
+      outline: none;
+      background: #fff;
+    }
+    .installment-modal::backdrop {
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+    }
+    .installment-modal .modal-content {
+      padding: 3rem;
+      position: relative;
+      animation: modalFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(0);
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .installment-modal .modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: #f5f5f5;
+      border: none;
+      width: 3.2rem;
+      height: 3.2rem;
+      border-radius: 50%;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 10;
+    }
+    .installment-modal .modal-close:hover {
+      background: #eee;
+      color: #000;
+    }
+    .installment-modal .modal-close:active {
+      transform: scale(0.95);
+    }
+    .installment-modal .modal-title {
+      margin: 0 0 2.5rem 0;
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: left;
+      color: #1a1a1a;
+    }
+    .installment-modal .pix-discount-info {
+      margin-bottom: 2.5rem;
+    }
+    .installment-modal .pix-badge-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      background: transparent;
+      border: none;
+      padding: 1.2rem 0;
+      border-radius: 0;
+      color: #1a5e3b;
+    }
+    .installment-modal .pix-discount-text {
+      font-size: 1.4rem;
+      line-height: 1.2;
+    }
+    .installment-modal .installment-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .installment-modal .installment-table tr {
+      border-bottom: 1px solid #f2f2f2;
+    }
+    .installment-modal .installment-table tr:last-child {
+      border-bottom: none;
+    }
+    .installment-modal .installment-table td {
+      padding: 1.2rem 0;
+      font-size: 1.4rem;
+    }
+    .installment-modal .installment-qty {
+      color: #666;
+      width: 1%;
+      white-space: nowrap;
+      padding-right: 1.5rem !important;
+    }
+    .installment-modal .installment-value {
+      font-weight: 700;
+      color: #000;
+    }
+    .installment-modal .installment-fee {
+      text-align: right;
+      color: #999;
+      font-size: 1.2rem;
+    }
+    
+    /* Responsive font resizing */
+    @media screen and (max-width: 749px) {
+      .pix-discount-highlight .pix-price {
+        font-size: 1.6rem !important;
+      }
+      .pix-discount-highlight .pix-text {
+        font-size: 1.3rem !important;
+      }
+      .installment-modal .modal-content {
+        padding: 2.5rem 2rem;
+      }
+    }
+  </style>
+
+  <script>
+    // Update the installment pricing when the variant changes
+    document.addEventListener('DOMContentLoaded', function() {
+      const productForm{{ section.id | replace: '-', '' }} = document.querySelector('product-info[data-section="{{ section.id }}"]');
+      if (!productForm{{ section.id | replace: '-', '' }}) return;
+
+      productForm{{ section.id | replace: '-', '' }}.addEventListener('variantChange', function(event) {
+        const variant = event.detail.variant;
+        if (!variant) return;
+        
+        // This is a complex update depending on Shopify's money formatter.
+        // The easiest reliable way is to let section rendering update it (which Dawn does automatically).
+        // Since we are inside the product form scope and Dawn replaces the whole price block 
+        // using the section API, as long as this snippet is inside the block that Dawn replaces, 
+        // we don't need manual JS calculations here.
+      });
+    });
+  </script>
+{% endif %}

@@ -1,0 +1,1127 @@
+{
+  "sections": {
+    "slideshow_bYRrVM": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_NtWDdB": {
+          "type": "slide",
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        },
+        "slide_nWwJTh": {
+          "type": "slide",
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_NtWDdB",
+        "slide_nWwJTh"
+      ],
+      "name": "t:sections.slideshow.presets.name",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "adapt_image",
+        "slider_visual": "dots",
+        "auto_rotate": true,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": false,
+        "accessibility_info": ""
+      }
+    },
+    "collection_list_tabs_E4Hpwb": {
+      "type": "collection-list-tabs",
+      "blocks": {
+        "tab_header_Qkyx8C": {
+          "type": "tab_header",
+          "settings": {
+            "tab_label": "Seleções"
+          }
+        },
+        "collection_item_wrBPkV": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "argentina",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/argentina.webp"
+          }
+        },
+        "collection_item_NMRKaR": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "brazil",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/brasil.webp"
+          }
+        },
+        "collection_item_XQL3wX": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "portugal",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_Xhm3k4": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "france",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/franc%CC%A7a.webp"
+          }
+        },
+        "collection_item_EpDiqU": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "colombia",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_nPjE9Q": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "germany",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/alemanha%20(1).webp"
+          }
+        },
+        "collection_item_3jVHxc": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "spain",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/espanha.webp"
+          }
+        },
+        "collection_item_DwNA7J": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "england",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/inglaterra.webp"
+          }
+        },
+        "collection_item_eF67PL": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "italy",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_zJQpUg": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "mexico",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/mexico.webp"
+          }
+        },
+        "collection_item_heqwy7": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "belgium",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_cCPdGn": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "japan",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_bNbjGn": {
+          "type": "collection_item",
+          "disabled": true,
+          "settings": {
+            "collection": "saudi-arabia",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_WGWyyy": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "netherlands",
+            "custom_image_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "tab_header_Qkyx8C",
+        "collection_item_wrBPkV",
+        "collection_item_NMRKaR",
+        "collection_item_XQL3wX",
+        "collection_item_Xhm3k4",
+        "collection_item_EpDiqU",
+        "collection_item_nPjE9Q",
+        "collection_item_3jVHxc",
+        "collection_item_DwNA7J",
+        "collection_item_eF67PL",
+        "collection_item_zJQpUg",
+        "collection_item_heqwy7",
+        "collection_item_cCPdGn",
+        "collection_item_bNbjGn",
+        "collection_item_WGWyyy"
+      ],
+      "name": "Coleções com Abas",
+      "settings": {
+        "header_style": "standard",
+        "title": "<strong>NATIONAL TEAMS</strong>",
+        "heading_size": "h1",
+        "description": "",
+        "description_style": "body",
+        "header_alignment": "center",
+        "image_ratio": "square",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
+        "color_scheme": "",
+        "columns_mobile": "3",
+        "swipe_on_mobile": true,
+        "show_desktop_arrows": false,
+        "show_mobile_arrows": false,
+        "unselected_tab_text_color": "#000000",
+        "active_tab_text_color": "#000000",
+        "padding_top": 0,
+        "padding_bottom": 12
+      }
+    },
+    "featured_collection_tabs_ycEnGy": {
+      "type": "featured-collection-tabs",
+      "blocks": {
+        "tab_kyaMnp": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Categoria",
+            "collection": "vitrine-world-cup-2026"
+          }
+        }
+      },
+      "block_order": [
+        "tab_kyaMnp"
+      ],
+      "name": "Coleção Destaque + Abas",
+      "settings": {
+        "products_to_show": 25,
+        "title": "<strong>WORLD CUP 2026 SHIRTS</strong>",
+        "heading_size": "h1",
+        "description": "<p>Discover the latest World Cup jerseys.</p>",
+        "description_style": "body",
+        "header_alignment": "center",
+        "collection": "vitrine-world-cup-2026",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
+        "full_width": false,
+        "show_view_all": true,
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": true,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "unselected_tab_text_color": "#ffffff",
+        "active_tab_text_color": "#000000",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "featured_collection_tabs_4fkewQ": {
+      "type": "featured-collection-tabs",
+      "blocks": {
+        "tab_imCmWt": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Brazilians",
+            "collection": "vitrine-brazilian-league"
+          }
+        },
+        "tab_aL7tqA": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "European",
+            "collection": "vitrine-europe-teams"
+          }
+        }
+      },
+      "block_order": [
+        "tab_imCmWt",
+        "tab_aL7tqA"
+      ],
+      "disabled": true,
+      "name": "Coleção Destaque + Abas",
+      "settings": {
+        "products_to_show": 10,
+        "title": "Releases 2026",
+        "heading_size": "h1",
+        "description": "",
+        "description_style": "body",
+        "header_alignment": "center",
+        "collection": "brazil",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
+        "full_width": false,
+        "show_view_all": true,
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": true,
+        "view_all_style": "outline",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "unselected_tab_text_color": "#ffffff",
+        "active_tab_text_color": "#000000",
+        "padding_top": 0,
+        "padding_bottom": 4
+      }
+    },
+    "slideshow_UbF3G7": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_V976MF": {
+          "type": "slide",
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h2",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-1"
+          }
+        }
+      },
+      "block_order": [
+        "slide_V976MF"
+      ],
+      "name": "t:sections.slideshow.presets.name",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "adapt_image",
+        "slider_visual": "dots",
+        "auto_rotate": true,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": false,
+        "accessibility_info": ""
+      }
+    },
+    "collection_list_tabs_KyG4MC": {
+      "type": "collection-list-tabs",
+      "blocks": {
+        "tab_header_Wr9teh": {
+          "type": "tab_header",
+          "settings": {
+            "tab_label": "Premier League"
+          }
+        },
+        "collection_item_cM7qNa": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "arsenal",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/9.webp"
+          }
+        },
+        "collection_item_Bpb8BN": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "manchester-city",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/13.webp"
+          }
+        },
+        "collection_item_aW9Jka": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "manchester-united",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/manutd.png"
+          }
+        },
+        "collection_item_gtrkUP": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "chelsea",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/zz.webp"
+          }
+        },
+        "collection_item_H3fBwF": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "liverpool",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/12.webp"
+          }
+        },
+        "collection_item_cKWj7g": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "tottenham",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/a.webp"
+          }
+        },
+        "collection_item_6RDRQ4": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "newcastle",
+            "custom_image_url": ""
+          }
+        },
+        "tab_header_rtbteB": {
+          "type": "tab_header",
+          "settings": {
+            "tab_label": "La Liga"
+          }
+        },
+        "collection_item_66HPnK": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "barcelona",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/2.webp"
+          }
+        },
+        "collection_item_aLhje9": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "real-madrid",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/3.webp"
+          }
+        },
+        "collection_item_P9FQtb": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "atletico-madrid",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/7.webp"
+          }
+        },
+        "tab_header_pRheER": {
+          "type": "tab_header",
+          "settings": {
+            "tab_label": "Serie A"
+          }
+        },
+        "collection_item_A97TLg": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "inter-milan",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/8.webp"
+          }
+        },
+        "collection_item_h4NypE": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "milan",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/10.webp"
+          }
+        },
+        "collection_item_K8hGwM": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "juventus",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/5.webp"
+          }
+        },
+        "tab_header_gdMDCm": {
+          "type": "tab_header",
+          "settings": {
+            "tab_label": "Ligue 1"
+          }
+        },
+        "collection_item_RNAb6t": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "psg",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/1.webp"
+          }
+        },
+        "collection_item_HRxf8V": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "lyon",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_XyDrrg": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "marseille",
+            "custom_image_url": ""
+          }
+        },
+        "tab_header_MjVX4N": {
+          "type": "tab_header",
+          "settings": {
+            "tab_label": "Bundesliga"
+          }
+        },
+        "collection_item_DJihAy": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "bayern-munchen",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/6.webp"
+          }
+        },
+        "collection_item_qxAXb4": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "borussia-dortmund",
+            "custom_image_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "tab_header_Wr9teh",
+        "collection_item_cM7qNa",
+        "collection_item_Bpb8BN",
+        "collection_item_aW9Jka",
+        "collection_item_gtrkUP",
+        "collection_item_H3fBwF",
+        "collection_item_cKWj7g",
+        "collection_item_6RDRQ4",
+        "tab_header_rtbteB",
+        "collection_item_66HPnK",
+        "collection_item_aLhje9",
+        "collection_item_P9FQtb",
+        "tab_header_pRheER",
+        "collection_item_A97TLg",
+        "collection_item_h4NypE",
+        "collection_item_K8hGwM",
+        "tab_header_gdMDCm",
+        "collection_item_RNAb6t",
+        "collection_item_HRxf8V",
+        "collection_item_XyDrrg",
+        "tab_header_MjVX4N",
+        "collection_item_DJihAy",
+        "collection_item_qxAXb4"
+      ],
+      "name": "Coleções com Abas",
+      "settings": {
+        "header_style": "standard",
+        "title": "<strong>TOP LEAGUES EUROPE</strong>",
+        "heading_size": "h1",
+        "description": "",
+        "description_style": "body",
+        "header_alignment": "center",
+        "image_ratio": "square",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
+        "color_scheme": "",
+        "columns_mobile": "3",
+        "swipe_on_mobile": true,
+        "show_desktop_arrows": false,
+        "show_mobile_arrows": false,
+        "unselected_tab_text_color": "#ffffff",
+        "active_tab_text_color": "#000000",
+        "padding_top": 4,
+        "padding_bottom": 32
+      }
+    },
+    "featured_collection_tabs_7XUrdN": {
+      "type": "featured-collection-tabs",
+      "blocks": {
+        "tab_WG7qmR": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Premier League",
+            "collection": "vitrine-europe-teams"
+          }
+        }
+      },
+      "block_order": [
+        "tab_WG7qmR"
+      ],
+      "name": "Coleção Destaque + Abas",
+      "settings": {
+        "products_to_show": 25,
+        "title": "<strong>EUROPE SHIRTS</strong>",
+        "heading_size": "h1",
+        "description": "",
+        "description_style": "body",
+        "header_alignment": "center",
+        "collection": "vitrine-europe-teams",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
+        "full_width": false,
+        "show_view_all": true,
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": true,
+        "view_all_style": "outline",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "unselected_tab_text_color": "#ffffff",
+        "active_tab_text_color": "#000000",
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
+    },
+    "featured_collection_tabs_c7UkEj": {
+      "type": "featured-collection-tabs",
+      "blocks": {
+        "tab_LDiwYf": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Releases",
+            "collection": "vitrine-new-arrivals-26-27"
+          }
+        },
+        "tab_bYYJkq": {
+          "type": "tab",
+          "disabled": true,
+          "settings": {
+            "tab_label": "Kids Kit",
+            "collection": "kids-kit"
+          }
+        }
+      },
+      "block_order": [
+        "tab_LDiwYf",
+        "tab_bYYJkq"
+      ],
+      "name": "Coleção Destaque + Abas",
+      "settings": {
+        "products_to_show": 25,
+        "title": "<strong>RELEASES 2026/27</strong>",
+        "heading_size": "h1",
+        "description": "",
+        "description_style": "body",
+        "header_alignment": "center",
+        "collection": "vitrine-new-arrivals-26-27",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
+        "full_width": false,
+        "show_view_all": true,
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": true,
+        "view_all_style": "outline",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "unselected_tab_text_color": "#ffffff",
+        "active_tab_text_color": "#000000",
+        "padding_top": 0,
+        "padding_bottom": 36
+      }
+    },
+    "benefits_grid_PTxpjT": {
+      "type": "benefits-grid",
+      "blocks": {
+        "grid_benefit_66wMdT": {
+          "type": "grid_benefit",
+          "settings": {
+            "icon_svg": "<svg viewbox=\"0 0 612 612\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M504.9,395.756c-28.684,0-52.02,23.342-52.02,52.02c0,28.684,23.336,52.02,52.02,52.02c28.678,0,52.02-23.336,52.02-52.02C556.92,419.098,533.578,395.756,504.9,395.756z M504.9,463.076c-8.439,0-15.3-6.861-15.3-15.3c0-8.439,6.861-15.3,15.3-15.3s15.3,6.861,15.3,15.3C520.2,456.215,513.339,463.076,504.9,463.076z\"></path><path d=\"M499.918,179.518H410.04c-6.763,0-12.24,5.484-12.24,12.24v238.68c0,6.756,5.477,12.24,12.24,12.24h12.981c6.059,0,11.426-4.364,12.209-10.373c4.804-36.806,34.162-59.633,69.676-59.633s64.872,22.828,69.676,59.633c0.783,6.01,6.144,10.373,12.209,10.373h12.968c6.756,0,12.24-5.484,12.24-12.24v-119.34c0-2.876-1.01-5.655-2.852-7.852l-99.842-119.34C506.981,181.128,503.541,179.518,499.918,179.518z M422.28,277.438v-61.2c0-6.756,5.477-12.24,12.24-12.24h53.917c3.629,0,7.075,1.616,9.4,4.406l50.998,61.2c6.64,7.974,0.973,20.074-9.406,20.074H434.52C427.757,289.678,422.28,284.201,422.28,277.438z\"></path><path d=\"M12.24,442.684h31.341c6.059,0,11.426-4.364,12.209-10.373c4.804-36.806,34.162-59.633,69.676-59.633s64.872,22.828,69.676,59.633c0.783,6.01,6.144,10.373,12.209,10.373H361.08c6.757,0,12.24-5.484,12.24-12.24v-306c0-6.756-5.484-12.24-12.24-12.24H12.24c-6.763,0-12.24,5.484-12.24,12.24v306C0,437.201,5.477,442.684,12.24,442.684z\"></path><path d=\"M125.46,395.756c-28.684,0-52.02,23.342-52.02,52.02c0,28.684,23.336,52.02,52.02,52.02c28.678,0,52.02-23.336,52.02-52.02C177.48,419.098,154.138,395.756,125.46,395.756z M125.46,463.076c-8.439,0-15.3-6.861-15.3-15.3c0-8.439,6.861-15.3,15.3-15.3s15.3,6.861,15.3,15.3C140.76,456.215,133.899,463.076,125.46,463.076z\"></path></svg>",
+            "title": "WORLDWIDE SHIPPING",
+            "text": "Express & tracked delivery to most countries."
+          }
+        },
+        "grid_benefit_MfpdJ4": {
+          "type": "grid_benefit",
+          "settings": {
+            "icon_svg": "<svg viewbox=\"0 0 512 512\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"m227.6 19.35 64.72 37.366-209.829 121.145v89.769c0 3.587 1.778 6.667 4.885 8.461l48.638 28.081c1.553.897 3.331.897 4.885 0 1.553-.897 2.442-2.437 2.442-4.23v-86.949l209.83-121.145 64.72 37.366c6.213 3.587 9.77 9.747 9.77 16.921v112.29c-17.571-5.927-36.163-9.124-54.733-10.257v-7.528c0-8.202-4.682-15.557-12.114-19.027-7.429-3.469-16.076-2.339-22.364 2.923l-74.499 62.353c-6.18 5.172-9.557 12.714-9.299 20.768.258 8.088 4.083 15.346 10.607 20.133l74.248 54.473c6.412 4.704 14.819 5.395 21.913 1.801 7.101-3.598 11.509-10.772 11.509-18.732v-8.312c15.453 1.843 30.75 6.594 43.311 15.688 2.437 1.764 4.747 3.685 6.897 5.75-1.438 1.685-3.197 3.146-5.244 4.328l-190.293 109.864c-6.213 3.587-13.326 3.587-19.539 0l-190.29-109.864c-6.214-3.587-9.77-9.747-9.77-16.922v-219.728c0-7.175 3.556-13.335 9.77-16.921l190.291-109.865c6.213-3.587 13.325-3.587 19.538 0zm129.328 320.743c104.49 0 134.102 99.8 48.275 144.657-.471.244-.672.807-.456 1.291.202.451.68.69 1.159.57 142.596-35.074 132.627-222.924-48.978-222.924v-23.047c0-1.988-1.083-3.689-2.884-4.53s-3.8-.58-5.325.696l-74.499 62.354c-2.436 2.039-3.678 4.813-3.577 7.988.102 3.175 1.519 5.864 4.08 7.743l74.248 54.473c1.558 1.143 3.494 1.302 5.217.429s2.74-2.529 2.74-4.46z\"></path></svg>",
+            "title": "EASY RETURNS",
+            "text": "30-day hassle-free returns. Fast refunds after inspection."
+          }
+        },
+        "grid_benefit_WWdE4a": {
+          "type": "grid_benefit",
+          "settings": {
+            "icon_svg": "<svg viewbox=\"0 -86 512 512\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"m90.046875 120.070312h40.058594v40.058594h-40.058594zm0 0\"></path><path d=\"m0 0v340.246094h512v-340.246094zm170.664062 250.199219v30h-110.628906v-30zm-110.617187-60.070313v-100.058594h100.058594v100.058594zm391.917969-70.03125v30h-251.816406v-30zm-251.816406-30.050781v-30h251.816406v30zm251.816406 160.152344v30h-110.628906v-30zm-140.652344 0v30h-110.625v-30zm0 0\"></path></svg>",
+            "title": "SECURE PAYMENTS",
+            "text": "SSL checkout. All major cards, Apple Pay, PayPal, etc."
+          }
+        },
+        "grid_benefit_xntKUK": {
+          "type": "grid_benefit",
+          "settings": {
+            "icon_svg": "<svg viewbox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"m64.499 58.733h-29.002c-12.162 1.111-21.688 11.335-21.688 23.788 0 11.895 8.691 12.479 20.073 12.479 1.242 0 2.515-.006 3.817-.006h24.604c1.293 0 2.569.006 3.811.006 11.382 0 20.078-.583 20.078-12.479-.004-12.454-9.531-22.679-21.693-23.788z\" fill=\"#000\"></path><path d=\"m54.391 46.439h3.656c1.205 0 2.351.41 3.274 1.14 2.104-.282 4.091-.829 5.813-1.574.497-.736.929-1.518 1.327-2.319v-8.001c0-1.809.673-3.494 1.84-4.778-1.705-9.679-10.135-17.037-20.303-17.037-10.165 0-18.597 7.359-20.302 17.038 1.166 1.283 1.84 2.968 1.84 4.777v8.001c3.381 6.786 10.368 11.458 18.461 11.458.126 0 .248-.016.373-.019-.781-.923-1.271-2.099-1.271-3.399.001-2.915 2.375-5.287 5.292-5.287z\" fill=\"#000\"></path><path d=\"m24.177 49.469h.231c2.536 0 4.594-2.058 4.594-4.603v-9.182c0-1.804-1.041-3.358-2.556-4.111.655-12.425 10.967-22.33 23.551-22.33s22.9 9.904 23.553 22.33c-1.515.752-2.555 2.307-2.555 4.111v9.182c0 .61.119 1.178.327 1.71-2.679 1.913-6.576 3.279-10.965 3.657-.497-.755-1.344-1.26-2.312-1.26h-3.656c-1.524 0-2.756 1.234-2.756 2.752 0 1.52 1.231 2.756 2.756 2.756h3.656c1.065 0 1.973-.607 2.431-1.487 5.096-.402 9.527-1.958 12.64-4.259.713.462 1.559.733 2.472.733h.23c2.539 0 4.593-2.058 4.593-4.603v-9.182c0-1.829-1.072-3.408-2.619-4.141-.674-14.744-12.882-26.542-27.794-26.542s-27.122 11.798-27.791 26.544c-1.549.732-2.624 2.312-2.624 4.141v9.182c0 2.544 2.06 4.602 4.594 4.602z\" fill=\"#000\"></path></svg>",
+            "title": "24/7 SUPPORT",
+            "text": "Need help with sizing, shipping or custom orders? We're here anytime."
+          }
+        },
+        "grid_benefit_TcwjhL": {
+          "type": "grid_benefit",
+          "settings": {
+            "icon_svg": "<svg viewbox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"m23 12-2.44-2.79.34-3.69-3.61-.82-1.89-3.2-3.4 1.46-3.4-1.46-1.89 3.19-3.61.81.34 3.7-2.44 2.8 2.44 2.79-.34 3.7 3.61.82 1.89 3.19 3.4-1.47 3.4 1.46 1.89-3.19 3.61-.82-.34-3.69zm-12.91 4.72-3.8-3.81 1.48-1.48 2.32 2.33 5.85-5.87 1.48 1.48z\" fill=\"#000\"></path></svg>",
+            "title": "QUALITY CHECKED",
+            "text": "Each jersey is individually inspected for quality before shipping."
+          }
+        },
+        "grid_benefit_6WP6BP": {
+          "type": "grid_benefit",
+          "settings": {
+            "icon_svg": "<svg viewbox=\"0 0 38 38\" xmlns=\"http://www.w3.org/2000/svg\"><g><path d=\"m23.39 12a1 1 0 0 0 .59-.19 1 1 0 0 0 .39-1l-.37-2.4 1.72-1.68a1 1 0 0 0 -.58-1.73l-2.39-.34-1.07-2.15a1 1 0 0 0 -1.79 0l-1.07 2.17-2.39.32a1 1 0 0 0 -.55 1.71l1.73 1.68-.41 2.38a1 1 0 0 0 .4 1 1 1 0 0 0 1 .08l2.14-1.13 2.13 1.13a1.12 1.12 0 0 0 .52.15z\"></path><path d=\"m18.49 14-2.38-.35-1.11-2.14a1 1 0 0 0 -1.79 0l-1.07 2.16-2.35.33a1 1 0 0 0 -.55 1.7l1.76 1.71-.4 2.38a1 1 0 0 0 1.4 1.05l2.13-1.12 2.14 1.12a.93.93 0 0 0 .46.12 1 1 0 0 0 .59-.2 1 1 0 0 0 .4-1l-.41-2.38 1.73-1.69a1 1 0 0 0 -.56-1.7z\"></path><path d=\"m32.59 14.7a1 1 0 0 0 -.81-.68l-2.38-.35-1.07-2.16a1 1 0 0 0 -.9-.56 1 1 0 0 0 -.89.56l-1.07 2.16-2.39.33a1 1 0 0 0 -.81.68 1 1 0 0 0 .26 1l1.72 1.69-.4 2.38a1 1 0 0 0 .39 1 1 1 0 0 0 1.06.08l2.13-1.12 2.14 1.12a.93.93 0 0 0 .43.17 1 1 0 0 0 .59-.2 1 1 0 0 0 .4-1l-.41-2.38 1.73-1.69a1 1 0 0 0 .28-1.03z\"></path><path d=\"m5.33 23.65h-1.66a1.78 1.78 0 0 0 -1.67 1.93v8a1.78 1.78 0 0 0 1.67 1.93h1.66a1.78 1.78 0 0 0 1.67-1.97v-8a1.78 1.78 0 0 0 -1.67-1.89z\"></path><path d=\"m35.35 26.38a3 3 0 0 0 -3.61-.51l-7.44 4.13h-5.74a1 1 0 0 1 0-2h4.5a2.5 2.5 0 1 0 0-5h-11.5a1 1 0 0 0 -.56.17l-2.47 1.65v.3 8.76.3l2.47 1.65a1 1 0 0 0 .56.17h14a1 1 0 0 0 .48-.12l8.62-4.7a3 3 0 0 0 .69-4.8z\"></path></g></svg>",
+            "title": "TRUSTED BY FANS",
+            "text": "1000+ happy customers. Quality jerseys, loved worldwide."
+          }
+        }
+      },
+      "block_order": [
+        "grid_benefit_66wMdT",
+        "grid_benefit_MfpdJ4",
+        "grid_benefit_WWdE4a",
+        "grid_benefit_xntKUK",
+        "grid_benefit_TcwjhL",
+        "grid_benefit_6WP6BP"
+      ],
+      "name": "The Promise",
+      "settings": {
+        "title": "The World Cup Promise",
+        "padding_top": 16,
+        "padding_bottom": 40
+      }
+    },
+    "video_stories_KRXdVJ": {
+      "type": "video-stories",
+      "blocks": {
+        "story_mL9wME": {
+          "type": "story",
+          "settings": {
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "custom_video_url": "",
+            "title": "Story"
+          }
+        },
+        "story_PqwkTe": {
+          "type": "story",
+          "settings": {
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "custom_video_url": "",
+            "title": "Story"
+          }
+        },
+        "story_JTYifV": {
+          "type": "story",
+          "settings": {
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "custom_video_url": "",
+            "title": "Story"
+          }
+        },
+        "story_CJepiL": {
+          "type": "story",
+          "settings": {
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "custom_video_url": "",
+            "title": "Story"
+          }
+        },
+        "story_herVaK": {
+          "type": "story",
+          "settings": {
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "custom_video_url": "",
+            "title": "Story"
+          }
+        },
+        "story_ETUhax": {
+          "type": "story",
+          "settings": {
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "custom_video_url": "",
+            "title": "Story"
+          }
+        },
+        "story_aTBgVT": {
+          "type": "story",
+          "settings": {
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "custom_video_url": "",
+            "title": "Story"
+          }
+        },
+        "story_FPGMGL": {
+          "type": "story",
+          "settings": {
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "custom_video_url": "",
+            "title": "Story"
+          }
+        },
+        "story_pGAMWB": {
+          "type": "story",
+          "settings": {
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "custom_video_url": "",
+            "title": "Story"
+          }
+        },
+        "story_y6eWfc": {
+          "type": "story",
+          "settings": {
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "custom_video_url": "",
+            "title": "Story"
+          }
+        }
+      },
+      "block_order": [
+        "story_mL9wME",
+        "story_PqwkTe",
+        "story_JTYifV",
+        "story_CJepiL",
+        "story_herVaK",
+        "story_ETUhax",
+        "story_aTBgVT",
+        "story_FPGMGL",
+        "story_pGAMWB",
+        "story_y6eWfc"
+      ],
+      "disabled": true,
+      "name": "Video Stories",
+      "settings": {
+        "title": "Stories",
+        "heading_size": "h1",
+        "description": "<p>Confira nossos stories exclusivos.</p>",
+        "description_style": "body",
+        "columns_desktop": 5
+      }
+    },
+    "slideshow_Wp6JAj": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_hLC6xm": {
+          "type": "slide",
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_hLC6xm"
+      ],
+      "name": "t:sections.slideshow.presets.name",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "adapt_image",
+        "slider_visual": "dots",
+        "auto_rotate": true,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": false,
+        "accessibility_info": ""
+      }
+    },
+    "featured_collection_tabs_EMLUgd": {
+      "type": "featured-collection-tabs",
+      "blocks": {
+        "tab_hpDyWB": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Kids kit",
+            "collection": "vitrine-strong-kids"
+          }
+        }
+      },
+      "block_order": [
+        "tab_hpDyWB"
+      ],
+      "name": "Coleção Destaque + Abas",
+      "settings": {
+        "products_to_show": 8,
+        "title": "FOR THE KIDS",
+        "heading_size": "h1",
+        "description": "",
+        "description_style": "body",
+        "header_alignment": "center",
+        "collection": "vitrine-strong-kids",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
+        "full_width": false,
+        "show_view_all": true,
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": true,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "unselected_tab_text_color": "#ffffff",
+        "active_tab_text_color": "#000000",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "slideshow_KYwKmW": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_DDdYBV": {
+          "type": "slide",
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_DDdYBV"
+      ],
+      "name": "t:sections.slideshow.presets.name",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "adapt_image",
+        "slider_visual": "dots",
+        "auto_rotate": true,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": false,
+        "accessibility_info": ""
+      }
+    },
+    "featured_collection_tabs_VzwxLW": {
+      "type": "featured-collection-tabs",
+      "blocks": {
+        "tab_BKFJeD": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Categoria",
+            "collection": "vitrine-retro"
+          }
+        }
+      },
+      "block_order": [
+        "tab_BKFJeD"
+      ],
+      "name": "Coleção Destaque + Abas",
+      "settings": {
+        "products_to_show": 8,
+        "title": "WEAR THE STORY",
+        "heading_size": "h1",
+        "description": "<p>The best retro shirts.</p>",
+        "description_style": "body",
+        "header_alignment": "center",
+        "collection": "vitrine-retro",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
+        "full_width": false,
+        "show_view_all": true,
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": true,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "unselected_tab_text_color": "#ffffff",
+        "active_tab_text_color": "#000000",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "image_banner_rVpzjn": {
+      "type": "image-banner",
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image_overlay_opacity": 0,
+        "image_height": "medium",
+        "image_behavior": "none",
+        "desktop_content_position": "middle-center",
+        "desktop_content_alignment": "center",
+        "show_text_box": true,
+        "color_scheme": "",
+        "stack_images_on_mobile": true,
+        "mobile_content_alignment": "center",
+        "show_text_below": true
+      }
+    },
+    "image_with_text_xhnpLX": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_pryhgk": {
+          "type": "heading",
+          "settings": {
+            "heading": "About Us",
+            "heading_size": "h1"
+          }
+        },
+        "text_rcnbn8": {
+          "type": "text",
+          "settings": {
+            "text": "<p>At <strong>Mantos do PH Sports</strong>, we know that a team jersey is not just clothing, it's armor. Born from passion for football with a mission to deliver high-quality kits and impeccable details for those who live the game intensely. Our commitment is to dress your support with the standard your team deserves.</p>",
+            "text_style": "subtitle"
+          }
+        },
+        "button_g7X7YY": {
+          "type": "button",
+          "settings": {
+            "button_label": "Read more",
+            "button_link": "shopify://pages/sobre-nos",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_pryhgk",
+        "text_rcnbn8",
+        "button_g7X7YY"
+      ],
+      "disabled": true,
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "scheme-2",
+        "color_scheme": "scheme-2",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "trustpilot_reviews": {
+      "type": "trustpilot-reviews",
+      "blocks": {
+        "review_1": {
+          "type": "tp_review",
+          "settings": {
+            "title": "Amazing quality!",
+            "content": "The product exceeded my expectations. Great build and fast delivery!",
+            "author": "Michael R.",
+            "date": "2 hours ago"
+          }
+        },
+        "review_2": {
+          "type": "tp_review",
+          "settings": {
+            "title": "Super impressed",
+            "content": "Fast shipping, premium quality, and excellent customer support.",
+            "author": "Emily L.",
+            "date": "5 hours ago"
+          }
+        },
+        "review_3": {
+          "type": "tp_review",
+          "settings": {
+            "title": "Top-notch service",
+            "content": "Amazing experience. Everything arrived perfectly and on time.",
+            "author": "Daniel K.",
+            "date": "1 day ago"
+          }
+        },
+        "review_4": {
+          "type": "tp_review",
+          "settings": {
+            "title": "Highly recommend",
+            "content": "Excellent quality and premium packaging. Totally worth it.",
+            "author": "Sarah M.",
+            "date": "2 days ago"
+          }
+        },
+        "review_5": {
+          "type": "tp_review",
+          "settings": {
+            "title": "Will buy again",
+            "content": "Very satisfied with my purchase. Great value and fast delivery.",
+            "author": "Adam F.",
+            "date": "3 days ago"
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3",
+        "review_4",
+        "review_5"
+      ],
+      "settings": {
+        "color_scheme": "scheme-4",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    }
+  },
+  "order": [
+    "slideshow_bYRrVM",
+    "collection_list_tabs_E4Hpwb",
+    "featured_collection_tabs_ycEnGy",
+    "featured_collection_tabs_4fkewQ",
+    "slideshow_UbF3G7",
+    "collection_list_tabs_KyG4MC",
+    "featured_collection_tabs_7XUrdN",
+    "featured_collection_tabs_c7UkEj",
+    "benefits_grid_PTxpjT",
+    "video_stories_KRXdVJ",
+    "slideshow_Wp6JAj",
+    "featured_collection_tabs_EMLUgd",
+    "slideshow_KYwKmW",
+    "featured_collection_tabs_VzwxLW",
+    "image_banner_rVpzjn",
+    "image_with_text_xhnpLX",
+    "trustpilot_reviews"
+  ]
+}

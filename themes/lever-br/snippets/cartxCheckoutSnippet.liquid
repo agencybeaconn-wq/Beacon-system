@@ -1,0 +1,117 @@
+<link rel="preconnect" crossorigin href="https://accounts.cartpanda.com">
+<style>
+    .white-overlay {display: none;background-color: rgb(255, 255, 255);z-index: 9999;top: 0;left: 0;height: 100vh;width: 100vw;position: fixed;margin: 0;}.spinner-wrapper {position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);margin: 0 auto;min-width: 220px;}.cartpanda .spinner {border: 6px solid #e2e2e2;border-top: 6px solid #297FBC;border-radius: 50%;width: 100px;height: 100px;animation: spin 2s linear infinite;margin: auto;}.spinner-icon {position: relative;}.spinner-icon .spinner-icon-svg {position: absolute;top: 50%;left: 50%;margin-left: -19px;margin-top: -70px;width: 40px;height: 40px;}.spinner-text {text-align: center;color: #526473;font-size: 16px;padding-top: 2rem;}.custom_spinner.loading {padding: 50px;position: relative;text-align: center;}.custom_spinner.loading:before {content: '';height: 45px;width: 45px;margin: 0px auto auto -20px;position: absolute;border-width: 8px;border-style: solid;border-color: #2180c0 #ccc #ccc;  border-radius: 100%;animation: rotation .7s infinite linear;}@keyframes rotation {from {transform: rotate(0deg);} to {transform: rotate(359deg);}} @keyframes spin {0% {transform: rotate(0deg);}100% {transform: rotate(360deg);}}
+    .cartx-fake-checkout-btn { cursor: pointer; display: inline-flex; justify-content: center; align-items: center; text-align: center; text-decoration: none; width: 100%; font-weight: bold; }
+</style>
+
+<div class="cartx-preloader white-overlay cartx-loader" id="cartx-preloader">
+    <div class="spinner-wrapper">
+        <div class="spinner-icon"><div class="custom_spinner loading">&nbsp;</div></div>
+        <div class="spinner-text" id="cartx-loader-txt">Iniciando Ambiente Seguro</div>
+    </div>
+</div>
+
+<script>
+const loadScriptCartx = function (url, callback) {
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.onload = function () { callback(); };
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+};
+
+if (!window.jQuery || typeof jQuery == 'undefined') {
+    loadScriptCartx('https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js', () => { mainCartpandaRedirect(); });
+} else {
+    mainCartpandaRedirect();
+}
+
+function mainCartpandaRedirect() {
+    console.log('Cartpanda: Definitive Init');
+    
+    // UNIVERSAL: usa o domínio Shopify real da loja e o endpoint do settings
+    var shopName = '{{ shop.permanent_domain }}';
+    var cartEndpoint = '{{ settings.cartpanda_endpoint }}';
+    
+    // Valida se o endpoint foi configurado
+    if (!cartEndpoint || cartEndpoint === '') {
+        console.warn('CartPanda: Endpoint não configurado nas Configurações do Tema > Checkout Externo');
+        return;
+    }
+    
+    var e_param = '';
+
+    function showCartxLoader(text) {
+        var el = document.querySelector('.cartx-loader');
+        var txt = document.getElementById('cartx-loader-txt');
+        if(txt && text) txt.innerHTML = text;
+        if(el) el.style.display = 'block';
+    }
+
+    function hideCartxLoader(errorMsg) {
+        var el = document.querySelector('.cartx-loader');
+        var txt = document.getElementById('cartx-loader-txt');
+        if (errorMsg && txt) {
+            txt.innerHTML = '<span style="color: #ff4d4d; font-weight: bold;">Erro: ' + errorMsg + '</span><br><small>Redirecionando para correção...</small>';
+            setTimeout(function() { if(el) el.style.display = 'none'; }, 6000);
+        } else {
+            if(el) el.style.display = 'none';
+        }
+    }
+
+    // Tracking Parameters
+    setInterval(function() {
+        if(!e_param) {
+            try {
+                if(typeof ga !== "undefined") ga(function(t) { e_param = '&' + t.get('linkerParam'); });
+            } catch(e) {}
+        }
+    }, 1000);
+
+    // Expõe a função globalmente para ser chamada pelo botão do carrinho
+    window.triggerCartpandaCheckout = function() {
+        showCartxLoader('Preparando seu carrinho...');
+        console.log('Cartpanda: Sending checkout request');
+        
+        jQuery.getJSON('/cart.json', function(cart) {
+            if (cart.items) cart.items.forEach(function(i) { delete i.product_description; });
+
+            var data = {
+                shop: shopName,
+                host_name: window.location.host,
+                cart_payload: cart
+            };
+
+            jQuery.ajax({
+                url: cartEndpoint,
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                crossDomain: true,
+                success: function(resp) {
+                    console.log('Cartpanda: Success', resp);
+                    if (resp.checkout_direct_url) {
+                        var finalUrl = resp.checkout_direct_url + e_param;
+                        if (resp.remove_cart_item) {
+                            jQuery.post('/cart/clear.js', function() { window.location.href = finalUrl; });
+                        } else {
+                            window.location.href = finalUrl;
+                        }
+                    } else {
+                        hideCartxLoader('Resposta do checkout vazia');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Cartpanda Detail:', xhr.status, xhr.responseText);
+                    hideCartxLoader('Falha na comunicação (' + xhr.status + ')');
+                }
+            });
+        });
+    };
+
+    document.addEventListener('cart:refresh', function() {
+        console.log('Cartpanda: Refreshing after AJAX');
+    });
+}
+</script>

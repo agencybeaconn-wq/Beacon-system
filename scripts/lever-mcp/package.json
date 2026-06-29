@@ -1,0 +1,16 @@
+{
+  "name": "lever-system-mcp",
+  "version": "0.1.0-mvp",
+  "private": true,
+  "type": "module",
+  "description": "MVP do Lever System MCP — admin-only (service role), 5 tools cobrindo casos de uso imediatos pré-versão definitiva do João.",
+  "bin": {
+    "lever-mcp": "./index.mjs"
+  },
+  "scripts": {
+    "start": "node index.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4"
+  }
+}

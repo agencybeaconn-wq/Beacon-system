@@ -1,0 +1,872 @@
+{
+  "sections": {
+    "custom-player-rules": {
+      "type": "custom-player-rules",
+      "blocks": {
+        "player_rule_jXCnWq": {
+          "type": "player_rule",
+          "disabled": true,
+          "settings": {
+            "keywords": "real madrid",
+            "exclude_keywords": "",
+            "player_name_1": "Mbappé",
+            "player_number_1": "10",
+            "player_name_2": "Vini JR.",
+            "player_number_2": "7",
+            "player_name_3": "Rodrygo",
+            "player_number_3": "11",
+            "player_name_4": "Valverde",
+            "player_number_4": "8",
+            "player_name_5": "Bellingham",
+            "player_number_5": "5",
+            "player_name_6": "Arda Güler",
+            "player_number_6": "15",
+            "player_name_7": "Tchouaméni",
+            "player_number_7": "14",
+            "player_name_8": "Camavinga",
+            "player_number_8": "6",
+            "player_name_9": "Brahim",
+            "player_number_9": "21",
+            "player_name_10": "E. Militão",
+            "player_number_10": "3",
+            "player_name_11": "Carvajal",
+            "player_number_11": "2",
+            "player_name_12": "Gonzalo",
+            "player_number_12": "16",
+            "player_name_13": "Trent",
+            "player_number_13": "12",
+            "player_name_14": "",
+            "player_number_14": "",
+            "player_name_15": "",
+            "player_number_15": ""
+          }
+        }
+      },
+      "block_order": [
+        "player_rule_jXCnWq"
+      ],
+      "settings": {
+        "customization_price": 0,
+        "disclaimer_1": "Customized products cannot be exchanged, returned, or canceled;",
+        "disclaimer_2": "Orders with customized products have an additional delivery time of up to 6 days;",
+        "disclaimer_3": "The font used will be the same as observed in the official match line;"
+      }
+    },
+    "custom-patch-rules": {
+      "type": "custom-patch-rules",
+      "blocks": {
+        "patch_rule_LphFBJ": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "",
+            "exclude_keywords": "",
+            "patch_product": "",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_0": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "brazil, argentina, italy, spain, portugal, france, germany, england, belgium",
+            "exclude_keywords": "",
+            "patch_product": "patch-fifa-world-cup-2026-qualifiers",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_1": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "arsenal, aston villa, bournemouth, brentford, brighton, burnley, chelsea, crystal palace, everton, fulham, leeds, liverpool, manchester, newcastle, nottingham, sunderland, tottenham, west ham, wolves",
+            "exclude_keywords": "",
+            "patch_product": "patch-premier-league-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_2": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "real madrid, barcelona, atletico, sevilla, betis, valencia, villarreal, sociedad, bilbao, getafe, osasuna, espanyol, celta, granada, mallorca, rayo, alaves, leganes, levante",
+            "exclude_keywords": "",
+            "patch_product": "patch-laliga-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_3": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "bayern, dortmund, leipzig, leverkusen, stuttgart, frankfurt, wolfsburg, gladbach, hoffenheim, freiburg, mainz, augsburg, bochum, köln, union berlin, werder, heidenheim, darmstadt",
+            "exclude_keywords": "",
+            "patch_product": "patch-bundesliga-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_4": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "juventus, inter milan, milan, roma, lazio, napoli, atalanta, fiorentina, torino, bologna, verona, udinese, genoa, lecce, empoli, monza, cagliari, sassuolo",
+            "exclude_keywords": "",
+            "patch_product": "patch-serie-a-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_5": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "paris, marseille, lyon, monaco, lille, nice, rennes, nantes, strasbourg, montpellier, toulouse, reims, metz, brest, lens, lorient, auxerre, clermont",
+            "exclude_keywords": "",
+            "patch_product": "patch-ligue-1-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_6": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "benfica, porto, sporting, braga, guimaraes, boavista, estoril, famalicao, rio ave, arouca, casa pia, vizela, gil vicente, moreirense, portimonense",
+            "exclude_keywords": "",
+            "patch_product": "patch-liga-portugal-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_7": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "fluminense, vasco, corinthians, são paulo, sao paulo, santos, grêmio, gremio, internacional, cruzeiro, atlético mineiro, atletico mineiro, athletico, bahia, fortaleza, ceará, ceara, goiás, goias, cuiabá, cuiaba, red bull bragantino, bragantino, coritiba, vitória, vitoria, américa mineiro, america mineiro",
+            "exclude_keywords": "",
+            "patch_product": "patch-brasileirao-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_9": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "eintracht frankfurt",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_10": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "atletico madrid",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_11": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "borussia dortmund",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_12": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "bayer leverkusen",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_13": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "real madrid",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-15-trophies",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_14": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "barcelona",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-5-trophies",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_15": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "bayern",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-6-trophies",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_16": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "liverpool",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-6-trophies",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_17": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "milan",
+            "exclude_keywords": "inter milan",
+            "patch_product": "patch-champions-league-7-trophies",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_18": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "chelsea",
+            "exclude_keywords": "",
+            "patch_product": "patch-world-champions",
+            "position": "peito",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_19": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "paris",
+            "exclude_keywords": "",
+            "patch_product": "patches-uefa-champions-202526",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_20": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "tottenham",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_21": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "atalanta",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_22": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "monaco",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_23": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "juventus",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_24": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "sporting cp",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_25": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "marseille",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_26": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "villarreal",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_27": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "manchester",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_28": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "napoli",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_29": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "benfica",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_30": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "olympiacos",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_32": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "são paulo, sao paulo, palmeiras",
+            "exclude_keywords": "",
+            "patch_product": "patches-libertadores-3-trophies",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_33": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "internacional",
+            "exclude_keywords": "inter milan",
+            "patch_product": "patches-libertadores-2-trophies",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_39": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "cruz azul",
+            "exclude_keywords": "",
+            "patch_product": "patches-cruz-202425",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_40": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "chelsea, paris saint-germain, psg, real madrid, bayern, borussia dortmund, manchester city, juventus, inter milan, atlético de madrid, atletico de madrid, atlético madrid, porto, benfica, red bull salzburg, fluminense, palmeiras, flamengo, botafogo, river plate, boca juniors, inter miami, pachuca, monterrey, seattle sounders, los angeles fc, la fc, al hilal, al ahly, mamelodi sundowns, urawa red diamonds, auckland city",
+            "exclude_keywords": "",
+            "patch_product": "patch-world-cup-2025-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_xK9CDY": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "flamengo",
+            "exclude_keywords": "",
+            "patch_product": "kit-patch-champion-libertadores-tetra-2025",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_dFrkNR": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "flamengo",
+            "exclude_keywords": "",
+            "patch_product": "patch-campeao-brasileirao-2025",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        }
+      },
+      "block_order": [
+        "patch_rule_LphFBJ",
+        "patch_rule_0",
+        "patch_rule_1",
+        "patch_rule_2",
+        "patch_rule_3",
+        "patch_rule_4",
+        "patch_rule_5",
+        "patch_rule_6",
+        "patch_rule_7",
+        "patch_rule_9",
+        "patch_rule_10",
+        "patch_rule_11",
+        "patch_rule_12",
+        "patch_rule_13",
+        "patch_rule_14",
+        "patch_rule_15",
+        "patch_rule_16",
+        "patch_rule_17",
+        "patch_rule_18",
+        "patch_rule_19",
+        "patch_rule_20",
+        "patch_rule_21",
+        "patch_rule_22",
+        "patch_rule_23",
+        "patch_rule_24",
+        "patch_rule_25",
+        "patch_rule_26",
+        "patch_rule_27",
+        "patch_rule_28",
+        "patch_rule_29",
+        "patch_rule_30",
+        "patch_rule_32",
+        "patch_rule_33",
+        "patch_rule_39",
+        "patch_rule_40",
+        "patch_rule_xK9CDY",
+        "patch_rule_dFrkNR"
+      ],
+      "settings": {}
+    },
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": {
+          "type": "text",
+          "settings": {
+            "text": "{{ product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "badges_XBEwXy": {
+          "type": "badges",
+          "settings": {
+            "badge_1_text": "Buy 2 & Get 3",
+            "badge_1_bg": "#121212",
+            "badge_1_text_color": "#ffffff",
+            "badge_2_text": "Free shipping",
+            "badge_2_bg": "#28a745",
+            "badge_2_text_color": "#ffffff"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "custom_liquid_rpbg8p": {
+          "type": "custom_liquid",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": ""
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "none"
+          }
+        },
+        "quantity_selector_i4nafN": {
+          "type": "quantity_selector",
+          "disabled": true,
+          "settings": {}
+        },
+        "shop_the_look_p3bk48": {
+          "type": "shop_the_look",
+          "settings": {
+            "heading": "Buy Together",
+            "product_list": [],
+            "limit": 2
+          }
+        },
+        "complementary_7ErDgy": {
+          "type": "complementary",
+          "settings": {
+            "block_heading": "Combina bem com",
+            "make_collapsible_row": false,
+            "icon": "price_tag",
+            "product_list_limit": 10,
+            "products_per_page": 3,
+            "pagination_style": "counter",
+            "image_ratio": "square",
+            "enable_quick_add": false
+          }
+        },
+        "scarcity_badge_wPDn6K": {
+          "type": "scarcity_badge",
+          "settings": {
+            "max_stock": 5,
+            "sale_only": true
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "show_gift_card_recipient": false,
+            "hover_bg_color": "#28a745",
+            "hover_text_color": "#ffffff"
+          }
+        },
+        "payment_badges_custom": {
+          "type": "payment_badges",
+          "disabled": true,
+          "settings": {
+            "show_paypal_badge": false,
+            "show_klarna_badge": false,
+            "show_trustpilot_badge": true
+          }
+        },
+        "benefit_MVBDqM": {
+          "type": "benefit",
+          "settings": {
+            "title": "CUSTOMER SERVICE",
+            "subtitle": "Over 10,000 5-star reviews",
+            "icon_type": "svg",
+            "icon_url": "",
+            "icon_predefined": "none",
+            "icon_svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z\"><\/path><\/svg>",
+            "content": "<p>24\/7 support available via chat, email, and phone. Specialized and trained team. Average response time: 2 hours. Satisfaction guaranteed or your money back.<br\/><br\/><\/p>"
+          }
+        },
+        "benefit_BxPV6U": {
+          "type": "benefit",
+          "settings": {
+            "title": "SHIPPING & DELIVERY",
+            "subtitle": "Fast dispatch and worldwide delivery with free shipping on all orders",
+            "icon_type": "svg",
+            "icon_url": "",
+            "icon_predefined": "none",
+            "icon_svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"1\" y=\"3\" width=\"15\" height=\"13\"><\/rect><polygon points=\"16 8 20 8 23 11 23 16 16 16 16 8\"><\/polygon><circle cx=\"5.5\" cy=\"18.5\" r=\"2.5\"><\/circle><circle cx=\"18.5\" cy=\"18.5\" r=\"2.5\"><\/circle><\/svg>",
+            "content": "<p>Free shipping on all purchases. Express shipping available. Real-time tracking. Estimated delivery time: 6 to 16 business days.<\/p>"
+          }
+        },
+        "benefit_XVxCCG": {
+          "type": "benefit",
+          "settings": {
+            "title": "HASSLE-FREE RETURNS",
+            "subtitle": "Easy online returns on items within 28 days of delivery date.",
+            "icon_type": "svg",
+            "icon_url": "",
+            "icon_predefined": "none",
+            "icon_svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 14 4 9l5-5\"><\/path><path d=\"M4 9h12.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11\"><\/path><\/svg>",
+            "content": "<p>100% online process through our portal. Refund processed within 7 business days after receiving the product.<br\/><br\/><\/p>"
+          }
+        },
+        "benefit_cJYw7L": {
+          "type": "benefit",
+          "settings": {
+            "title": "PAYMENT",
+            "subtitle": "Credit\/Debit Card, Apple Pay, Google Pay, PayPal* or Bank Transfer*",
+            "icon_type": "svg",
+            "icon_url": "",
+            "icon_predefined": "none",
+            "icon_svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"24\" height=\"24\" viewbox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z\"><\/path><\/svg>",
+            "content": "<p>100% secure environment with SSL certificate. We accept all major cards and payment methods.<br\/><br\/><\/p>"
+          }
+        },
+        "custom_liquid_TAVmpf": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": ""
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "vendor",
+        "badges_XBEwXy",
+        "title",
+        "price",
+        "custom_liquid_rpbg8p",
+        "variant_picker",
+        "quantity_selector_i4nafN",
+        "shop_the_look_p3bk48",
+        "complementary_7ErDgy",
+        "scarcity_badge_wPDn6K",
+        "buy_buttons",
+        "payment_badges_custom",
+        "benefit_MVBDqM",
+        "benefit_BxPV6U",
+        "benefit_XVxCCG",
+        "benefit_cJYw7L",
+        "custom_liquid_TAVmpf",
+        "description"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-1",
+        "media_size": "medium",
+        "constrain_to_viewport": true,
+        "media_fit": "cover",
+        "gallery_layout": "columns",
+        "mobile_thumbnails": "hide",
+        "media_position": "left",
+        "image_zoom": "hover",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "heading": "You may also like",
+        "heading_size": "h1",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "padding_top": 0,
+        "padding_bottom": 28
+      }
+    },
+    "video_stories_yPY9dd": {
+      "type": "video-stories",
+      "blocks": {
+        "story_9kWiCM": {
+          "type": "story",
+          "settings": {
+            "video_url": "",
+            "custom_video_url": "",
+            "title": "Story"
+          }
+        },
+        "story_LMh3Pc": {
+          "type": "story",
+          "settings": {
+            "video_url": "",
+            "custom_video_url": "",
+            "title": "Story"
+          }
+        },
+        "story_YnzP6T": {
+          "type": "story",
+          "settings": {
+            "video_url": "",
+            "custom_video_url": "",
+            "title": "Story"
+          }
+        },
+        "story_tBARLE": {
+          "type": "story",
+          "settings": {
+            "video_url": "",
+            "custom_video_url": "",
+            "title": "Story"
+          }
+        }
+      },
+      "block_order": [
+        "story_9kWiCM",
+        "story_LMh3Pc",
+        "story_YnzP6T",
+        "story_tBARLE"
+      ],
+      "disabled": true,
+      "name": "Video Stories",
+      "settings": {
+        "title": "Our Fanatical Customers!",
+        "heading_size": "h2",
+        "description": "",
+        "description_style": "body",
+        "columns_desktop": 5
+      }
+    },
+    "collapsible_content_xVhrTi": {
+      "type": "collapsible-content",
+      "blocks": {
+        "collapsible_row_YGH38K": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Are the products official?",
+            "icon": "none",
+            "row_content": "<p>At ForgeBall 3D, we offer high-quality products. With impeccable details and unbeatable prices, our products are authentic and provide a superior experience in every detail. We guarantee that every item delivered meets our high standards, so you receive products that represent your passion with excellence and durability.<\/p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_AY9XMK": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "If I don't like it, can I return it?",
+            "icon": "none",
+            "row_content": "<p>In cases of regret or dissatisfaction, you may request the return of the product within 7 calendar days from receipt, as provided for in the Consumer Protection Code.<\/p><p><em>Important:<\/em> Personalized products (with name, number or any modification requested by the customer) cannot be exchanged or refunded, except in cases of manufacturing defects.<\/p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_FbyYkq": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How to choose the right size?",
+            "icon": "none",
+            "row_content": "<p>To make the right purchase, always consult our Size Guide. If in doubt, choose a size larger than you normally wear, this way you guarantee more comfort, freedom of movement and avoid surprises when getting dressed.<\/p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_FBpGM4": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Is it safe to buy from ForgeBall 3D?",
+            "icon": "none",
+            "row_content": "<p>Our store is recommended by Trustpilot. Since 2024, we have delivered over 20,000 orders worldwide, building a two-year track record of experience, quality, and dedication. Don't hesitate to buy your shirts from us and join the thousands of passionate fan customers.<\/p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_Bcw3XX": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How does delivery work?",
+            "icon": "none",
+            "row_content": "<p>Our shipments are directly from Asia. Upon completing your order, we will ship it within 2 to 5 days. After shipment, you will receive your tracking code in your registered email to track your order until delivery. Our average delivery time is 5 to 15 business days.<br\/><br\/><a href=\"\/policies\/shipping-policy\" title=\"\/policies\/shipping-policy\"><em>Please see our delivery policies for more information.<\/em><\/a><\/p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_YGH38K",
+        "collapsible_row_AY9XMK",
+        "collapsible_row_FbyYkq",
+        "collapsible_row_FBpGM4",
+        "collapsible_row_Bcw3XX"
+      ],
+      "disabled": true,
+      "name": "t:sections.collapsible_content.presets.name",
+      "settings": {
+        "caption": "",
+        "heading": "Collapsible content",
+        "heading_size": "h2",
+        "heading_alignment": "left",
+        "layout": "none",
+        "container_color_scheme": "",
+        "color_scheme": "",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "1771439740f882e9fa": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "trustpilot_reviews_wUAVkp": {
+      "type": "trustpilot-reviews",
+      "blocks": {
+        "tp_review_GVytwj": {
+          "type": "tp_review",
+          "settings": {
+            "title": "Amazing quality!",
+            "content": "The product exceeded my expectations. Great build and fast delivery!",
+            "author": "Michael R.",
+            "date": "2 hours ago"
+          }
+        },
+        "tp_review_CmX899": {
+          "type": "tp_review",
+          "settings": {
+            "title": "Super impressed",
+            "content": "The product exceeded my expectations. Great build and fast delivery!",
+            "author": "Emily L.",
+            "date": "2 hours ago"
+          }
+        },
+        "tp_review_nHQ8Qg": {
+          "type": "tp_review",
+          "settings": {
+            "title": "Top-notch service",
+            "content": "The product exceeded my expectations. Great build and fast delivery!",
+            "author": "Daniel K.",
+            "date": "2 hours ago"
+          }
+        },
+        "tp_review_bftMrc": {
+          "type": "tp_review",
+          "settings": {
+            "title": "Highly recommend",
+            "content": "The product exceeded my expectations. Great build and fast delivery!",
+            "author": "Sarah M.",
+            "date": "2 hours ago"
+          }
+        }
+      },
+      "block_order": [
+        "tp_review_GVytwj",
+        "tp_review_CmX899",
+        "tp_review_nHQ8Qg",
+        "tp_review_bftMrc"
+      ],
+      "name": "Trustpilot Premium",
+      "settings": {
+        "color_scheme": "",
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    }
+  },
+  "order": [
+    "custom-player-rules",
+    "custom-patch-rules",
+    "main",
+    "related-products",
+    "video_stories_yPY9dd",
+    "collapsible_content_xVhrTi",
+    "1771439740f882e9fa",
+    "trustpilot_reviews_wUAVkp"
+  ]
+}

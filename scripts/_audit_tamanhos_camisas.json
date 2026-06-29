@@ -1,0 +1,40 @@
+{
+  "stats": {
+    "masc": {
+      "tem4gg": 846,
+      "falta4gg": 1,
+      "falta3gg": 1,
+      "falta2gg": 0,
+      "falta3e4": 1,
+      "tem_ggg": 0,
+      "tem_gggg": 0
+    },
+    "fem": {
+      "tem4gg": 212,
+      "falta4gg": 0,
+      "falta3gg": 0,
+      "falta2gg": 0,
+      "falta3e4": 0,
+      "tem_ggg": 0,
+      "tem_gggg": 0
+    }
+  },
+  "examples": {
+    "masc_falta4gg": [
+      {
+        "title": "Camisa Retro Flamengo 1987",
+        "sizes": "P,M,G,GG,2GG"
+      }
+    ],
+    "fem_falta4gg": [],
+    "masc_falta3e4": [
+      {
+        "title": "Camisa Retro Flamengo 1987",
+        "sizes": "P,M,G,GG,2GG"
+      }
+    ],
+    "fem_falta3e4": []
+  },
+  "countMasc": 847,
+  "countFem": 212
+}

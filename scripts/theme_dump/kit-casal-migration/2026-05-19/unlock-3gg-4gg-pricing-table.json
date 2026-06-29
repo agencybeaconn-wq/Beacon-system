@@ -1,0 +1,27 @@
+{
+  "base": 319.9,
+  "persExtra": {
+    "Nenhum": 0,
+    "Só Masculina": 30,
+    "Só Feminina": 30,
+    "Ambos": 60
+  },
+  "sizeExtra": {
+    "P": 0,
+    "M": 0,
+    "G": 0,
+    "GG": 0,
+    "2GG": 10,
+    "3GG": 20,
+    "4GG": 30
+  },
+  "compareAt": "450.00",
+  "inventoryPolicy": "CONTINUE",
+  "persOptions": [
+    "Nenhum",
+    "Só Masculina",
+    "Só Feminina",
+    "Ambos"
+  ],
+  "mismatches": 0
+}

@@ -1,0 +1,251 @@
+[
+  {
+    "id": "gid://shopify/Menu/190234132552",
+    "handle": "main-menu",
+    "title": "Menu principal",
+    "items": [
+      {
+        "id": "gid://shopify/MenuItem/444216344648",
+        "title": "Início",
+        "url": "/",
+        "type": "FRONTPAGE",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/444216377416",
+        "title": "Catálogo",
+        "url": "/collections/all",
+        "type": "CATALOG",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/444216410184",
+        "title": "Entrar em contato",
+        "url": "/pages/contact",
+        "type": "PAGE",
+        "resourceId": "gid://shopify/Page/91026980936",
+        "items": []
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Menu/190234165320",
+    "handle": "footer",
+    "title": "Nossas Políticas",
+    "items": [
+      {
+        "id": "gid://shopify/MenuItem/457713025096",
+        "title": "Aviso Legal",
+        "url": "/pages/aviso-legal",
+        "type": "HTTP",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457713057864",
+        "title": "Compra Segura",
+        "url": "/pages/compra-segura",
+        "type": "HTTP",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457713090632",
+        "title": "Envios e Prazos",
+        "url": "/pages/envios-e-prazos",
+        "type": "HTTP",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457713123400",
+        "title": "Opções de Pagamento",
+        "url": "/pages/opcoes-de-pagamento",
+        "type": "HTTP",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457713156168",
+        "title": "Perguntas Frequentes",
+        "url": "/pages/perguntas-frequentes",
+        "type": "HTTP",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457713188936",
+        "title": "Política de Privacidade",
+        "url": "/pages/politica-de-privacidade",
+        "type": "HTTP",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457713221704",
+        "title": "Reembolso e Cancelamento",
+        "url": "/pages/politica-de-reembolso",
+        "type": "HTTP",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457713254472",
+        "title": "Sobre Nós",
+        "url": "/pages/sobre-nos",
+        "type": "HTTP",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457713287240",
+        "title": "Termos de Uso",
+        "url": "/pages/termos-de-uso",
+        "type": "HTTP",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457713320008",
+        "title": "Trocas e Devoluções",
+        "url": "/pages/trocas-e-devolucoes",
+        "type": "HTTP",
+        "resourceId": null,
+        "items": []
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Menu/190234198088",
+    "handle": "customer-account-main-menu",
+    "title": "Menu principal da conta de cliente",
+    "items": [
+      {
+        "id": "gid://shopify/MenuItem/444216508488",
+        "title": "Pedidos",
+        "url": "https://shopify.com/57856524360/account/orders",
+        "type": "CUSTOMER_ACCOUNT_PAGE",
+        "resourceId": "gid://shopify/CustomerAccountPage/25930629192",
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/455452360776",
+        "title": "Perfil",
+        "url": "https://shopify.com/57856524360/account/profile",
+        "type": "CUSTOMER_ACCOUNT_PAGE",
+        "resourceId": "gid://shopify/CustomerAccountPage/25930661960",
+        "items": []
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Menu/195181477960",
+    "handle": "main-menu-1",
+    "title": "Menu Principal",
+    "items": [
+      {
+        "id": "gid://shopify/MenuItem/457432662088",
+        "title": "Página Inicial",
+        "url": "/",
+        "type": "FRONTPAGE",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457711616072",
+        "title": "Masculino ",
+        "url": "/collections/masculino-brasil",
+        "type": "COLLECTION",
+        "resourceId": "gid://shopify/Collection/280481857608",
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457435480136",
+        "title": "Feminina",
+        "url": "/collections/feminina",
+        "type": "COLLECTION",
+        "resourceId": "gid://shopify/Collection/280480481352",
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457433972808",
+        "title": "Retrô",
+        "url": "/collections/retro",
+        "type": "HTTP",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457554952264",
+        "title": "Inverno ",
+        "url": "/collections/jaqueta-brasil",
+        "type": "COLLECTION",
+        "resourceId": "gid://shopify/Collection/280502272072",
+        "items": []
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Menu/195181674568",
+    "handle": "footer-1",
+    "title": "Rodapé",
+    "items": [
+      {
+        "id": "gid://shopify/MenuItem/457434005576",
+        "title": "Sobre Nós",
+        "url": "/pages/sobre-nos",
+        "type": "HTTP",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457434038344",
+        "title": "Perguntas Frequentes",
+        "url": "/pages/perguntas-frequentes",
+        "type": "HTTP",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457434071112",
+        "title": "Trocas e Devoluções",
+        "url": "/pages/trocas-e-devolucoes",
+        "type": "HTTP",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457434103880",
+        "title": "Envios e Prazos",
+        "url": "/pages/envios-e-prazos",
+        "type": "HTTP",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457434136648",
+        "title": "Compra Segura",
+        "url": "/pages/compra-segura",
+        "type": "HTTP",
+        "resourceId": null,
+        "items": []
+      },
+      {
+        "id": "gid://shopify/MenuItem/457434169416",
+        "title": "Rastreio",
+        "url": "/pages/rastreio",
+        "type": "HTTP",
+        "resourceId": null,
+        "items": []
+      }
+    ]
+  },
+  {
+    "id": "gid://shopify/Menu/195181707336",
+    "handle": "institutional",
+    "title": "Institucional",
+    "items": []
+  }
+]

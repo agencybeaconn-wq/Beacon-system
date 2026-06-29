@@ -1,0 +1,46 @@
+{
+  "torcida": {
+    "sections/main-product.liquid": {
+      "bytes": "140568",
+      "md5": "aeb05180891090e63752c351edb5dd9d",
+      "path": "scripts\\theme_dump\\loja-da-torcida\\kit-casal-followup\\2026-05-19\\before\\sections__main-product.liquid"
+    },
+    "sections/size-chart-drawer.liquid": {
+      "bytes": "17605",
+      "md5": "d0a6d9bab29ef535e1bc30d15be49ce7",
+      "path": "scripts\\theme_dump\\loja-da-torcida\\kit-casal-followup\\2026-05-19\\before\\sections__size-chart-drawer.liquid"
+    },
+    "snippets/kit-casal-variant-picker.liquid": {
+      "bytes": "36864",
+      "md5": "ca107cdd6c1873790d1ef10d2e497a8e",
+      "path": "scripts\\theme_dump\\loja-da-torcida\\kit-casal-followup\\2026-05-19\\before\\snippets__kit-casal-variant-picker.liquid"
+    },
+    "snippets/product-variant-picker.liquid": {
+      "bytes": "15357",
+      "md5": "200a6c7233139877d9aef0362d3fb532",
+      "path": "scripts\\theme_dump\\loja-da-torcida\\kit-casal-followup\\2026-05-19\\before\\snippets__product-variant-picker.liquid"
+    },
+    "templates/product.json": {
+      "bytes": "46391",
+      "md5": "17188ccc01e736158dd0f98eec570d4c",
+      "path": "scripts\\theme_dump\\loja-da-torcida\\kit-casal-followup\\2026-05-19\\before\\templates__product.json"
+    }
+  },
+  "mantos": {
+    "sections/main-product.liquid": {
+      "bytes": "138672",
+      "md5": "5ad9b755ffaab1312a93cb169446cf1c",
+      "path": "scripts\\theme_dump\\loja-da-torcida\\kit-casal-followup\\2026-05-19\\before-mantos\\sections__main-product.liquid"
+    },
+    "snippets/size-chart.liquid": {
+      "bytes": "16880",
+      "md5": "37d865af0c4def44eeefdb24c900adb0",
+      "path": "scripts\\theme_dump\\loja-da-torcida\\kit-casal-followup\\2026-05-19\\before-mantos\\snippets__size-chart.liquid"
+    },
+    "templates/product.json": {
+      "bytes": "34402",
+      "md5": "8eebd437ce391c8e1e2eef8e0749c7f5",
+      "path": "scripts\\theme_dump\\loja-da-torcida\\kit-casal-followup\\2026-05-19\\before-mantos\\templates__product.json"
+    }
+  }
+}

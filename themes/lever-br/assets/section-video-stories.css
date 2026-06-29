@@ -1,0 +1,331 @@
+.video-stories {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    overflow: hidden;
+}
+
+.video-stories__heading {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.video-stories__container {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding: 1rem 0;
+    /* Align with edge */
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    /* Hide scrollbar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.video-stories__container::-webkit-scrollbar {
+    display: none;
+}
+
+.video-stories__item {
+    flex: 0 0 auto;
+    width: 100px;
+    scroll-snap-align: center;
+}
+
+.video-stories__button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    width: 100%;
+}
+
+.video-stories__thumbnail {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    /* Circle shape like stories */
+    overflow: hidden;
+    border: 2px solid rgb(var(--color-button));
+    /* Brand color ring */
+    padding: 2px;
+    /* Gap between ring and image */
+    background-clip: content-box;
+    /* Ensures image fits inside padding */
+}
+
+/* Fallback to rectangle if user prefers, but starting with circle as requested "Stories" style usually implies interaction */
+/* Actually, user asked for "Stories" dimension (9:16), which usually means rectangle cards in a carousel, OR circle thumbnails that open 9:16 modal.
+   Let's stick to the REFERENCE IMAGE the user might have provided or the mental model of "Stories section on a website" which often looks like rectangular cards (Reels style).
+   Let's ADJUST to Rectangular 9:16 cards as per common "Video Stories" sections on e-comm.
+*/
+
+.video-stories__item {
+    /* Desktop: Calculate width based on columns and gap */
+    width: calc((100% - (1.5rem * (var(--columns-desktop) - 1))) / var(--columns-desktop));
+}
+
+@media screen and (max-width: 749px) {
+    .video-stories__item {
+        /* Mobile: One smaller card focused, others peeking */
+        width: 60vw;
+        scroll-snap-align: center;
+    }
+}
+
+.video-stories__thumbnail {
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--video-aspect-ratio, 9 / 16);
+    border-radius: 12px;
+    border: none;
+    padding: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: #f0f0f0;
+}
+
+.video-stories__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.video-stories__button:hover .video-stories__image {
+    transform: scale(1.05);
+}
+
+.video-stories__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-stories__icon {
+    color: white !important;
+    background: rgba(255, 255, 255, 0.25) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.video-stories__icon svg {
+    margin-left: 2px;
+    /* Visual centering of play triangle */
+    width: 20px;
+    height: 20px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.video-stories__button:hover .video-stories__icon {
+    background: rgba(255, 255, 255, 0.4) !important;
+    transform: scale(1.1);
+}
+
+.video-stories__title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+    color: rgb(var(--color-foreground));
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Autoplay Preview Video inside thumbnail */
+.video-stories__preview-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Subtle overlay: nearly transparent, play icon appears on hover */
+.video-stories__overlay--subtle {
+    background: transparent;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.video-stories__button:hover .video-stories__overlay--subtle {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+/* Smaller play icon for autoplay previews */
+.video-stories__icon--small {
+    width: 40px;
+    height: 40px;
+}
+
+.video-stories__icon--small svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Modal Styles */
+.video-stories-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 200000;
+    /* Very high z-index */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    background-color: rgba(0, 0, 0, 0.8);
+    /* Background moved here for robustness */
+}
+
+.video-stories-modal[aria-hidden="false"] {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.video-stories-modal__backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    /* Transferred to parent */
+    backdrop-filter: blur(5px);
+    z-index: 1;
+    /* Keep it catching clicks */
+}
+
+.video-stories-modal__content {
+    position: relative;
+    z-index: 2;
+    width: auto;
+    /* Let ratio define width */
+    height: 85vh;
+    /* Taller on desktop */
+    aspect-ratio: 9/16;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    display: flex;
+    /* Fix video container fill */
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 750px) {
+    .video-stories-modal__content {
+        width: 90%;
+        height: auto;
+        max-width: 400px;
+        max-height: 80vh;
+        border-radius: 12px;
+        aspect-ratio: 9/16;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+}
+
+.video-stories-modal__video-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-stories-modal__video-container video,
+.video-stories-modal__video-container iframe {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-stories-modal__close {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    z-index: 200001;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 4.4rem;
+    height: 4.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.video-stories-modal__close:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.video-stories-modal__mute {
+    position: fixed;
+    top: 2rem;
+    right: 7.4rem;
+    /* Left of the close button */
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    cursor: pointer;
+    z-index: 200001;
+    color: white;
+    width: 4.4rem;
+    height: 4.4rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+}
+
+.video-stories-modal__mute:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.video-stories-modal__mute.hidden,
+.video-stories__icon.hidden,
+.icon-muted.hidden,
+.icon-unmuted.hidden {
+    display: none;
+}
+
+@media screen and (max-width: 749px) {
+    .video-stories-modal__mute {
+        top: 2rem;
+        right: 7.4rem;
+        /* Adjust spacing on mobile */
+        width: 32px;
+        height: 32px;
+    }
+}

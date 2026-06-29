@@ -1,0 +1,47 @@
+{
+  "scrapedAt": "2026-05-18T20:22:09.660Z",
+  "report": [
+    {
+      "slug": "creatify",
+      "url": "https://creatify.ai/",
+      "ok": true,
+      "ms": 25032,
+      "errors": []
+    },
+    {
+      "slug": "getinfluencer",
+      "url": "https://getinfluencer.me/",
+      "ok": true,
+      "ms": 14260,
+      "errors": []
+    },
+    {
+      "slug": "influency",
+      "url": "https://influency.me/",
+      "ok": true,
+      "ms": 16507,
+      "errors": []
+    },
+    {
+      "slug": "99influence",
+      "url": "https://www.99influence.com/",
+      "ok": true,
+      "ms": 14471,
+      "errors": []
+    },
+    {
+      "slug": "mundomapping",
+      "url": "https://mundomapping.com/",
+      "ok": true,
+      "ms": 13693,
+      "errors": []
+    },
+    {
+      "slug": "post2b",
+      "url": "https://www.post2b.com/",
+      "ok": true,
+      "ms": 14870,
+      "errors": []
+    }
+  ]
+}

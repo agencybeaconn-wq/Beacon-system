@@ -1,0 +1,44 @@
+Plano: 621 produtos pra ajustar
+
+[0/621] Agasalho de Viagem Ajax Masculino...
+
+[50/621] Camisa Arsenal 2025/26 II Jogador...
+
+[100/621] Camisa Espanha 2026 I Manga Longa Copa do Mundo...
+
+[150/621] Camisa Feminina Colômbia 2026/27 II...
+
+[200/621] Camisa Feminina Holanda 2026/27 II...
+
+[250/621] Camisa Feminina Real Madrid 2024/25 II Torcedor...
+
+[300/621] Camisa Grêmio 2024/25 I Versão Jogador...
+
+[350/621] Camisa Mexico 2026 Manga Longa I Copa do Mundo...
+
+[400/621] Camisa Retrô Brasil 1993/1994 Torcedor...
+
+[450/621] Camisa Retrô Manchester United 2007/08 I...
+
+[500/621] Camisa Retrô Seleção Brasileira Feminina 2019 III...
+
+[550/621] Conjunto Treino Flamengo 2025/26...
+
+[600/621] Shorts Espanha 2026 I Copa do Mundo...
+
+=== RESULTADO ===
+Renames aplicados: 0
+Variants criadas: 0
+Erros: 621
+
+Primeiros 10 erros:
+  gid://shopify/Product/8998172000498:  → fetch falhou
+  gid://shopify/Product/8998171574514:  → fetch falhou
+  gid://shopify/Product/8998169968882:  → fetch falhou
+  gid://shopify/Product/8998169936114:  → fetch falhou
+  gid://shopify/Product/8998169903346:  → fetch falhou
+  gid://shopify/Product/8998171705586:  → fetch falhou
+  gid://shopify/Product/8998171443442:  → fetch falhou
+  gid://shopify/Product/8998173704434:  → fetch falhou
+  gid://shopify/Product/8998171508978:  → fetch falhou
+  gid://shopify/Product/8998173475058:  → fetch falhou

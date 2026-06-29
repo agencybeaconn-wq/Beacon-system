@@ -1,0 +1,163 @@
+// Gera o templates/index.json adaptado pro MontRoyal:
+// - mantém estrutura/estilo da Nord
+// - adapta a sequência de seções pra ficar como luckyfours.com
+// - aponta cada featured-collection pras coleções do MontRoyal
+//
+// Output: themes/client-d9e577c9/templates/index.json (montroyal pasta)
+
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = path.resolve(__dirname, '../..');
+
+const NORD_INDEX = path.join(REPO_ROOT, 'themes/client-3555185d/templates/index.json');
+const TARGET = path.join(REPO_ROOT, 'themes/client-d9e577c9/templates/index.json');
+
+const nord = JSON.parse(fs.readFileSync(NORD_INDEX, 'utf8'));
+
+// Coleções do MontRoyal (importadas do scrape Lucky Fours)
+const COLLS = {
+  bestsellers: 'watches',          // BUY 1 GET 1 FREE / Best Sellers (67 produtos)
+  mens: 'mens-watches',
+  womens: 'womens-watches',
+  automatic: 'automatic-watches',
+  quartz: 'quartz-watches',
+  sport: 'sport-watches',
+  accessories: 'watch-accessories',
+  oldmoney: 'poedagar-collection', // Old Money Collection
+  grealy: 'grealy-collection',
+};
+
+// Helper pra clonar/renomear sections com novo ID e ajustar settings
+function clone(obj) { return JSON.parse(JSON.stringify(obj)); }
+function rid(prefix) {
+  return prefix + '_' + Math.random().toString(36).slice(2, 8) + Math.random().toString(36).slice(2, 8);
+}
+
+// Constrói índice copiando seções da Nord, mas adaptando coleções
+function buildAdaptedIndex() {
+  const sections = {};
+  const order = [];
+
+  // 1. SLIDESHOW (hero) — pega o primeiro slideshow da Nord como template
+  const nordSlideshow = Object.entries(nord.sections).find(([id, s]) => s.type === 'slideshow');
+  if (nordSlideshow) {
+    const id = rid('slideshow');
+    sections[id] = clone(nordSlideshow[1]);
+    order.push(id);
+  }
+
+  // 2. COLLECTION-LIST (overview) com 6 coleções do MontRoyal
+  const nordCL = Object.entries(nord.sections).find(([id, s]) => s.type === 'collection-list');
+  if (nordCL) {
+    const id = rid('collection_list');
+    const cloned = clone(nordCL[1]);
+    // Pega o primeiro card como template
+    const cardKeys = Object.keys(cloned.blocks).filter(k => cloned.blocks[k].type === 'collection-card');
+    const cardTemplate = cardKeys[0] ? clone(cloned.blocks[cardKeys[0]]) : null;
+    // Limpa os cards originais
+    for (const k of cardKeys) delete cloned.blocks[k];
+    cloned.block_order = cloned.block_order.filter(k => !cardKeys.includes(k));
+
+    const overviewColls = [COLLS.bestsellers, COLLS.mens, COLLS.womens, COLLS.automatic, COLLS.quartz, COLLS.sport];
+    for (const handle of overviewColls) {
+      if (!cardTemplate) break;
+      const cardId = rid('collection_card');
+      const card = clone(cardTemplate);
+      card.settings.collection = handle;
+      card.settings.image = ''; // limpa, deixa default da coleção
+      cloned.blocks[cardId] = card;
+      cloned.block_order.unshift(cardId); // mantém section-header no fim
+    }
+
+    // Atualiza settings do header pra título compatível
+    if (cloned.blocks['section-header']) {
+      cloned.blocks['section-header'].settings.title = 'WATCHES BUILT TO LAST';
+      cloned.blocks['section-header'].settings.content = '<p>Explore our collections</p>';
+    }
+    cloned.settings.items_per_row = 3;
+    sections[id] = cloned;
+    order.push(id);
+  }
+
+  // 3-N. FEATURED COLLECTIONS intercaladas com banners
+  // Padrão Lucky Fours: featured → image_banner → featured → image_banner ...
+  const nordFC = Object.entries(nord.sections).find(([id, s]) => s.type === 'featured-collections');
+
+  const featuredColls = [
+    { handle: COLLS.bestsellers, title: 'Best Sellers', content: '<p>Our most-loved timepieces.</p>' },
+    { handle: COLLS.mens,        title: 'Men',          content: '<p>Refined watches for the modern man.</p>' },
+    { handle: COLLS.womens,      title: 'Women',        content: '<p>Elegance designed for her.</p>' },
+    { handle: COLLS.automatic,   title: 'Automatic',    content: '<p>Mechanical movements, modern soul.</p>' },
+    { handle: COLLS.quartz,      title: 'Quartz',       content: '<p>Precision in every second.</p>' },
+    { handle: COLLS.sport,       title: 'Sport',        content: '<p>Built for movement and adventure.</p>' },
+  ];
+
+  for (const fc of featuredColls) {
+    if (!nordFC) break;
+    const id = rid('featured_collections');
+    const cloned = clone(nordFC[1]);
+    // Pega o primeiro block tipo "collection" como template
+    const collBlockKey = Object.keys(cloned.blocks).find(k => cloned.blocks[k].type === 'collection');
+    if (collBlockKey) {
+      const newBlockKey = rid('collection');
+      cloned.blocks[newBlockKey] = clone(cloned.blocks[collBlockKey]);
+      cloned.blocks[newBlockKey].settings.collection = fc.handle;
+      cloned.blocks[newBlockKey].settings.title = fc.title;
+      cloned.blocks[newBlockKey].settings.content = fc.content;
+      // Remove o original
+      if (newBlockKey !== collBlockKey) {
+        delete cloned.blocks[collBlockKey];
+      }
+      cloned.block_order = [newBlockKey];
+    }
+    sections[id] = cloned;
+    order.push(id);
+  }
+
+  // 4. TESTIMONIALS / CUSTOMER REVIEWS (mantém da Nord pra credibilidade)
+  const nordTestim = Object.entries(nord.sections).find(([id, s]) => s.type === 'testimonials');
+  if (nordTestim) {
+    const id = rid('testimonials');
+    sections[id] = clone(nordTestim[1]);
+    order.push(id);
+  }
+
+  const nordReviews = Object.entries(nord.sections).find(([id, s]) => s.type === 'customer-reviews');
+  if (nordReviews) {
+    const id = rid('customer_reviews');
+    sections[id] = clone(nordReviews[1]);
+    order.push(id);
+  }
+
+  return { sections, order };
+}
+
+const adapted = buildAdaptedIndex();
+
+// Stats
+console.log('=== Adapted index.json ===');
+console.log('Total sections:', Object.keys(adapted.sections).length);
+console.log('\nOrdem:');
+adapted.order.forEach((id, i) => {
+  const s = adapted.sections[id];
+  const blocks = s.blocks ? Object.keys(s.blocks).length : 0;
+  // Coleções referenciadas
+  const colls = new Set();
+  const find = (o) => {
+    if (!o || typeof o !== 'object') return;
+    for (const [k, v] of Object.entries(o)) {
+      if (k === 'collection' && typeof v === 'string') colls.add(v);
+      else find(v);
+    }
+  };
+  find(s);
+  console.log(`  ${i+1}. ${s.type.padEnd(28)} | blocks=${blocks} | colls=[${[...colls].join(', ')}]`);
+});
+
+fs.mkdirSync(path.dirname(TARGET), { recursive: true });
+fs.writeFileSync(TARGET, JSON.stringify(adapted, null, 2));
+console.log(`\n✓ Salvo em ${TARGET}`);
+

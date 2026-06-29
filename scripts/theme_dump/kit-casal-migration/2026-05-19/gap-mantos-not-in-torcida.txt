@@ -1,0 +1,2 @@
+snippets/kit-casal-variant-picker.liquid
+snippets/size-chart.liquid

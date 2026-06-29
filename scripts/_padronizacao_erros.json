@@ -1,0 +1,27 @@
+[
+  {
+    "id": "gid://shopify/Product/8998114066674",
+    "op": "bulkCreate 3GG,4GG",
+    "err": "{\"field\":[\"variants\",\"0\"],\"message\":\"You need to add option values for Nome e Número\",\"code\":\"NEED_TO_ADD_OPTION_VALUES\"}"
+  },
+  {
+    "id": "gid://shopify/Product/8998115574002",
+    "op": "bulkCreate 3GG,4GG",
+    "err": "{\"field\":[\"variants\",\"0\"],\"message\":\"You need to add option values for Nome e Número\",\"code\":\"NEED_TO_ADD_OPTION_VALUES\"}"
+  },
+  {
+    "id": "gid://shopify/Product/8998114164978",
+    "op": "bulkCreate 3GG,4GG",
+    "err": "{\"field\":[\"variants\",\"0\"],\"message\":\"You need to add option values for Nome e Número\",\"code\":\"NEED_TO_ADD_OPTION_VALUES\"}"
+  },
+  {
+    "id": "gid://shopify/Product/8998114197746",
+    "op": "bulkCreate 3GG,4GG",
+    "err": "{\"field\":[\"variants\",\"0\"],\"message\":\"You need to add option values for Nome e Número\",\"code\":\"NEED_TO_ADD_OPTION_VALUES\"}"
+  },
+  {
+    "id": "gid://shopify/Product/8998115541234",
+    "op": "bulkCreate 4GG",
+    "err": "{\"field\":[\"variants\",\"0\"],\"message\":\"You need to add option values for Nome e Número\",\"code\":\"NEED_TO_ADD_OPTION_VALUES\"}"
+  }
+]

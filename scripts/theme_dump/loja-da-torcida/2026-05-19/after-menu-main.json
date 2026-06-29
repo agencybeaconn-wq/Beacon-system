@@ -1,0 +1,55 @@
+{
+  "id": "gid://shopify/Menu/195181477960",
+  "handle": "main-menu-1",
+  "title": "Menu Principal",
+  "items": [
+    {
+      "id": "gid://shopify/MenuItem/459871256648",
+      "title": "Página Inicial",
+      "url": "/",
+      "type": "FRONTPAGE",
+      "resourceId": null,
+      "items": []
+    },
+    {
+      "id": "gid://shopify/MenuItem/459871289416",
+      "title": "Masculino ",
+      "url": "/collections/masculino-brasil",
+      "type": "COLLECTION",
+      "resourceId": "gid://shopify/Collection/280481857608",
+      "items": []
+    },
+    {
+      "id": "gid://shopify/MenuItem/459871322184",
+      "title": "Feminina",
+      "url": "/collections/feminina",
+      "type": "COLLECTION",
+      "resourceId": "gid://shopify/Collection/280480481352",
+      "items": []
+    },
+    {
+      "id": "gid://shopify/MenuItem/459871354952",
+      "title": "Retrô",
+      "url": "/collections/retro",
+      "type": "HTTP",
+      "resourceId": null,
+      "items": []
+    },
+    {
+      "id": "gid://shopify/MenuItem/459871387720",
+      "title": "Acessórios",
+      "url": "/collections/acessorios",
+      "type": "COLLECTION",
+      "resourceId": "gid://shopify/Collection/281256362056",
+      "items": []
+    },
+    {
+      "id": "gid://shopify/MenuItem/459871420488",
+      "title": "Inverno ",
+      "url": "/collections/jaqueta-brasil",
+      "type": "COLLECTION",
+      "resourceId": "gid://shopify/Collection/280502272072",
+      "items": []
+    }
+  ]
+}

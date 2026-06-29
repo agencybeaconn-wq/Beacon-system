@@ -1,0 +1,640 @@
+{% comment %}
+  Kit Casal variant picker — v2.
+  Suporta DUAS estruturas de produto:
+   • Legado:   options Tamanho Masculino + Tamanho Feminino (sem Personalização nativa)
+   • Novo:     options Tamanho (combinada "MASC/FEM") + Personalização (Nenhum/Só Masculina/Só Feminina/Ambos)
+  Renderiza UI de 2 grupos visuais (azul/rosa). No novo, sincroniza option Tamanho via JS.
+{% endcomment %}
+
+{%- unless product.has_only_default_variant -%}
+  {%- liquid
+    assign opt_cor = nil
+    assign opt_masc = nil
+    assign opt_fem = nil
+    assign opt_tam = nil
+    assign opt_pers = nil
+    for o in product.options_with_values
+      case o.name
+        when 'Cor'
+          assign opt_cor = o
+        when 'Tamanho Masculino'
+          assign opt_masc = o
+        when 'Tamanho Feminino'
+          assign opt_fem = o
+        when 'Tamanho'
+          assign opt_tam = o
+        when 'Personalização'
+          assign opt_pers = o
+      endcase
+    endfor
+
+    assign mode_combined = false
+    if opt_tam
+      assign mode_combined = true
+    endif
+
+    assign masc_sel = ''
+    assign fem_sel = ''
+    if mode_combined
+      assign tam_sel_raw = opt_tam.selected_value | default: ''
+      capture tam_sel_raw
+        echo opt_tam.selected_value
+      endcapture
+      assign tam_parts = tam_sel_raw | strip | split: '/'
+      if tam_parts.size >= 2
+        assign masc_sel = tam_parts[0] | strip
+        assign fem_sel = tam_parts[1] | strip
+      endif
+    else
+      if opt_masc
+        capture masc_sel
+          echo opt_masc.selected_value
+        endcapture
+        assign masc_sel = masc_sel | strip
+      endif
+      if opt_fem
+        capture fem_sel
+          echo opt_fem.selected_value
+        endcapture
+        assign fem_sel = fem_sel | strip
+      endif
+    endif
+
+    assign sizes_masc = 'P,M,G,GG,2GG,3GG,4GG' | split: ','
+    assign sizes_fem = 'P,M,G,GG,2GG,3GG,4GG' | split: ','
+    assign disabled_masc = '' | split: ','
+    assign disabled_fem = '3GG,4GG' | split: ','
+    assign sizes = sizes_masc
+
+    assign pers_sel_str = 'Nenhum'
+    if opt_pers
+      capture pers_sel_str
+        echo opt_pers.selected_value
+      endcapture
+      assign pers_sel_str = pers_sel_str | strip
+      if pers_sel_str == blank
+        assign pers_sel_str = 'Nenhum'
+      endif
+    endif
+    assign masc_checked = false
+    assign fem_checked = false
+    if pers_sel_str == 'Ambos'
+      assign masc_checked = true
+      assign fem_checked = true
+    elsif pers_sel_str == 'Só Masculina'
+      assign masc_checked = true
+    elsif pers_sel_str == 'Só Feminina'
+      assign fem_checked = true
+    endif
+  -%}
+
+  <variant-selects
+    id="variant-selects-{{ section.id }}"
+    data-section="{{ section.id }}"
+    class="kit-casal-picker"
+    data-kit-section="{{ section.id }}"
+    data-kit-mode="{% if mode_combined %}combined{% else %}legacy{% endif %}"
+    {{ block.shopify_attributes }}
+  >
+    {%- if opt_cor -%}
+      <fieldset class="js product-form__input product-form__input--pill kit-cor-fieldset">
+        <legend class="form__label" style="display:flex; align-items:center; width:100%;">
+          <span>{{ opt_cor.name }}</span>
+        </legend>
+        {% render 'product-variant-options', product: product, option: opt_cor, block: block, picker_type: 'button' %}
+      </fieldset>
+    {%- endif -%}
+
+    {%- comment -%} BLOCO MASCULINO {%- endcomment -%}
+    <div class="kit-casal-bloco kit-casal-bloco--masc">
+      <div class="kit-casal-bloco__header">
+        <span class="kit-casal-bloco__dot"></span>
+        <span>Você está editando a <strong>camisa masculina</strong></span>
+      </div>
+
+      {%- if mode_combined -%}
+        <div class="js product-form__input product-form__input--pill kit-size-fieldset kit-size-fieldset--masc">
+          <p class="form__label" style="display:flex; justify-content:space-between; align-items:center; width:100%; margin:0 0 1rem;">
+            <span>Tamanho Masculino</span>
+            <button type="button" id="abrirTabela-{{ section.id }}" style="display:inline-flex; align-items:center; background:none; border:none; padding:0; font-size:1.5rem; font-weight:400; gap:0.6rem; cursor:pointer; color:#000; text-decoration:underline; text-underline-offset:0.3rem;">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1707 1707" width="20" height="20" style="flex-shrink:0;"><path fill="currentColor" d="M80 857c0-25 20-46 45-46h1456c25 0 46 21 46 46v397c0 25-21 45-46 45h-85v-117c0-22-18-40-40-40s-40 18-40 40v117h-121v-211c0-23-18-40-40-40s-40 17-40 40v211h-121v-117c0-22-18-40-40-40s-40 18-40 40v117h-121v-211c0-23-18-40-40-40s-40 17-40 40v211h-121v-117c0-22-17-40-40-40-22 0-40 18-40 40v117h-120v-211c0-23-18-40-40-40-23 0-40 17-40 40v211h-121v-117c0-22-18-40-40-40s-40 18-40 40v117h-86c-25 0-45-21-45-45zm259-213c19 12 43 7 55-12 12-18 7-43-12-55l-74-48h1091l-75 48c-18 12-23 37-12 55 12 19 37 24 56 12l186-120c14-7 21-21 21-36-1-14-8-27-21-34l-186-120c-19-12-44-6-56 12-11 19-6 43 12 55l75 48h-1091l74-48c19-12 24-36 12-55-12-18-36-24-55-12l-186 120c-13 7-20 20-21 34 0 15 7 28 20 36zm1368 610v-397c0-69-57-126-126-126h-1456c-69 0-125 57-125 126v397c0 69 56 125 125 125h1456c69 0 126-57 126-125z"/></svg>
+              <span>Tabela de medidas</span>
+            </button>
+          </p>
+          <div class="kit-size-options" role="group" aria-label="Tamanho Masculino">
+            {%- for sz in sizes_masc -%}
+              {%- assign rid = 'kit-tam-masc-' | append: sz | append: '-' | append: section.id -%}
+              {%- assign is_disabled = false -%}
+              {%- if disabled_masc contains sz -%}{%- assign is_disabled = true -%}{%- endif -%}
+              <input type="radio" id="{{ rid }}" name="kit-tam-masc-ui" value="{{ sz }}" {% if sz == masc_sel %}checked{% endif %} {% if is_disabled %}class="disabled" disabled{% endif %}>
+              <label for="{{ rid }}" {% if is_disabled %}class="is-soldout"{% endif %}>{{ sz }}{%- case sz -%}{%- when '2GG' -%}<span class="kit-extra-price">+R$&nbsp;10</span>{%- when '3GG' -%}<span class="kit-extra-price">+R$&nbsp;20</span>{%- when '4GG' -%}<span class="kit-extra-price">+R$&nbsp;30</span>{%- endcase -%}</label>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- elsif opt_masc -%}
+        <fieldset class="js product-form__input product-form__input--pill kit-size-fieldset kit-size-fieldset--masc">
+          <legend class="form__label" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+            <span>{{ opt_masc.name }}</span>
+            <button type="button" id="abrirTabela-{{ section.id }}" style="display:inline-flex; align-items:center; background:none; border:none; padding:0; font-size:1.5rem; font-weight:400; gap:0.6rem; cursor:pointer; color:#000; text-decoration:underline; text-underline-offset:0.3rem;">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1707 1707" width="20" height="20" style="flex-shrink:0;"><path fill="currentColor" d="M80 857c0-25 20-46 45-46h1456c25 0 46 21 46 46v397c0 25-21 45-46 45h-85v-117c0-22-18-40-40-40s-40 18-40 40v117h-121v-211c0-23-18-40-40-40s-40 17-40 40v211h-121v-117c0-22-18-40-40-40s-40 18-40 40v117h-121v-211c0-23-18-40-40-40s-40 17-40 40v211h-121v-117c0-22-17-40-40-40-22 0-40 18-40 40v117h-120v-211c0-23-18-40-40-40-23 0-40 17-40 40v211h-121v-117c0-22-18-40-40-40s-40 18-40 40v117h-86c-25 0-45-21-45-45zm259-213c19 12 43 7 55-12 12-18 7-43-12-55l-74-48h1091l-75 48c-18 12-23 37-12 55 12 19 37 24 56 12l186-120c14-7 21-21 21-36-1-14-8-27-21-34l-186-120c-19-12-44-6-56 12-11 19-6 43 12 55l75 48h-1091l74-48c19-12 24-36 12-55-12-18-36-24-55-12l-186 120c-13 7-20 20-21 34 0 15 7 28 20 36zm1368 610v-397c0-69-57-126-126-126h-1456c-69 0-125 57-125 126v397c0 69 56 125 125 125h1456c69 0 126-57 126-125z"/></svg>
+              <span>Tabela de medidas</span>
+            </button>
+          </legend>
+          {% render 'product-variant-options', product: product, option: opt_masc, block: block, picker_type: 'button' %}
+        </fieldset>
+      {%- endif -%}
+
+      <div class="js product-form__input product-form__input--pill kit-pers-fieldset kit-pers-fieldset--masc" role="group" aria-label="Personalizar camisa masculina">
+        <p class="form__label" style="display:flex; align-items:center; gap:0.5rem; margin:0 0 1rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <span>Personalizar camisa masculina</span>
+        </p>
+        <div class="kit-pers-toggle-options">
+          <input type="radio" id="kit-pers-masc-no-{{ section.id }}" name="kit-pers-masc-ui" value="no" {% unless masc_checked %}checked{% endunless %}>
+          <label for="kit-pers-masc-no-{{ section.id }}">Não</label>
+          <input type="radio" id="kit-pers-masc-yes-{{ section.id }}" name="kit-pers-masc-ui" value="yes" {% if masc_checked %}checked{% endif %}>
+          <label for="kit-pers-masc-yes-{{ section.id }}">Personalizar <span class="kit-pers-inc">+R$ 30</span></label>
+        </div>
+        <div class="kit-pers-fields{% if masc_checked %} is-open{% endif %}" data-kit-pers-fields="masc">
+          <div class="kit-pers-field"><label>Nome</label><input type="text" name="properties[Nome Masculino]" maxlength="15" placeholder="Ex: PEDRO" form="{{ product_form_id }}" data-kit-uppercase data-kit-letters-only autocomplete="off" {% unless masc_checked %}disabled{% endunless %}></div>
+          <div class="kit-pers-field kit-pers-field--num"><label>Núm.</label><input type="text" name="properties[Número Masculino]" maxlength="5" inputmode="numeric" data-kit-digits-only placeholder="10" form="{{ product_form_id }}" autocomplete="off" {% unless masc_checked %}disabled{% endunless %}></div>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} BLOCO FEMININO {%- endcomment -%}
+    <div class="kit-casal-bloco kit-casal-bloco--fem">
+      <div class="kit-casal-bloco__header">
+        <span class="kit-casal-bloco__dot"></span>
+        <span>Você está editando a <strong>camisa feminina</strong></span>
+      </div>
+
+      {%- if mode_combined -%}
+        <div class="js product-form__input product-form__input--pill kit-size-fieldset kit-size-fieldset--fem">
+          <p class="form__label" style="display:flex; justify-content:space-between; align-items:center; width:100%; margin:0 0 1rem;">
+            <span>Tamanho Feminino</span>
+            <button type="button" class="js-kit-open-size-chart-fem" style="display:inline-flex; align-items:center; background:none; border:none; padding:0; font-size:1.5rem; font-weight:400; gap:0.6rem; cursor:pointer; color:#000; text-decoration:underline; text-underline-offset:0.3rem;">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1707 1707" width="20" height="20" style="flex-shrink:0;"><path fill="currentColor" d="M80 857c0-25 20-46 45-46h1456c25 0 46 21 46 46v397c0 25-21 45-46 45h-85v-117c0-22-18-40-40-40s-40 18-40 40v117h-121v-211c0-23-18-40-40-40s-40 17-40 40v211h-121v-117c0-22-18-40-40-40s-40 18-40 40v117h-121v-211c0-23-18-40-40-40s-40 17-40 40v211h-121v-117c0-22-17-40-40-40-22 0-40 18-40 40v117h-120v-211c0-23-18-40-40-40-23 0-40 17-40 40v211h-121v-117c0-22-18-40-40-40s-40 18-40 40v117h-86c-25 0-45-21-45-45zm259-213c19 12 43 7 55-12 12-18 7-43-12-55l-74-48h1091l-75 48c-18 12-23 37-12 55 12 19 37 24 56 12l186-120c14-7 21-21 21-36-1-14-8-27-21-34l-186-120c-19-12-44-6-56 12-11 19-6 43 12 55l75 48h-1091l74-48c19-12 24-36 12-55-12-18-36-24-55-12l-186 120c-13 7-20 20-21 34 0 15 7 28 20 36zm1368 610v-397c0-69-57-126-126-126h-1456c-69 0-125 57-125 126v397c0 69 56 125 125 125h1456c69 0 126-57 126-125z"/></svg>
+              <span>Tabela de medidas</span>
+            </button>
+          </p>
+          <div class="kit-size-options" role="group" aria-label="Tamanho Feminino">
+            {%- for sz in sizes_fem -%}
+              {%- assign rid = 'kit-tam-fem-' | append: sz | append: '-' | append: section.id -%}
+              {%- assign is_disabled = false -%}
+              {%- if disabled_fem contains sz -%}{%- assign is_disabled = true -%}{%- endif -%}
+              <input type="radio" id="{{ rid }}" name="kit-tam-fem-ui" value="{{ sz }}" {% if sz == fem_sel %}checked{% endif %} {% if is_disabled %}class="disabled" disabled{% endif %}>
+              <label for="{{ rid }}" {% if is_disabled %}class="is-soldout"{% endif %}>{{ sz }}{%- case sz -%}{%- when '2GG' -%}<span class="kit-extra-price">+R$&nbsp;10</span>{%- when '3GG' -%}<span class="kit-extra-price">+R$&nbsp;20</span>{%- when '4GG' -%}<span class="kit-extra-price">+R$&nbsp;30</span>{%- endcase -%}</label>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- elsif opt_fem -%}
+        <fieldset class="js product-form__input product-form__input--pill kit-size-fieldset kit-size-fieldset--fem">
+          <legend class="form__label" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+            <span>{{ opt_fem.name }}</span>
+            <button type="button" class="js-kit-open-size-chart-fem" style="display:inline-flex; align-items:center; background:none; border:none; padding:0; font-size:1.5rem; font-weight:400; gap:0.6rem; cursor:pointer; color:#000; text-decoration:underline; text-underline-offset:0.3rem;">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1707 1707" width="20" height="20" style="flex-shrink:0;"><path fill="currentColor" d="M80 857c0-25 20-46 45-46h1456c25 0 46 21 46 46v397c0 25-21 45-46 45h-85v-117c0-22-18-40-40-40s-40 18-40 40v117h-121v-211c0-23-18-40-40-40s-40 17-40 40v211h-121v-117c0-22-18-40-40-40s-40 18-40 40v117h-121v-211c0-23-18-40-40-40s-40 17-40 40v211h-121v-117c0-22-17-40-40-40-22 0-40 18-40 40v117h-120v-211c0-23-18-40-40-40-23 0-40 17-40 40v211h-121v-117c0-22-18-40-40-40s-40 18-40 40v117h-86c-25 0-45-21-45-45zm259-213c19 12 43 7 55-12 12-18 7-43-12-55l-74-48h1091l-75 48c-18 12-23 37-12 55 12 19 37 24 56 12l186-120c14-7 21-21 21-36-1-14-8-27-21-34l-186-120c-19-12-44-6-56 12-11 19-6 43 12 55l75 48h-1091l74-48c19-12 24-36 12-55-12-18-36-24-55-12l-186 120c-13 7-20 20-21 34 0 15 7 28 20 36zm1368 610v-397c0-69-57-126-126-126h-1456c-69 0-125 57-125 126v397c0 69 56 125 125 125h1456c69 0 126-57 126-125z"/></svg>
+              <span>Tabela de medidas</span>
+            </button>
+          </legend>
+          {% render 'product-variant-options', product: product, option: opt_fem, block: block, picker_type: 'button' %}
+        </fieldset>
+      {%- endif -%}
+
+      <div class="js product-form__input product-form__input--pill kit-pers-fieldset kit-pers-fieldset--fem" role="group" aria-label="Personalizar camisa feminina">
+        <p class="form__label" style="display:flex; align-items:center; gap:0.5rem; margin:0 0 1rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <span>Personalizar camisa feminina</span>
+        </p>
+        <div class="kit-pers-toggle-options">
+          <input type="radio" id="kit-pers-fem-no-{{ section.id }}" name="kit-pers-fem-ui" value="no" {% unless fem_checked %}checked{% endunless %}>
+          <label for="kit-pers-fem-no-{{ section.id }}">Não</label>
+          <input type="radio" id="kit-pers-fem-yes-{{ section.id }}" name="kit-pers-fem-ui" value="yes" {% if fem_checked %}checked{% endif %}>
+          <label for="kit-pers-fem-yes-{{ section.id }}">Personalizar <span class="kit-pers-inc">+R$ 30</span></label>
+        </div>
+        <div class="kit-pers-fields{% if fem_checked %} is-open{% endif %}" data-kit-pers-fields="fem">
+          <div class="kit-pers-field"><label>Nome</label><input type="text" name="properties[Nome Feminino]" maxlength="15" placeholder="Ex: CAMILLE" form="{{ product_form_id }}" data-kit-uppercase data-kit-letters-only autocomplete="off" {% unless fem_checked %}disabled{% endunless %}></div>
+          <div class="kit-pers-field kit-pers-field--num"><label>Núm.</label><input type="text" name="properties[Número Feminino]" maxlength="5" inputmode="numeric" data-kit-digits-only placeholder="10" form="{{ product_form_id }}" autocomplete="off" {% unless fem_checked %}disabled{% endunless %}></div>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} OPTION TAMANHO oculta (modo combined) {%- endcomment -%}
+    {%- if opt_tam -%}
+      <fieldset class="js product-form__input product-form__input--pill" data-kit-hidden-option style="position:absolute; left:-9999px; width:0; height:0; overflow:hidden; opacity:0; pointer-events:none;">
+        <legend>{{ opt_tam.name }}</legend>
+        <span data-selected-value aria-hidden="true"></span>
+        {%- for value in opt_tam.values -%}
+          <input type="radio"
+                 id="kit-hidden-tam-{{ section.id }}-{{ forloop.index }}"
+                 name="{{ opt_tam.name }}-{{ opt_tam.position }}"
+                 value="{{ value | escape }}"
+                 form="{{ product_form_id }}"
+                 data-product-url="{{ value.product_url }}"
+                 data-option-value-id="{{ value.id }}"
+                 {% if opt_tam.selected_value == value %}checked{% endif %}
+                 data-kit-tam-radio="{{ value | escape }}">
+          <label for="kit-hidden-tam-{{ section.id }}-{{ forloop.index }}">{{ value }}</label>
+        {%- endfor -%}
+      </fieldset>
+    {%- endif -%}
+
+    {%- comment -%} OPTION PERSONALIZAÇÃO oculta {%- endcomment -%}
+    {%- if opt_pers -%}
+      <fieldset class="js product-form__input product-form__input--pill" data-kit-hidden-option style="position:absolute; left:-9999px; width:0; height:0; overflow:hidden; opacity:0; pointer-events:none;">
+        <legend>{{ opt_pers.name }}</legend>
+        <span data-selected-value aria-hidden="true"></span>
+        {%- for value in opt_pers.values -%}
+          <input type="radio"
+                 id="kit-hidden-pers-{{ section.id }}-{{ forloop.index }}"
+                 name="{{ opt_pers.name }}-{{ opt_pers.position }}"
+                 value="{{ value | escape }}"
+                 form="{{ product_form_id }}"
+                 data-product-url="{{ value.product_url }}"
+                 data-option-value-id="{{ value.id }}"
+                 {% if opt_pers.selected_value == value %}checked{% endif %}
+                 data-kit-pers-radio="{{ value | escape }}">
+          <label for="kit-hidden-pers-{{ section.id }}-{{ forloop.index }}">{{ value }}</label>
+        {%- endfor -%}
+      </fieldset>
+    {%- endif -%}
+
+    <input type="hidden" name="properties[_pair_count]" value="2" form="{{ product_form_id }}">
+
+    <script type="application/json" data-selected-variant>
+      {{ product.selected_or_first_available_variant | json }}
+    </script>
+  </variant-selects>
+
+  <style>
+    .kit-casal-picker { display: block; margin-top: 1.8rem; }
+    .kit-casal-picker .kit-cor-fieldset { margin-bottom: 1.6rem; }
+    .kit-casal-picker .kit-cor-fieldset legend > span { font-size: 1.4rem; font-weight: 600; }
+    .kit-casal-bloco { border-radius: 1rem; padding: 1.4rem 1.6rem; margin-bottom: 1.6rem; border: 2px solid transparent; }
+    .kit-casal-bloco--masc { background: #dbeafe; border-color: #2563eb; }
+    .kit-casal-bloco--fem  { background: #fbcfe8; border-color: #ec4899; }
+    .kit-casal-bloco:last-child { margin-bottom: 0; }
+
+    .kit-casal-bloco__header { display: flex; align-items: center; gap: 0.8rem; font-size: 1.2rem; margin-bottom: 1.2rem; }
+    .kit-casal-bloco__header strong { font-weight: 700; }
+    .kit-casal-bloco__dot { width: 0.9rem; height: 0.9rem; border-radius: 50%; flex-shrink: 0; }
+    .kit-casal-bloco__header { color: #111; }
+    .kit-casal-bloco--masc .kit-casal-bloco__dot { background: #2563eb; }
+    .kit-casal-bloco--fem  .kit-casal-bloco__dot { background: #ec4899; }
+
+    .kit-casal-bloco .kit-size-fieldset,
+    .kit-casal-bloco .kit-pers-fieldset { background: transparent !important; border: 0 !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; }
+    .kit-casal-bloco .kit-pers-fieldset { margin-top: 1.4rem !important; padding-top: 0 !important; border: 0 !important; }
+    .kit-casal-bloco .kit-size-fieldset legend > span,
+    .kit-casal-bloco .kit-size-fieldset > p > span,
+    .kit-casal-bloco .kit-pers-fieldset legend > span { color: #111 !important; }
+    .kit-casal-bloco .kit-pers-fieldset legend svg { color: #111; }
+
+    .kit-size-options { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    .kit-size-options input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+    .kit-size-options label { min-width: 5rem; padding: 1rem 1.4rem; border: 1px solid #ddd; border-radius: 0.6rem; text-align: center; font-size: 1.3rem; font-weight: 600; cursor: pointer; background: #fff; transition: all .12s; line-height: 1; display: inline-flex; align-items: center; justify-content: center; }
+    .kit-size-options label:hover { border-color: #999; }
+    .kit-casal-bloco .kit-size-options input[type="radio"]:checked + label { border-color: #111; background: #111; color: #fff; }
+
+    .kit-pers-toggle-options { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    .kit-pers-toggle-options input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+    .kit-pers-toggle-options label { min-width: 8rem; padding: 1rem 1.6rem; border: 1px solid #ddd; border-radius: 0.6rem; text-align: center; font-size: 1.3rem; font-weight: 600; cursor: pointer; background: #fff; transition: all .12s; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; line-height: 1; }
+    .kit-pers-toggle-options label:hover { border-color: #999; }
+    .kit-casal-bloco .kit-pers-toggle-options input[type="radio"]:checked + label { border-color: #111; background: #111; color: #fff; }
+    .kit-pers-inc { font-size: 1.1rem; font-weight: 600; opacity: 0.85; }
+
+    .kit-pers-fields { display: none; grid-template-columns: 1fr 8rem; gap: 0.8rem; margin-top: 1.2rem; padding: 0; background: transparent; }
+    .kit-pers-fields.is-open { display: grid; }
+    .kit-pers-fields label { font-size: 1.1rem; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.4rem; display: block; }
+    .kit-pers-fields input { width: 100%; border: 1px solid #ddd; border-radius: 0.6rem; padding: 1rem; font-size: 1.4rem; font-family: inherit; box-sizing: border-box; background: #fff; }
+    .kit-pers-fields input[data-kit-uppercase] { text-transform: uppercase; }
+    .kit-pers-fields input[data-kit-uppercase]::placeholder { text-transform: none; }
+
+    .kit-size-fieldset legend span { font-size: 1.4rem; font-weight: 600; }
+    .kit-size-fieldset > p > span { font-size: 1.4rem; font-weight: 600; }
+  </style>
+
+  <script>
+  (function () {
+    if (window.__kitCasalBound) return;
+    window.__kitCasalBound = true;
+
+    function syncTamFor(root) {
+      var mascSel = root.querySelector('input[name="kit-tam-masc-ui"]:checked');
+      var femSel  = root.querySelector('input[name="kit-tam-fem-ui"]:checked');
+      var m = mascSel ? mascSel.value : '';
+      var f = femSel ? femSel.value : '';
+      if (!m || !f) return;
+      var combined = m + '/' + f;
+      var radio = root.querySelector('input[data-kit-tam-radio="' + combined + '"]');
+      if (radio && !radio.checked) {
+        radio.checked = true;
+        radio.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }
+
+    function syncPersonaFor(root) {
+      var mascChecked = root.querySelector('input[name="kit-pers-masc-ui"]:checked');
+      var femChecked  = root.querySelector('input[name="kit-pers-fem-ui"]:checked');
+      var pm = !!(mascChecked && mascChecked.value === 'yes');
+      var pf = !!(femChecked && femChecked.value === 'yes');
+      var target = 'Nenhum';
+      if (pm && pf) target = 'Ambos';
+      else if (pm)  target = 'Só Masculina';
+      else if (pf)  target = 'Só Feminina';
+
+      var mascFields = root.querySelector('[data-kit-pers-fields="masc"]');
+      var femFields  = root.querySelector('[data-kit-pers-fields="fem"]');
+      if (mascFields) {
+        if (pm) mascFields.classList.add('is-open'); else mascFields.classList.remove('is-open');
+        mascFields.querySelectorAll('input').forEach(function (i) { i.disabled = !pm; if (!pm) i.value = ''; });
+      }
+      if (femFields) {
+        if (pf) femFields.classList.add('is-open'); else femFields.classList.remove('is-open');
+        femFields.querySelectorAll('input').forEach(function (i) { i.disabled = !pf; if (!pf) i.value = ''; });
+      }
+
+      var radio = root.querySelector('input[data-kit-pers-radio="' + target + '"]');
+      if (radio && !radio.checked) {
+        radio.checked = true;
+        radio.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }
+
+    document.addEventListener('change', function (e) {
+      if (!e.target) return;
+      if (e.target.name === 'kit-tam-masc-ui' || e.target.name === 'kit-tam-fem-ui') {
+        var root = e.target.closest('variant-selects');
+        if (root) {
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          syncTamFor(root);
+        }
+        return;
+      }
+      if (e.target.name === 'kit-pers-masc-ui' || e.target.name === 'kit-pers-fem-ui') {
+        var root = e.target.closest('variant-selects');
+        if (root) {
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          syncPersonaFor(root);
+        }
+        return;
+      }
+      if (e.target.matches('.kit-pers-fields input')) {
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+      }
+    }, true);
+
+    document.addEventListener('input', function (e) {
+      if (!e.target) return;
+      var el = e.target;
+      var pos = el.selectionStart;
+      var v = el.value;
+      var changed = false;
+      if (el.matches('input[data-kit-letters-only]')) {
+        var nv = v.replace(/[^A-Za-zÀ-ÿ ]/g, '');
+        if (nv !== v) { v = nv; changed = true; }
+      }
+      if (el.matches('input[data-kit-digits-only]')) {
+        var nv2 = v.replace(/\D/g, '');
+        if (nv2 !== v) { v = nv2; changed = true; }
+      }
+      if (el.matches('input[data-kit-uppercase]')) {
+        var nv3 = v.toUpperCase();
+        if (nv3 !== v) { v = nv3; changed = true; }
+      }
+      if (changed) {
+        var origLen = el.value.length;
+        el.value = v;
+        // Cursor preserva posição: diff entre tamanho antigo e novo. Uppercase puro = diff 0, cursor mantém. Remoção = recua N posições.
+        var diff = origLen - v.length;
+        var newPos = pos - diff;
+        if (newPos < 0) newPos = 0;
+        if (newPos > v.length) newPos = v.length;
+        try { el.setSelectionRange(newPos, newPos); } catch (err) {}
+      }
+    });
+            // _kitCasalNomeCache v4 — window + sessionStorage + restauração super robusta
+    if (!window._kitCasalNomeCache) window._kitCasalNomeCache = {};
+    var KC = window._kitCasalNomeCache;
+    var KIT_NAMES = ['properties[Nome Masculino]', 'properties[Nome Feminino]', 'properties[Número Masculino]', 'properties[Número Feminino]'];
+
+    // Carrega do sessionStorage no boot
+    try {
+      KIT_NAMES.forEach(function (name) {
+        var v = sessionStorage.getItem('_kc_' + name);
+        if (v) KC[name] = v;
+      });
+    } catch (e) {}
+
+    function saveKitInput(el) {
+      if (!el || !el.name) return;
+      if (KIT_NAMES.indexOf(el.name) === -1) return;
+      var val = (el.value || '').trim();
+      KC[el.name] = val; // salva também vazio — user apagou deliberadamente
+      try {
+        if (val) sessionStorage.setItem('_kc_' + el.name, val);
+        else sessionStorage.removeItem('_kc_' + el.name);
+      } catch (e) {}
+    }
+
+    function restoreKitInputs() {
+      KIT_NAMES.forEach(function (name) {
+        var val = KC[name];
+        if (!val) { try { val = sessionStorage.getItem('_kc_' + name); if (val) KC[name] = val; } catch (e) {} }
+        if (!val) return;
+        var input = document.querySelector('input[name="' + name + '"]');
+        if (input && !input.disabled && !input.value) {
+          input.value = val;
+        }
+      });
+    }
+
+    document.addEventListener('input',  function (e) { saveKitInput(e.target); }, true);
+    document.addEventListener('change', function (e) { saveKitInput(e.target); }, true);
+    document.addEventListener('keyup',  function (e) { saveKitInput(e.target); }, true);
+    document.addEventListener('blur',   function (e) { saveKitInput(e.target); }, true);
+
+    if (!window._kitCasalPoll) window._kitCasalPoll = setInterval(restoreKitInputs, 100);
+    document.addEventListener('product-info:loaded', function () {
+      [30, 100, 300, 700, 1200].forEach(function (ms) { setTimeout(restoreKitInputs, ms); });
+    });
+    document.addEventListener('change', function (e) {
+      if (!e.target) return;
+      var n = e.target.name;
+      if (n === 'kit-pers-masc-ui' || n === 'kit-pers-fem-ui' || n === 'kit-tam-masc-ui' || n === 'kit-tam-fem-ui') {
+        [30, 100, 300, 700, 1200].forEach(function (ms) { setTimeout(restoreKitInputs, ms); });
+      }
+    }, true);
+
+        // _kitCasalObserver — injeta value ANTES do browser pintar (zero flicker)
+    if (!window._kitCasalObserver) {
+      window._kitCasalObserver = new MutationObserver(function (mutations) {
+        for (var i = 0; i < mutations.length; i++) {
+          var added = mutations[i].addedNodes;
+          for (var j = 0; j < added.length; j++) {
+            var node = added[j];
+            if (node.nodeType !== 1) continue;
+            var inputs;
+            if (node.matches && node.matches('input[name^="properties["]')) {
+              inputs = [node];
+            } else if (node.querySelectorAll) {
+              inputs = node.querySelectorAll('input[name^="properties["]');
+            } else { inputs = []; }
+            for (var k = 0; k < inputs.length; k++) {
+              var inp = inputs[k];
+              if (KIT_NAMES.indexOf(inp.name) > -1 && KC[inp.name] && !inp.value && !inp.disabled) {
+                inp.value = KC[inp.name];
+              }
+            }
+          }
+        }
+      });
+      window._kitCasalObserver.observe(document.body, { childList: true, subtree: true });
+    }
+    // Sync inicial
+
+    // Restaura após re-render do Dawn
+    document.addEventListener('product-info:loaded', function () {
+      setTimeout(restoreKitInputs, 50);
+      setTimeout(restoreKitInputs, 200);
+    });
+
+        // _kitCasalPoll — polling agressivo restaura inputs Nome/Número se Dawn re-renderizar e apagar
+    window._kitCasalPoll = window._kitCasalPoll || setInterval(restoreKitInputs, 100);
+        // _kitCasalValidateSubmit — bloqueia submit se Personalizar=yes mas Nome+Número vazios
+    if (!window._kitCasalValidateSubmit) {
+      window._kitCasalValidateSubmit = true;
+      document.addEventListener('submit', function (e) {
+        var form = e.target;
+        if (!form || form.tagName !== 'FORM') return;
+        // Só age em form de produto que tem inputs do Kit Casal
+        var mascYes = form.querySelector('input[name="kit-pers-masc-ui"]:checked');
+        var femYes = form.querySelector('input[name="kit-pers-fem-ui"]:checked');
+        var mascPersonalizar = mascYes && mascYes.value === 'yes';
+        var femPersonalizar = femYes && femYes.value === 'yes';
+        if (!mascPersonalizar && !femPersonalizar) return;
+        var errors = [];
+        if (mascPersonalizar) {
+          var nm = form.querySelector('input[name="properties[Nome Masculino]"]');
+          var num = form.querySelector('input[name="properties[Número Masculino]"]');
+          var nmVal = nm ? nm.value.trim() : '';
+          var numVal = num ? num.value.trim() : '';
+          if (!nmVal && !numVal) errors.push('Preencha Nome ou Número da camisa MASCULINA.');
+        }
+        if (femPersonalizar) {
+          var nf = form.querySelector('input[name="properties[Nome Feminino]"]');
+          var numf = form.querySelector('input[name="properties[Número Feminino]"]');
+          var nfVal = nf ? nf.value.trim() : '';
+          var numfVal = numf ? numf.value.trim() : '';
+          if (!nfVal && !numfVal) errors.push('Preencha Nome ou Número da camisa FEMININA.');
+        }
+        if (errors.length === 0) return;
+        // Bloqueia submit
+        e.preventDefault();
+        e.stopPropagation();
+        // Mostra erro inline
+        var existing = form.querySelector('.kit-casal-validation-error');
+        if (existing) existing.remove();
+        var errEl = document.createElement('div');
+        errEl.className = 'kit-casal-validation-error';
+        errEl.setAttribute('role', 'alert');
+        errEl.style.cssText = 'background:#fee;border:1px solid #fcc;color:#a00;padding:0.8rem 1rem;border-radius:0.5rem;font-size:1.2rem;font-weight:600;margin:0 0 1rem;line-height:1.4;';
+        errEl.innerHTML = errors.join('<br>');
+        var buttons = form.querySelector('.product-form__buttons');
+        if (buttons) buttons.parentNode.insertBefore(errEl, buttons);
+        else form.insertBefore(errEl, form.firstChild);
+        // Scroll suave até o primeiro input vazio
+        setTimeout(function () {
+          var firstEmpty = form.querySelector('input[name="properties[Nome Masculino]"]:placeholder-shown, input[name="properties[Nome Feminino]"]:placeholder-shown');
+          if (firstEmpty) firstEmpty.focus({ preventScroll: false });
+        }, 100);
+        // Auto-remove erro em 5s
+        setTimeout(function () { if (errEl.parentNode) errEl.remove(); }, 5000);
+      }, true);
+    }
+    // Sync inicial
+    setTimeout(restoreKitInputs, 100);
+
+    // _kitCasalSizeChartFemBtn — botão fem da Tabela de Medidas reusa o modal do size-chart (botão masc tem o ID que o size-chart bind)
+    if (!window._kitCasalSizeChartFemBound) {
+      window._kitCasalSizeChartFemBound = true;
+      document.addEventListener('click', function (e) {
+        var btn = e.target && e.target.closest && e.target.closest('.js-kit-open-size-chart-fem');
+        if (!btn) return;
+        e.preventDefault();
+        if (typeof window.openSizePanel === 'function') {
+          window.openSizePanel();
+        } else {
+          // Fallback: dispara click no botão masc, que tem listener nativo
+          var mascBtn = document.querySelector('[id^="abrirTabela-"]:not(.js-kit-open-size-chart-fem)');
+          if (mascBtn) mascBtn.click();
+        }
+      });
+    }
+  })();
+  </script>
+
+  {%- comment -%} Modal da Tabela de Medidas (define overlay + JS com window.openSizePanel) {%- endcomment -%}
+  {% render 'size-chart' %}
+{%- endunless -%}
+<style>
+  .kit-size-options label .kit-extra-price {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: inherit;
+    margin-top: 0.15rem;
+    line-height: 1;
+  }
+</style>
+
+{%- comment -%} KIT-CASAL-ESCASSEZ-V1 (2026-05-15): tamanhos PP/3GG/4GG riscados, visualmente claros, não clicáveis {%- endcomment -%}
+<style>
+  /* KIT-CASAL-ESCASSEZ-V1 */
+  .kit-size-options input[type="radio"].disabled,
+  .kit-size-options input[type="radio"][disabled] {
+    pointer-events: none !important;
+  }
+  .kit-size-options input[type="radio"].disabled + label,
+  .kit-size-options input[type="radio"][disabled] + label,
+  .kit-size-options label.is-soldout {
+    pointer-events: none !important;
+    cursor: default !important;
+    user-select: none !important;
+    opacity: 1 !important;
+    color: #999 !important;
+    background-color: #f4f4f4 !important;
+    border-color: #d0d0d0 !important;
+    text-decoration: line-through !important;
+    text-decoration-color: #d63838 !important;
+    text-decoration-thickness: 2px !important;
+    -webkit-text-decoration-color: #d63838 !important;
+  }
+  .kit-size-options input[type="radio"].disabled + label .kit-extra-price,
+  .kit-size-options input[type="radio"][disabled] + label .kit-extra-price,
+  .kit-size-options label.is-soldout .kit-extra-price {
+    color: #b0b0b0;
+    text-decoration: line-through;
+    text-decoration-color: #d63838;
+  }
+</style>
+<style>
+  /* kit-size-label-centered-v1 — todos labels com mesma altura, conteúdo centralizado */
+  .kit-size-options label {
+    display: inline-flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 4.2rem;
+    line-height: 1.1;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    box-sizing: border-box;
+  }
+  .kit-size-options label .kit-extra-price {
+    margin-top: 0.15rem;
+  }
+</style>

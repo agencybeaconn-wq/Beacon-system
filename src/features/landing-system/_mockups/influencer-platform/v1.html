@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>[Plataforma] — Encontre os influenciadores certos para sua marca</title>
+  <meta name="description" content="Plataforma completa pra contratar, gerenciar e medir campanhas com influenciadores. Marcas e creators no mesmo lugar." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Inter Tight"', 'sans-serif'] },
+          colors: {
+            brand: 'hsl(0 72% 51%)',
+            'brand-fg': '#ffffff',
+            'brand-soft': 'hsl(0 72% 95%)',
+            ink: '#0a0a0a',
+            muted: '#737373',
+            line: '#e5e5e5',
+            paper: '#fafafa',
+          },
+          borderRadius: { md: '10px', lg: '12px', xl: '16px' },
+        },
+      },
+    };
+  </script>
+  <style>
+    :root { -webkit-font-smoothing: antialiased; }
+    body { font-family: 'Inter Tight', sans-serif; }
+    .container-wide { max-width: 1280px; margin-inline: auto; padding-inline: 1.5rem; }
+    @media (min-width: 768px) { .container-wide { padding-inline: 2rem; } }
+    .eyebrow { letter-spacing: 0.18em; }
+    .gradient-bg {
+      background-image:
+        radial-gradient(60% 50% at 50% 0%, hsl(0 72% 96%) 0%, transparent 60%),
+        linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+    }
+    .hover-lift { transition: transform .2s ease, box-shadow .2s ease; }
+    .hover-lift:hover { transform: translateY(-2px); box-shadow: 0 10px 30px -10px rgba(0,0,0,.1); }
+  </style>
+</head>
+<body class="bg-white text-ink">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 bg-white/85 backdrop-blur border-b border-line">
+    <div class="container-wide flex h-16 items-center justify-between">
+      <a href="#" class="text-xl font-bold tracking-tight">[Plataforma]</a>
+      <nav class="hidden md:flex items-center gap-7">
+        <a href="#como-funciona" class="text-sm font-medium text-muted hover:text-ink transition">Como funciona</a>
+        <a href="#funcionalidades" class="text-sm font-medium text-muted hover:text-ink transition">Funcionalidades</a>
+        <a href="#cases" class="text-sm font-medium text-muted hover:text-ink transition">Cases</a>
+        <a href="#faq" class="text-sm font-medium text-muted hover:text-ink transition">FAQ</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <a href="#" class="hidden md:inline-flex text-sm font-medium text-ink hover:text-brand transition">Entrar</a>
+        <a href="#cta" class="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-brand text-brand-fg font-medium text-sm hover:brightness-110 transition">
+          Criar conta
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="gradient-bg relative">
+      <div class="container-wide pt-20 md:pt-28 pb-16 md:pb-24 text-center">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-soft text-brand text-xs font-semibold uppercase eyebrow">
+          <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
+          Marketing de influência sem complicação
+        </span>
+        <h1 class="mt-6 text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05]">
+          Encontre os influenciadores<br class="hidden md:block" />
+          <span class="text-brand">certos</span> pra sua marca.
+        </h1>
+        <p class="mt-6 mx-auto max-w-2xl text-lg md:text-xl text-muted leading-relaxed">
+          Busca filtrada, negociação por chat, pagamento integrado e relatórios reais.
+          Tudo num lugar só — pra marcas e creators que querem resultado.
+        </p>
+        <div class="mt-10 flex flex-wrap gap-3 justify-center">
+          <a href="#cta" class="inline-flex items-center justify-center h-12 px-7 rounded-md bg-brand text-brand-fg font-semibold text-base hover:brightness-110 transition">
+            Sou marca, quero criar campanha
+          </a>
+          <a href="#cta" class="inline-flex items-center justify-center h-12 px-7 rounded-md bg-white text-ink border border-line font-semibold text-base hover:bg-paper transition">
+            Sou creator, quero me cadastrar
+          </a>
+        </div>
+        <div class="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-muted">
+          <div class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-muted"></span> +12 mil creators verificados</div>
+          <div class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-muted"></span> Pagamento garantido</div>
+          <div class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-muted"></span> Sem fidelidade</div>
+        </div>
+      </div>
+
+      <!-- Hero visual mock -->
+      <div class="container-wide pb-20">
+        <div class="mx-auto max-w-5xl rounded-xl border border-line bg-white shadow-2xl shadow-black/5 overflow-hidden">
+          <div class="flex items-center gap-1.5 px-4 py-3 border-b border-line bg-paper">
+            <span class="w-3 h-3 rounded-full bg-red-400"></span>
+            <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
+            <span class="w-3 h-3 rounded-full bg-green-400"></span>
+            <span class="ml-3 text-xs text-muted">painel.[plataforma].com.br</span>
+          </div>
+          <div class="aspect-[16/9] bg-paper flex items-center justify-center">
+            <span class="text-muted text-sm">[Mockup de dashboard — busca de creators]</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOGOS PROVA SOCIAL -->
+    <section class="py-12 border-y border-line bg-paper">
+      <div class="container-wide">
+        <p class="text-center text-sm font-medium text-muted uppercase eyebrow mb-8">
+          + de 200 marcas já confiam
+        </p>
+        <div class="grid grid-cols-3 md:grid-cols-6 gap-8 items-center opacity-60">
+          <div class="h-8 bg-ink/10 rounded flex items-center justify-center text-xs text-muted">LOGO 1</div>
+          <div class="h-8 bg-ink/10 rounded flex items-center justify-center text-xs text-muted">LOGO 2</div>
+          <div class="h-8 bg-ink/10 rounded flex items-center justify-center text-xs text-muted">LOGO 3</div>
+          <div class="h-8 bg-ink/10 rounded flex items-center justify-center text-xs text-muted">LOGO 4</div>
+          <div class="h-8 bg-ink/10 rounded flex items-center justify-center text-xs text-muted">LOGO 5</div>
+          <div class="h-8 bg-ink/10 rounded flex items-center justify-center text-xs text-muted">LOGO 6</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section id="como-funciona" class="py-20 md:py-28">
+      <div class="container-wide">
+        <div class="text-center max-w-3xl mx-auto">
+          <span class="text-xs font-semibold uppercase eyebrow text-brand">Como funciona</span>
+          <h2 class="mt-4 text-3xl md:text-5xl font-bold tracking-tight">
+            Crie uma campanha em 4 passos.
+          </h2>
+          <p class="mt-5 text-lg text-muted">
+            Da definição da estratégia ao pagamento, tudo dentro da plataforma.
+          </p>
+        </div>
+
+        <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Step 1 -->
+          <div class="relative p-7 rounded-xl border border-line bg-white hover-lift">
+            <div class="inline-flex items-center justify-center w-10 h-10 rounded-md bg-brand text-brand-fg font-bold text-sm">01</div>
+            <h3 class="mt-5 text-xl font-bold">Filtre os creators</h3>
+            <p class="mt-2 text-sm text-muted leading-relaxed">
+              Nicho, audiência, engajamento, região. Encontre exatamente quem fala com a sua marca.
+            </p>
+          </div>
+          <!-- Step 2 -->
+          <div class="relative p-7 rounded-xl border border-line bg-white hover-lift">
+            <div class="inline-flex items-center justify-center w-10 h-10 rounded-md bg-brand text-brand-fg font-bold text-sm">02</div>
+            <h3 class="mt-5 text-xl font-bold">Briefe a campanha</h3>
+            <p class="mt-2 text-sm text-muted leading-relaxed">
+              Defina entregáveis, prazo e orçamento. O creator recebe tudo organizado.
+            </p>
+          </div>
+          <!-- Step 3 -->
+          <div class="relative p-7 rounded-xl border border-line bg-white hover-lift">
+            <div class="inline-flex items-center justify-center w-10 h-10 rounded-md bg-brand text-brand-fg font-bold text-sm">03</div>
+            <h3 class="mt-5 text-xl font-bold">Negocie pelo chat</h3>
+            <p class="mt-2 text-sm text-muted leading-relaxed">
+              Receba propostas, ajuste valores e aprove conteúdo direto na plataforma.
+            </p>
+          </div>
+          <!-- Step 4 -->
+          <div class="relative p-7 rounded-xl border border-line bg-white hover-lift">
+            <div class="inline-flex items-center justify-center w-10 h-10 rounded-md bg-brand text-brand-fg font-bold text-sm">04</div>
+            <h3 class="mt-5 text-xl font-bold">Pague e meça</h3>
+            <p class="mt-2 text-sm text-muted leading-relaxed">
+              Pagamento garantido no cartão. Relatórios de alcance, engajamento e ROI em tempo real.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FUNCIONALIDADES -->
+    <section id="funcionalidades" class="py-20 md:py-28 bg-paper border-y border-line">
+      <div class="container-wide">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          <div class="lg:col-span-5 lg:sticky lg:top-24">
+            <span class="text-xs font-semibold uppercase eyebrow text-brand">Funcionalidades</span>
+            <h2 class="mt-4 text-3xl md:text-5xl font-bold tracking-tight">
+              Tudo o que você precisa, num lugar só.
+            </h2>
+            <p class="mt-5 text-lg text-muted">
+              Sem planilhas, sem grupos de WhatsApp, sem perder follow-up.
+              Da prospecção ao pagamento — fluxo único.
+            </p>
+            <a href="#cta" class="mt-7 inline-flex items-center gap-2 text-brand font-semibold hover:gap-3 transition-all">
+              Ver demo da plataforma
+              <span>→</span>
+            </a>
+          </div>
+          <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="p-6 rounded-xl border border-line bg-white">
+              <div class="w-9 h-9 rounded-md bg-brand-soft text-brand flex items-center justify-center font-bold">🔎</div>
+              <h3 class="mt-4 font-bold">Busca avançada</h3>
+              <p class="mt-2 text-sm text-muted">Filtros por nicho, audiência, engajamento real (não vaidade).</p>
+            </div>
+            <div class="p-6 rounded-xl border border-line bg-white">
+              <div class="w-9 h-9 rounded-md bg-brand-soft text-brand flex items-center justify-center font-bold">💬</div>
+              <h3 class="mt-4 font-bold">Chat integrado</h3>
+              <p class="mt-2 text-sm text-muted">Toda negociação registrada. Sem perder histórico.</p>
+            </div>
+            <div class="p-6 rounded-xl border border-line bg-white">
+              <div class="w-9 h-9 rounded-md bg-brand-soft text-brand flex items-center justify-center font-bold">💳</div>
+              <h3 class="mt-4 font-bold">Pagamento seguro</h3>
+              <p class="mt-2 text-sm text-muted">Cartão de crédito, escrow, liberação após entrega.</p>
+            </div>
+            <div class="p-6 rounded-xl border border-line bg-white">
+              <div class="w-9 h-9 rounded-md bg-brand-soft text-brand flex items-center justify-center font-bold">📊</div>
+              <h3 class="mt-4 font-bold">Relatórios em tempo real</h3>
+              <p class="mt-2 text-sm text-muted">Alcance, engajamento, clicks, conversões. CSV pra time.</p>
+            </div>
+            <div class="p-6 rounded-xl border border-line bg-white">
+              <div class="w-9 h-9 rounded-md bg-brand-soft text-brand flex items-center justify-center font-bold">✅</div>
+              <h3 class="mt-4 font-bold">Aprovação de conteúdo</h3>
+              <p class="mt-2 text-sm text-muted">Veja o post antes do creator publicar. Comente, peça ajuste.</p>
+            </div>
+            <div class="p-6 rounded-xl border border-line bg-white">
+              <div class="w-9 h-9 rounded-md bg-brand-soft text-brand flex items-center justify-center font-bold">🛡️</div>
+              <h3 class="mt-4 font-bold">Creators verificados</h3>
+              <p class="mt-2 text-sm text-muted">Conta + audiência analisadas. Zero perfis fake.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CASES -->
+    <section id="cases" class="py-20 md:py-28">
+      <div class="container-wide">
+        <div class="text-center max-w-3xl mx-auto">
+          <span class="text-xs font-semibold uppercase eyebrow text-brand">Cases</span>
+          <h2 class="mt-4 text-3xl md:text-5xl font-bold tracking-tight">
+            Resultado real, não promessa.
+          </h2>
+        </div>
+
+        <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-8 rounded-xl border border-line bg-white">
+            <div class="text-xs uppercase eyebrow text-muted">Beleza</div>
+            <div class="mt-4 text-4xl md:text-5xl font-extrabold tracking-tight text-brand">+218%</div>
+            <p class="mt-3 text-sm text-muted">de aumento em vendas durante a campanha de lançamento, com 23 micro-influenciadores.</p>
+            <p class="mt-6 text-sm font-semibold">Marca de skincare nacional</p>
+          </div>
+          <div class="p-8 rounded-xl border border-line bg-white">
+            <div class="text-xs uppercase eyebrow text-muted">Fitness</div>
+            <div class="mt-4 text-4xl md:text-5xl font-extrabold tracking-tight text-brand">3.2M</div>
+            <p class="mt-3 text-sm text-muted">de impressões orgânicas em 14 dias, custo médio de R$ 0,12 por visualização.</p>
+            <p class="mt-6 text-sm font-semibold">Suplemento DTC</p>
+          </div>
+          <div class="p-8 rounded-xl border border-line bg-white">
+            <div class="text-xs uppercase eyebrow text-muted">Moda</div>
+            <div class="mt-4 text-4xl md:text-5xl font-extrabold tracking-tight text-brand">7x ROAS</div>
+            <p class="mt-3 text-sm text-muted">em campanha de Black Friday com creators de moda streetwear. R$ 1 investido = R$ 7 em vendas.</p>
+            <p class="mt-6 text-sm font-semibold">Marca de streetwear</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DUAL CTA -->
+    <section id="cta" class="py-20 md:py-28 bg-ink text-white">
+      <div class="container-wide">
+        <div class="text-center max-w-2xl mx-auto">
+          <h2 class="text-3xl md:text-5xl font-bold tracking-tight">
+            Pronto pra começar?
+          </h2>
+          <p class="mt-5 text-lg text-white/70">
+            Escolha o caminho que combina com você.
+          </p>
+        </div>
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto">
+          <div class="p-8 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
+            <div class="text-xs uppercase eyebrow text-white/60">Sou marca</div>
+            <h3 class="mt-3 text-2xl font-bold">Crie sua primeira campanha</h3>
+            <p class="mt-3 text-sm text-white/70">Cadastro grátis. Pague só o que rodar. Sem mensalidade obrigatória.</p>
+            <a href="#" class="mt-7 inline-flex items-center justify-center h-12 px-7 rounded-md bg-brand text-brand-fg font-semibold w-full hover:brightness-110 transition">
+              Criar conta de marca
+            </a>
+          </div>
+          <div class="p-8 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
+            <div class="text-xs uppercase eyebrow text-white/60">Sou creator</div>
+            <h3 class="mt-3 text-2xl font-bold">Cadastre-se e receba campanhas</h3>
+            <p class="mt-3 text-sm text-white/70">Aprovação em até 48h. Pagamento direto na sua conta após entrega.</p>
+            <a href="#" class="mt-7 inline-flex items-center justify-center h-12 px-7 rounded-md bg-white text-ink font-semibold w-full hover:bg-paper transition">
+              Quero ser creator
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-20 md:py-28">
+      <div class="container-wide max-w-3xl">
+        <div class="text-center">
+          <span class="text-xs font-semibold uppercase eyebrow text-brand">FAQ</span>
+          <h2 class="mt-4 text-3xl md:text-5xl font-bold tracking-tight">
+            Dúvidas que a gente sempre escuta.
+          </h2>
+        </div>
+        <div class="mt-12 divide-y divide-line border-y border-line">
+          <details class="group py-6">
+            <summary class="flex items-center justify-between cursor-pointer text-lg font-semibold list-none">
+              Como funciona o pagamento?
+              <span class="text-brand text-2xl group-open:rotate-45 transition-transform">+</span>
+            </summary>
+            <p class="mt-3 text-muted">Você paga no cartão de crédito quando a campanha é criada. O valor fica retido até o creator entregar o conteúdo aprovado. Aí sim ele recebe — pagamento garantido pros dois lados.</p>
+          </details>
+          <details class="group py-6">
+            <summary class="flex items-center justify-between cursor-pointer text-lg font-semibold list-none">
+              Tem mensalidade?
+              <span class="text-brand text-2xl group-open:rotate-45 transition-transform">+</span>
+            </summary>
+            <p class="mt-3 text-muted">Não. Cadastro é grátis e você só paga quando contratar uma campanha. Comissão de 10% sobre o valor da campanha — sem taxas escondidas.</p>
+          </details>
+          <details class="group py-6">
+            <summary class="flex items-center justify-between cursor-pointer text-lg font-semibold list-none">
+              Como vocês escolhem os creators?
+              <span class="text-brand text-2xl group-open:rotate-45 transition-transform">+</span>
+            </summary>
+            <p class="mt-3 text-muted">Todo creator passa por análise: verificamos autenticidade da audiência, engajamento real (vs. inflado), nicho e histórico de campanhas. Quem não passa, não entra.</p>
+          </details>
+          <details class="group py-6">
+            <summary class="flex items-center justify-between cursor-pointer text-lg font-semibold list-none">
+              E se o creator não entregar?
+              <span class="text-brand text-2xl group-open:rotate-45 transition-transform">+</span>
+            </summary>
+            <p class="mt-3 text-muted">Pagamento só é liberado após você aprovar o conteúdo. Se não rolar, você recebe 100% de volta. Sem briga, sem boleto perdido.</p>
+          </details>
+          <details class="group py-6">
+            <summary class="flex items-center justify-between cursor-pointer text-lg font-semibold list-none">
+              Quanto tempo demora uma campanha?
+              <span class="text-brand text-2xl group-open:rotate-45 transition-transform">+</span>
+            </summary>
+            <p class="mt-3 text-muted">Do briefing à publicação, em média 7-14 dias. Campanhas urgentes podem rodar em 48h se já tiver creators escolhidos.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="py-20 md:py-28 bg-brand text-brand-fg">
+      <div class="container-wide text-center max-w-3xl">
+        <h2 class="text-3xl md:text-5xl font-bold tracking-tight">
+          Comece sua primeira campanha hoje.
+        </h2>
+        <p class="mt-5 text-lg text-brand-fg/85">
+          Sem mensalidade. Sem fidelidade. Pagamento garantido.
+        </p>
+        <a href="#" class="mt-10 inline-flex items-center justify-center h-12 px-8 rounded-md bg-white text-ink font-semibold text-base hover:bg-paper transition">
+          Criar conta grátis
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-paper border-t border-line">
+    <div class="container-wide py-16">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+        <div class="md:col-span-4">
+          <div class="text-xl font-bold tracking-tight">[Plataforma]</div>
+          <p class="mt-3 text-sm text-muted max-w-xs">
+            Marketing de influência sem complicação. Pra marcas que querem resultado e creators que querem profissionalismo.
+          </p>
+        </div>
+        <div class="md:col-span-8 grid grid-cols-2 md:grid-cols-3 gap-8">
+          <div>
+            <h4 class="text-sm font-semibold">Plataforma</h4>
+            <ul class="mt-4 space-y-3">
+              <li><a href="#" class="text-sm text-muted hover:text-ink">Como funciona</a></li>
+              <li><a href="#" class="text-sm text-muted hover:text-ink">Funcionalidades</a></li>
+              <li><a href="#" class="text-sm text-muted hover:text-ink">Cases</a></li>
+              <li><a href="#" class="text-sm text-muted hover:text-ink">Planos</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold">Empresa</h4>
+            <ul class="mt-4 space-y-3">
+              <li><a href="#" class="text-sm text-muted hover:text-ink">Sobre</a></li>
+              <li><a href="#" class="text-sm text-muted hover:text-ink">Blog</a></li>
+              <li><a href="#" class="text-sm text-muted hover:text-ink">Carreira</a></li>
+              <li><a href="#" class="text-sm text-muted hover:text-ink">Contato</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold">Suporte</h4>
+            <ul class="mt-4 space-y-3">
+              <li><a href="#" class="text-sm text-muted hover:text-ink">Central de ajuda</a></li>
+              <li><a href="#" class="text-sm text-muted hover:text-ink">WhatsApp</a></li>
+              <li><a href="#" class="text-sm text-muted hover:text-ink">Status</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="mt-12 pt-8 border-t border-line flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+        <p class="text-sm text-muted">© 2026 [Plataforma]. Feito no Brasil.</p>
+        <ul class="flex gap-6">
+          <li><a href="#" class="text-sm text-muted hover:text-ink">Privacidade</a></li>
+          <li><a href="#" class="text-sm text-muted hover:text-ink">Termos</a></li>
+          <li><a href="#" class="text-sm text-muted hover:text-ink">Cookies</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

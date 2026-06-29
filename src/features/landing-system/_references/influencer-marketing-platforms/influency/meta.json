@@ -1,0 +1,22 @@
+{
+  "slug": "influency",
+  "url": "https://influency.me/",
+  "scrapedAt": "2026-05-18T20:21:26.566Z",
+  "title": "Marketing de Influência de Alta Performance é com a Influency.me",
+  "description": "Conecte sua marca aos influenciadores certos. Estratégia, dados e alta performance para campanhas de marketing de influência é aqui.",
+  "ogImage": "https://influency.me/wp-content/uploads/2024/07/social.png",
+  "headings": 16,
+  "ctas": 12,
+  "visual": {
+    "fontPrimary": "Open Sans",
+    "fonts": [
+      "Ubuntu",
+      "Open Sans",
+      "Verdana",
+      "Arial",
+      "Helvetica"
+    ],
+    "bg": "rgb(249, 249, 249)",
+    "fg": "rgb(99, 99, 99)"
+  }
+}

@@ -1,0 +1,7 @@
+# Disable JWT verification for this function.
+# Shopify sends compliance webhooks (customers/data_request, customers/redact,
+# shop/redact) with an X-Shopify-Hmac-Sha256 header — NOT a Supabase JWT.
+# Without this, the gateway returns 401 before the function runs and the
+# App Store "verifies webhooks with HMAC" check fails.
+[functions.shopify-webhooks]
+verify_jwt = false

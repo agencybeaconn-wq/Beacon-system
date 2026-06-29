@@ -1,0 +1,760 @@
+{% comment %}
+  Renders product variant-picker (Lever Template BR — Inline UX 2026-05-17)
+
+  Estrutura:
+  1. variant-selects (Tamanho + outras options) — fieldset original Personalizar fica HIDDEN via data-personalizar-original
+  2. Custom Personalizar com 3 botões: Não / Sim / Pelo Jogador
+  3. Campo de edição Nome+Número (aparece só com "Sim")
+  4. Lista de jogadores (aparece só com "Pelo Jogador")
+  5. Custom Adicionar Patch: Não / Sim
+  6. Carousel patches (aparece só com Patch=Sim)
+{% endcomment %}
+{%- if product.tags contains 'kit-casal' -%}
+  {% render 'kit-casal-variant-picker', product: product, block: block, product_form_id: product_form_id, section: section %}
+{%- else -%}
+{%- unless product.has_only_default_variant -%}
+  <variant-selects
+    id="variant-selects-{{ section.id }}"
+    data-section="{{ section.id }}"
+    {{ block.shopify_attributes }}
+  >
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        assign swatch_count = option.values | map: 'swatch' | compact | size
+        assign picker_type = block.settings.picker_type
+
+        if swatch_count > 0 and block.settings.swatch_shape != 'none'
+          if block.settings.picker_type == 'dropdown'
+            assign picker_type = 'swatch_dropdown'
+          else
+            assign picker_type = 'swatch'
+          endif
+        endif
+
+        assign opt_name_lower = option.name | downcase
+        assign is_personalizar_opt = false
+        if opt_name_lower contains 'personaliz'
+          assign is_personalizar_opt = true
+        endif
+      -%}
+      {%- if picker_type == 'swatch' -%}
+        <fieldset class="js product-form__input product-form__input--swatch"{% if is_personalizar_opt %} data-personalizar-original style="display:none !important;"{% endif %}>
+          <legend class="form__label">
+            {{ option.name }}:
+            <span data-selected-value>
+              {{- option.selected_value -}}
+            </span>
+          </legend>
+          {% render 'product-variant-options',
+            product: product,
+            option: option,
+            block: block,
+            picker_type: picker_type
+          %}
+        </fieldset>
+      {%- elsif picker_type == 'button' -%}
+        <fieldset class="js product-form__input product-form__input--pill"{% if is_personalizar_opt %} data-personalizar-original style="display:none !important;"{% endif %}>
+          <legend class="form__label" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <span>{{ option.name }}</span>
+            {%- if option.name == 'Tamanho' or option.name == 'Size' -%}
+               <button
+                id="abrirTabela-global"
+                type="button"
+                style="display: inline-flex; align-items: center; background: none; border: none; padding: 0; font-size: 1.5rem; font-weight: 400; gap: 0.6rem; cursor: pointer; color: #000000; text-decoration: underline; text-underline-offset: 0.3rem;"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1707 1707" width="20" height="20" style="flex-shrink: 0;">
+                  <path fill="currentColor" d="M80 857c0-25 20-46 45-46h1456c25 0 46 21 46 46v397c0 25-21 45-46 45h-85v-117c0-22-18-40-40-40s-40 18-40 40v117h-121v-211c0-23-18-40-40-40s-40 17-40 40v211h-121v-117c0-22-18-40-40-40s-40 18-40 40v117h-121v-211c0-23-18-40-40-40s-40 17-40 40v211h-121v-117c0-22-17-40-40-40-22 0-40 18-40 40v117h-120v-211c0-23-18-40-40-40-23 0-40 17-40 40v211h-121v-117c0-22-18-40-40-40s-40 18-40 40v117h-86c-25 0-45-21-45-45zm259-213c19 12 43 7 55-12 12-18 7-43-12-55l-74-48h1091l-75 48c-18 12-23 37-12 55 12 19 37 24 56 12l186-120c14-7 21-21 21-36-1-14-8-27-21-34l-186-120c-19-12-44-6-56 12-11 19-6 43 12 55l75 48h-1091l74-48c19-12 24-36 12-55-12-18-36-24-55-12l-186 120c-13 7-20 20-21 34 0 15 7 28 20 36zm1368 610v-397c0-69-57-126-126-126h-1456c-69 0-125 57-125 126v397c0 69 56 125 125 125h1456c69 0 126-57 126-125z"/>
+                </svg>
+                <span>Tabela de medidas</span>
+              </button>
+            {%- endif -%}
+          </legend>
+          {% render 'product-variant-options',
+            product: product,
+            option: option,
+            block: block,
+            picker_type: picker_type
+          %}
+        </fieldset>
+      {%- else -%}
+        <div class="product-form__input product-form__input--dropdown"{% if is_personalizar_opt %} data-personalizar-original style="display:none !important;"{% endif %}>
+          <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
+            {{ option.name }}
+          </label>
+          <div class="select">
+            {%- if picker_type == 'swatch_dropdown' -%}
+              <span data-selected-value class="dropdown-swatch">
+                {% render 'swatch', swatch: option.selected_value.swatch, shape: block.settings.swatch_shape %}
+              </span>
+            {%- endif -%}
+            <select id="Option-{{ section.id }}-{{ forloop.index0 }}" class="select__select" name="options[{{ option.name | escape }}]" form="{{ product_form_id }}">
+              {% render 'product-variant-options',
+                product: product,
+                option: option,
+                block: block,
+                picker_type: picker_type
+              %}
+            </select>
+            <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+
+    <script type="application/json" data-selected-variant>
+      {{ product.selected_or_first_available_variant | json }}
+    </script>
+  </variant-selects>
+
+  <!-- CUSTOM PERSONALIZAR: 3 botões mutuamente exclusivos (Não / Sim / Pelo Jogador) -->
+  <fieldset class="js product-form__input product-form__input--pill custom-personalizar-fieldset">
+    <legend class="form__label custom-fieldset-legend">
+      <span class="cfl-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      </span>
+      <span>Personalizar</span>
+      <span class="cfl-price">+R$ 30</span>
+    </legend>
+    <div class="custom-personalizar-buttons">
+      <button type="button" class="cpb-btn cpb-btn--nao active" data-pers-action="nao" data-section="{{ section.id }}">Não</button>
+      <button type="button" class="cpb-btn cpb-btn--sim" data-pers-action="sim" data-section="{{ section.id }}">Sim</button>
+      <button type="button" class="cpb-btn cpb-btn--jogador" data-pers-action="pelo-jogador" data-section="{{ section.id }}" aria-expanded="false">
+        <span class="cpb-jogador-content"><span class="cpb-label">Pelo Jogador</span></span>
+        <span class="cpb-arrow" aria-hidden="true">▼</span>
+      </button>
+    </div>
+  </fieldset>
+
+  <!-- Campo edição Nome+Número em grid 2-col (Nome largo + Número estreito) -->
+  <div id="aparecer-{{ section.id }}" class="aparecer-edicao removeContainerPersonalizar">
+    <div class="personalizar-form-grid">
+      <div class="pf-nome">
+        <label for="campo-personalizacao-{{ section.id }}" class="align-label-campo">
+          <span style="color: #000;">NOME:</span>
+          <span class="aviso">Até 20 caracteres</span>
+        </label>
+        <input type="text" id="campo-personalizacao-{{ section.id }}" class="campo-personalizacao" name="properties[Nome]" form="{{ product_form_id }}" placeholder="Ex: João" maxlength="20" inputmode="text" autocomplete="off" pattern="[A-Za-zÀ-ÿ ]*" />
+      </div>
+      <div class="pf-num">
+        <label for="personalizar-numero-{{ section.id }}" class="align-label-campo">
+          <span style="color: #000;">NÚM.:</span>
+        </label>
+        <input type="text" id="personalizar-numero-{{ section.id }}" class="personalizar-numero" name="properties[Número]" form="{{ product_form_id }}" placeholder="10" maxlength="3" inputmode="numeric" autocomplete="off" pattern="[0-9]*" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de jogadores (slide-down quando Pelo Jogador ativo) -->
+  <div id="player-roster-list-{{ section.id }}" class="player-roster-list"></div>
+
+  <!-- CUSTOM PATCH: 2 botões (Não / Sim) -->
+  <fieldset class="js product-form__input product-form__input--pill custom-patch-fieldset" id="patch-fieldset-{{ section.id }}">
+    <legend class="form__label custom-fieldset-legend">
+      <span class="cfl-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </span>
+      <span>Adicionar Patch</span>
+      <span class="cfl-price" id="patch-legend-price-{{ section.id }}"></span>
+    </legend>
+    <div class="custom-patch-buttons">
+      <button type="button" class="cpb-btn cpb-btn--nao active" data-patch-action="nao" data-section="{{ section.id }}">Não</button>
+      <button type="button" class="cpb-btn cpb-btn--sim" data-patch-action="sim" data-section="{{ section.id }}">Sim</button>
+    </div>
+  </fieldset>
+
+  <!-- Carousel patches (slide-down quando Patch=Sim) -->
+  <div id="patches-section-{{ section.id }}" class="patches-section">
+    <div class="patches-carousel">
+      <button type="button" class="patches-arrow patches-arrow-left" aria-label="Anterior">‹</button>
+      <div class="patches-track" id="patches-track-{{ section.id }}"></div>
+      <button type="button" class="patches-arrow patches-arrow-right" aria-label="Próximo">›</button>
+    </div>
+    <div id="patch-extra-indicator-{{ section.id }}" class="patch-extra-indicator" style="display:none;"></div>
+    <div id="patches-unavailable-{{ section.id }}" class="patches-unavailable" style="display:none;">Esta camisa não tem patches disponíveis no momento.</div>
+  </div>
+
+  <style>
+    /* === LEGENDA: ícone + título + preço === */
+    .custom-fieldset-legend {
+      display: flex !important; align-items: center; gap: 0.6rem;
+      font-weight: 700; font-size: 1.5rem; color: #151515;
+    }
+    .custom-fieldset-legend .cfl-icon { display: inline-flex; color: #151515; }
+    .custom-fieldset-legend .cfl-price {
+      margin-left: auto; font-size: 1.3rem; font-weight: 600; color: #16a34a;
+    }
+
+    /* === BOLINHAS DISABLED — fundo cinza pra deixar claro que não clica === */
+    .product-form__input--pill input[type="radio"].disabled + label {
+      background-color: #f4f4f4 !important;
+      border-color: #d0d0d0 !important;
+    }
+
+    /* === GRID Nome (largo) + Número (estreito) ao lado === */
+    .personalizar-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 9rem;
+      gap: 1rem;
+      align-items: end;
+    }
+    .pf-nome label, .pf-num label { display: flex; align-items: center; font-size: 1.1rem; text-transform: uppercase; font-weight: 600; margin-bottom: 0.4rem; }
+    .pf-num input { text-align: center; }
+
+    /* === CUSTOM PERSONALIZAR + PATCH BOTÕES — segue padrão das bolinhas de Tamanho === */
+    .custom-personalizar-fieldset,
+    .custom-patch-fieldset { border: none; padding: 0; margin: 1.2rem 0; }
+    .custom-personalizar-buttons,
+    .custom-patch-buttons { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.6rem; align-items: center; }
+    .cpb-btn {
+      flex: 0 0 auto; min-height: 5rem; min-width: 5rem; height: 5rem;
+      display: inline-flex; flex-direction: row; align-items: center; justify-content: center;
+      background: #fff; border: 1px solid #ddd; border-radius: 0.8rem;
+      font-size: 1.3rem; font-weight: 600; color: #252525;
+      padding: 0.6rem 1.2rem; cursor: pointer; transition: all 0.18s;
+      gap: 0.4rem; line-height: 1.1; text-align: center; box-sizing: border-box;
+    }
+    .cpb-btn:hover { border-color: #999; }
+    .cpb-btn.active { background: #151515; color: #fff; border-color: #151515; }
+    .cpb-btn .cpb-extra { font-size: 1rem; font-weight: 500; opacity: 0.85; }
+    .cpb-btn .cpb-label { line-height: 1.1; }
+    /* Pelo Jogador — seta no fim, +R$30 do LADO (não embaixo) */
+    .cpb-btn--jogador { gap: 0.6rem; padding-right: 1rem; flex: 0 0 auto; }
+    .cpb-btn--jogador .cpb-jogador-content { display: inline-flex; flex-direction: row; align-items: center; gap: 0.5rem; }
+    .cpb-btn--jogador .cpb-arrow { font-size: 1rem; transition: transform 0.2s; opacity: 0.7; }
+    .cpb-btn--jogador[aria-expanded="true"] .cpb-arrow { transform: rotate(180deg); }
+    /* Pelo Jogador SELECIONADO — verde */
+    .cpb-btn--jogador.has-selection {
+      background: #16a34a !important; color: #fff !important; border-color: #16a34a !important;
+    }
+
+    /* SLIDE-DOWN aparecer-edicao */
+    .aparecer-edicao {
+      max-height: 0; overflow: hidden; opacity: 0;
+      transition: max-height 250ms ease, opacity 200ms ease, margin-top 200ms ease;
+      margin-top: 0;
+    }
+    .aparecer-edicao:not(.removeContainerPersonalizar) {
+      max-height: 50rem; opacity: 1; margin-top: 0.8rem;
+    }
+    .removeContainerPersonalizar { /* placeholder */ }
+    .align-label-campo { display: flex; flex-direction: row; align-items: center; font-size: 12px; text-transform: uppercase; font-weight: 600; margin-bottom: 5px; }
+    .campo-personalizacao, .personalizar-numero {
+      border: 1px solid #ddd; background: white; border-radius: 40px;
+      width: 100%; height: 42px; padding: 10px 18px;
+      font-size: 14px; color: #252525; margin-bottom: 12px;
+    }
+    .campo-personalizacao::placeholder, .personalizar-numero::placeholder { color: #adb4c5; }
+    .aviso { color: #878787; font-weight: normal; margin-left: 6px; font-size: 10px; }
+
+    /* SLIDE-DOWN player-roster-list */
+    .player-roster-list {
+      max-height: 0; overflow: hidden; margin-top: 0;
+      transition: max-height 300ms ease, margin-top 200ms ease;
+      border-radius: 0.8rem;
+    }
+    .player-roster-list.is-open {
+      max-height: 32rem; overflow-y: auto; margin-top: 0.6rem;
+      border: 1px solid #ddd; background: #fafafa;
+    }
+    .player-roster-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 1.4rem; cursor: pointer; transition: background 0.15s;
+      border-bottom: 1px solid #eee;
+    }
+    .player-roster-item:last-child { border-bottom: none; }
+    .player-roster-item:hover { background: #fff; }
+    .player-roster-num {
+      flex: 0 0 auto; width: 3.6rem; height: 3.6rem;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #151515; color: #fff; border-radius: 50%;
+      font-weight: 700; font-size: 1.4rem;
+    }
+    .player-roster-name { font-weight: 600; font-size: 1.4rem; color: #252525; text-transform: uppercase; }
+
+    /* SLIDE-DOWN patches-section */
+    .patches-section {
+      max-height: 0; overflow: hidden; margin-top: 0; opacity: 0;
+      transition: max-height 300ms ease, opacity 200ms ease, margin-top 200ms ease;
+    }
+    .patches-section.is-open { max-height: 25rem; opacity: 1; margin-top: 0.8rem; }
+    .patches-carousel { position: relative; display: flex; align-items: center; gap: 0.4rem; }
+    .patches-arrow {
+      flex: 0 0 auto; width: 3.2rem; height: 3.2rem; border-radius: 50%;
+      border: 1px solid #ddd; background: #fff; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 2rem; color: #151515; transition: all 0.15s; z-index: 2;
+    }
+    .patches-arrow:hover { background: #f0f0f0; border-color: #999; }
+    .patches-track {
+      flex: 1 1 auto; display: flex; gap: 0.8rem; overflow-x: auto;
+      scroll-behavior: smooth; padding: 0.4rem 0.4rem;
+      scrollbar-width: none;
+    }
+    .patches-track::-webkit-scrollbar { display: none; }
+    /* Cards de patches — estilo Voltz: branco, sombra suave, selected escuro com checkmark */
+    .patch-card {
+      flex: 0 0 auto; width: 11.5rem; position: relative;
+      background: #fff; border: 2px solid transparent; border-radius: 1.2rem;
+      padding: 1rem 0.8rem 0.8rem; cursor: pointer; transition: all 0.18s;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
+    }
+    .patch-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+    .patch-card.selected {
+      border-color: #151515;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15), 0 0 0 2px #151515 inset;
+    }
+    .patch-card.selected::after {
+      content: '✓'; position: absolute; top: 0.6rem; right: 0.6rem;
+      width: 2rem; height: 2rem; border-radius: 50%;
+      background: #151515; color: #fff; font-size: 1.2rem; font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center;
+      z-index: 3;
+    }
+    .patch-card img { width: 8rem; height: 8rem; object-fit: contain; }
+    .patch-card-title { font-size: 1.1rem; font-weight: 600; text-align: center; color: #252525; line-height: 1.25; }
+    .patch-card-price { font-size: 1.2rem; color: #16a34a; font-weight: 700; }
+    .patch-extra-indicator {
+      margin-top: 0.8rem; font-size: 1.3rem; font-weight: 600; color: #16a34a;
+    }
+    .patches-unavailable {
+      padding: 1.2rem; background: #f8f8f8; border: 1px solid #e0e0e0;
+      border-radius: 0.8rem; color: #666; font-size: 1.3rem; text-align: center;
+    }
+  </style>
+
+  <script>
+    (function() {
+      'use strict';
+      const SECTION_ID = {{ section.id | json }};
+      const PRODUCT_TITLE = {{ product.title | downcase | json }};
+
+      // === HELPERS ===
+      function isPersonalizarLegend(el) {
+        if (!el) return false;
+        const txt = el.textContent.toLowerCase();
+        return /\b(personalizar|customize)\b/.test(txt) && !txt.includes('personalização');
+      }
+      function findPersonalizarFieldsets() {
+        return Array.from(document.querySelectorAll('[data-personalizar-original]'));
+      }
+      // Triggera o radio/select original do Shopify pra Dawn atualizar variant_id
+      function setOriginalVariant(value) {
+        // value = 'nao' / 'sim'
+        findPersonalizarFieldsets().forEach(fs => {
+          fs.querySelectorAll('input[type="radio"]').forEach(r => {
+            const v = (r.value || '').toLowerCase();
+            const matches = (value === 'nao' && (v.startsWith('não') || v.startsWith('nao') || v === 'no'))
+              || (value === 'sim' && (v.includes('personalizar') || v === 'sim' || v.includes('customize')));
+            if (matches && !r.checked) {
+              r.checked = true;
+              r.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          });
+          const sel = fs.querySelector('select');
+          if (sel) {
+            for (const opt of sel.options) {
+              const v = (opt.value || '').toLowerCase();
+              const matches = (value === 'nao' && (v.startsWith('não') || v.startsWith('nao') || v === 'no'))
+                || (value === 'sim' && (v.includes('personalizar') || v === 'sim' || v.includes('customize')));
+              if (matches && sel.value !== opt.value) {
+                sel.value = opt.value;
+                sel.dispatchEvent(new Event('change', { bubbles: true }));
+                break;
+              }
+            }
+          }
+        });
+      }
+
+      // === ROSTER MATCHING ===
+      function getMatchedRoster() {
+        if (!Array.isArray(window.customPlayerRules)) return null;
+        for (const rule of window.customPlayerRules) {
+          const kws = (rule.keywords || '').split(',').map(s => s.trim()).filter(Boolean);
+          const exkws = (rule.excludeKeywords || '').split(',').map(s => s.trim()).filter(Boolean);
+          if (!kws.length) continue;
+          const matched = kws.some(k => PRODUCT_TITLE.includes(k));
+          const excluded = exkws.some(k => PRODUCT_TITLE.includes(k));
+          if (matched && !excluded) {
+            // Formato novo: array `players: [{name, num}, ...]`
+            if (Array.isArray(rule.players) && rule.players.length) {
+              return rule.players.filter(p => p && p.name);
+            }
+            // Fallback legacy: string `playerData` com newlines
+            const lines = String(rule.playerData || '').split(/\r\n|\r|\n|\\n/).map(l => l.trim()).filter(Boolean);
+            const players = lines.map(l => {
+              const [name, num] = l.split('|').map(s => (s||'').trim());
+              return name ? { name, num: num || '' } : null;
+            }).filter(Boolean);
+            if (players.length) return players;
+          }
+        }
+        return null;
+      }
+      function renderRoster() {
+        const list = document.getElementById('player-roster-list-' + SECTION_ID);
+        if (!list) return;
+        const players = getMatchedRoster();
+        if (!players) {
+          list.innerHTML = '<div style="padding:1.4rem;text-align:center;color:#666;font-size:1.3rem;">Ainda não tem nenhum jogador disponível para essa camisa.</div>';
+          return;
+        }
+        list.innerHTML = players.map(p =>
+          `<div class="player-roster-item" data-name="${p.name.replace(/"/g,'&quot;')}" data-num="${(p.num||'').replace(/"/g,'&quot;')}">
+            <span class="player-roster-num">${p.num||'-'}</span>
+            <span class="player-roster-name">${p.name}</span>
+          </div>`).join('');
+      }
+
+      // === PATCHES MATCHING ===
+      function getMatchedPatchRule() {
+        if (!Array.isArray(window.customPatchRules)) return null;
+        for (const r of window.customPatchRules) {
+          const kws = (r.keywords || []).map(s => String(s).toLowerCase().trim()).filter(Boolean);
+          const exs = (r.exclude || r.excludeKeywords || []).map(s => String(s).toLowerCase().trim()).filter(Boolean);
+          if (!kws.length) continue;
+          const matched = kws.some(k => PRODUCT_TITLE.includes(k));
+          const excluded = exs.some(k => PRODUCT_TITLE.includes(k));
+          if (matched && !excluded) return r;
+        }
+        return null;
+      }
+      async function renderPatches() {
+        const track = document.getElementById('patches-track-' + SECTION_ID);
+        const unav = document.getElementById('patches-unavailable-' + SECTION_ID);
+        if (!track) return;
+        const rule = getMatchedPatchRule();
+        const patchHandle = rule && (rule.patchHandle || rule.patch_product);
+        if (!rule || !patchHandle) {
+          track.innerHTML = '';
+          if (unav) unav.style.display = 'block';
+          return;
+        }
+        track.innerHTML = '<div style="padding:1rem;color:#666;font-size:1.2rem;">Carregando patches…</div>';
+        try {
+          const handles = Array.isArray(patchHandle) ? patchHandle : [patchHandle];
+          const cards = [];
+          for (const h of handles) {
+            try {
+              const r = await fetch('/products/' + h + '.json');
+              if (!r.ok) continue;
+              const data = await r.json();
+              const p = data.product;
+              const img = (p.images && p.images[0]) || null;
+              const imgUrl = img ? (img.src || img.original_src || img.url) : '';
+              const price = p.variants && p.variants[0] ? p.variants[0].price : '';
+              const priceFmt = price ? ('R$ ' + (parseFloat(price)).toFixed(2).replace('.', ',')) : '';
+              cards.push({ handle: p.handle, title: p.title, img: imgUrl, price: priceFmt, variantId: p.variants[0]?.id });
+            } catch (_) {}
+          }
+          if (!cards.length) {
+            track.innerHTML = '';
+            if (unav) unav.style.display = 'block';
+            return;
+          }
+          if (unav) unav.style.display = 'none';
+          track.innerHTML = cards.map(c =>
+            `<div class="patch-card" data-handle="${c.handle}" data-variant="${c.variantId||''}" data-title="${c.title.replace(/"/g,'&quot;')}" data-img="${c.img||''}" data-price="${c.price||''}">
+              ${c.img?`<img src="${c.img}" alt="${c.title}">`:''}
+              <div class="patch-card-title">${c.title.replace(/^Patch\\s*/i,'')}</div>
+            </div>`).join('');
+          // Popula preço no título "Adicionar Patch +R$ X"
+          const legendPrice = document.getElementById('patch-legend-price-' + SECTION_ID);
+          if (legendPrice && cards.length) {
+            const priceStrs = cards.map(c => c.price).filter(Boolean);
+            if (priceStrs.length) legendPrice.textContent = '+' + priceStrs[0];
+          }
+        } catch (e) {
+          if (unav) unav.style.display = 'block';
+        }
+      }
+
+      // === ESTADOS ===
+      let personalizarState = 'nao'; // 'nao' / 'sim' / 'pelo-jogador'
+      let patchState = 'nao';
+
+      function setPersonalizarState(state) {
+        personalizarState = state;
+        // Atualizar botões ativos
+        document.querySelectorAll('.cpb-btn[data-pers-action][data-section="'+SECTION_ID+'"]').forEach(b => {
+          b.classList.toggle('active', b.dataset.persAction === state);
+        });
+        const aparecer = document.getElementById('aparecer-' + SECTION_ID);
+        const rosterList = document.getElementById('player-roster-list-' + SECTION_ID);
+        const jogadorBtn = document.querySelector('.cpb-btn--jogador[data-section="'+SECTION_ID+'"]');
+
+        if (state === 'nao') {
+          if (aparecer) aparecer.classList.add('removeContainerPersonalizar');
+          if (rosterList) rosterList.classList.remove('is-open');
+          if (jogadorBtn) { jogadorBtn.setAttribute('aria-expanded', 'false'); jogadorBtn.classList.remove('has-selection'); resetJogadorLabel(); }
+          // Limpa inputs e seleção
+          if (aparecer) {
+            const n = aparecer.querySelector('.campo-personalizacao'); if (n) n.value = '';
+            const num = aparecer.querySelector('.personalizar-numero'); if (num) num.value = '';
+          }
+          document.querySelectorAll('.player-roster-item').forEach(i => i.classList.remove('selected'));
+          setOriginalVariant('nao');
+        } else if (state === 'sim') {
+          if (aparecer) aparecer.classList.remove('removeContainerPersonalizar');
+          if (rosterList) rosterList.classList.remove('is-open');
+          if (jogadorBtn) { jogadorBtn.setAttribute('aria-expanded', 'false'); jogadorBtn.classList.remove('has-selection'); resetJogadorLabel(); }
+          setOriginalVariant('sim');
+        } else if (state === 'pelo-jogador') {
+          if (aparecer) aparecer.classList.add('removeContainerPersonalizar');
+          if (rosterList) rosterList.classList.add('is-open');
+          if (jogadorBtn) jogadorBtn.setAttribute('aria-expanded', 'true');
+          setOriginalVariant('sim');
+        }
+      }
+
+      function resetJogadorLabel() {
+        const jogadorBtn = document.querySelector('.cpb-btn--jogador[data-section="'+SECTION_ID+'"]');
+        if (!jogadorBtn) return;
+        const content = jogadorBtn.querySelector('.cpb-jogador-content');
+        if (content) content.innerHTML = '<span class="cpb-label">Pelo Jogador</span><span class="cpb-extra">+R$ 30</span>';
+      }
+
+      function setPatchState(state) {
+        patchState = state;
+        document.querySelectorAll('.cpb-btn[data-patch-action][data-section="'+SECTION_ID+'"]').forEach(b => {
+          b.classList.toggle('active', b.dataset.patchAction === state);
+        });
+        const sec = document.getElementById('patches-section-' + SECTION_ID);
+        if (sec) sec.classList.toggle('is-open', state === 'sim');
+        if (state === 'nao') {
+          // Limpa seleção de patch
+          document.querySelectorAll('.patch-card').forEach(c => c.classList.remove('selected'));
+          window['_selectedPatch_' + SECTION_ID] = null;
+          updatePriceWithPatch();
+        }
+      }
+
+      // === PREÇO COM PATCH (mutação visual) + indicador "+R$X (patch)" ===
+      function updatePriceWithPatch() {
+        const selected = window['_selectedPatch_' + SECTION_ID];
+        const priceEl = document.querySelector('#price-' + SECTION_ID + ' .price-item--sale, #price-' + SECTION_ID + ' .price-item--last, #price-' + SECTION_ID + ' .price-item--regular');
+        const indicator = document.getElementById('patch-extra-indicator-' + SECTION_ID);
+        if (!priceEl) return;
+        if (!priceEl.dataset.basePrice) priceEl.dataset.basePrice = priceEl.textContent.trim();
+        const baseStr = priceEl.dataset.basePrice;
+        if (!selected) {
+          priceEl.textContent = baseStr;
+          if (indicator) { indicator.style.display = 'none'; indicator.textContent = ''; }
+          recalcPixBadge(parsePriceBR(baseStr));
+          return;
+        }
+        const baseCents = parsePriceBR(baseStr);
+        const patchCents = parsePriceBR(selected.priceStr || '');
+        if (baseCents == null || patchCents == null) return;
+        const totalCents = baseCents + patchCents;
+        priceEl.textContent = formatBRL(totalCents);
+        if (indicator) {
+          indicator.style.display = 'block';
+          indicator.textContent = '+ ' + formatBRL(patchCents) + ' (patch)';
+        }
+        recalcPixBadge(totalCents);
+      }
+      function parsePriceBR(str) {
+        const m = String(str).match(/R\$\s*([\d.]+)[,.](\d{2})/);
+        if (m) return parseInt(m[1].replace(/\./g, '')) * 100 + parseInt(m[2]);
+        const m2 = String(str).match(/(\d+)[,.](\d{2})/);
+        if (m2) return parseInt(m2[1]) * 100 + parseInt(m2[2]);
+        return null;
+      }
+      function formatBRL(cents) {
+        return 'R$ ' + (cents / 100).toFixed(2).replace('.', ',');
+      }
+      function recalcPixBadge(totalCents) {
+        if (totalCents == null) return;
+        document.querySelectorAll('[id^="PixBadge-"]').forEach(badge => {
+          const discount = parseFloat(badge.dataset.pixDiscount) / 100;
+          const savings = Math.round(totalCents * discount);
+          const pixPrice = totalCents - savings;
+          const pEl = badge.querySelector('.pix-badge__price');
+          const sEl = badge.querySelector('.pix-badge__savings-amount');
+          if (pEl) pEl.textContent = formatBRL(pixPrice);
+          if (sEl) sEl.textContent = formatBRL(savings);
+        });
+      }
+
+      // === EVENT DELEGATION ===
+      document.addEventListener('click', function(e) {
+        // Botões Personalizar (3 opções)
+        const persBtn = e.target.closest('.cpb-btn[data-pers-action][data-section="'+SECTION_ID+'"]');
+        if (persBtn) {
+          e.preventDefault();
+          const action = persBtn.dataset.persAction;
+          // Pelo Jogador: se JÁ ativo, toggla a lista (abre/fecha) sem mudar estado
+          if (action === 'pelo-jogador' && personalizarState === 'pelo-jogador') {
+            const rosterList = document.getElementById('player-roster-list-' + SECTION_ID);
+            const isOpen = rosterList && rosterList.classList.contains('is-open');
+            if (rosterList) rosterList.classList.toggle('is-open', !isOpen);
+            persBtn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+            return;
+          }
+          setPersonalizarState(action);
+          return;
+        }
+        // Botões Patch (Não/Sim)
+        const patchBtn = e.target.closest('.cpb-btn[data-patch-action][data-section="'+SECTION_ID+'"]');
+        if (patchBtn) {
+          e.preventDefault();
+          setPatchState(patchBtn.dataset.patchAction);
+          return;
+        }
+        // Click num jogador
+        const playerItem = e.target.closest('.player-roster-item');
+        if (playerItem) {
+          const name = (playerItem.dataset.name || '').toUpperCase();
+          const num = playerItem.dataset.num || '';
+          // Preenche inputs HIDDEN pra properties[Nome]/[Número] no submit
+          const aparecer = document.getElementById('aparecer-' + SECTION_ID);
+          if (aparecer) {
+            const n = aparecer.querySelector('.campo-personalizacao'); if (n) n.value = name;
+            const nu = aparecer.querySelector('.personalizar-numero'); if (nu) nu.value = num;
+          }
+          // Marca selected na lista
+          document.querySelectorAll('.player-roster-item').forEach(i => i.classList.remove('selected'));
+          playerItem.classList.add('selected');
+          // Atualiza label do botão "Pelo Jogador" pra mostrar jogador + verde
+          const jogadorBtn = document.querySelector('.cpb-btn--jogador[data-section="'+SECTION_ID+'"]');
+          if (jogadorBtn) {
+            jogadorBtn.classList.add('has-selection');
+            const content = jogadorBtn.querySelector('.cpb-jogador-content');
+            if (content) content.innerHTML = '<span class="cpb-label">' + name + ' (' + num + ')</span><span class="cpb-extra">selecionado ✓</span>';
+          }
+          // Colapsa lista após delay (UX feedback)
+          setTimeout(function() {
+            const rosterList = document.getElementById('player-roster-list-' + SECTION_ID);
+            if (jogadorBtn) jogadorBtn.setAttribute('aria-expanded', 'false');
+            if (rosterList) rosterList.classList.remove('is-open');
+          }, 250);
+          return;
+        }
+        // Click patch card
+        const patchCard = e.target.closest('.patch-card');
+        if (patchCard) {
+          const track = patchCard.parentElement;
+          const wasSelected = patchCard.classList.contains('selected');
+          track.querySelectorAll('.patch-card').forEach(c => c.classList.remove('selected'));
+          if (!wasSelected) {
+            patchCard.classList.add('selected');
+            window['_selectedPatch_' + SECTION_ID] = {
+              variantId: patchCard.dataset.variant,
+              title: patchCard.dataset.title,
+              img: patchCard.dataset.img,
+              priceStr: patchCard.dataset.price,
+            };
+          } else {
+            window['_selectedPatch_' + SECTION_ID] = null;
+          }
+          updatePriceWithPatch();
+          return;
+        }
+        // Setas patches
+        const arr = e.target.closest('.patches-arrow');
+        if (arr) {
+          const track = arr.parentElement.querySelector('.patches-track');
+          if (track) {
+            const dir = arr.classList.contains('patches-arrow-right') ? 1 : -1;
+            track.scrollBy({ left: dir * 200, behavior: 'smooth' });
+          }
+          return;
+        }
+      });
+
+      // === INPUT MASKS ===
+      document.addEventListener('input', function(e) {
+        const t = e.target;
+        if (!t || !t.classList) return;
+        if (t.classList.contains('campo-personalizacao')) {
+          const cleaned = t.value.replace(/[^A-Za-zÀ-ÿ ]/g, '').toUpperCase();
+          if (cleaned !== t.value) t.value = cleaned;
+        } else if (t.classList.contains('personalizar-numero')) {
+          const cleaned = t.value.replace(/\D/g, '');
+          if (cleaned !== t.value) t.value = cleaned;
+        }
+      });
+
+      // === VALIDAÇÃO SUBMIT ===
+      document.addEventListener('submit', function(e) {
+        const form = e.target;
+        if (!form || !form.matches || !form.matches('form[action*="/cart/add"]')) return;
+        // Só valida se Sim ou Pelo Jogador ativo
+        if (personalizarState === 'nao') return;
+        const aparecer = document.getElementById('aparecer-' + SECTION_ID);
+        if (!aparecer) return;
+        const name = aparecer.querySelector('.campo-personalizacao');
+        const num = aparecer.querySelector('.personalizar-numero');
+        if ((!name || !name.value.trim()) || (!num || !num.value.trim())) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          let pill = document.getElementById('persona-validate-msg');
+          if (!pill) {
+            pill = document.createElement('div');
+            pill.id = 'persona-validate-msg';
+            pill.style.cssText = 'background:#fee;color:#c53030;border:1px solid #f56565;padding:8px 14px;border-radius:8px;margin:8px 0;font-size:13px;font-weight:600;';
+            const btnArea = form.querySelector('.product-form__buttons') || form.querySelector('button[type="submit"]')?.parentElement;
+            if (btnArea) btnArea.parentElement.insertBefore(pill, btnArea);
+          }
+          pill.textContent = personalizarState === 'pelo-jogador'
+            ? 'Selecione um jogador da lista.'
+            : 'Preencha Nome e Número pra personalizar a camisa.';
+          setTimeout(() => pill.remove(), 5000);
+          if (personalizarState === 'sim') (name && !name.value.trim() ? name : num)?.focus();
+        }
+      }, true);
+
+      // === ESCUTA mudança no fieldset Personalizar original (sync de fora) ===
+      document.addEventListener('change', function(e) {
+        const t = e.target;
+        if (!t || !t.matches) return;
+        // Variant change reseta cache de preço base
+        if (t.matches('input[type="radio"]') || t.matches('select')) {
+          setTimeout(function() {
+            const priceEl = document.querySelector('#price-' + SECTION_ID + ' .price-item--sale, #price-' + SECTION_ID + ' .price-item--last, #price-' + SECTION_ID + ' .price-item--regular');
+            if (priceEl) delete priceEl.dataset.basePrice;
+            updatePriceWithPatch();
+          }, 200);
+        }
+      });
+
+      // Esconde setas de navegação quando há poucos patches (cabe sem scroll)
+      function adjustPatchArrows() {
+        const sec = document.getElementById('patches-section-' + SECTION_ID);
+        const track = document.getElementById('patches-track-' + SECTION_ID);
+        if (!sec || !track) return;
+        const leftArr = sec.querySelector('.patches-arrow-left');
+        const rightArr = sec.querySelector('.patches-arrow-right');
+        // Margem de 10px pra evitar oscilação
+        const hasOverflow = track.scrollWidth > (track.clientWidth + 10);
+        if (leftArr) leftArr.style.display = hasOverflow ? '' : 'none';
+        if (rightArr) rightArr.style.display = hasOverflow ? '' : 'none';
+      }
+      window.addEventListener('resize', adjustPatchArrows);
+
+      async function initPatchesAndArrows() {
+        await renderPatches();
+        setTimeout(adjustPatchArrows, 100);
+      }
+
+      function init() {
+        renderRoster();
+        initPatchesAndArrows();
+        // Estado inicial: detecta variant cadastrada (default Não)
+        setPersonalizarState('nao');
+        setPatchState('nao');
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+      document.addEventListener('product-info:loaded', function() {
+        setTimeout(init, 100);
+      });
+    })();
+  </script>
+{%- endunless -%}
+{%- endif -%}

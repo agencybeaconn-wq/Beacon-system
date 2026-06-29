@@ -1,0 +1,34 @@
+{
+  "name": "@lever/shopify-mcp",
+  "version": "0.2.0",
+  "description": "Multi-shop Shopify Admin MCP server — agency-grade GraphQL proxy. stdio for local dev, HTTP on Vercel for the team.",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "lever-shopify-mcp": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "vercel-build": "tsc"
+  },
+  "dependencies": {
+    "@shopify/admin-api-client": "^1.0.5",
+    "@supabase/supabase-js": "^2.106.0",
+    "jose": "^6.2.3",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@vercel/node": "^5.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

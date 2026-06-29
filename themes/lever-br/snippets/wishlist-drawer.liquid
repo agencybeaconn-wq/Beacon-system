@@ -1,0 +1,153 @@
+{% comment %}
+  Renders wishlist drawer
+{% endcomment %}
+
+{{ 'component-wishlist-drawer.css' | asset_url | stylesheet_tag }}
+
+{%- capture icon_remove -%}
+  {{- 'icon-remove.svg' | inline_asset_content -}}
+{%- endcapture -%}
+
+<div id="WishlistDrawer-Overlay" class="wishlist-drawer__overlay"></div>
+
+<div class="wishlist-drawer" id="WishlistDrawer" role="dialog" aria-modal="true" aria-label="Favoritos" tabindex="-1">
+  <div class="drawer__inner">
+    <div class="drawer__header">
+      <h2 class="drawer__heading">{{ 'Favoritos' }}</h2>
+      <button class="drawer__close" type="button" onclick="window.WishlistDrawer.close()" aria-label="{{ 'accessibility.close' | t }}">
+        <span class="svg-wrapper">
+          {{- 'icon-close.svg' | inline_asset_content -}}
+        </span>
+      </button>
+    </div>
+
+    <div class="drawer__contents">
+      <div id="WishlistDrawer-Items" class="wishlist-items js-contents">
+        <!-- Items will be rendered here via JS -->
+      </div>
+      <div id="WishlistDrawer-Empty" class="wishlist-empty" style="display: none;">
+        <h2 class="cart__empty-text">Sua lista está vazia</h2>
+        <a href="{{ routes.all_products_collection_url }}" class="button primary-button">
+          {{ 'Continuar Comprando' }}
+        </a>
+        
+        <div class="cart-drawer__collection">
+          <a href="/collections/mais-vendidos" class="cart-drawer__collection-item">
+            <div class="cart-drawer__collection-image">
+               <img src="https://cdn.shopify.com/s/files/1/0641/2510/8299/files/Design_sem_nome_43.png?v=1737482596" alt="Mais Vendidos" loading="lazy" width="100" height="100">
+            </div>
+            <span class="cart-drawer__collection-title">Mais Vendidos <span class="arrow">→</span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer__footer" id="WishlistDrawer-Footer">
+      <button type="button" class="wishlist__clear-button" onclick="window.Wishlist.clear()">
+        Limpar Lista
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.WishlistDrawer = {
+    open: function() {
+      const drawer = document.getElementById('WishlistDrawer');
+      const overlay = document.getElementById('WishlistDrawer-Overlay');
+      
+      if(drawer) drawer.classList.add('active');
+      if(overlay) overlay.classList.add('active');
+      document.body.classList.add('overflow-hidden');
+      
+      if(window.Wishlist && window.Wishlist.updateUI) {
+        window.Wishlist.updateUI();
+      }
+    },
+    close: function() {
+      const drawer = document.getElementById('WishlistDrawer');
+      const overlay = document.getElementById('WishlistDrawer-Overlay');
+      
+      if(drawer) drawer.classList.remove('active');
+      if(overlay) overlay.classList.remove('active');
+      document.body.classList.remove('overflow-hidden');
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const wishlistIcon = document.getElementById('wishlist-icon-bubble');
+    if (wishlistIcon) {
+      wishlistIcon.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.WishlistDrawer.open();
+      });
+    }
+
+    const overlay = document.getElementById('WishlistDrawer-Overlay');
+    if (overlay) {
+      overlay.addEventListener('click', () => window.WishlistDrawer.close());
+    }
+    
+    document.addEventListener('click', (e) => {
+      if (e.target.matches('.wishlist-drawer')) {
+        window.WishlistDrawer.close();
+      }
+    });
+  });
+
+  window.renderWishlistDrawerItems = function(items) {
+    const container = document.getElementById('WishlistDrawer-Items');
+    const emptyMsg = document.getElementById('WishlistDrawer-Empty');
+    const footer = document.getElementById('WishlistDrawer-Footer');
+    
+    if (!container || !emptyMsg) return;
+
+    if (items.length === 0) {
+      container.innerHTML = '';
+      emptyMsg.style.display = 'flex';
+      if(footer) footer.style.display = 'none';
+      return;
+    }
+
+    emptyMsg.style.display = 'none';
+    if(footer) footer.style.display = 'block';
+    
+    let html = '';
+    
+    items.forEach(item => {
+      let price = item.price;
+      const parsedPrice = parseFloat(price);
+      if(!isNaN(parsedPrice)) {
+        price = (parsedPrice / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }).replace(/\s/g, '');
+      }
+
+      html += `
+        <div class="wishlist-item" data-id="${item.id}">
+          <div class="wishlist-item__media">
+            <a href="${item.handle ? `/products/${item.handle}` : '#'}" tabindex="-1">
+              <img src="${item.image}" alt="${item.title}" loading="lazy" width="60" height="60">
+            </a>
+          </div>
+          <div class="wishlist-item__details">
+            <a href="${item.handle ? `/products/${item.handle}` : '#'}" class="wishlist-item__name">${item.title}</a>
+            <div class="wishlist-item__price-row">
+              <div class="wishlist-item__price">${price}</div>
+              <button type="button" class="wishlist-item__remove" onclick="window.Wishlist.remove('${item.id}')" aria-label="Remover item">
+                <span class="svg-wrapper">
+                  {{ icon_remove | strip_newlines | replace: "'", "\\'" }}
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    
+    container.innerHTML = html;
+  };
+
+  window.Wishlist.clear = function() {
+      localStorage.removeItem('shopify-wishlist');
+      window.Wishlist.updateUI();
+  };
+</script>

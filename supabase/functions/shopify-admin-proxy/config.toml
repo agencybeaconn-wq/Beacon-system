@@ -1,0 +1,3 @@
+# Disable JWT verification - auth is handled by Shopify access tokens stored in DB
+[functions.shopify-admin-proxy]
+verify_jwt = false

@@ -1,0 +1,252 @@
+{{ 'section-video-stories.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'video-stories.js' | asset_url }}" defer="defer"></script>
+
+<div class="video-stories page-width">
+  <div class="title-wrapper title-wrapper--no-top-margin{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" style="margin-bottom: 0.5rem; gap: 0.5rem;">
+    {%- if section.settings.title != blank -%}
+      <h2 class="title related-products__heading inline-richtext {{ section.settings.heading_size }}">
+        {{ section.settings.title }}
+      </h2>
+    {%- endif -%}
+    {%- if section.settings.description != blank -%}
+      <div class="collection__description {{ section.settings.description_style }} rte" style="margin-top: 0; font-size: 1.6rem;">
+        {{ section.settings.description -}}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="video-stories__container" style="--columns-desktop: {{ section.settings.columns_desktop }};">
+    {%- for block in section.blocks -%}
+      <div class="video-stories__item" {{ block.shopify_attributes }}>
+        <button
+          type="button"
+          class="video-stories__button"
+          data-video-url="{{ block.settings.video_url }}"
+          data-custom-video-url="{{ block.settings.custom_video_url }}"
+          data-video-type="{% if block.settings.video != blank %}shopify{% elsif block.settings.custom_video_url != blank %}custom{% else %}external{% endif %}"
+          {% if block.settings.video != blank %}
+            data-shopify-video-src="{{ block.settings.video.sources[1].url }}"
+            data-shopify-video-type="{{ block.settings.video.sources[1].mime_type }}"
+          {% endif %}
+          aria-label="{{ block.settings.title | default: 'Play video' }}"
+        >
+          <div class="video-stories__thumbnail">
+            {%- if block.settings.image != blank -%}
+              {{
+                block.settings.image
+                | image_url: width: 400
+                | image_tag: loading: 'lazy', class: 'video-stories__image'
+              }}
+            {%- elsif block.settings.video != blank -%}
+              {{
+                block.settings.video.preview_image
+                | image_url: width: 400
+                | image_tag: loading: 'lazy', class: 'video-stories__image'
+              }}
+            {%- else -%}
+              {{ 'collection-1' | placeholder_svg_tag: 'video-stories__image placeholder-svg' }}
+            {%- endif -%}
+            <div class="video-stories__overlay">
+              <span class="video-stories__icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </button>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+<div id="VideoStoriesModal" class="video-stories-modal" aria-hidden="true">
+    <button type="button" class="video-stories-modal__close" aria-label="Close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <button type="button" class="video-stories-modal__mute" aria-label="Mute/Unmute">
+      <svg class="icon-unmuted" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <line x1="19" y1="5" x2="19" y2="19"></line>
+      </svg>
+      <svg class="icon-muted hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <line x1="23" y1="9" x2="17" y2="15"></line>
+        <line x1="17" y1="9" x2="23" y2="15"></line>
+      </svg>
+    </button>
+  <div class="video-stories-modal__content">
+    <div class="video-stories-modal__video-container">
+      <!-- Video will be injected here -->
+    </div>
+  </div>
+  <div class="video-stories-modal__backdrop"></div>
+</div>
+
+{% schema %}
+{
+  "name": "Video Stories",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Stories",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Heading 2"
+        },
+        {
+          "value": "h1",
+          "label": "Heading 1"
+        },
+        {
+          "value": "h0",
+          "label": "Heading 0"
+        }
+      ],
+      "default": "h1",
+      "label": "Heading Size"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Confira nossos stories exclusivos.</p>"
+    },
+    {
+      "type": "select",
+      "id": "description_style",
+      "label": "Description Style",
+      "options": [
+        {
+          "value": "body",
+          "label": "Body"
+        },
+        {
+          "value": "subtitle",
+          "label": "Subtitle"
+        },
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        }
+      ],
+      "default": "body"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 3,
+      "max": 6,
+      "step": 1,
+      "default": 5,
+      "label": "Colunas no Desktop"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "story",
+      "name": "Story",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Cover Image"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Shopify Video (Upload)"
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "accept": ["youtube", "vimeo"],
+          "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+          "label": "YouTube/Vimeo URL"
+        },
+        {
+          "type": "text",
+          "id": "custom_video_url",
+          "label": "Link de Vídeo MP4 (Ex: hospedagem externa)",
+          "info": "Cole um link direto para um arquivo .mp4 para reproduzir como Stories."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Caption",
+          "default": "Story"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video Stories",
+      "blocks": [
+        {
+          "type": "story"
+        },
+        {
+          "type": "story"
+        },
+        {
+          "type": "story"
+        },
+        {
+          "type": "story"
+        },
+        {
+          "type": "story"
+        },
+        {
+          "type": "story"
+        },
+        {
+          "type": "story"
+        },
+        {
+          "type": "story"
+        },
+        {
+          "type": "story"
+        },
+        {
+          "type": "story"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

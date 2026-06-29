@@ -1,0 +1,204 @@
+# BLOCK: Cart Item Layout CSS
+
+## META
+- **Origem:** TG Jerseys / LEVER EVER TG JERSEYS (theme 157588324582)
+- **Data:** 2026-04-08
+- **Store:** store-tg-jersey.myshopify.com
+
+## O QUE FAZ
+Estiliza visualmente o carrinho lateral (cart drawer): botoes de quantidade (+/-) com bordas arredondadas, botao de checkout em verde vibrante com texto preto em caixa alta, badges "FREE" para itens gratuitos com fundo verde claro, propriedades do item empilhadas verticalmente (tamanho, nome, numero cada um em sua linha), separador visual entre a linha de quantidade e as demais propriedades, e thumbnails de patches com spacing limpo.
+
+## ONDE INSERIR
+- **Arquivo alvo:** `snippets/cart-drawer.liquid`
+- **Posicao:** Dentro da tag `<style>` existente no topo do arquivo
+- **Como encontrar:** Procurar por `<style>` no inicio do arquivo. Se nao existir, criar uma tag `<style>` logo apos o primeiro comentario ou `{%- comment -%}` do arquivo.
+
+## DEPENDE DE
+Nenhum
+
+## CONTEXTO PARA O CLAUDE QUE VAI RECEBER
+O tema de origem tem um cart drawer completamente customizado. O CSS abaixo substitui/complementa os estilos padrao do Dawn para o carrinho.
+
+**Classes criticas que este CSS define:**
+- `.cart-item__quantity-wrapper` — container flex inline dos botoes +/- (usado no Block 6)
+- `.cart-qty-btn` — botoes +/- individuais (usado no Block 2 e 6)
+- `.cart-qty-input` — input numerico de quantidade entre os botoes
+- `.cart__checkout-button` — botao de checkout verde (usa `!important` em tudo para sobrescrever Dawn)
+- `.cart-item--free` — modificador de classe para itens com preco $0
+- `.cart-item__free-badge` — badge verde "FREE" ou similar
+- `.cart-item__properties` — container flex-column para propriedades empilhadas
+- `.quantity-line` — primeira propriedade (quantidade), com `border-bottom` separador
+- `.cart-item__patch-thumbnails` — container de thumbnails de patches
+
+**O que pode dar errado:**
+- Se o tema alvo ja tem estilos para `.cart__checkout-button`, havera conflito. Os `!important` aqui vencem, mas pode causar confusao.
+- A classe `.cart__ctas.cartx-CrtpageMainFrm` e especifica de um app de cross-sell; se o tema alvo nao usar esse app, essa regra simplesmente nao se aplica (sem erro).
+- O Block 6 menciona que ha CSS adicional em `component-cart-drawer.css` — verificar se o tema alvo tem esse arquivo separado.
+
+## CODIGO DE REFERENCIA
+
+```css
+/* -- Quantity selector (inline +/- buttons) -- */
+.cart-item__quantity-wrapper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  height: 2.6rem;
+}
+
+.cart-qty-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 100%;
+  background: #f5f5f5;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  padding: 0;
+  transition: background 0.2s;
+}
+
+.cart-qty-btn:hover {
+  background: #e0e0e0;
+}
+
+.cart-qty-input {
+  width: 2.4rem;
+  text-align: center;
+  border: none;
+  border-left: 1px solid #e0e0e0;
+  border-right: 1px solid #e0e0e0;
+  background: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #333;
+  padding: 0;
+  height: 100%;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.cart-qty-input::-webkit-outer-spin-button,
+.cart-qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* -- Checkout button — green, full width -- */
+.cart__ctas.cartx-CrtpageMainFrm {
+  align-items: stretch !important;
+  width: 100% !important;
+}
+
+.cart__checkout-button {
+  display: block !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
+  background: #22c55e !important;
+  color: #000 !important;
+  padding: 1.4rem 2rem !important;
+  border-radius: 8px !important;
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: background 0.3s ease !important;
+  letter-spacing: 0.05rem !important;
+  text-transform: uppercase !important;
+  max-width: none !important;
+  min-width: 100% !important;
+}
+
+.cart__checkout-button:hover {
+  background: #16a34a !important;
+  color: #000 !important;
+}
+
+/* -- Free item ($0) — consistent spacing -- */
+.cart-item--free .cart-item__price-row {
+  margin-top: 0 !important;
+}
+
+.cart-item--free .cart-item__name {
+  margin-bottom: 0.2rem;
+}
+
+.cart-item--free .cart-item__properties {
+  margin-top: 0.3rem;
+}
+
+/* -- Free item badge -- */
+.cart-item__free-badge {
+  display: inline-block;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  margin-top: 0.3rem;
+}
+
+/* -- Cart line-item properties — stacked, one per line -- */
+.cart-item__properties {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 0.6rem;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.cart-item__properties .product-option {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+
+.cart-item__properties .product-option dt {
+  color: #888;
+  font-weight: 500;
+  white-space: nowrap;
+  margin: 0;
+  min-width: 0;
+}
+
+.cart-item__properties .product-option dd {
+  color: #222;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+}
+
+/* -- Quantity line — first in properties, separator below -- */
+.cart-item__properties .quantity-line {
+  margin-bottom: 6px !important;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* -- Patch thumbnails — clean spacing -- */
+.cart-item__patch-thumbnails {
+  margin-top: 8px !important;
+}
+```
+
+## COMO VALIDAR
+- [ ] Abrir o cart drawer com pelo menos 1 item — botoes +/- aparecem com borda arredondada
+- [ ] Botao de checkout esta verde (#22c55e) com texto preto em uppercase
+- [ ] Adicionar um item gratuito (preco $0) — badge "FREE" aparece em verde claro
+- [ ] Propriedades do item (Tamanho, Nome, Numero) aparecem empilhadas verticalmente, uma por linha
+- [ ] Linha de quantidade tem separador (border-bottom) abaixo dela
+- [ ] Thumbnails de patches tem spacing consistente (8px margin-top)
+- [ ] Nao ha scroll horizontal no cart drawer
+- [ ] Testar em mobile — botoes +/- sao tocaveis (min 2.4rem)

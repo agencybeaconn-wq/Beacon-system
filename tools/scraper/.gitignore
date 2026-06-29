@@ -1,0 +1,34 @@
+node_modules/
+.env
+.env.*
+!.env.example
+
+# Profile do Chrome usado pelo scraper_mk3 (CDP)
+chrome-profile-mk3/
+chrome-debug/
+
+# Subprojeto separado
+meta-marketing-api/
+
+# ----- Saídas de scraping (dados brutos / outputs) -----
+# JSONs raiz com dados scrapeados
+catalogo_raw.json
+cke_produtos.json
+mk3_car_remotes.json
+mk3_deep.json
+servicos_raw.json
+
+# Pastas de output dos scrapers
+fssport-com-br/
+pedidoatacado-com/
+shopify-docs/
+shopify-store-*/
+
+# ----- Arquivos de inspeção / teste one-off -----
+inspect.js
+inspect_css.js
+inspect_deep.js
+inspect_shopify.js
+test_flow.js
+test_result.js
+setup_db.js

@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scale Criativos — Criativos feitos pra escalar.</title>
+  <meta name="description" content="Estrutura criativa para marcas que querem vender, testar e escalar no tráfego pago. E-commerce, DTC e Infoprodutos." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,700;1,800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Inter Tight"', 'sans-serif'] },
+          colors: {
+            azul: '#159BFF',
+            'azul-escuro': '#061A2E',
+            'azul-glow': '#19E6FF',
+            'azul-claro': '#DDF3FF',
+            'branco-gelo': '#F7FBFF',
+            grafite: '#07111F',
+            line: 'rgba(21, 155, 255, 0.12)',
+            'line-strong': 'rgba(21, 155, 255, 0.24)',
+            'line-light': '#E2E8F0',
+          },
+          borderRadius: { md: '10px', lg: '14px', xl: '18px', '2xl': '24px' },
+          fontWeight: { light: '300' },
+        },
+      },
+    };
+  </script>
+  <style>
+    :root { -webkit-font-smoothing: antialiased; }
+    body { font-family: 'Inter Tight', sans-serif; font-weight: 300; }
+    .container-wide { max-width: 1280px; margin-inline: auto; padding-inline: 1.5rem; }
+    @media (min-width: 768px) { .container-wide { padding-inline: 2rem; } }
+    .eyebrow { letter-spacing: 0.18em; }
+
+    /* --- TEXTURAS DE FUNDO --- */
+    .bg-dark-grid {
+      background-color: #061A2E;
+      background-image:
+        radial-gradient(70% 60% at 80% 10%, rgba(21, 155, 255, 0.22) 0%, transparent 60%),
+        radial-gradient(50% 50% at 10% 90%, rgba(25, 230, 255, 0.12) 0%, transparent 55%),
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><path d='M 40 0 L 0 0 0 40' fill='none' stroke='%23159BFF' stroke-width='0.4' stroke-opacity='0.18'/></svg>");
+    }
+    .bg-dark-noise {
+      background-color: #07111F;
+      background-image:
+        radial-gradient(60% 50% at 50% 0%, rgba(21,155,255,0.18) 0%, transparent 60%),
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+    .bg-light-grid {
+      background-color: #F7FBFF;
+      background-image:
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='44' height='44'><path d='M 44 0 L 0 0 0 44' fill='none' stroke='%23159BFF' stroke-width='0.5' stroke-opacity='0.05'/></svg>");
+    }
+    .bg-light-noise {
+      background-color: #FFFFFF;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.03 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+    .bg-accent-glow {
+      background-color: #159BFF;
+      background-image:
+        radial-gradient(60% 60% at 80% 20%, rgba(25,230,255,0.45) 0%, transparent 55%),
+        radial-gradient(50% 50% at 20% 80%, rgba(255,255,255,0.16) 0%, transparent 55%);
+    }
+
+    /* --- DETALHES VISUAIS --- */
+    .pill-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.375rem 0.875rem; border-radius: 9999px;
+      background: rgba(21,155,255,0.10); border: 1px solid rgba(21,155,255,0.30);
+      color: #19E6FF; font-size: 0.75rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .pill-tag-light {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.375rem 0.875rem; border-radius: 9999px;
+      background: rgba(21,155,255,0.08); border: 1px solid rgba(21,155,255,0.18);
+      color: #159BFF; font-size: 0.75rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .card-bracket {
+      position: relative; border: 1px solid var(--bcolor, #E2E8F0);
+      border-radius: 18px; padding: 1.75rem;
+    }
+    .card-bracket::before {
+      content: ''; position: absolute; top: -1px; left: 1.5rem; height: 2px;
+      width: 2.5rem; background: #159BFF;
+    }
+    .icon-tile {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: rgba(21,155,255,0.10);
+      color: #159BFF; border: 1px solid rgba(21,155,255,0.22);
+    }
+    .icon-tile-dark {
+      background: rgba(21,155,255,0.15);
+      color: #19E6FF; border: 1px solid rgba(25,230,255,0.30);
+    }
+    .hover-lift { transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; }
+    .hover-lift:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -22px rgba(21,155,255,.35); border-color: rgba(21,155,255,0.45); }
+    .text-italic-accent { font-style: italic; color: #19E6FF; }
+    .underline-accent { background: linear-gradient(transparent 62%, rgba(21,155,255,0.30) 62%); padding: 0 0.15em; }
+  </style>
+</head>
+<body class="bg-branco-gelo text-azul-escuro">
+
+  <!-- ========== HEADER ========== -->
+  <header class="sticky top-0 z-40 bg-branco-gelo/90 backdrop-blur border-b border-line-light">
+    <div class="container-wide flex h-16 items-center justify-between">
+      <a href="#" class="flex items-center gap-2.5">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-azul text-white">
+          <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+        <span class="font-extrabold tracking-tight text-azul-escuro">SCALE CRIATIVOS</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-7">
+        <a href="#manifesto" class="text-sm font-medium text-azul-escuro/70 hover:text-azul-escuro transition">Manifesto</a>
+        <a href="#publico" class="text-sm font-medium text-azul-escuro/70 hover:text-azul-escuro transition">Pra quem</a>
+        <a href="#processo" class="text-sm font-medium text-azul-escuro/70 hover:text-azul-escuro transition">Processo</a>
+        <a href="#cases" class="text-sm font-medium text-azul-escuro/70 hover:text-azul-escuro transition">Cases</a>
+        <a href="#faq" class="text-sm font-medium text-azul-escuro/70 hover:text-azul-escuro transition">FAQ</a>
+      </nav>
+      <a href="#cta" class="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-azul-escuro text-white font-semibold text-sm hover:bg-grafite transition">
+        Solicitar pacote
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ========== HERO ========== -->
+    <section class="bg-dark-grid relative overflow-hidden">
+      <div class="container-wide pt-20 md:pt-28 pb-20 md:pb-28 text-center">
+        <span class="pill-tag">
+          <span class="w-1.5 h-1.5 rounded-full bg-azul-glow"></span>
+          Brand Positioning · 2026
+        </span>
+        <h1 class="mt-7 text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.95] text-white">
+          Criativos feitos<br/>
+          pra <span class="text-italic-accent">escalar.</span>
+        </h1>
+        <p class="mt-7 mx-auto max-w-2xl text-lg md:text-xl text-azul-claro/90 leading-relaxed font-light">
+          Estrutura criativa para marcas que querem <span class="text-white font-medium">vender, testar e escalar</span> no tráfego pago.
+        </p>
+        <div class="mt-10 flex flex-wrap gap-3 justify-center">
+          <a href="#cta" class="inline-flex items-center justify-center gap-2 h-12 px-7 rounded-md bg-azul text-white font-semibold text-base hover:brightness-110 transition">
+            Quero criativos que vendem
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#processo" class="inline-flex items-center justify-center gap-2 h-12 px-7 rounded-md bg-white/5 text-white border border-white/15 font-semibold text-base hover:bg-white/10 transition">
+            Como funciona
+          </a>
+        </div>
+
+        <div class="mt-14 grid grid-cols-3 max-w-2xl mx-auto gap-6 text-center">
+          <div>
+            <div class="text-3xl md:text-4xl font-extrabold text-azul-glow">+R$ 8M</div>
+            <div class="text-xs uppercase eyebrow text-white/55 mt-1.5">em ads gerenciados</div>
+          </div>
+          <div class="border-x border-white/10">
+            <div class="text-3xl md:text-4xl font-extrabold text-azul-glow">120+</div>
+            <div class="text-xs uppercase eyebrow text-white/55 mt-1.5">marcas atendidas</div>
+          </div>
+          <div>
+            <div class="text-3xl md:text-4xl font-extrabold text-azul-glow">5x</div>
+            <div class="text-xs uppercase eyebrow text-white/55 mt-1.5">ROAS médio</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== MANIFESTO PRINCIPAL ========== -->
+    <section id="manifesto" class="bg-light-grid relative">
+      <div class="container-wide py-20 md:py-28">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          <div class="lg:col-span-5">
+            <span class="pill-tag-light">
+              <span class="w-1.5 h-1.5 rounded-full bg-azul"></span>
+              Posicionamento
+            </span>
+            <h2 class="mt-6 text-3xl md:text-5xl font-black tracking-tight leading-tight text-azul-escuro">
+              Não é agência<br/>
+              de edição.<br/>
+              É <span class="underline-accent">estrutura criativa</span><br/>
+              para performance.
+            </h2>
+          </div>
+          <div class="lg:col-span-7">
+            <div class="rounded-2xl bg-azul-escuro p-8 md:p-12 bg-dark-grid">
+              <div class="pill-tag">— Frase de posicionamento</div>
+              <p class="mt-5 text-2xl md:text-3xl font-bold leading-snug text-white">
+                Criativos estratégicos para marcas que querem <span class="text-italic-accent">vender, testar e escalar</span> no tráfego pago.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== O QUE A MARCA DIZ X ENTREGA ========== -->
+    <section class="bg-light-noise">
+      <div class="container-wide py-20 md:py-28">
+        <div class="text-center max-w-3xl mx-auto">
+          <span class="pill-tag-light"><span class="w-1.5 h-1.5 rounded-full bg-azul"></span>Mensagem & Promessa</span>
+          <h2 class="mt-5 text-3xl md:text-5xl font-black tracking-tight text-azul-escuro">
+            O que a marca <span class="underline-accent">diz</span> e o que ela <span class="underline-accent">entrega</span>.
+          </h2>
+        </div>
+
+        <div class="mt-14 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Diz -->
+          <div class="card-bracket bg-white" style="--bcolor:#E2E8F0">
+            <div class="text-xs uppercase eyebrow text-azul font-semibold">Mensagem central</div>
+            <h3 class="mt-3 text-2xl md:text-3xl font-extrabold text-azul-escuro leading-tight">
+              Criativos feitos para vender, testar e escalar.
+            </h3>
+            <p class="mt-4 text-base text-azul-escuro/60 font-light leading-relaxed">
+              A frase que resume tudo. Não é estética. Não é só edição. É estrutura criativa pensada para performance no tráfego pago.
+            </p>
+          </div>
+
+          <!-- Entrega -->
+          <div class="rounded-2xl bg-dark-grid p-7 md:p-8">
+            <div class="text-xs uppercase eyebrow text-azul-glow font-semibold">Promessa da marca</div>
+            <h3 class="mt-3 text-2xl md:text-3xl font-extrabold text-white leading-tight">
+              Estrutura criativa que aumenta a chance de performance dos seus anúncios.
+            </h3>
+            <ul class="mt-6 space-y-3.5 text-white/80 font-light">
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-flex w-5 h-5 rounded-full bg-azul/30 text-azul-glow items-center justify-center flex-shrink-0">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                </span>
+                Redução de CPA e aumento de ROI
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-flex w-5 h-5 rounded-full bg-azul/30 text-azul-glow items-center justify-center flex-shrink-0">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                </span>
+                Mais retenção, menos fadiga de anúncio
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-flex w-5 h-5 rounded-full bg-azul/30 text-azul-glow items-center justify-center flex-shrink-0">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                </span>
+                Volume criativo para testar mais ângulos
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="mt-1 inline-flex w-5 h-5 rounded-full bg-azul/30 text-azul-glow items-center justify-center flex-shrink-0">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                </span>
+                Clareza na comunicação da oferta
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PÚBLICO-ALVO (3 CARDS) ========== -->
+    <section id="publico" class="bg-light-grid">
+      <div class="container-wide py-20 md:py-28">
+        <div class="text-center max-w-3xl mx-auto">
+          <span class="pill-tag-light"><span class="w-1.5 h-1.5 rounded-full bg-azul"></span>Público-alvo</span>
+          <h2 class="mt-5 text-3xl md:text-5xl font-black tracking-tight text-azul-escuro">
+            Pra <span class="underline-accent">quem</span> a Scale fala — e como entrega.
+          </h2>
+        </div>
+
+        <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- E-commerce -->
+          <div class="card-bracket bg-white hover-lift" style="--bcolor:#E2E8F0">
+            <div class="icon-tile">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M3 9l1.5-4.5A2 2 0 016.4 3h11.2a2 2 0 011.9 1.4L21 9M3 9v9a2 2 0 002 2h14a2 2 0 002-2V9M3 9h18M9 13h6"/></svg>
+            </div>
+            <h3 class="mt-5 text-xl font-extrabold text-azul-escuro">E-commerce e DTC</h3>
+            <p class="mt-2.5 text-sm text-azul-escuro/60 font-light leading-relaxed">
+              Marcas que vendem produto físico e dependem de criativo pra sustentar campanha.
+            </p>
+            <div class="mt-5 flex flex-wrap gap-2">
+              <span class="text-xs px-2.5 py-1 rounded-full bg-azul-claro text-azul font-medium">Meta</span>
+              <span class="text-xs px-2.5 py-1 rounded-full bg-azul-claro text-azul font-medium">TikTok</span>
+              <span class="text-xs px-2.5 py-1 rounded-full bg-azul-claro text-azul font-medium">Google</span>
+            </div>
+          </div>
+
+          <!-- Gestores -->
+          <div class="card-bracket bg-white hover-lift" style="--bcolor:#E2E8F0">
+            <div class="icon-tile">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <h3 class="mt-5 text-xl font-extrabold text-azul-escuro">Gestores de tráfego</h3>
+            <p class="mt-2.5 text-sm text-azul-escuro/60 font-light leading-relaxed">
+              Quem opera Meta, TikTok e Google e precisa de volume criativo pra testar.
+            </p>
+            <div class="mt-5 flex flex-wrap gap-2">
+              <span class="text-xs px-2.5 py-1 rounded-full bg-azul-claro text-azul font-medium">Volume</span>
+              <span class="text-xs px-2.5 py-1 rounded-full bg-azul-claro text-azul font-medium">Variação</span>
+              <span class="text-xs px-2.5 py-1 rounded-full bg-azul-claro text-azul font-medium">Testes A/B</span>
+            </div>
+          </div>
+
+          <!-- Infoprodutores -->
+          <div class="card-bracket bg-white hover-lift" style="--bcolor:#E2E8F0">
+            <div class="icon-tile">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+            </div>
+            <h3 class="mt-5 text-xl font-extrabold text-azul-escuro">Infoprodutores</h3>
+            <p class="mt-2.5 text-sm text-azul-escuro/60 font-light leading-relaxed">
+              Operações que escalam com criativos persuasivos, UGC e dark posts.
+            </p>
+            <div class="mt-5 flex flex-wrap gap-2">
+              <span class="text-xs px-2.5 py-1 rounded-full bg-azul-claro text-azul font-medium">UGC</span>
+              <span class="text-xs px-2.5 py-1 rounded-full bg-azul-claro text-azul font-medium">Dark posts</span>
+              <span class="text-xs px-2.5 py-1 rounded-full bg-azul-claro text-azul font-medium">VSL</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TOM DE VOZ -->
+        <div class="mt-12 rounded-2xl bg-azul-claro/60 border border-line p-6 md:p-8">
+          <div class="flex flex-col md:flex-row md:items-center gap-5 md:gap-10">
+            <div class="text-xs uppercase eyebrow font-semibold text-azul md:min-w-[140px]">Tom de voz</div>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-4 py-2 rounded-full bg-white text-azul-escuro font-semibold text-sm border border-line">Direto</span>
+              <span class="px-4 py-2 rounded-full bg-white text-azul-escuro font-semibold text-sm border border-line">Estratégico</span>
+              <span class="px-4 py-2 rounded-full bg-white text-azul-escuro font-semibold text-sm border border-line">Moderno</span>
+              <span class="px-4 py-2 rounded-full bg-white text-azul-escuro font-semibold text-sm border border-line">Confiante</span>
+              <span class="px-4 py-2 rounded-full bg-white text-azul-escuro font-semibold text-sm border border-line">Comercial</span>
+              <span class="px-4 py-2 rounded-full bg-white text-azul-escuro font-semibold text-sm border border-line">Foco em performance</span>
+              <span class="px-4 py-2 rounded-full bg-white text-azul-escuro font-semibold text-sm border border-line">Sem enrolação</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== LOGOS PROVA SOCIAL ========== -->
+    <section class="bg-branco-gelo border-y border-line-light">
+      <div class="container-wide py-14">
+        <p class="text-center text-xs font-semibold uppercase eyebrow text-azul-escuro/55 mb-8">
+          Marcas que escalaram com a Scale
+        </p>
+        <div class="grid grid-cols-3 md:grid-cols-6 gap-8 items-center">
+          <div class="h-7 bg-azul-escuro/10 rounded flex items-center justify-center text-xs text-azul-escuro/40 font-medium">LOGO 1</div>
+          <div class="h-7 bg-azul-escuro/10 rounded flex items-center justify-center text-xs text-azul-escuro/40 font-medium">LOGO 2</div>
+          <div class="h-7 bg-azul-escuro/10 rounded flex items-center justify-center text-xs text-azul-escuro/40 font-medium">LOGO 3</div>
+          <div class="h-7 bg-azul-escuro/10 rounded flex items-center justify-center text-xs text-azul-escuro/40 font-medium">LOGO 4</div>
+          <div class="h-7 bg-azul-escuro/10 rounded flex items-center justify-center text-xs text-azul-escuro/40 font-medium">LOGO 5</div>
+          <div class="h-7 bg-azul-escuro/10 rounded flex items-center justify-center text-xs text-azul-escuro/40 font-medium">LOGO 6</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== MANIFESTO - 4 PRINCÍPIOS ========== -->
+    <section class="bg-dark-noise">
+      <div class="container-wide py-20 md:py-28">
+        <div class="max-w-4xl">
+          <span class="pill-tag"><span class="w-1.5 h-1.5 rounded-full bg-azul-glow"></span>Manifesto da marca</span>
+          <h2 class="mt-6 text-3xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white">
+            Conteúdo bonito chama atenção.<br/>
+            <span class="text-italic-accent">Criativo estratégico</span> gera venda.
+          </h2>
+        </div>
+
+        <div class="mt-14 grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="rounded-xl bg-white/[0.04] border border-white/10 p-7 hover-lift">
+            <div class="flex items-center gap-4">
+              <span class="font-black text-3xl text-azul-glow tabular-nums">01</span>
+              <div class="text-xs uppercase eyebrow text-azul-glow font-semibold">Princípio 01</div>
+            </div>
+            <p class="mt-4 text-lg text-white font-light leading-relaxed">
+              Criativo não é vídeo bonito. <span class="font-semibold">É estrutura: gancho, copy, ritmo e formato pronto pra rodar.</span>
+            </p>
+          </div>
+          <div class="rounded-xl bg-white/[0.04] border border-white/10 p-7 hover-lift">
+            <div class="flex items-center gap-4">
+              <span class="font-black text-3xl text-azul-glow tabular-nums">02</span>
+              <div class="text-xs uppercase eyebrow text-azul-glow font-semibold">Princípio 02</div>
+            </div>
+            <p class="mt-4 text-lg text-white font-light leading-relaxed">
+              O anúncio precisa vender antes do clique. <span class="font-semibold">Quem não para o scroll, não converte.</span>
+            </p>
+          </div>
+          <div class="rounded-xl bg-white/[0.04] border border-white/10 p-7 hover-lift">
+            <div class="flex items-center gap-4">
+              <span class="font-black text-3xl text-azul-glow tabular-nums">03</span>
+              <div class="text-xs uppercase eyebrow text-azul-glow font-semibold">Princípio 03</div>
+            </div>
+            <p class="mt-4 text-lg text-white font-light leading-relaxed">
+              Mais ganchos, mais testes. <span class="font-semibold">Mais testes, mais chance de achar o vencedor.</span>
+            </p>
+          </div>
+          <div class="rounded-xl bg-white/[0.04] border border-white/10 p-7 hover-lift">
+            <div class="flex items-center gap-4">
+              <span class="font-black text-3xl text-azul-glow tabular-nums">04</span>
+              <div class="text-xs uppercase eyebrow text-azul-glow font-semibold">Princípio 04</div>
+            </div>
+            <p class="mt-4 text-lg text-white font-light leading-relaxed">
+              Criativos cansam rápido. <span class="font-semibold">Volume e variação não são luxo — são operação.</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== TIPOS DE CRIATIVO (FUNCIONALIDADES) ========== -->
+    <section class="bg-light-noise">
+      <div class="container-wide py-20 md:py-28">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          <div class="lg:col-span-5 lg:sticky lg:top-24">
+            <span class="pill-tag-light"><span class="w-1.5 h-1.5 rounded-full bg-azul"></span>O que entregamos</span>
+            <h2 class="mt-5 text-3xl md:text-5xl font-black tracking-tight text-azul-escuro leading-tight">
+              Tudo o que sua operação precisa para <span class="underline-accent">rodar mais ângulos</span>.
+            </h2>
+            <p class="mt-5 text-lg text-azul-escuro/60 font-light leading-relaxed">
+              Da prospecção do gancho à entrega do MP4 — fluxo único, pronto pra subir.
+            </p>
+            <a href="#cta" class="mt-7 inline-flex items-center gap-2 text-azul font-semibold hover:gap-3 transition-all">
+              Ver pacotes
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+
+          <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="p-6 rounded-xl border border-line-light bg-white hover-lift">
+              <div class="icon-tile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+              </div>
+              <h3 class="mt-4 font-extrabold text-azul-escuro">UGC autêntico</h3>
+              <p class="mt-2 text-sm text-azul-escuro/60 font-light">Creators reais, depoimento real, sem cheiro de comercial.</p>
+            </div>
+            <div class="p-6 rounded-xl border border-line-light bg-white hover-lift">
+              <div class="icon-tile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+              </div>
+              <h3 class="mt-4 font-extrabold text-azul-escuro">Vídeo motion</h3>
+              <p class="mt-2 text-sm text-azul-escuro/60 font-light">Animação 2D, motion graphics e produto em destaque.</p>
+            </div>
+            <div class="p-6 rounded-xl border border-line-light bg-white hover-lift">
+              <div class="icon-tile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <h3 class="mt-4 font-extrabold text-azul-escuro">Estático que para o scroll</h3>
+              <p class="mt-2 text-sm text-azul-escuro/60 font-light">Composição editorial, copy bold, oferta clara em 1 frame.</p>
+            </div>
+            <div class="p-6 rounded-xl border border-line-light bg-white hover-lift">
+              <div class="icon-tile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><rect x="3" y="3" width="14" height="14" rx="2"/><rect x="7" y="7" width="14" height="14" rx="2"/></svg>
+              </div>
+              <h3 class="mt-4 font-extrabold text-azul-escuro">Carrossel modular</h3>
+              <p class="mt-2 text-sm text-azul-escuro/60 font-light">Frame a frame pensado pra narrativa — gancho, oferta, prova, CTA.</p>
+            </div>
+            <div class="p-6 rounded-xl border border-line-light bg-white hover-lift">
+              <div class="icon-tile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 6.7 3"/><polyline points="21 3 21 9 15 9"/><path d="M21 12a9 9 0 0 1-9 9 9 9 0 0 1-6.7-3"/><polyline points="3 21 3 15 9 15"/></svg>
+              </div>
+              <h3 class="mt-4 font-extrabold text-azul-escuro">Iteração semanal</h3>
+              <p class="mt-2 text-sm text-azul-escuro/60 font-light">Volume contínuo pra combater fadiga e ampliar testes.</p>
+            </div>
+            <div class="p-6 rounded-xl border border-line-light bg-white hover-lift">
+              <div class="icon-tile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+              </div>
+              <h3 class="mt-4 font-extrabold text-azul-escuro">Briefing por ângulo</h3>
+              <p class="mt-2 text-sm text-azul-escuro/60 font-light">Cada criativo nasce com objetivo de funil e métrica alvo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CASES ========== -->
+    <section id="cases" class="bg-light-grid">
+      <div class="container-wide py-20 md:py-28">
+        <div class="text-center max-w-3xl mx-auto">
+          <span class="pill-tag-light"><span class="w-1.5 h-1.5 rounded-full bg-azul"></span>Cases</span>
+          <h2 class="mt-5 text-3xl md:text-5xl font-black tracking-tight text-azul-escuro">
+            Performance que <span class="underline-accent">aparece no painel</span>.
+          </h2>
+          <p class="mt-5 text-lg text-azul-escuro/60 font-light">
+            Métricas reais de marcas que mudaram só o criativo — operação, oferta e budget mantidos.
+          </p>
+        </div>
+
+        <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div class="card-bracket bg-white hover-lift" style="--bcolor:#E2E8F0">
+            <div class="text-xs uppercase eyebrow text-azul font-semibold">DTC · Suplemento</div>
+            <div class="mt-5 text-5xl md:text-6xl font-black tracking-tight text-azul-escuro tabular-nums">-42%</div>
+            <p class="mt-3 text-sm text-azul-escuro/65 font-light">de CPA em 30 dias trocando UGC genérico por estrutura por ângulo. Volume aumentou 3x.</p>
+            <p class="mt-6 text-sm font-bold text-azul-escuro">Marca DTC de suplementação</p>
+          </div>
+          <div class="card-bracket bg-white hover-lift" style="--bcolor:#E2E8F0">
+            <div class="text-xs uppercase eyebrow text-azul font-semibold">E-commerce · Moda</div>
+            <div class="mt-5 text-5xl md:text-6xl font-black tracking-tight text-azul-escuro tabular-nums">7.4x</div>
+            <p class="mt-3 text-sm text-azul-escuro/65 font-light">ROAS médio no lançamento de coleção, com 24 criativos rodando simultâneo em 4 ângulos.</p>
+            <p class="mt-6 text-sm font-bold text-azul-escuro">Marca de streetwear</p>
+          </div>
+          <div class="card-bracket bg-white hover-lift" style="--bcolor:#E2E8F0">
+            <div class="text-xs uppercase eyebrow text-azul font-semibold">Infoproduto · Educação</div>
+            <div class="mt-5 text-5xl md:text-6xl font-black tracking-tight text-azul-escuro tabular-nums">+318%</div>
+            <p class="mt-3 text-sm text-azul-escuro/65 font-light">de leads qualificados num lançamento. VSL nova + 9 ganchos em vídeo curto.</p>
+            <p class="mt-6 text-sm font-bold text-azul-escuro">Mentoria de gestão de tráfego</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== COMO FUNCIONA ========== -->
+    <section id="processo" class="bg-light-noise">
+      <div class="container-wide py-20 md:py-28">
+        <div class="text-center max-w-3xl mx-auto">
+          <span class="pill-tag-light"><span class="w-1.5 h-1.5 rounded-full bg-azul"></span>Processo</span>
+          <h2 class="mt-5 text-3xl md:text-5xl font-black tracking-tight text-azul-escuro">
+            Do briefing ao MP4 pronto em <span class="underline-accent">4 passos</span>.
+          </h2>
+        </div>
+
+        <div class="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="card-bracket bg-white hover-lift" style="--bcolor:#E2E8F0">
+            <div class="font-black text-4xl text-azul tabular-nums">01</div>
+            <h3 class="mt-4 text-xl font-extrabold text-azul-escuro">Briefing por ângulo</h3>
+            <p class="mt-2.5 text-sm text-azul-escuro/65 font-light leading-relaxed">
+              Mapeamos persona, oferta e gargalo do funil. Saímos com 6-12 ângulos prontos pra produzir.
+            </p>
+          </div>
+          <div class="card-bracket bg-white hover-lift" style="--bcolor:#E2E8F0">
+            <div class="font-black text-4xl text-azul tabular-nums">02</div>
+            <h3 class="mt-4 text-xl font-extrabold text-azul-escuro">Produção em batelada</h3>
+            <p class="mt-2.5 text-sm text-azul-escuro/65 font-light leading-relaxed">
+              UGC, motion, estático e carrossel — produzidos em ciclo semanal com volume previsível.
+            </p>
+          </div>
+          <div class="card-bracket bg-white hover-lift" style="--bcolor:#E2E8F0">
+            <div class="font-black text-4xl text-azul tabular-nums">03</div>
+            <h3 class="mt-4 text-xl font-extrabold text-azul-escuro">Entrega pronta pra subir</h3>
+            <p class="mt-2.5 text-sm text-azul-escuro/65 font-light leading-relaxed">
+              MP4 e PNG no aspect ratio certo, nomeados por ângulo, prontos pra rodar no gerenciador.
+            </p>
+          </div>
+          <div class="card-bracket bg-white hover-lift" style="--bcolor:#E2E8F0">
+            <div class="font-black text-4xl text-azul tabular-nums">04</div>
+            <h3 class="mt-4 text-xl font-extrabold text-azul-escuro">Iteração baseada em dado</h3>
+            <p class="mt-2.5 text-sm text-azul-escuro/65 font-light leading-relaxed">
+              Vencedor identificado, batemos variação. Perdedor cortado. Loop semanal vivo.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== FAQ ========== -->
+    <section id="faq" class="bg-branco-gelo">
+      <div class="container-wide py-20 md:py-28 max-w-3xl">
+        <div class="text-center">
+          <span class="pill-tag-light"><span class="w-1.5 h-1.5 rounded-full bg-azul"></span>FAQ</span>
+          <h2 class="mt-5 text-3xl md:text-5xl font-black tracking-tight text-azul-escuro">
+            Dúvidas que <span class="underline-accent">a gente sempre escuta</span>.
+          </h2>
+        </div>
+
+        <div class="mt-12 divide-y divide-line-light border-y border-line-light">
+          <details class="group py-6">
+            <summary class="flex items-center justify-between cursor-pointer list-none">
+              <span class="text-lg font-bold text-azul-escuro pr-6">Quantos criativos vem por mês?</span>
+              <span class="flex-shrink-0 w-8 h-8 rounded-full bg-azul-claro text-azul flex items-center justify-center group-open:rotate-45 transition-transform">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M12 5v14M5 12h14"/></svg>
+              </span>
+            </summary>
+            <p class="mt-4 text-base text-azul-escuro/65 font-light leading-relaxed">
+              Depende do pacote. O básico entrega 16 criativos/mês (4 ângulos × 4 variações). Pacotes maiores chegam a 40+/mês com cadência semanal.
+            </p>
+          </details>
+          <details class="group py-6">
+            <summary class="flex items-center justify-between cursor-pointer list-none">
+              <span class="text-lg font-bold text-azul-escuro pr-6">Vocês cuidam só do criativo ou também rodam tráfego?</span>
+              <span class="flex-shrink-0 w-8 h-8 rounded-full bg-azul-claro text-azul flex items-center justify-center group-open:rotate-45 transition-transform">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M12 5v14M5 12h14"/></svg>
+              </span>
+            </summary>
+            <p class="mt-4 text-base text-azul-escuro/65 font-light leading-relaxed">
+              Só criativo. A gente entrega pronto pra subir, mas a gestão fica com seu time ou agência. Trabalhamos bem em parceria com gestores.
+            </p>
+          </details>
+          <details class="group py-6">
+            <summary class="flex items-center justify-between cursor-pointer list-none">
+              <span class="text-lg font-bold text-azul-escuro pr-6">Como vocês escolhem os ângulos?</span>
+              <span class="flex-shrink-0 w-8 h-8 rounded-full bg-azul-claro text-azul flex items-center justify-center group-open:rotate-45 transition-transform">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M12 5v14M5 12h14"/></svg>
+              </span>
+            </summary>
+            <p class="mt-4 text-base text-azul-escuro/65 font-light leading-relaxed">
+              Mapeamento estratégico: persona × dor × oferta × prova. Cada ângulo testa uma hipótese específica. Sem palpite — método.
+            </p>
+          </details>
+          <details class="group py-6">
+            <summary class="flex items-center justify-between cursor-pointer list-none">
+              <span class="text-lg font-bold text-azul-escuro pr-6">Quanto tempo até o primeiro lote?</span>
+              <span class="flex-shrink-0 w-8 h-8 rounded-full bg-azul-claro text-azul flex items-center justify-center group-open:rotate-45 transition-transform">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M12 5v14M5 12h14"/></svg>
+              </span>
+            </summary>
+            <p class="mt-4 text-base text-azul-escuro/65 font-light leading-relaxed">
+              5 a 7 dias úteis pra primeiro lote depois do briefing aprovado. Daí em diante, cadência semanal contínua.
+            </p>
+          </details>
+          <details class="group py-6">
+            <summary class="flex items-center justify-between cursor-pointer list-none">
+              <span class="text-lg font-bold text-azul-escuro pr-6">Tem fidelidade?</span>
+              <span class="flex-shrink-0 w-8 h-8 rounded-full bg-azul-claro text-azul flex items-center justify-center group-open:rotate-45 transition-transform">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M12 5v14M5 12h14"/></svg>
+              </span>
+            </summary>
+            <p class="mt-4 text-base text-azul-escuro/65 font-light leading-relaxed">
+              Contrato mensal recorrente. Você pode pausar com 15 dias de aviso. Sem multa, sem letra miúda.
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CTA FINAL ========== -->
+    <section id="cta" class="bg-accent-glow text-white relative overflow-hidden">
+      <div class="container-wide py-20 md:py-28 text-center max-w-3xl">
+        <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur border border-white/20 text-xs font-medium eyebrow uppercase">
+          <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+          Vagas limitadas · Mai 2026
+        </span>
+        <h2 class="mt-7 text-4xl md:text-6xl font-black tracking-tight leading-tight">
+          Pare de produzir <span class="italic text-azul-escuro">criativo bonito</span>.<br/>
+          Comece a vender.
+        </h2>
+        <p class="mt-6 text-lg md:text-xl text-white/85 font-light">
+          Solicite um diagnóstico do seu funil criativo. Em 24h te mandamos 3 ângulos prontos pra testar.
+        </p>
+        <div class="mt-10 flex flex-wrap gap-3 justify-center">
+          <a href="#" class="inline-flex items-center justify-center gap-2 h-13 px-8 py-3.5 rounded-md bg-azul-escuro text-white font-bold text-base hover:bg-grafite transition">
+            Solicitar diagnóstico grátis
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#" class="inline-flex items-center justify-center gap-2 h-13 px-8 py-3.5 rounded-md bg-white/10 backdrop-blur text-white border border-white/30 font-bold text-base hover:bg-white/20 transition">
+            Ver pacotes e preços
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="bg-dark-noise text-white">
+    <div class="container-wide py-16">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+        <div class="md:col-span-5">
+          <div class="flex items-center gap-2.5">
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-azul text-white">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+            <span class="font-extrabold tracking-tight">SCALE CRIATIVOS</span>
+          </div>
+          <p class="mt-4 text-sm text-white/55 font-light max-w-sm leading-relaxed">
+            Estrutura criativa pra marcas que querem vender, testar e escalar no tráfego pago. Vender · Testar · Escalar.
+          </p>
+        </div>
+        <div class="md:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-8">
+          <div>
+            <h4 class="text-sm font-bold text-white">Scale</h4>
+            <ul class="mt-4 space-y-3">
+              <li><a href="#manifesto" class="text-sm text-white/55 hover:text-white font-light transition">Manifesto</a></li>
+              <li><a href="#publico" class="text-sm text-white/55 hover:text-white font-light transition">Pra quem</a></li>
+              <li><a href="#processo" class="text-sm text-white/55 hover:text-white font-light transition">Processo</a></li>
+              <li><a href="#cases" class="text-sm text-white/55 hover:text-white font-light transition">Cases</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-white">Recursos</h4>
+            <ul class="mt-4 space-y-3">
+              <li><a href="#" class="text-sm text-white/55 hover:text-white font-light transition">Brand book</a></li>
+              <li><a href="#" class="text-sm text-white/55 hover:text-white font-light transition">Blog</a></li>
+              <li><a href="#" class="text-sm text-white/55 hover:text-white font-light transition">FAQ</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-white">Contato</h4>
+            <ul class="mt-4 space-y-3">
+              <li><a href="#" class="text-sm text-white/55 hover:text-white font-light transition">contato@scale.com.br</a></li>
+              <li><a href="#" class="text-sm text-white/55 hover:text-white font-light transition">WhatsApp</a></li>
+              <li><a href="#" class="text-sm text-white/55 hover:text-white font-light transition">Instagram</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+        <p class="text-sm text-white/45 font-light">© 2026 Scale Criativos · Brand Doc v1.0</p>
+        <ul class="flex gap-6">
+          <li><a href="#" class="text-sm text-white/45 hover:text-white font-light transition">Privacidade</a></li>
+          <li><a href="#" class="text-sm text-white/45 hover:text-white font-light transition">Termos</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

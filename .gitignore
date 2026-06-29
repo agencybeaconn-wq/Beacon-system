@@ -1,0 +1,118 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+.claude.md
+
+.env
+.vercel
+
+# Scripts de deploy em massa de edge functions (ver memory phase2-edgefns-incident-2026-05-19)
+# Nao commitar sem confirmar com Joao — incidente em 2026-05-19 sobrescreveu 45 fns
+scripts/*deploy-edgefns*.sh
+scripts/*deploy-edgefns*.bak*
+
+# One-time scripts (use .claude/skills/ instead)
+scripts/*.mjs
+tmp_*
+.tmp_*
+
+# Claude Code execution logs (per-machine, not shared)
+.claude/logs/
+
+# Claude Code scratch/tmp (per-machine, scratch de sessoes — nao versionar)
+.claude/tmp/
+
+# Skill outputs (pagespeed reports, etc — local only)
+out/
+
+# Dumps de inventario/segredos do Lever (manifestos de migracao — nao versionar)
+scripts/_out/*-secrets.json
+
+# Dumps de contexto/credenciais por cliente (nunca versionar — contem service_role keys)
+clients/**/CONTEXTO_COMPLETO.md
+
+# Claude Code local settings (contains anon keys, tmp paths, per-machine)
+.claude/settings.local.json
+
+# Claude Code runtime lock files
+.claude/scheduled_tasks.lock
+
+# Supabase CLI cache (per-machine)
+supabase/.temp/
+
+# Shopify theme local dev artifacts
+themes/*/.shopify-cli.yml
+themes/*/config/settings_data.json.backup
+themes/*/.shopify/
+
+# Client themes (temporary, not versioned — lever-br and lever-en ARE versioned)
+themes/client-*/
+
+# Clone-theme skill workspace (per-clone, not versioned)
+themes/clones/
+~/.claude-cache/dawn/
+
+# Shopify docs mirror (100MB+, per-machine — see shopify-docs/README.md to recreate)
+shopify-docs/
+
+# Shopify store data dumps (per-machine, large — use .claude/skills/ instead)
+shopify-store-*/
+
+# Skill backups (per-machine safety dumps, não vai pro repo)
+backups/
+.claude/_backups/
+
+# Obsidian vault config (per-machine)
+.obsidian/
+INDEX.md
+documentacao_estrelas_desktop.md
+
+# Documentos internos (planning, handoff, auditorias) — manter fora do repo
+AUDITORIA-SEGURANCA-*.md
+SECURITY-ALERT-*.md
+HANDOFF-CTO.md
+EXECUTIVE-SUMMARY-*.md
+GO-NO-GO-CHECKLIST.md
+LEV-1-DELIVERABLES.md
+TECHNICAL-DESIGN-TEMPLATE.md
+ARCHITECTURE-BRIEF.md
+
+# TCC do Pedro — pessoal, não pertence ao repo Lever
+tcc-*.pdf
+
+# Screenshots de debug/sessões (Playwright, SAK, WhatsApp) — per-machine, não versionar
+/*.png
+.playwright-mcp/
+
+# Sensíveis — NUNCA commitar (envs extras, oauth servers, burner accounts, carkeys)
+.env.*
+oauth-server-*.mjs
+burners/
+scripts/_carkeys-work/
+
+# Segredos do Lever MCP (chaves por membro) — NUNCA commitar
+keys.json
+.claude/skills/install-lever-shopify-mcp/keys.json

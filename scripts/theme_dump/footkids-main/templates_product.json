@@ -1,0 +1,1303 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "custom-player-rules": {
+      "type": "custom-player-rules",
+      "blocks": {
+        "sao_paulo": {
+          "type": "player_rule",
+          "settings": {
+            "keywords": "são paulo, sao paulo",
+            "exclude_keywords": "",
+            "player_name_1": "ARBOLEDA",
+            "player_number_1": "5",
+            "player_name_2": "ENZO DÍAZ",
+            "player_number_2": "13",
+            "player_name_3": "WENDELL",
+            "player_number_3": "18",
+            "player_name_4": "CÉDRIC",
+            "player_number_4": "21",
+            "player_name_5": "A. FRANCO",
+            "player_number_5": "28",
+            "player_name_6": "MAIK",
+            "player_number_6": "42",
+            "player_name_7": "MARCOS ANTÔNIO",
+            "player_number_7": "8",
+            "player_name_8": "ALISSON",
+            "player_number_8": "25",
+            "player_name_9": "PABLO MAIA",
+            "player_number_9": "29",
+            "player_name_10": "LUCAS",
+            "player_number_10": "7",
+            "player_name_11": "CALLERI",
+            "player_number_11": "9",
+            "player_name_12": "TAPIA",
+            "player_number_12": "14",
+            "player_name_13": "",
+            "player_number_13": "",
+            "player_name_14": "",
+            "player_number_14": "",
+            "player_name_15": "",
+            "player_number_15": ""
+          }
+        },
+        "santos": {
+          "type": "player_rule",
+          "settings": {
+            "keywords": "santos",
+            "exclude_keywords": "",
+            "player_name_1": "NEYMAR JR",
+            "player_number_1": "10",
+            "player_name_2": "ZÉ IVALDO",
+            "player_number_2": "2",
+            "player_name_3": "MAYKE",
+            "player_number_3": "12",
+            "player_name_4": "ESCOBAR",
+            "player_number_4": "31",
+            "player_name_5": "JP CHERMONT",
+            "player_number_5": "44",
+            "player_name_6": "ZÉ RAFAEL",
+            "player_number_6": "6",
+            "player_name_7": "J. SCHMIDT",
+            "player_number_7": "5",
+            "player_name_8": "RINCON",
+            "player_number_8": "8",
+            "player_name_9": "WILLIAN ARÃO",
+            "player_number_9": "15",
+            "player_name_10": "BARREAL",
+            "player_number_10": "22",
+            "player_name_11": "G. MENINO",
+            "player_number_11": "25",
+            "player_name_12": "G. BONTEMPO",
+            "player_number_12": "49",
+            "player_name_13": "GABRIEL B.",
+            "player_number_13": "9",
+            "player_name_14": "RONY",
+            "player_number_14": "11",
+            "player_name_15": "ROLLHEISER",
+            "player_number_15": "32"
+          }
+        },
+        "vasco": {
+          "type": "player_rule",
+          "settings": {
+            "keywords": "vasco",
+            "exclude_keywords": "",
+            "player_name_1": "PUMA",
+            "player_number_1": "2",
+            "player_name_2": "ROBERT R.",
+            "player_number_2": "30",
+            "player_name_3": "CUESTA",
+            "player_number_3": "46",
+            "player_name_4": "CUIABANO",
+            "player_number_4": "66",
+            "player_name_5": "LUCAS PITON",
+            "player_number_5": "6",
+            "player_name_6": "TCHÊ TCHÊ",
+            "player_number_6": "3",
+            "player_name_7": "JAIR",
+            "player_number_7": "8",
+            "player_name_8": "HUGO MOURA",
+            "player_number_8": "25",
+            "player_name_9": "ROJAS",
+            "player_number_9": "29",
+            "player_name_10": "COUTINHO",
+            "player_number_10": "10",
+            "player_name_11": "ANDRÉS GOMEZ",
+            "player_number_11": "11",
+            "player_name_12": "N. MOREIRA",
+            "player_number_12": "17",
+            "player_name_13": "M. FRANÇA",
+            "player_number_13": "9",
+            "player_name_14": "GB",
+            "player_number_14": "19",
+            "player_name_15": "DAVID",
+            "player_number_15": "7"
+          }
+        },
+        "fluminense": {
+          "type": "player_rule",
+          "settings": {
+            "keywords": "fluminense",
+            "exclude_keywords": "",
+            "player_name_1": "SAMUEL XAVIER",
+            "player_number_1": "2",
+            "player_name_2": "IGNÁCIO",
+            "player_number_2": "4",
+            "player_name_3": "RENÉ",
+            "player_number_3": "6",
+            "player_name_4": "G. ARANA",
+            "player_number_4": "13",
+            "player_name_5": "IGOR RABELLO",
+            "player_number_5": "21",
+            "player_name_6": "GUGA",
+            "player_number_6": "23",
+            "player_name_7": "FACUNDO BERNAL",
+            "player_number_7": "5",
+            "player_name_8": "MARTINELLI",
+            "player_number_8": "8",
+            "player_name_9": "GANSO",
+            "player_number_9": "10",
+            "player_name_10": "NONATO",
+            "player_number_10": "16",
+            "player_name_11": "ACOSTA",
+            "player_number_11": "32",
+            "player_name_12": "JOHN KENNEDY",
+            "player_number_12": "9",
+            "player_name_13": "G. CANO",
+            "player_number_13": "14",
+            "player_name_14": "A. CANOBBIO",
+            "player_number_14": "17",
+            "player_name_15": "SERNA",
+            "player_number_15": "90"
+          }
+        },
+        "gremio": {
+          "type": "player_rule",
+          "settings": {
+            "keywords": "grêmio, gremio",
+            "exclude_keywords": "",
+            "player_name_1": "KANNEMANN",
+            "player_number_1": "4",
+            "player_name_2": "M. ROCHA",
+            "player_number_2": "14",
+            "player_name_3": "C. PAULISTA",
+            "player_number_3": "38",
+            "player_name_4": "CUÉLLAR",
+            "player_number_4": "6",
+            "player_name_5": "EDENILSON",
+            "player_number_5": "8",
+            "player_name_6": "DODI",
+            "player_number_6": "17",
+            "player_name_7": "VILLASANTI",
+            "player_number_7": "20",
+            "player_name_8": "ARTHUR",
+            "player_number_8": "29",
+            "player_name_9": "TETÊ",
+            "player_number_9": "21",
+            "player_name_10": "C. VINÍCIUS",
+            "player_number_10": "95",
+            "player_name_11": "WILLIAN",
+            "player_number_11": "88",
+            "player_name_12": "PAVÓN",
+            "player_number_12": "6",
+            "player_name_13": "AMUZU",
+            "player_number_13": "9",
+            "player_name_14": "BRAITHWAITE",
+            "player_number_14": "22",
+            "player_name_15": "A. HENRIQUE",
+            "player_number_15": "77"
+          }
+        },
+        "internacional": {
+          "type": "player_rule",
+          "settings": {
+            "keywords": "internacional",
+            "exclude_keywords": "",
+            "player_name_1": "A. PATRICK",
+            "player_number_1": "10",
+            "player_name_2": "BERNABEI",
+            "player_number_2": "26",
+            "player_name_3": "B. GOMES",
+            "player_number_3": "15",
+            "player_name_4": "B. HENRIQUE",
+            "player_number_4": "8",
+            "player_name_5": "B. TABATA",
+            "player_number_5": "17",
+            "player_name_6": "PAULINHO",
+            "player_number_6": "27",
+            "player_name_7": "THIAGO MAIA",
+            "player_number_7": "29",
+            "player_name_8": "VILLAGRA",
+            "player_number_8": "5",
+            "player_name_9": "ALERRANDO",
+            "player_number_9": "9",
+            "player_name_10": "CARBONERO",
+            "player_number_10": "7",
+            "player_name_11": "BORRÉ",
+            "player_number_11": "19",
+            "player_name_12": "VITINHO",
+            "player_number_12": "28",
+            "player_name_13": "",
+            "player_number_13": "",
+            "player_name_14": "",
+            "player_number_14": "",
+            "player_name_15": "",
+            "player_number_15": ""
+          }
+        },
+        "atletico_mineiro": {
+          "type": "player_rule",
+          "settings": {
+            "keywords": "atlético mineiro, atletico mineiro",
+            "exclude_keywords": "",
+            "player_name_1": "LYANCO",
+            "player_number_1": "13",
+            "player_name_2": "RENAN LODI",
+            "player_number_2": "16",
+            "player_name_3": "ALEXSANDER",
+            "player_number_3": "5",
+            "player_name_4": "MAYCON",
+            "player_number_4": "8",
+            "player_name_5": "G. SCARPA",
+            "player_number_5": "10",
+            "player_name_6": "BERNARD",
+            "player_number_6": "11",
+            "player_name_7": "IGOR GOMES",
+            "player_number_7": "17",
+            "player_name_8": "REINIER",
+            "player_number_8": "19",
+            "player_name_9": "A. FRANCO",
+            "player_number_9": "21",
+            "player_name_10": "HULK",
+            "player_number_10": "7",
+            "player_name_11": "CASSIERRA",
+            "player_number_11": "9",
+            "player_name_12": "DUDU",
+            "player_number_12": "92",
+            "player_name_13": "JR SANTOS",
+            "player_number_13": "37",
+            "player_name_14": "CUELLO",
+            "player_number_14": "28",
+            "player_name_15": "",
+            "player_number_15": ""
+          }
+        },
+        "cruzeiro": {
+          "type": "player_rule",
+          "settings": {
+            "keywords": "cruzeiro",
+            "exclude_keywords": "",
+            "player_name_1": "KAIO JORGE",
+            "player_number_1": "19",
+            "player_name_2": "LUCAS SILVA",
+            "player_number_2": "16",
+            "player_name_3": "LUCAS ROMERO",
+            "player_number_3": "29",
+            "player_name_4": "GERSON",
+            "player_number_4": "11",
+            "player_name_5": "M. HENRIQUE",
+            "player_number_5": "8",
+            "player_name_6": "M. PEREIRA",
+            "player_number_6": "10",
+            "player_name_7": "FABRÍCIO BRUNO",
+            "player_number_7": "34",
+            "player_name_8": "WALACE",
+            "player_number_8": "19",
+            "player_name_9": "FAGNER",
+            "player_number_9": "23",
+            "player_name_10": "WANDERSON",
+            "player_number_10": "94",
+            "player_name_11": "ARROYO",
+            "player_number_11": "99",
+            "player_name_12": "",
+            "player_number_12": "",
+            "player_name_13": "",
+            "player_number_13": "",
+            "player_name_14": "",
+            "player_number_14": "",
+            "player_name_15": "",
+            "player_number_15": ""
+          }
+        },
+        "corinthians": {
+          "type": "player_rule",
+          "settings": {
+            "keywords": "corinthians",
+            "exclude_keywords": "",
+            "player_name_1": "GARRO",
+            "player_number_1": "8",
+            "player_name_2": "MEMPHIS",
+            "player_number_2": "10",
+            "player_name_3": "MATEUZINHO",
+            "player_number_3": "2",
+            "player_name_4": "ANDRÉ RAMALHO",
+            "player_number_4": "5",
+            "player_name_5": "GUSTAVO HENRIQUE",
+            "player_number_5": "13",
+            "player_name_6": "MATHEUS BIDU",
+            "player_number_6": "21",
+            "player_name_7": "BRENO BIDON",
+            "player_number_7": "7",
+            "player_name_8": "RANIELE",
+            "player_number_8": "14",
+            "player_name_9": "CARRILLO",
+            "player_number_9": "19",
+            "player_name_10": "MARTÍNEZ",
+            "player_number_10": "70",
+            "player_name_11": "VITINHO",
+            "player_number_11": "11",
+            "player_name_12": "YURI ALBERTO",
+            "player_number_12": "9",
+            "player_name_13": "GUI NEGÃO",
+            "player_number_13": "56",
+            "player_name_14": "GABRIEL PAULISTA",
+            "player_number_14": "3",
+            "player_name_15": "",
+            "player_number_15": ""
+          }
+        },
+        "palmeiras": {
+          "type": "player_rule",
+          "settings": {
+            "keywords": "palmeiras",
+            "exclude_keywords": "",
+            "player_name_1": "B. FUCHS",
+            "player_number_1": "3",
+            "player_name_2": "G. GÓMEZ",
+            "player_number_2": "15",
+            "player_name_3": "MICAEL",
+            "player_number_3": "13",
+            "player_name_4": "MURILO",
+            "player_number_4": "26",
+            "player_name_5": "GIAY",
+            "player_number_5": "4",
+            "player_name_6": "PIQUEREZ",
+            "player_number_6": "22",
+            "player_name_7": "ALLAN",
+            "player_number_7": "40",
+            "player_name_8": "MORENO",
+            "player_number_8": "5",
+            "player_name_9": "F. ANDERSON",
+            "player_number_9": "7",
+            "player_name_10": "B. RODRIGUES",
+            "player_number_10": "11",
+            "player_name_11": "F. TORRES",
+            "player_number_11": "17",
+            "player_name_12": "LÓPEZ",
+            "player_number_12": "42",
+            "player_name_13": "PAULINHO",
+            "player_number_13": "10",
+            "player_name_14": "VITOR ROQUE",
+            "player_number_14": "9",
+            "player_name_15": "ANDREAS",
+            "player_number_15": "8"
+          }
+        },
+        "flamengo": {
+          "type": "player_rule",
+          "settings": {
+            "keywords": "flamengo",
+            "exclude_keywords": "",
+            "player_name_1": "G. PLATA",
+            "player_number_1": "19",
+            "player_name_2": "LÉO PEREIRA",
+            "player_number_2": "4",
+            "player_name_3": "S. LINO",
+            "player_number_3": "16",
+            "player_name_4": "DANILO",
+            "player_number_4": "13",
+            "player_name_5": "VARELA",
+            "player_number_5": "2",
+            "player_name_6": "EMERSON ROYAL",
+            "player_number_6": "22",
+            "player_name_7": "ALEX SANDRO",
+            "player_number_7": "26",
+            "player_name_8": "ERICK",
+            "player_number_8": "5",
+            "player_name_9": "ALLAN",
+            "player_number_9": "29",
+            "player_name_10": "JORGINHO",
+            "player_number_10": "21",
+            "player_name_11": "DE ARRASCAETA",
+            "player_number_11": "10",
+            "player_name_12": "DE LA CRUZ",
+            "player_number_12": "18",
+            "player_name_13": "L. PAQUETÁ",
+            "player_number_13": "20",
+            "player_name_14": "BRUNO HENRIQUE",
+            "player_number_14": "27",
+            "player_name_15": "PEDRO",
+            "player_number_15": "9"
+          }
+        }
+      },
+      "block_order": [
+        "sao_paulo",
+        "santos",
+        "vasco",
+        "fluminense",
+        "gremio",
+        "internacional",
+        "atletico_mineiro",
+        "cruzeiro",
+        "corinthians",
+        "palmeiras",
+        "flamengo"
+      ],
+      "settings": {}
+    },
+    "custom-patch-rules": {
+      "type": "custom-patch-rules",
+      "blocks": {
+        "patch_rule_0": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "world cup 2026, 2026 world cup, world cup, copa do mundo, copa do mundo 2026, 2026 copa do mundo",
+            "exclude_keywords": "",
+            "patch_product": "patch-copa-do-mundo-2026",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_1": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "arsenal, aston villa, bournemouth, brentford, brighton, burnley, chelsea, crystal palace, everton, fulham, leeds, liverpool, manchester, newcastle, nottingham, sunderland, tottenham, west ham, wolves",
+            "exclude_keywords": "",
+            "patch_product": "patch-premier-league",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_2": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "real madrid, barcelona, atletico, sevilla, betis, valencia, villarreal, sociedad, bilbao, getafe, osasuna, espanyol, celta, granada, mallorca, rayo, alaves, leganes, levante",
+            "exclude_keywords": "",
+            "patch_product": "patch-laliga",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_3": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "bayern, dortmund, leipzig, leverkusen, stuttgart, frankfurt, wolfsburg, gladbach, hoffenheim, freiburg, mainz, augsburg, bochum, köln, union berlin, werder, heidenheim, darmstadt",
+            "exclude_keywords": "",
+            "patch_product": "patch-bundesliga",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_4": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "juventus, inter milan, milan, roma, lazio, napoli, atalanta, fiorentina, torino, bologna, verona, udinese, genoa, lecce, empoli, monza, cagliari, sassuolo",
+            "exclude_keywords": "",
+            "patch_product": "patch-serie-a",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_5": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "paris, marseille, lyon, monaco, lille, nice, rennes, nantes, strasbourg, montpellier, toulouse, reims, metz, brest, lens, lorient, auxerre, clermont",
+            "exclude_keywords": "",
+            "patch_product": "patch-ligue-1",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_6": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "benfica, porto, sporting, braga, guimaraes, boavista, estoril, famalicao, rio ave, arouca, casa pia, vizela, gil vicente, moreirense, portimonense",
+            "exclude_keywords": "",
+            "patch_product": "patch-liga-portugal",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_7": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "fluminense, vasco, corinthians, são paulo, sao paulo, santos, grêmio, gremio, internacional, cruzeiro, atlético mineiro, atletico mineiro, athletico, bahia, fortaleza, ceará, ceara, goiás, goias, cuiabá, cuiaba, red bull bragantino, bragantino, coritiba, vitória, vitoria, américa mineiro, america mineiro",
+            "exclude_keywords": "",
+            "patch_product": "patch-brasileirao",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_9": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "eintracht frankfurt",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_10": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "atletico madrid",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_11": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "borussia dortmund",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_12": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "bayer leverkusen",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_13": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "real madrid",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-15",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_14": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "barcelona",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-5",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_15": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "bayern",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-6",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_16": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "liverpool",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league-6",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_17": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "milan",
+            "exclude_keywords": "inter milan",
+            "patch_product": "patch-champions-league-7",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_18": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "chelsea",
+            "exclude_keywords": "",
+            "patch_product": "patch-world-champions",
+            "position": "peito",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_19": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "paris",
+            "exclude_keywords": "",
+            "patch_product": "patch-uefa-champions-25-26",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_20": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "tottenham",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_21": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "atalanta",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_22": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "monaco",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_23": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "juventus",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_24": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "sporting cp",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_25": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "marseille",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_26": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "villarreal",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_27": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "manchester",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_28": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "napoli",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_29": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "benfica",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_30": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "olympiacos",
+            "exclude_keywords": "",
+            "patch_product": "patch-champions-league",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_32": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "são paulo, sao paulo, palmeiras",
+            "exclude_keywords": "",
+            "patch_product": "patch-libertadores-3",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_33": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "internacional",
+            "exclude_keywords": "inter milan",
+            "patch_product": "patch-libertadores-2",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_39": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "cruz azul",
+            "exclude_keywords": "",
+            "patch_product": "patches-cruz-azul-champions-24-25",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_40": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "chelsea, paris saint-germain, psg, real madrid, bayern, borussia dortmund, manchester city, juventus, inter milan, atlético de madrid, atletico de madrid, atlético madrid, porto, benfica, red bull salzburg, fluminense, palmeiras, flamengo, botafogo, river plate, boca juniors, inter miami, pachuca, monterrey, seattle sounders, los angeles fc, la fc, al hilal, al ahly, mamelodi sundowns, urawa red diamonds, auckland city",
+            "exclude_keywords": "",
+            "patch_product": "patch-world-cup-2025-participation",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_xK9CDY": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "flamengo",
+            "exclude_keywords": "",
+            "patch_product": "kit-campeao-libertadores-tetra-2025",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "patch_rule_dFrkNR": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "flamengo",
+            "exclude_keywords": "",
+            "patch_product": "patch-campeao-brasileirao-2025",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        }
+      },
+      "block_order": [
+        "patch_rule_0",
+        "patch_rule_1",
+        "patch_rule_2",
+        "patch_rule_3",
+        "patch_rule_4",
+        "patch_rule_5",
+        "patch_rule_6",
+        "patch_rule_7",
+        "patch_rule_9",
+        "patch_rule_10",
+        "patch_rule_11",
+        "patch_rule_12",
+        "patch_rule_13",
+        "patch_rule_14",
+        "patch_rule_15",
+        "patch_rule_16",
+        "patch_rule_17",
+        "patch_rule_18",
+        "patch_rule_19",
+        "patch_rule_20",
+        "patch_rule_21",
+        "patch_rule_22",
+        "patch_rule_23",
+        "patch_rule_24",
+        "patch_rule_25",
+        "patch_rule_26",
+        "patch_rule_27",
+        "patch_rule_28",
+        "patch_rule_29",
+        "patch_rule_30",
+        "patch_rule_32",
+        "patch_rule_33",
+        "patch_rule_39",
+        "patch_rule_40",
+        "patch_rule_xK9CDY",
+        "patch_rule_dFrkNR"
+      ],
+      "settings": {}
+    },
+    "size-chart": {
+      "type": "size-chart-drawer",
+      "blocks": {
+        "tab_1": {
+          "type": "size_table",
+          "settings": {
+            "title": "Camisas Masculinas",
+            "measure_label": "Medida (cm)",
+            "col_headers": "P, M, G, GG, 2GG, 3GG, 4GG",
+            "row_1_name": "Comprimento",
+            "row_1_values": "69-71, 71-73, 73-75, 75-78, 78-81, 81-83, 83-85",
+            "row_2_name": "Largura (peito)",
+            "row_2_values": "53-55, 55-57, 57-58, 58-60, 60-62, 62-64, 64-66",
+            "row_3_name": "Altura Recomendada",
+            "row_3_values": "162-170, 170-176, 176-182, 182-190, 190-195, 195-197, 197-200",
+            "row_4_name": "Peso Recomendado",
+            "row_4_values": "50-62, 62-78, 78-83, 83-90, 90-97, 97-104, 104-110",
+            "row_5_name": "",
+            "row_5_values": "",
+            "table_note": ""
+          }
+        },
+        "tab_2": {
+          "type": "size_table",
+          "settings": {
+            "title": "Camisas Femininas",
+            "measure_label": "Medida (cm)",
+            "col_headers": "P, M, G, GG, 2GG",
+            "row_1_name": "Comprimento",
+            "row_1_values": "60-62, 62-65, 65-68, 68-70, 71-73",
+            "row_2_name": "Largura (peito)",
+            "row_2_values": "40-41, 41-44, 44-46, 46-50, 47-51",
+            "row_3_name": "Altura Recomendada",
+            "row_3_values": "150-160, 160-165, 165-170, 170+, 173-178",
+            "row_4_name": "Peso Recomendado",
+            "row_4_values": "45-52, 52-60, 60-68, 68-75, 75-82",
+            "row_5_name": "",
+            "row_5_values": "",
+            "table_note": ""
+          }
+        },
+        "tab_3": {
+          "type": "size_table",
+          "settings": {
+            "title": "Camisas Versão Jogador",
+            "measure_label": "Medida (cm)",
+            "col_headers": "P, M, G, GG, 2GG, 3GG, 4GG",
+            "row_1_name": "Comprimento",
+            "row_1_values": "68-71, 71-72, 73, 75, 77-78*, 78-80*, 80-84*",
+            "row_2_name": "Largura (peito)",
+            "row_2_values": "47, 51, 52, 53, 55*, 56-58*, 58-60*",
+            "row_3_name": "Altura Recomendada",
+            "row_3_values": "160-170, 170-175, 175-180, 180-190, 190-195*, 185-190*, 190-195*",
+            "row_4_name": "Peso Recomendado",
+            "row_4_values": "55-63, 63-72, 72-80, 80-90, 90-100*, 100-110*, 110-120*",
+            "row_5_name": "",
+            "row_5_values": "",
+            "table_note": "*Estimativas com base em feedbacks reais de clientes."
+          }
+        },
+        "tab_4": {
+          "type": "size_table",
+          "settings": {
+            "title": "Camisas Infantis",
+            "measure_label": "Tamanho",
+            "col_headers": "03-04, 04-05, 05-06, 06-07, 08-09, 10-11, 12-13",
+            "row_1_name": "Comprimento (blusa)",
+            "row_1_values": "44, 47, 50, 53, 56, 59, 62",
+            "row_2_name": "Largura",
+            "row_2_values": "28-30, 30-32, 32-34, 34-36, 36-38, 38-40, 40-42",
+            "row_3_name": "Altura (cm)",
+            "row_3_values": "95-105, 105-115, 115-125, 125-135, 135-145, 145-155, 155-165",
+            "row_4_name": "",
+            "row_4_values": "",
+            "row_5_name": "",
+            "row_5_values": "",
+            "table_note": ""
+          }
+        },
+        "tab_5": {
+          "type": "size_table",
+          "settings": {
+            "title": "Camisas Retrô",
+            "measure_label": "Tamanho",
+            "col_headers": "P, M, G, GG, 2GG, 3GG, 4GG",
+            "row_1_name": "Altura (cm)",
+            "row_1_values": "160-167, 167-172, 172-177, 177-182, 182-187, 187-192, 192-197",
+            "row_2_name": "Peitoral (cm)",
+            "row_2_values": "83-90, 90-97, 97-104, 104-114, 114-124, 124-134, 134-144",
+            "row_3_name": "Cintura (cm)",
+            "row_3_values": "67-74, 74-81, 81-88, 88-98, 98-108, 108-118, 118-128",
+            "row_4_name": "Peso (kg)",
+            "row_4_values": "91-98, 98-105, 105-112, 112-120, 120-128, 128-138, 138-148",
+            "row_5_name": "",
+            "row_5_values": "",
+            "table_note": ""
+          }
+        }
+      },
+      "block_order": [
+        "tab_1",
+        "tab_2",
+        "tab_3",
+        "tab_4",
+        "tab_5"
+      ],
+      "settings": {
+        "heading": "TABELA DE MEDIDAS",
+        "notice_text": "<p><strong>Versão Jogador (Authentic):</strong> é extremamente justa. Recomendamos <strong>1 tamanho acima</strong> do que você costuma usar.</p>",
+        "guide_title": "Como tirar suas medidas:",
+        "guide_text": "<p>Compare com uma camisa que você já tenha. Meça a largura de axila a axila (peito) e o comprimento da gola até a barra.</p>"
+      }
+    },
+    "custom_shop_the_look_rules_global": {
+      "type": "custom-shop-the-look-rules",
+      "blocks": {
+        "rule_DDQNi6": {
+          "type": "rule",
+          "settings": {
+            "keywords": "Flamengo",
+            "exclude_keywords": "",
+            "product_list": [
+              "short-flamengo-adidas-2025-26",
+              "short-flamengo-adidas-2025-26-ii"
+            ],
+            "heading": "Compre Junto e Ganhe Desconto!",
+            "discount_text": "Leve os 2 por apenas",
+            "discount_percentage": 10
+          }
+        }
+      },
+      "block_order": [
+        "rule_DDQNi6"
+      ],
+      "settings": {}
+    },
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": {
+          "type": "text",
+          "settings": {
+            "text": "{{ product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "badges_XBEwXy": {
+          "type": "badges",
+          "settings": {
+            "badge_1_text": "Personalizável",
+            "badge_1_bg": "#71c4f9",
+            "badge_1_text_color": "#ffffff",
+            "badge_2_text": "Frete Grátis",
+            "badge_2_bg": "#171717",
+            "badge_2_text_color": "#ffffff"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "none"
+          }
+        },
+        "shop_the_look_p3bk48": {
+          "type": "shop_the_look",
+          "disabled": true,
+          "settings": {
+            "heading": "Compre Junto",
+            "product_list": [],
+            "limit": 4
+          }
+        },
+        "quantity_selector_i4nafN": {
+          "type": "quantity_selector",
+          "disabled": true,
+          "settings": {}
+        },
+        "scarcity_badge_wPDn6K": {
+          "type": "scarcity_badge",
+          "settings": {
+            "max_stock": 5,
+            "sale_only": true
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "show_gift_card_recipient": false,
+            "hover_bg_color": "#000000",
+            "hover_text_color": "#ffffff"
+          }
+        },
+        "benefits_grid_main": {
+          "type": "benefits_grid",
+          "settings": {
+            "title_1": "Personalize do seu jeito",
+            "desc_1": "Adicione o nome e número do seu craque favorito.",
+            "title_2": "Envio com rastreio Para Todo o Brasil",
+            "desc_2": "Entrega segura com código de rastreio via Correios.",
+            "title_3": "1ª Troca Grátis e sem burocracia",
+            "desc_3": "Não Serviu? A gente resolve para voce",
+            "title_4": "Qualidade Premium Garantida",
+            "desc_4": "Tecido leve, escudos bordados e acabamento de 1ª linha."
+          }
+        },
+        "custom_liquid_dPNC6T": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{% render 'rgd-rating-summary' %}"
+          }
+        },
+        "shipping_calculator_AzgtjY": {
+          "type": "shipping_calculator",
+          "disabled": true,
+          "settings": {
+            "title": "Calcule o frete e prazo de entrega",
+            "subtitle": "Simule com seu CEP",
+            "option_1_title": "🚀 Frete Prioritário ⭐ MAIS RÁPIDO 📦 Produção e envio com prioridade - 8-20 Dias úteis - 39,99",
+            "option_2_title": "Frete Grátis - 📦 Entrega padrão - 15-35 dias úteis - Grátis",
+            "option_3_title": "",
+            "option_4_title": ""
+          }
+        },
+        "promo_banners_aB3xQ1": {
+          "type": "promo_banners",
+          "settings": {
+            "price_heading": "TODAS AS PEÇAS POR R$114,95 (CADA)",
+            "price_subtitle": "Ao Adicionar 4 Ou Mais Produtos No Carrinho",
+            "price_bg_color": "#242e4a",
+            "price_text_color": "#ffffff",
+            "show_ball_promo": true,
+            "ball_text": "<b>LEVE 6</b> ou mais produtos e ganhe uma <b>BOLA DA COPA 2026</b>",
+            "show_keychain_promo": true,
+            "keychain_text": "<b>GANHE UM CHAVEIRO GRÁTIS</b> na sua compra",
+            "row_bg_color": "#f0f2f5"
+          }
+        },
+        "stories_row_ipmRRC": {
+          "type": "stories_row",
+          "settings": {
+            "heading": "",
+            "video_size": "adaptive",
+            "story_1_title": "",
+            "story_1_video": "",
+            "story_1_custom_url": "",
+            "story_2_title": "",
+            "story_2_shopify_video": "shopify://files/videos/IMG_9834 (1).MOV",
+            "story_2_video": "",
+            "story_2_custom_url": "",
+            "story_3_title": "",
+            "story_3_shopify_video": "shopify://files/videos/IMG_4441.MOV",
+            "story_3_video": "",
+            "story_3_custom_url": "",
+            "story_4_title": "",
+            "story_4_shopify_video": "shopify://files/videos/IMG_6915.MOV",
+            "story_4_video": "",
+            "story_4_custom_url": "",
+            "story_5_title": "",
+            "story_5_video": "",
+            "story_5_custom_url": ""
+          }
+        },
+        "custom_image_FMFF9Y": {
+          "type": "custom_image",
+          "settings": {
+            "image": "shopify://shop_images/footkids_banner_icones_54211d5f-c6d4-4c5b-9d2a-ae2b235f57d9.webp",
+            "margin_top": 0,
+            "margin_bottom": 0
+          }
+        },
+        "feedbacks_gallery_Rk7x9Q": {
+          "type": "image_stories_row",
+          "settings": {
+            "heading": "FEEDBACKS RECENTES",
+            "image_size": "medium",
+            "image_1_title": "",
+            "image_1_file": "shopify://shop_images/dticoawhqxjpd2uu1rvh.webp",
+            "image_1_url": "",
+            "image_2_title": "",
+            "image_2_file": "shopify://shop_images/s5yid8nyivz8yide8ylx.webp",
+            "image_2_url": "",
+            "image_3_title": "",
+            "image_3_file": "shopify://shop_images/1_e6c51aea-e526-4901-9661-3397dbfcacfe.png",
+            "image_3_url": "",
+            "image_4_title": "",
+            "image_4_file": "shopify://shop_images/WhatsApp_Image_2025-06-25_at_17.35.39.jpg",
+            "image_4_url": "",
+            "image_5_title": "",
+            "image_5_file": "shopify://shop_images/WhatsApp_Image_2025-08-30_at_15.44.21.jpg",
+            "image_5_url": "",
+            "image_6_title": "",
+            "image_6_file": "shopify://shop_images/WhatsApp_Image_2025-08-12_at_19.23.35_4_b79df9b0-eea7-41a2-8ab1-b8d22fe010c3.jpg",
+            "image_6_url": "",
+            "image_7_title": "",
+            "image_7_file": "shopify://shop_images/WhatsApp_Image_2025-08-12_at_19.23.35_1.jpg",
+            "image_7_url": "",
+            "image_8_title": "",
+            "image_8_file": "shopify://shop_images/WhatsApp_Image_2025-07-23_at_20.35.36_3049eac2-c443-4d21-80f9-193038c454ad.jpg",
+            "image_8_url": "",
+            "image_9_title": "",
+            "image_9_file": "shopify://shop_images/WhatsApp_Image_2025-07-05_at_14.27.44_1.jpg",
+            "image_9_url": "",
+            "image_10_title": "",
+            "image_10_url": "",
+            "image_11_title": "",
+            "image_11_url": "",
+            "image_12_title": "",
+            "image_12_url": "",
+            "image_13_title": "",
+            "image_13_url": "",
+            "image_14_title": "",
+            "image_14_url": "",
+            "image_15_title": "",
+            "image_15_url": "",
+            "image_16_title": "",
+            "image_16_url": "",
+            "image_17_title": "",
+            "image_17_url": "",
+            "image_18_title": "",
+            "image_18_url": "",
+            "image_19_title": "",
+            "image_19_url": "",
+            "image_20_title": "",
+            "image_20_url": ""
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        }
+      },
+      "block_order": [
+        "vendor",
+        "badges_XBEwXy",
+        "title",
+        "price",
+        "variant_picker",
+        "shop_the_look_p3bk48",
+        "quantity_selector_i4nafN",
+        "scarcity_badge_wPDn6K",
+        "buy_buttons",
+        "benefits_grid_main",
+        "custom_liquid_dPNC6T",
+        "shipping_calculator_AzgtjY",
+        "promo_banners_aB3xQ1",
+        "stories_row_ipmRRC",
+        "custom_image_FMFF9Y",
+        "feedbacks_gallery_Rk7x9Q",
+        "description",
+        "share"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-1",
+        "media_size": "medium",
+        "constrain_to_viewport": true,
+        "media_fit": "cover",
+        "gallery_layout": "columns",
+        "mobile_thumbnails": "hide",
+        "media_position": "left",
+        "image_zoom": "hover",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    },
+    "video_stories_E4DLye": {
+      "type": "video-stories",
+      "blocks": {
+        "story_PmrYfw": {
+          "type": "story",
+          "settings": {
+            "title": "Vídeo",
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "custom_video_url": ""
+          }
+        },
+        "story_hhLG4P": {
+          "type": "story",
+          "settings": {
+            "title": "Vídeo",
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "custom_video_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "story_PmrYfw",
+        "story_hhLG4P"
+      ],
+      "disabled": true,
+      "name": "Galeria de Vídeos",
+      "settings": {
+        "header_style": "with_line",
+        "title": "Qualidade e Confiança",
+        "heading_size": "h2",
+        "description": "<p>Faça parte da nossa família.</p>",
+        "description_style": "body",
+        "header_alignment": "center",
+        "video_format": "9-16",
+        "columns_desktop": 4,
+        "color_scheme": "",
+        "padding_top": 16,
+        "padding_bottom": 36
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "header_style": "with_line",
+        "heading": "Você também pode gostar",
+        "header_alignment": "center",
+        "heading_size": "h2",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "padding_top": 0,
+        "padding_bottom": 28
+      }
+    },
+    "17700382027e00a1cc": {
+      "type": "apps",
+      "disabled": true,
+      "settings": {
+        "include_margins": true
+      }
+    }
+  },
+  "order": [
+    "custom-player-rules",
+    "custom-patch-rules",
+    "size-chart",
+    "custom_shop_the_look_rules_global",
+    "main",
+    "video_stories_E4DLye",
+    "related-products",
+    "17700382027e00a1cc"
+  ]
+}

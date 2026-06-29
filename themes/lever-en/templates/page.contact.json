@@ -1,0 +1,36 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "custom_liquid_XKGkGd": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "<div class=\"rte scroll-trigger animate--slide-in\">\n    <h2 style=\"text-align: center; color: #007bff;\"><br><\/h2>\n<div style=\"margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px;\">\n<p>For more information, feel free to reach out directly! You can fill out the form below or use one of our contact channels:<\/p>\n<p><strong>Email:<\/strong> <a href=\"mailto:contact@bgjerseys.com\">contact@bgjerseys.com<\/a><\/p>\n<!-- Here you can include your contact form --><form action=\"#\" method=\"POST\"><!-- Form fields go here --><\/form>\n  <\/div>",
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "form": {
+      "type": "contact-form",
+      "settings": {
+        "heading": "",
+        "heading_size": "h1",
+        "color_scheme": "scheme-1",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "custom_liquid_XKGkGd",
+    "form"
+  ]
+}

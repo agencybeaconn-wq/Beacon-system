@@ -1,0 +1,127 @@
+{%- comment -%}
+  Seção de configuração de regras de patches
+  Permite adicionar e remover patches manualmente pelos donos das lojas
+  Todas as regras embutidas do script também estão aqui
+  Esta seção não renderiza HTML, apenas define o script window.customPatchRules
+{%- endcomment -%}
+
+<script>
+  console.log('DEBUG: custom-patch-rules section is loading...');
+  
+  // Initialize or extend existing customPatchRules
+  if (!window.customPatchRules) {
+    window.customPatchRules = [];
+    console.log('DEBUG: Initialized window.customPatchRules as empty array');
+  } else {
+    console.log('DEBUG: window.customPatchRules already exists with', window.customPatchRules.length, 'rules');
+  }
+  
+  // Add custom rules from admin configuration
+  {%- comment -%} Regras de patches configuradas no Admin {%- endcomment -%}
+  {% if section.blocks.size > 0 %}
+    {% for block in section.blocks %}
+      {% if block.settings.patch_product != blank and block.settings.keywords != blank %}
+      {%- assign keywords_str = block.settings.keywords | strip -%}
+      {%- assign exclude_str = block.settings.exclude_keywords | default: '' | strip -%}
+      {%- if keywords_str != blank -%}
+      {%- assign keywords_array = keywords_str | split: ',' -%}
+      {%- assign exclude_array = exclude_str | split: ',' -%}
+      window.customPatchRules.push({
+        keywords: [
+          {%- for keyword in keywords_array -%}
+            "{{ keyword | strip | downcase }}"{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        ],
+        excludeKeywords: [
+          {%- if exclude_str != blank -%}
+            {%- for keyword in exclude_array -%}
+              "{{ keyword | strip | downcase }}"{% unless forloop.last %},{% endunless %}
+            {%- endfor -%}
+          {%- endif -%}
+        ],
+        patchHandle: {{ block.settings.patch_product.handle | json }},
+        position: {{ block.settings.position | default: 'manga' | json }},
+        patchType: {{ block.settings.patch_type | default: 'participacao' | json }}
+      });
+      {%- endif -%}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  
+  console.log('DEBUG: Custom patch rules loaded:', window.customPatchRules.length, 'rules');
+  console.log('DEBUG: All custom patch rules:', window.customPatchRules);
+</script>
+
+{% schema %}
+{
+  "name": "Configuração de Patches",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Adicione e gerencie as regras de patches aqui. Use as palavras-chave para determinar quais patches aparecem para cada produto."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "patch_rule",
+      "name": "Regra de Patch",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "keywords",
+          "label": "Palavras-chave (separadas por vírgula)",
+          "info": "Ex: portugal, argentina. Se o título do produto conter qualquer uma dessas palavras, o patch será exibido."
+        },
+        {
+          "type": "textarea",
+          "id": "exclude_keywords",
+          "label": "Palavras-chave para Exclusão (separadas por vírgula)",
+          "info": "Ex: lifestyler. Se o título do produto conter qualquer uma dessas palavras, o patch NÃO será exibido, mesmo que corresponda às palavras-chave acima."
+        },
+        {
+          "type": "product",
+          "id": "patch_product",
+          "label": "Produto Patch"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Posição",
+          "options": [
+            { "value": "manga", "label": "Manga" },
+            { "value": "peito", "label": "Peito" },
+            { "value": "manga_peito", "label": "Manga + Peito" }
+          ],
+          "default": "manga"
+        },
+        {
+          "type": "select",
+          "id": "patch_type",
+          "label": "Tipo de Patch",
+          "options": [
+            { "value": "participacao", "label": "Participação" },
+            { "value": "campeao", "label": "Campeão" }
+          ],
+          "default": "participacao"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Configuração de Patches",
+      "blocks": [
+        {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "copa do mundo, world cup, 2026",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

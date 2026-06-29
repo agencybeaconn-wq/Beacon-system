@@ -1,0 +1,159 @@
+{
+  "sections": {
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "cat-shipping": {
+          "type": "category",
+          "settings": {
+            "title": "Free Shipping"
+          }
+        },
+        "q-shipping-1": {
+          "type": "question",
+          "settings": {
+            "question": "Do you ship worldwide?",
+            "answer": "<p>Yes. We offer free worldwide shipping on every order, with no minimum purchase required. Customs and duties taxes are included — no surprise fees on delivery.</p>"
+          }
+        },
+        "q-shipping-2": {
+          "type": "question",
+          "settings": {
+            "question": "How long will my order take to arrive?",
+            "answer": "<p>Standard delivery takes <strong>7–16 business days</strong> depending on your location. You will receive a tracking number by email as soon as your order ships, and you can follow it in real time.</p>"
+          }
+        },
+        "q-shipping-3": {
+          "type": "question",
+          "settings": {
+            "question": "How can I track my order?",
+            "answer": "<p>As soon as your order leaves our warehouse, we send you a tracking link by email. You can also track your order anytime on our <a href=\"/pages/track-order\">Track Order</a> page using your order number and email.</p>"
+          }
+        },
+        "q-shipping-4": {
+          "type": "question",
+          "settings": {
+            "question": "Will I have to pay customs or import fees?",
+            "answer": "<p>No. All customs and import duties are <strong>fully covered by us</strong>. The price you see at checkout is the final price you pay — nothing extra is collected on delivery.</p>"
+          }
+        },
+        "q-shipping-5": {
+          "type": "question",
+          "settings": {
+            "question": "What if my package is lost or damaged?",
+            "answer": "<p>Every order is shipped with full carrier insurance. If a package arrives damaged or fails to arrive, contact our support team within 14 days of the expected delivery date and we will send a replacement at no cost.</p>"
+          }
+        },
+
+        "cat-service": {
+          "type": "category",
+          "settings": {
+            "title": "Customer Service"
+          }
+        },
+        "q-service-1": {
+          "type": "question",
+          "settings": {
+            "question": "When can I reach customer support?",
+            "answer": "<p>Our team is available <strong>Monday to Friday, 9 AM – 6 PM (GMT)</strong>. We typically respond to all inquiries within 24 hours on business days.</p>"
+          }
+        },
+        "q-service-2": {
+          "type": "question",
+          "settings": {
+            "question": "How do I contact you?",
+            "answer": "<p>The fastest way is through our <a href=\"/pages/contact\">Contact page</a>. You can also email us directly — every message is read and answered by a real person on our team, never an automated reply.</p>"
+          }
+        },
+        "q-service-3": {
+          "type": "question",
+          "settings": {
+            "question": "Can I change or cancel my order after placing it?",
+            "answer": "<p>Yes, as long as your order has not yet been processed for shipping. Reach out within 12 hours of ordering and we will update or cancel it for you. Once your tracking number is generated, the package is already in transit and cannot be modified.</p>"
+          }
+        },
+        "q-service-4": {
+          "type": "question",
+          "settings": {
+            "question": "What is your return and refund policy?",
+            "answer": "<p>We offer <strong>30-day hassle-free returns</strong>. If you are not fully satisfied with your timepiece, return it in its original condition for a full refund. Full details on our <a href=\"/policies/refund-policy\">Refund Policy</a> page.</p>"
+          }
+        },
+        "q-service-5": {
+          "type": "question",
+          "settings": {
+            "question": "Do your watches come with a warranty?",
+            "answer": "<p>Yes. Every Mont Royal timepiece is covered by a <strong>2-year international warranty</strong> against manufacturing defects. Wear it with confidence, anywhere in the world.</p>"
+          }
+        },
+
+        "cat-payment": {
+          "type": "category",
+          "settings": {
+            "title": "Secure Payment"
+          }
+        },
+        "q-payment-1": {
+          "type": "question",
+          "settings": {
+            "question": "Is my payment information secure?",
+            "answer": "<p>Absolutely. All transactions are processed through industry-standard <strong>PCI-DSS compliant encryption</strong>. We never see, store, or have access to your card information at any point.</p>"
+          }
+        },
+        "q-payment-2": {
+          "type": "question",
+          "settings": {
+            "question": "Which payment methods do you accept?",
+            "answer": "<p>We accept all major credit and debit cards (Visa, Mastercard, American Express), Apple Pay, Google Pay, PayPal, and Shop Pay. Payment options are shown at checkout based on your region.</p>"
+          }
+        },
+        "q-payment-3": {
+          "type": "question",
+          "settings": {
+            "question": "Can I pay in installments?",
+            "answer": "<p>Yes. At checkout you will see installment options with <strong>Shop Pay, Klarna or Afterpay</strong> (availability depends on your country). Split your purchase into 4 interest-free payments.</p>"
+          }
+        },
+        "q-payment-4": {
+          "type": "question",
+          "settings": {
+            "question": "Will I be charged in my local currency?",
+            "answer": "<p>Yes. Prices automatically adjust to your local currency at checkout. Your card will be charged the exact amount displayed — no hidden conversion fees on our end.</p>"
+          }
+        },
+        "q-payment-5": {
+          "type": "question",
+          "settings": {
+            "question": "I was charged but did not receive an order confirmation. What do I do?",
+            "answer": "<p>First, check your spam or promotions folder — confirmation emails sometimes land there. If you still cannot find it after one hour, contact us with the email used at checkout and we will resend it immediately.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "cat-shipping",
+        "q-shipping-1",
+        "q-shipping-2",
+        "q-shipping-3",
+        "q-shipping-4",
+        "q-shipping-5",
+        "cat-service",
+        "q-service-1",
+        "q-service-2",
+        "q-service-3",
+        "q-service-4",
+        "q-service-5",
+        "cat-payment",
+        "q-payment-1",
+        "q-payment-2",
+        "q-payment-3",
+        "q-payment-4",
+        "q-payment-5"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "faq"
+  ]
+}
+

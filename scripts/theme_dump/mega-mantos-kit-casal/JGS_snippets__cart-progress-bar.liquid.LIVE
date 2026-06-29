@@ -1,0 +1,281 @@
+{%- liquid
+  # Carrega das settings globais
+  assign goal_1 = settings.milestone_1_quantity | default: 3
+  assign goal_2 = settings.milestone_2_quantity | default: 6
+  assign milestone_1_badge = settings.milestone_1_badge | default: "Get 3"
+  assign milestone_2_badge = settings.milestone_2_badge | default: "Get 6"
+  assign milestone_1_icon = settings.milestone_1_icon | default: "shirt"
+  assign milestone_2_icon = settings.milestone_2_icon | default: "gift"
+  assign milestone_0_icon = settings.milestone_0_icon | default: "home"
+
+  # Contar camisas (excluindo apenas patches "soltos")
+  assign shirt_count = 0
+  for item in cart.items
+    assign p_title = item.product.title | downcase | default: ""
+    assign f_title = item.title | downcase | default: ""
+    
+    # Critério de Camisa: Quase tudo é camisa, exceto se for explicitamente Patch
+    assign is_shirt = true
+    
+    # Se tiver a propriedade Posição ou 'patch' no título (e NÃO tiver os termos de camisa no título), é um Patch
+    if item.properties['Posição'] != blank
+       assign is_shirt = false
+    elsif f_title contains 'patch'
+       unless f_title contains 'camisa' or f_title contains 'jersey' or f_title contains 'manto' or f_title contains 'retrô' or f_title contains 'kit'
+          assign is_shirt = false
+       endunless
+    elsif p_title contains 'patch'
+       unless p_title contains 'camisa' or p_title contains 'jersey' or p_title contains 'manto' or p_title contains 'retrô' or p_title contains 'kit'
+          assign is_shirt = false
+       endunless
+    endif
+
+    # Kit Casal: já é promoção à parte, não conta nos milestones
+    if item.product.tags contains 'kit-casal'
+      assign is_shirt = false
+    endif
+
+    if is_shirt
+      assign shirt_count = shirt_count | plus: item.quantity
+    endif
+  endfor
+
+  # Determinar Estágio
+  assign current_stage = 1
+  if shirt_count >= goal_1
+    assign current_stage = 2
+  endif
+
+  # Calcular progresso (Sliding Window)
+  assign progress_percent = 0
+  if current_stage == 1
+    if shirt_count > 0
+      assign progress_percent = shirt_count | times: 100.0 | divided_by: goal_1
+    endif
+  else
+    if shirt_count >= goal_2
+      assign progress_percent = 100
+    else
+      assign extra = shirt_count | minus: goal_1
+      assign range = goal_2 | minus: goal_1
+      assign progress_percent = extra | times: 100.0 | divided_by: range
+    endif
+  endif
+
+  if progress_percent > 100
+    assign progress_percent = 100
+  endif
+-%}
+
+<div class="cart-progress-bar-container {% if shirt_count < goal_1 %}stage-1{% else %}stage-2{% endif %}" id="CartProgressBar" data-shirt-count="{{ shirt_count }}" data-goal-1="{{ goal_1 }}" data-goal-2="{{ goal_2 }}" style="margin-top: 20px;">
+  <div class="cart-progress-bar__header">
+    <div class="cart-progress-bar__message-wrapper">
+       <div class="cart-progress-bar__message">
+        {%- liquid
+           # Usamos o texto exatamente como configurado pelo lojista, sem replace automático que quebra textos customizados.
+           assign msg_0 = settings.message_0
+           assign msg_1 = settings.message_1
+           assign msg_2 = settings.message_2
+           assign msg_3 = settings.message_3
+           assign msg_4 = settings.message_4
+           assign msg_5 = settings.message_5
+           assign msg_6 = settings.message_6
+           assign msg_7 = settings.message_7
+           assign msg_8 = settings.message_8
+           assign msg_9 = settings.message_9
+           assign msg_10_plus = settings.message_10_plus
+        -%}
+
+        {%- if shirt_count == 0 -%}
+          {{ settings.message_0 }}
+        {%- elsif shirt_count == 1 -%}
+          {{ settings.message_1 }}
+        {%- elsif shirt_count == 2 -%}
+          {{ settings.message_2 }}
+        {%- elsif shirt_count == 3 -%}
+          {{ settings.message_3 }}
+        {%- elsif shirt_count == 4 -%}
+          {{ settings.message_4 }}
+        {%- elsif shirt_count == 5 -%}
+          {{ settings.message_5 }}
+        {%- elsif shirt_count == 6 -%}
+          {{ settings.message_6 }}
+        {%- elsif shirt_count == 7 -%}
+          {{ settings.message_7 }}
+        {%- elsif shirt_count == 8 -%}
+          {{ settings.message_8 }}
+        {%- elsif shirt_count == 9 -%}
+          {{ settings.message_9 }}
+        {%- else -%}
+          {{ settings.message_10_plus }}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="cart-progress-bar__track-wrapper">
+    <div class="cart-progress-bar__track">
+      <div class="cart-progress-bar__fill" style="width: {{ progress_percent }}%;"></div>
+      
+      {%- comment -%} Steps {%- endcomment -%}
+      <div class="cart-progress-bar__steps">
+        {% if current_stage == 1 %}
+          {% for i in (1..goal_1) %}
+            {% if i < goal_1 %}
+              {% assign pos = i | times: 100.0 | divided_by: goal_1 %}
+              <div class="cart-progress-bar__step step-{{ i }} {% if shirt_count >= i %}is-reached{% endif %}" style="left: {{ pos }}%;">
+                 <div class="step__icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+                 </div>
+                 <div class="step__checkmark">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                 </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          {% assign start_i = goal_1 | plus: 1 %}
+          {% assign range = goal_2 | minus: goal_1 %}
+          {% for i in (start_i..goal_2) %}
+            {% if i < goal_2 %}
+              {% assign e = i | minus: goal_1 %}
+              {% assign pos = e | times: 100.0 | divided_by: range %}
+              <div class="cart-progress-bar__step step-{{ i }} {% if shirt_count >= i %}is-reached{% endif %}" style="left: {{ pos }}%;">
+                 <div class="step__icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+                 </div>
+                 <div class="step__checkmark">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                 </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      {%- comment -%} Milestone 0 - Start of Stage 1 {%- endcomment -%}
+      {% if current_stage == 1 %}
+        <div class="cart-progress-bar__milestone milestone-0 is-reached" style="left: 0% !important;">
+          <div class="milestone__icon-container">
+            <div class="milestone__icon">
+              {% render 'icon-shirt' %}
+            </div>
+            <div class="milestone__checkmark">
+               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {%- comment -%} Milestone 1 {%- endcomment -%}
+      {%- liquid
+         assign m1_pos = 100
+         assign m1_reached = false
+         if current_stage == 2
+           assign m1_pos = 0
+           assign m1_reached = true
+         elsif shirt_count >= goal_1
+           assign m1_reached = true
+         endif
+      -%}
+      <div class="cart-progress-bar__milestone milestone-1 {% if m1_reached %}is-reached{% endif %}" style="left: {{ m1_pos }}% !important;">
+        <span class="milestone__badge">{{ milestone_1_badge }}</span>
+        <div class="milestone__icon-container">
+          <div class="milestone__icon">
+            {%- case milestone_1_icon -%}
+              {%- when 'shirt' -%}
+                {% render 'icon-shirt' %}
+              {%- when 'gift' -%}
+                {% render 'icon-gift' %}
+              {%- when 'trophy' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M232,64H208V56a16,16,0,0,0-16-16H168a16,16,0,0,0-16,16v8H104V56A16,16,0,0,0,88,40H64A16,16,0,0,0,48,56v8H24A16,16,0,0,0,8,80V96a40,40,0,0,0,40,40h3.65A80.13,80.13,0,0,0,120,191.61V216H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V191.58c31.94-3.23,58.44-25.64,68.08-55.58H208a40,40,0,0,0,40-40V80A16,16,0,0,0,232,64Z"></path>
+                </svg>
+              {%- when 'star' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M234.5,114.38l-45.1,39.36,13.51,58.6a16,16,0,0,1-23.84,17.34l-51.11-31-51,31a16,16,0,0,1-23.84-17.34L66.61,153.8,21.5,114.38a16,16,0,0,1,9.11-28.06l59.46-5.15,23.21-55.36a16,16,0,0,1,29.44,0h0L166,81.17l59.44,5.15a16,16,0,0,1,9.11,28.06Z"></path>
+                </svg>
+              {%- when 'ball' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm87.63,96H175.8c-1.37-34.19-11.32-65.82-27.52-90.13A88.2,88.2,0,0,1,215.63,120ZM128,207.83c-16.13-4.52-39.48-24.68-47.53-79.83h95.06C167.48,183.15,144.13,203.31,128,207.83ZM80.47,112C88.52,56.85,111.87,36.69,128,32.17c16.13,4.52,39.48,24.68,47.53,79.83ZM107.72,29.87C91.52,54.18,81.57,85.81,80.2,120H40.37A88.2,88.2,0,0,1,107.72,29.87ZM40.37,136H80.2c1.37,34.19,11.32,65.82,27.52,90.13A88.2,88.2,0,0,1,40.37,136Zm107.91,90.13c16.2-24.31,26.15-55.94,27.52-90.13h39.83A88.2,88.2,0,0,1,148.28,226.13Z"></path>
+                </svg>
+              {%- when 'custom' -%}
+                {%- if settings.milestone_1_custom_svg != blank -%}
+                  {{ settings.milestone_1_custom_svg }}
+                {%- else -%}
+                  {% render 'icon-shirt' %}
+                {%- endif -%}
+              {%- else -%}
+                {% render 'icon-shirt' %}
+            {%- endcase -%}
+          </div>
+          <div class="milestone__checkmark">
+             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} Milestone 2 {%- endcomment -%}
+      {% if current_stage == 2 %}
+        <div class="cart-progress-bar__milestone milestone-2 {% if shirt_count >= goal_2 %}is-reached{% endif %}" style="left: 100% !important;">
+          <span class="milestone__badge">{{ milestone_2_badge }}</span>
+          <div class="milestone__icon-container">
+            <div class="milestone__icon">
+              {%- case milestone_2_icon -%}
+                {%- when 'shirt' -%}
+                  {% render 'icon-shirt' %}
+                {%- when 'gift' -%}
+                  {% render 'icon-gift' %}
+                {%- when 'trophy' -%}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M232,64H208V56a16,16,0,0,0-16-16H168a16,16,0,0,0-16,16v8H104V56A16,16,0,0,0,88,40H64A16,16,0,0,0,48,56v8H24A16,16,0,0,0,8,80V96a40,40,0,0,0,40,40h3.65A80.13,80.13,0,0,0,120,191.61V216H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V191.58c31.94-3.23,58.44-25.64,68.08-55.58H208a40,40,0,0,0,40-40V80A16,16,0,0,0,232,64Z"></path>
+                  </svg>
+                {%- when 'star' -%}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M234.5,114.38l-45.1,39.36,13.51,58.6a16,16,0,0,1-23.84,17.34l-51.11-31-51,31a16,16,0,0,1-23.84-17.34L66.61,153.8,21.5,114.38a16,16,0,0,1,9.11-28.06l59.46-5.15,23.21-55.36a16,16,0,0,1,29.44,0h0L166,81.17l59.44,5.15a16,16,0,0,1,9.11,28.06Z"></path>
+                  </svg>
+                {%- when 'ball' -%}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm87.63,96H175.8c-1.37-34.19-11.32-65.82-27.52-90.13A88.2,88.2,0,0,1,215.63,120ZM128,207.83c-16.13-4.52-39.48-24.68-47.53-79.83h95.06C167.48,183.15,144.13,203.31,128,207.83ZM80.47,112C88.52,56.85,111.87,36.69,128,32.17c16.13,4.52,39.48,24.68,47.53,79.83ZM107.72,29.87C91.52,54.18,81.57,85.81,80.2,120H40.37A88.2,88.2,0,0,1,107.72,29.87ZM40.37,136H80.2c1.37,34.19,11.32,65.82,27.52,90.13A88.2,88.2,0,0,1,40.37,136Zm107.91,90.13c16.2-24.31,26.15-55.94,27.52-90.13h39.83A88.2,88.2,0,0,1,148.28,226.13Z"></path>
+                  </svg>
+                {%- when 'custom' -%}
+                  {%- if settings.milestone_2_custom_svg != blank -%}
+                    {{ settings.milestone_2_custom_svg }}
+                  {%- else -%}
+                    {% render 'icon-gift' %}
+                  {%- endif -%}
+                {%- else -%}
+                  {% render 'icon-gift' %}
+              {%- endcase -%}
+            </div>
+            <div class="milestone__checkmark">
+               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="cart-progress-bar__bonuses {% if shirt_count >= 1 %}is-visible{% endif %}" data-min-items="1">
+    {%- if settings.bonus_1_enabled -%}
+      <div class="cart-progress-bar__bonus-item">
+        <span class="bonus-item__icon">
+          {{ settings.bonus_1_icon_svg }}
+        </span>
+        <span class="bonus-item__text">{{ settings.bonus_1_text }}</span>
+        <span class="bonus-item__check">✓</span>
+      </div>
+    {%- endif -%}
+
+    {%- if settings.bonus_2_enabled -%}
+      <div class="cart-progress-bar__bonus-item">
+        <span class="bonus-item__icon">
+          {{ settings.bonus_2_icon_svg }}
+        </span>
+        <span class="bonus-item__text">{{ settings.bonus_2_text }}</span>
+        <span class="bonus-item__check">✓</span>
+      </div>
+    {%- endif -%}
+  </div>
+</div>

@@ -1,0 +1,370 @@
+{{ 'section-video-stories.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'video-stories.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign video_format = section.settings.video_format | default: '9-16'
+  case video_format
+    when '9-16'
+      assign aspect_ratio = '9 / 16'
+    when '16-9'
+      assign aspect_ratio = '16 / 9'
+    when '1-1'
+      assign aspect_ratio = '1 / 1'
+    when '4-5'
+      assign aspect_ratio = '4 / 5'
+    else
+      assign aspect_ratio = '9 / 16'
+  endcase
+-%}
+
+<div class="color-{{ section.settings.color_scheme }} isolate gradient">
+  <div class="video-stories section-{{ section.id }}-padding page-width">
+    {%- if section.settings.title != blank -%}
+      <div class="title-wrapper title-wrapper--no-top-margin {% if section.settings.header_alignment == 'center' %}center{% endif %}" style="text-align: {{ section.settings.header_alignment }}; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0;">
+        <div class="{% if section.settings.header_style == 'with_line' %}section-header--with-line section-header--{{ section.settings.header_alignment }}{% endif %}">
+          <h2 class="title inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" style="margin-bottom: 0.2rem;">
+            {{ section.settings.title }}
+          </h2>
+        </div>
+        {%- if section.settings.description != blank -%}
+          <div class="collection__description {{ section.settings.description_style }} rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" style="margin-top: 0; margin-bottom: 0;">
+            {{ section.settings.description -}}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="video-stories__container" style="--columns-desktop: {{ section.settings.columns_desktop }}; --video-aspect-ratio: {{ aspect_ratio }};">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign has_cover_image = false
+          if block.settings.image != blank
+            assign has_cover_image = true
+          endif
+          
+          assign has_shopify_video = false
+          if block.settings.video != blank
+            assign has_shopify_video = true
+          endif
+
+          assign has_custom_url = false
+          if block.settings.custom_video_url != blank
+            assign has_custom_url = true
+          endif
+
+          assign has_external_url = false
+          if block.settings.video_url != blank
+            assign has_external_url = true
+          endif
+        -%}
+        <div class="video-stories__item" {{ block.shopify_attributes }}>
+          <button
+            type="button"
+            class="video-stories__button"
+            data-video-url="{{ block.settings.video_url }}"
+            data-custom-video-url="{{ block.settings.custom_video_url }}"
+            data-video-type="{% if has_shopify_video %}shopify{% elsif has_custom_url %}custom{% else %}external{% endif %}"
+            {% if has_shopify_video %}
+              data-shopify-video-src="{{ block.settings.video.sources[1].url }}"
+              data-shopify-video-type="{{ block.settings.video.sources[1].mime_type }}"
+            {% endif %}
+            aria-label="{{ block.settings.title | default: 'Reproduzir vídeo' }}"
+          >
+            <div class="video-stories__thumbnail">
+              {%- if has_cover_image -%}
+                {%- comment -%} Cover image set: show static image {%- endcomment -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 600
+                  | image_tag: loading: 'lazy', class: 'video-stories__image'
+                }}
+                <div class="video-stories__overlay">
+                  <span class="video-stories__icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </span>
+                </div>
+              {%- elsif has_shopify_video -%}
+                {%- comment -%} No cover image, Shopify video: autoplay inline muted {%- endcomment -%}
+                <video
+                  class="video-stories__preview-video"
+                  loop
+                  muted
+                  playsinline
+                  preload="none"
+                  data-lazy-video
+                  poster="{{ block.settings.video.preview_image | image_url: width: 600 }}"
+                >
+                  <source src="{{ block.settings.video.sources[1].url }}" type="{{ block.settings.video.sources[1].mime_type }}">
+                </video>
+                <div class="video-stories__overlay video-stories__overlay--subtle">
+                  <span class="video-stories__icon video-stories__icon--small">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </span>
+                </div>
+              {%- elsif has_custom_url -%}
+                {%- comment -%} No cover image, Custom MP4: autoplay inline muted {%- endcomment -%}
+                <video
+                  class="video-stories__preview-video"
+                  loop
+                  muted
+                  playsinline
+                  preload="none"
+                  data-lazy-video
+                >
+                  <source src="{{ block.settings.custom_video_url }}" type="video/mp4">
+                </video>
+                <div class="video-stories__overlay video-stories__overlay--subtle">
+                  <span class="video-stories__icon video-stories__icon--small">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </span>
+                </div>
+              {%- else -%}
+                {{ 'collection-1' | placeholder_svg_tag: 'video-stories__image placeholder-svg' }}
+                <div class="video-stories__overlay">
+                  <span class="video-stories__icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </span>
+                </div>
+              {%- endif -%}
+            </div>
+          </button>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<div id="VideoStoriesModal" class="video-stories-modal" aria-hidden="true">
+    <button type="button" class="video-stories-modal__close" aria-label="Fechar">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <button type="button" class="video-stories-modal__mute" aria-label="Mutar/Desmutar">
+      <svg class="icon-unmuted" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <line x1="19" y1="5" x2="19" y2="19"></line>
+      </svg>
+      <svg class="icon-muted hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <line x1="23" y1="9" x2="17" y2="15"></line>
+        <line x1="17" y1="9" x2="23" y2="15"></line>
+      </svg>
+    </button>
+  <div class="video-stories-modal__content">
+    <div class="video-stories-modal__video-container">
+      <!-- Video will be injected here -->
+    </div>
+  </div>
+  <div class="video-stories-modal__backdrop"></div>
+</div>
+
+{% schema %}
+{
+  "name": "Galeria de Vídeos",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Cabeçalho"
+    },
+    {
+      "type": "select",
+      "id": "header_style",
+      "label": "Estilo do Cabeçalho",
+      "options": [
+        { "value": "standard", "label": "Padrão" },
+        { "value": "with_line", "label": "Com Linha" }
+      ],
+      "default": "standard"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Vídeos",
+      "label": "Título"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Heading 2" },
+        { "value": "h1", "label": "Heading 1" },
+        { "value": "h0", "label": "Heading 0" },
+        { "value": "hxl", "label": "Heading XL" },
+        { "value": "hxxl", "label": "Heading XXL" }
+      ],
+      "default": "h1",
+      "label": "Tamanho do Título"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Descrição",
+      "default": "<p>Confira nossos vídeos exclusivos.</p>"
+    },
+    {
+      "type": "select",
+      "id": "description_style",
+      "label": "Estilo da Descrição",
+      "options": [
+        { "value": "body", "label": "Corpo" },
+        { "value": "subtitle", "label": "Subtítulo" },
+        { "value": "uppercase", "label": "Maiúsculas" }
+      ],
+      "default": "body"
+    },
+    {
+      "type": "select",
+      "id": "header_alignment",
+      "label": "Alinhamento do Cabeçalho",
+      "options": [
+        { "value": "left", "label": "Esquerda" },
+        { "value": "center", "label": "Centro" },
+        { "value": "right", "label": "Direita" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "video_format",
+      "label": "Formato dos Vídeos",
+      "options": [
+        { "value": "9-16", "label": "Stories (9:16)" },
+        { "value": "4-5", "label": "Retrato (4:5)" },
+        { "value": "1-1", "label": "Quadrado (1:1)" },
+        { "value": "16-9", "label": "Paisagem (16:9)" }
+      ],
+      "default": "9-16",
+      "info": "O formato escolhido será aplicado a todos os vídeos da seção."
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "label": "Colunas no Desktop"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Esquema de Cores",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Espaçamento"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Espaçamento Superior",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Espaçamento Inferior",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "story",
+      "name": "Vídeo",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Vídeo"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Vídeo da Shopify (Upload)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagem de Capa",
+          "info": "Se adicionada, o vídeo ficará estático com esta capa. Se vazio, o vídeo roda automaticamente."
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "accept": ["youtube", "vimeo"],
+          "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+          "label": "URL do Vídeo (YouTube/Vimeo)",
+          "info": "Aceita links do YouTube ou Vimeo"
+        },
+        {
+          "type": "text",
+          "id": "custom_video_url",
+          "label": "URL de Vídeo MP4 Externo",
+          "info": "Cole um link direto para um arquivo .mp4"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Galeria de Vídeos",
+      "blocks": [
+        { "type": "story" },
+        { "type": "story" },
+        { "type": "story" },
+        { "type": "story" }
+      ]
+    }
+  ]
+}
+{% endschema %}

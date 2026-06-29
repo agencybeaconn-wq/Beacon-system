@@ -1,0 +1,267 @@
+[
+  {
+    "name": "chaves",
+    "id": "prj_ouWpPJC7nHCzgvz1gdWhDYb8Icub",
+    "framework": "nextjs",
+    "productionDomain": "chaves-leveragencys-projects.vercel.app",
+    "latestDeployUrl": "chaves-fxmg2k3uy-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/chaves",
+    "updated": "2026-05-18",
+    "supabase": null,
+    "envKeys": [
+      "MEDUSA_BACKEND_URL",
+      "NEXT_PUBLIC_BASE_URL",
+      "NEXT_PUBLIC_DEFAULT_REGION",
+      "NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY",
+      "NEXT_PUBLIC_PAYPAL_CLIENT_ID",
+      "REVALIDATE_SECRET"
+    ],
+    "errors": []
+  },
+  {
+    "name": "lever-system",
+    "id": "prj_BfrCUR27HAezXW0VROaC1o74mOD5",
+    "framework": "vite",
+    "productionDomain": "app.leverag.digital",
+    "latestDeployUrl": "lever-system-gej1ntef3-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/LeverSystem",
+    "updated": "2026-05-18",
+    "supabase": {
+      "ref": null,
+      "project": "unknown (no URL value visible)",
+      "envKeys": [
+        "VITE_SUPABASE_PUBLISHABLE_KEY",
+        "VITE_SUPABASE_URL"
+      ]
+    },
+    "envKeys": [
+      "VITE_APP_URL",
+      "VITE_FB_APP_ID",
+      "VITE_SUPABASE_PUBLISHABLE_KEY",
+      "VITE_SUPABASE_URL"
+    ],
+    "errors": []
+  },
+  {
+    "name": "revisor-de-artigos",
+    "id": "prj_Z2e2Oboi3fu9d9xxK6QqqoxWfWBq",
+    "framework": "vite",
+    "productionDomain": "revisor-de-artigos.vercel.app",
+    "latestDeployUrl": "revisor-de-artigos-n4g4ojya9-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/Revisor-de-Artigos",
+    "updated": "2026-05-18",
+    "supabase": null,
+    "envKeys": [],
+    "errors": []
+  },
+  {
+    "name": "lever-lp",
+    "id": "prj_BzHV4seXhHWRXftlgaDKVeinn98O",
+    "framework": "vite",
+    "productionDomain": "lever-lp.vercel.app",
+    "latestDeployUrl": "lever-itwqu2739-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/LeverSite",
+    "updated": "2026-05-18",
+    "supabase": null,
+    "envKeys": [],
+    "errors": []
+  },
+  {
+    "name": "lads-ai-optimizer",
+    "id": "prj_WGfSXRaxBtoWlmli06BZaBusrR95",
+    "framework": "vite",
+    "productionDomain": "app.leverads.io",
+    "latestDeployUrl": "lads-ai-optimizer-glo4qpbgh-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/Leverads.AI",
+    "updated": "2026-05-17",
+    "supabase": null,
+    "envKeys": [],
+    "errors": []
+  },
+  {
+    "name": "coreduca-dorama-kpop",
+    "id": "prj_RhK9ZfYRXUxFUPTNNrZ6JQpD6EkI",
+    "framework": "vite",
+    "productionDomain": "coreduca-dorama-kpop.vercel.app",
+    "latestDeployUrl": "coreduca-dorama-kpop-i2uu0vkne-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/coreduca-dorama-kpop",
+    "updated": "2026-05-16",
+    "supabase": null,
+    "envKeys": [],
+    "errors": []
+  },
+  {
+    "name": "oratoria-maestro-capture",
+    "id": "prj_PXAWj8l1nzBvYCXEW7owrTuXCYM0",
+    "framework": "vite",
+    "productionDomain": "www.anaventura.site",
+    "latestDeployUrl": "oratoria-maestro-capture-qjktvlst2-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/oratoria-maestro-capture",
+    "updated": "2026-05-16",
+    "supabase": null,
+    "envKeys": [],
+    "errors": []
+  },
+  {
+    "name": "fg-atacado",
+    "id": "prj_yPNEt3QHf337Bt4YxcX7jZWrKYQK",
+    "framework": "nextjs",
+    "productionDomain": "www.fgatacado.com",
+    "latestDeployUrl": "fg-atacado-5xndqzaxe-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/fg-atacado",
+    "updated": "2026-05-15",
+    "supabase": null,
+    "envKeys": [
+      "MEDUSA_BACKEND_URL",
+      "NEXT_PUBLIC_BASE_URL",
+      "NEXT_PUBLIC_DEFAULT_REGION",
+      "NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY",
+      "NEXT_PUBLIC_R2_PUBLIC_HOSTNAME"
+    ],
+    "errors": []
+  },
+  {
+    "name": "web",
+    "id": "prj_ABA5qqHgS3StC5lOBRUDzgRNT1IH",
+    "framework": "nextjs",
+    "productionDomain": "web-leveragencys-projects.vercel.app",
+    "latestDeployUrl": "web-6v0zwcyhv-leveragencys-projects.vercel.app",
+    "gitRepo": null,
+    "updated": "2026-04-06",
+    "supabase": null,
+    "envKeys": [],
+    "errors": []
+  },
+  {
+    "name": "ab-con",
+    "id": "prj_pD5pU8QEYLGDTruT01oHVedIk7Ra",
+    "framework": "vite",
+    "productionDomain": "www.abcon.site",
+    "latestDeployUrl": "ab-a3do9htd0-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/AbCon",
+    "updated": "2026-03-25",
+    "supabase": null,
+    "envKeys": [],
+    "errors": []
+  },
+  {
+    "name": "lp-focus-club",
+    "id": "prj_GvNZJGrfot6sXWZmXHPa1jd4jS8z",
+    "framework": "vite",
+    "productionDomain": "www.focusclub.pro",
+    "latestDeployUrl": "lp-focus-club-pzb1j5q13-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/LP-Focus-Club",
+    "updated": "2026-03-09",
+    "supabase": null,
+    "envKeys": [],
+    "errors": []
+  },
+  {
+    "name": "lp-carradore",
+    "id": "prj_cNCION4PdXxR6HZrOnOCikAu6Na5",
+    "framework": "vite",
+    "productionDomain": "lp-carradore.vercel.app",
+    "latestDeployUrl": "lp-carradore-638k0oqdt-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/silverstone-landing-craft",
+    "updated": "2026-01-23",
+    "supabase": null,
+    "envKeys": [],
+    "errors": []
+  },
+  {
+    "name": "lads-ai-lp",
+    "id": "prj_5g7qv1cBOD1K8vwVP3HsRsev1cE6",
+    "framework": "vite",
+    "productionDomain": "www.leverads.io",
+    "latestDeployUrl": "lads-ai-9syibea53-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/LadsAI-LP",
+    "updated": "2026-01-15",
+    "supabase": null,
+    "envKeys": [],
+    "errors": []
+  },
+  {
+    "name": "agro-capital-leveraged",
+    "id": "prj_NfxbYVU6zeGJ9JEksUo8Q7biBkwH",
+    "framework": "vite",
+    "productionDomain": "agro-capital-leveraged.vercel.app",
+    "latestDeployUrl": "agro-capital-leveraged-e27pudop9-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/agro-capital-leveraged",
+    "updated": "2025-12-13",
+    "supabase": null,
+    "envKeys": [],
+    "errors": []
+  },
+  {
+    "name": "size-genius",
+    "id": "prj_mNd4Snm7Yaj63SjR0TD3zTafvC67",
+    "framework": "vite",
+    "productionDomain": "size-genius.vercel.app",
+    "latestDeployUrl": "size-genius-8mr1dfqdg-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/size-genius",
+    "updated": "2025-11-11",
+    "supabase": null,
+    "envKeys": [],
+    "errors": []
+  },
+  {
+    "name": "entrar-em-contato",
+    "id": "prj_yM2HfSoOwS4YUQA6s99y0pK7pQmK",
+    "framework": "vite",
+    "productionDomain": "entrar-em-contato.vercel.app",
+    "latestDeployUrl": "entrar-em-contato-4vgh6q28h-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/entrar_em_contato",
+    "updated": "2025-10-16",
+    "supabase": null,
+    "envKeys": [],
+    "errors": []
+  },
+  {
+    "name": "novo-simulador-131025",
+    "id": "prj_qTvcFBNLXbNzshCarC2jrLxyFcj4",
+    "framework": "vite",
+    "productionDomain": "novo-simulador-131025.vercel.app",
+    "latestDeployUrl": "novo-simulador-131025-q7jd4x75i-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/novo_simulador_131025",
+    "updated": "2025-10-14",
+    "supabase": null,
+    "envKeys": [],
+    "errors": []
+  },
+  {
+    "name": "flexicred-filiais",
+    "id": "prj_DWYJHLee2I5S1i85EXkUh5GtLhDD",
+    "framework": "vite",
+    "productionDomain": "flexicred-filiais.vercel.app",
+    "latestDeployUrl": "flexicred-filiais-7ja8cba63-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/flexicred_filiais",
+    "updated": "2025-10-14",
+    "supabase": null,
+    "envKeys": [],
+    "errors": []
+  },
+  {
+    "name": "flexi-loan-card-57424-86651-12564",
+    "id": "prj_HJOsDTQ1y1O9T8fYy0LI0VAhxI65",
+    "framework": "vite",
+    "productionDomain": "flexi-loan-card-57424-86651-12564.vercel.app",
+    "latestDeployUrl": "flexi-loan-card-57424-86651-12564-1nzgpnog2.vercel.app",
+    "gitRepo": "leveragency/flexi-loan-card-57424-86651-12564",
+    "updated": "2025-10-03",
+    "supabase": null,
+    "envKeys": [],
+    "errors": []
+  },
+  {
+    "name": "flexicred-forms-fb",
+    "id": "prj_BlybT0mg64CkchJ4j1lLywxN1B4W",
+    "framework": "vite",
+    "productionDomain": "www.grupoflexicred.com.br",
+    "latestDeployUrl": "flexicred-forms-no2df50yz-leveragencys-projects.vercel.app",
+    "gitRepo": "leveragency/flexicred-forms-fb",
+    "updated": "2025-09-26",
+    "supabase": null,
+    "envKeys": [],
+    "errors": []
+  }
+]

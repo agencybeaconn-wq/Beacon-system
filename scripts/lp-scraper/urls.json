@@ -1,0 +1,10 @@
+{
+  "category": "influencer-marketing-platforms",
+  "urls": [
+    { "slug": "getinfluencer",  "url": "https://getinfluencer.me/" },
+    { "slug": "influency",      "url": "https://influency.me/" },
+    { "slug": "99influence",    "url": "https://www.99influence.com/" },
+    { "slug": "mundomapping",   "url": "https://mundomapping.com/" },
+    { "slug": "post2b",         "url": "https://www.post2b.com/" }
+  ]
+}

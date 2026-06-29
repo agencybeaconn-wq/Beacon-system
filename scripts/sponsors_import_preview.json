@@ -1,0 +1,321 @@
+{
+  "toImport": [
+    {
+      "title": "Agasalho de Viagem Seleção Brasil Masculino Com Patrocinio",
+      "handle": "agasalho-de-viagem-selecao-brasil-masculino-com-patrocinio",
+      "sig": "brasil|||M|agas",
+      "cat": "agasalho",
+      "base": 359.9,
+      "final": 399.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Corinthians 2024/25 II Torcedor Com Patrocínios",
+      "handle": "camisa-nike-corinthians-202425-ii-torcedor-com-patrocinios",
+      "sig": "corinthians|2425|2|M|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Corinthians 2025/26 I Jogador Com Patrocínios",
+      "handle": "camisa-nike-corinthians-202526-i-jogador-com-patrocinios",
+      "sig": "corinthians|2526|1|M|jog",
+      "cat": "jogador",
+      "base": 229.9,
+      "final": 269.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Corinthians 2025/26 I Torcedor Com Patrocínios",
+      "handle": "camisa-nike-corinthians-202526-i-torcedor-com-patrocinios",
+      "sig": "corinthians|2526|1|M|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Corinthians 2025/26 II Jogador Com Patrocínios",
+      "handle": "camisa-nike-corinthians-202526-ii-jogador-com-patrocinios",
+      "sig": "corinthians|2526|2|M|jog",
+      "cat": "jogador",
+      "base": 229.9,
+      "final": 269.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Corinthians 2025/26 II Torcedor Com Patrocínios",
+      "handle": "camisa-nike-corinthians-202526-ii-torcedor-com-patrocinios",
+      "sig": "corinthians|2526|2|M|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Corinthians 2025/26 III Jogador Com Patrocínios",
+      "handle": "camisa-nike-corinthians-202526-iii-jogador-com-patrocinios",
+      "sig": "corinthians|2526|3|M|jog",
+      "cat": "jogador",
+      "base": 229.9,
+      "final": 269.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Corinthians 2025/26 III Torcedor Com Patrocínios",
+      "handle": "camisa-nike-corinthians-202526-iii-torcedor-com-patrocinios",
+      "sig": "corinthians|2526|3|M|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Cruzeiro 2025/26 I Torcedor Com Patrocínios",
+      "handle": "camisa-adidas-cruzeiro-202526-i-torcedor-com-patrocinios",
+      "sig": "cruzeiro|2526|1|M|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Cruzeiro 2025/26 II Torcedor COM PATROCÍNIOS",
+      "handle": "camisa-adidas-cruzeiro-202526-ii-torcedor-com-patrocinios",
+      "sig": "cruzeiro|2526|2|M|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Feminina Corinthians 2025/26 I Torcedor Com Patrocínios",
+      "handle": "camisa-feminina-nike-corinthians-202526-i-torcedor-com-patrocinios",
+      "sig": "corinthians|2526|1|F|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Feminina Corinthians 2025/26 II Torcedor Com Patrocínios",
+      "handle": "camisa-feminina-nike-corinthians-202526-ii-torcedor-com-patrocinios",
+      "sig": "corinthians|2526|2|F|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Feminina Corinthians 2025/26 III Torcedor Com Patrocínios",
+      "handle": "camisa-feminina-nike-corinthians-202526-iii-torcedor-com-patrocinios",
+      "sig": "corinthians|2526|3|F|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Feminina Cruzeiro 2025/26 I Torcedor Com Patrocínios",
+      "handle": "camisa-feminina-adidas-cruzeiro-202526-i-torcedor-com-patrocinios",
+      "sig": "cruzeiro|2526|1|F|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Feminina Cruzeiro 2025/26 II Torcedor COM PATROCÍNIOS",
+      "handle": "camisa-feminina-adidas-cruzeiro-202526-ii-torcedor-com-patrocinios",
+      "sig": "cruzeiro|2526|2|F|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Feminina Flamengo 2025/26 I Torcedor Com Patrocínios",
+      "handle": "camisa-feminina-adidas-flamengo-202526-i-torcedor-com-patrocinios",
+      "sig": "flamengo|2526|1|F|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Feminina Flamengo 2025/26 II Torcedor Com Patrocínios",
+      "handle": "camisa-feminina-adidas-flamengo-202526-ii-torcedor-com-patrocinios",
+      "sig": "flamengo|2526|2|F|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Feminina Flamengo 2025/26 III Torcedor Com Patrocínios",
+      "handle": "camisa-feminina-adidas-flamengo-202526-iii-torcedor-com-patrocinios",
+      "sig": "flamengo|2526|3|F|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Feminina Fluminense 2025/26 I Torcedor Com Patrocinios",
+      "handle": "camisa-feminina-umbro-fluminense-202526-i-torcedor-com-patrocinios",
+      "sig": "fluminense|2526|1|F|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Feminina Fluminense 2025/26 II Torcedor Com Patrocínio",
+      "handle": "camisa-feminina-umbro-fluminense-202526-ii-torcedor-com-patrocinio",
+      "sig": "fluminense|2526|2|F|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Feminina Internacional 2025/26 I Torcedor Com Patrocínios",
+      "handle": "camisa-feminina-adidas-internacional-202526-i-torcedor-com-patrocinios",
+      "sig": "internacional|2526|1|F|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Feminina Internacional 2025/26 II Torcedor Com Patrocínios",
+      "handle": "camisa-feminina-adidas-internacional-202526-ii-torcedor-com-patrocinios",
+      "sig": "internacional|2526|2|F|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Flamengo 2014 I Retrô com Patrocinadores",
+      "handle": "camisa-adidas-flamengo-2014-i-retro-com-patrocinadores",
+      "sig": "flamengo||1|M|",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Flamengo 2025/26 I Authentic Com Patrocínios",
+      "handle": "camisa-adidas-flamengo-202526-i-authentic-com-patrocinios",
+      "sig": "flamengo|2526|1|M|jog",
+      "cat": "authentic (=jogador?)",
+      "base": 229.9,
+      "final": 269.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Flamengo 2025/26 I Torcedor Com Patrocínios",
+      "handle": "camisa-adidas-flamengo-202526-i-torcedor-com-patrocinios",
+      "sig": "flamengo|2526|1|M|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Flamengo 2025/26 II Torcedor Com Patrocínios",
+      "handle": "camisa-adidas-flamengo-202526-ii-torcedor-com-patrocinios",
+      "sig": "flamengo|2526|2|M|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Flamengo 2025/26 III Torcedor Com Patrocínios",
+      "handle": "camisa-adidas-flamengo-202526-iii-torcedor-com-patrocinios",
+      "sig": "flamengo|2526|3|M|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Fluminense 2025/26 I Torcedor Com Patrocinios",
+      "handle": "camisa-umbro-fluminense-202526-i-torcedor-com-patrocinios",
+      "sig": "fluminense|2526|1|M|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Fluminense 2025/26 II Torcedor Fluminense Com Patrocinios",
+      "handle": "camisa-umbro-fluminense-202526-ii-torcedor-fluminense-com-patrocinios",
+      "sig": "fluminense|2526|2|M|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Internacional 2025/26 I Torcedor Com Patrocínios",
+      "handle": "camisa-adidas-internacional-202526-i-torcedor-com-patrocinios",
+      "sig": "internacional|2526|1|M|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Internacional 2025/26 II Torcedor Com Patrocínios",
+      "handle": "camisa-adidas-internacional-202526-ii-torcedor-com-patrocinios",
+      "sig": "internacional|2526|2|M|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Internacional Manga Longa 2025/26 I Com Patrocínios",
+      "handle": "camisa-adidas-internacional-manga-longa-202526-i-com-patrocinios",
+      "sig": "internacional|2526|1|M||ML",
+      "cat": "manga_longa (=torcedor+?)",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Palmeiras 2025/26 I Torcedor Com Patrocínios",
+      "handle": "camisa-puma-palmeiras-202526-i-torcedor-com-patrocinios",
+      "sig": "palmeiras|2526|1|M|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    },
+    {
+      "title": "Camisa Palmeiras 2025/26 II Torcedor Com Patrocínios",
+      "handle": "camisa-puma-palmeiras-202526-ii-torcedor-com-patrocinios",
+      "sig": "palmeiras|2526|2|M|torc",
+      "cat": "torcedor",
+      "base": 209.9,
+      "final": 249.9,
+      "already": false
+    }
+  ],
+  "toSkip": [
+    {
+      "title": "Camisa Corinthians 2024/25 II Jogador Com Patrocínios",
+      "handle": "camisa-nike-corinthians-202425-ii-jogador-com-patrocinios",
+      "sig": "corinthians|2425|2|M|jog",
+      "cat": "jogador",
+      "base": 229.9,
+      "final": 269.9,
+      "already": true
+    }
+  ]
+}

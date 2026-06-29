@@ -1,0 +1,551 @@
+{% schema %}
+{
+  "name": "Trustpilot Premium",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-4"
+    },
+    {
+      "type": "header",
+      "content": "Espaçamento da Seção"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.section_padding_heading",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.section_padding_heading",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tp_review",
+      "name": "Avaliação",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Amazing quality!"
+        },
+        {
+          "type": "textarea",
+          "id": "content",
+          "label": "Conteúdo da Avaliação",
+          "default": "The product exceeded my expectations. Great build and fast delivery!"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Autor",
+          "default": "Michael R."
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Data",
+          "default": "2 hours ago"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trustpilot Premium",
+      "blocks": [
+        { "type": "tp_review" },
+        { "type": "tp_review", "settings": { "title": "Super impressed", "author": "Emily L." } },
+        { "type": "tp_review", "settings": { "title": "Top-notch service", "author": "Daniel K." } },
+        { "type": "tp_review", "settings": { "title": "Highly recommend", "author": "Sarah M." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 1.0 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 1.0 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 1.0 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 1.0 | round: 0 }}px;
+    }
+  }
+
+  .trustpilot-premium {
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-foreground));
+    overflow: hidden;
+  }
+  
+  /* New Reference Styles */
+  .trustpilot-premium {
+    background-color: #1c1c1c; /* Dark background matching reference */
+    color: #ffffff;
+    overflow: hidden;
+    font-family: "Inter Tight", sans-serif; /* User requested font */
+  }
+
+  .tp-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0; /* Removing padding container-wide, will handle via flex gap */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow: hidden; /* CRITICAL: Prevent entire section from causing horizontal scroll */
+  }
+
+  @media screen and (min-width: 990px) {
+    .tp-container {
+      flex-direction: row;
+      align-items: center; 
+      padding: 1rem 40px; /* Horizontal padding for responsiveness */
+      gap: 0; 
+    }
+  }
+  
+  /* Left Side: Summary */
+  .tp-summary {
+    flex: 0 0 auto;
+    width: 100%;
+    /* On mobile, center text */
+    text-align: center;
+    align-items: center;
+    margin-bottom: 2.5rem; /* Increased from 1.5rem for more separation */
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  @media screen and (min-width: 990px) {
+    .tp-summary {
+        text-align: left;
+        align-items: flex-start;
+        max-width: 250px; 
+        margin-bottom: 0;
+        margin-right: -2rem; 
+    }
+    
+    .tp-summary-grid {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+    }
+    
+    .tp-divider {
+      display: none !important;
+    }
+  }
+  
+  .tp-summary-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Vertically align logo with text block */
+    width: 100%;
+    margin-bottom: 0;
+    gap: 1rem;
+    padding: 0 20px; /* Added padding to prevent sticking to edges */
+  }
+  
+  .tp-summary-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .tp-summary-right {
+    flex-shrink: 0;
+  }
+  
+  .tp-divider {
+    width: 85%; /* Widen to 85% */
+    height: 1px;
+    min-height: 1px; 
+    background-color: rgba(255,255,255,0.2); /* More subtle */
+    margin: 2.5rem auto 1rem auto; 
+    display: block !important;
+  }
+  
+  .tp-header-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align text left relative to stars */
+    gap: 0.5rem; /* Gap between Excellent and Stars */
+    margin-bottom: 0.5rem;
+  }
+
+  .tp-summary h2 {
+    font-size: 1.6rem; /* Increased size (approx 25px) */
+    font-weight: 500; /* Medium weight (thinner than bold) */ 
+    margin: 0;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .tp-stars-img {
+      height: 22px; /* Slightly larger stars to match new header size */
+      width: auto;
+      margin-top: 0; 
+      margin-bottom: 8px; 
+  }
+
+  .tp-stars-row {
+    display: flex;
+    gap: 4px;
+  }
+  
+  .tp-star-box {
+    width: 32px;
+    height: 32px;
+    background-color: #00b67a; /* Trustpilot Green */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tp-star-box svg {
+    width: 20px;
+    height: 20px;
+    fill: white;
+  }
+  
+  .tp-based-on {
+    font-size: 0.9rem; /* Adjusted size slightly smaller for compact look */
+    opacity: 0.8;
+    margin-top: 0;
+    margin-bottom: 0; /* Logo is now to the side, no bottom margin needed */
+    line-height: 1;
+  }
+  
+  .tp-based-on strong {
+    text-decoration: underline;
+  }
+  
+  .tp-logo-img {
+      width: 130px; /* Adjusted size for the new symbol/logo */
+      height: auto;
+      margin-top: 0; 
+      display: block; 
+  }
+
+  .tp-showing-text {
+      font-size: 0.85rem;
+      opacity: 0.7;
+      margin-top: 1rem;
+  }
+
+  /* Right Side: CarouselWrapper */
+  .tp-carousel-wrapper {
+    /* Layout for arrows and carousel */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; 
+    padding-left: 15px; /* Reduced to move arrows closer to edge */
+    padding-right: 15px; /* Reduced to move arrows closer to edge */
+    position: relative;
+    width: 100%;
+    max-width: 100%; 
+    box-sizing: border-box; 
+  }
+
+  @media screen and (min-width: 990px) {
+      .tp-carousel-wrapper {
+          width: auto; /* Allow flex to dictate width, not 100% of parent */
+          flex: 1;
+          min-width: 0;
+          padding-left: 0; 
+          gap: 2rem; /* INCREASED gap between left arrow and first review card */
+      }
+  }
+
+  /* Viewport for the scrollable area to apply mask to just this part */
+  .tp-carousel-viewport {
+    flex: 1 1 0px; /* CRITICAL: Enforce shrinking to fit available space */
+    min-width: 0; 
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    /* Fade effect on right side primarily - Reduced to 95% to show more content */
+    -webkit-mask-image: linear-gradient(to right, black 95%, transparent 100%);
+    mask-image: linear-gradient(to right, black 95%, transparent 100%);
+  }
+
+  /* Navigation Arrows */
+  .tp-nav-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 32px; /* Reduced from 44px */
+    height: 32px; /* Reduced from 44px */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    flex-shrink: 0;
+    z-index: 2; /* Ensure above everything */
+    transform: scale(0.9); /* Slightly smaller on mobile */
+  }
+  
+  .tp-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+  
+  .tp-nav-btn svg {
+    width: 16px; /* Reduced from 24px */
+    height: 16px; /* Reduced from 24px */
+    fill: currentColor;
+  }
+  
+
+
+  .tp-carousel {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    /* padding-bottom removed for alignment */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .tp-carousel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tp-card {
+    flex: 0 0 100%; /* Fill the entire viewport space between arrows */
+    max-width: 400px; /* Cap at 400px for larger screens */
+    scroll-snap-align: center;
+    background: transparent; 
+    border: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0; /* Remove gap inside card, control via margins for tightness */
+  }
+
+  @media screen and (min-width: 750px) {
+    .tp-card {
+        flex: 0 0 400px; /* Fixed width on desktop */
+        scroll-snap-align: start;
+    }
+  }
+  
+  .tp-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem; /* Increased gap to title as requested */
+  }
+
+  .tp-card-stars {
+    display: flex;
+    gap: 2px;
+  }
+  
+  .tp-card-star {
+    width: 20px;
+    height: 20px;
+    background-color: #00b67a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .tp-card-star svg {
+    width: 12px;
+    height: 12px;
+    fill: white;
+  }
+  
+  .tp-verified {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+      color: #b5b5b5;
+  }
+  
+  .tp-verified svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+  }
+
+  .tp-card-title {
+    font-weight: 800; /* Extra Bold */
+    font-size: 1.5rem; /* Larger title */
+    margin: 0;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 0.1rem; /* Extremely close to content */
+  }
+
+  .tp-card-content {
+    font-size: 1.2rem; /* Increased size again */
+    line-height: 1.4;
+    color: #f0f0f0; /* Brighter */
+    font-weight: 400;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-top: 0; 
+    word-wrap: break-word; /* Ensure text wraps */
+    overflow-wrap: break-word;
+    white-space: normal; /* Force wrapping */
+  }
+
+  .tp-card-footer {
+    font-size: 0.95rem; /* Larger footer */
+    color: #aaa;
+    margin-top: 0.3rem; /* Very tight to content */
+  }
+  
+  /* Navigation Arrows (Optional, if we want to add later) */
+
+  
+  @media screen and (min-width: 990px) {
+    .tp-divider {
+      display: none !important;
+    }
+  }
+{%- endstyle -%}
+
+<div class="trustpilot-premium section-{{ section.id }}-padding color-{{ section.settings.color_scheme }}">
+  <div class="tp-container">
+    
+    <!-- LEFT: Summary -->
+    <div class="tp-summary">
+      <div class="tp-summary-grid">
+        <div class="tp-summary-left">
+          <div class="tp-header-group">
+            <h2>Excellent</h2>
+            
+             <!-- New Order: Excellent -> Stars -> Based On -> Logo -->
+            <img src="https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Badges/Starts%20Trustpillot%20png.svg" alt="5 Stars" class="tp-stars-img">
+          </div>
+
+          <div class="tp-based-on">
+            Based on <strong>165,921 reviews</strong>
+          </div>
+        </div>
+        
+        <div class="tp-summary-right">
+           <img src="https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Badges/NicePng_tilak-symbol-png_2561486.png" alt="Trustpilot" class="tp-logo-img">
+        </div>
+      </div>
+      
+      <div class="tp-divider"></div>
+    </div>
+
+    <!-- RIGHT: Carousel Wrapper incl Arrows -->
+    <div class="tp-carousel-wrapper">
+      
+      <button class="tp-nav-btn tp-prev" aria-label="Previous">
+        <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      </button>
+      
+      <div class="tp-carousel-viewport">
+        <div class="tp-carousel">
+          {%- for block in section.blocks -%}
+            <div class="tp-card" {{ block.shopify_attributes }}>
+              <div class="tp-card-header">
+                  <img src="https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Badges/Starts%20Trustpillot%20png.svg" alt="5 Stars" class="tp-stars-img" style="margin:0;">
+                  <div class="tp-verified">
+                      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                      <span>Verified</span>
+                  </div>
+              </div>
+              
+              <h3 class="tp-card-title">{{ block.settings.title }}</h3>
+              
+              <div class="tp-card-content">
+                {{ block.settings.content }}
+              </div>
+              
+              <div class="tp-card-footer">
+                 {{ block.settings.author }}, {{ block.settings.date }}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+      
+      <button class="tp-nav-btn tp-next" aria-label="Next">
+        <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+      </button>
+      
+    </div>
+    
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Select all instances of the section
+    const sections = document.querySelectorAll('.trustpilot-premium');
+    
+    sections.forEach(section => {
+        const carousel = section.querySelector('.tp-carousel');
+        const prevBtn = section.querySelector('.tp-prev');
+        const nextBtn = section.querySelector('.tp-next');
+        
+        if (carousel && prevBtn && nextBtn) {
+            
+            // Function to handle scroll logic
+            const scrollCarousel = (direction) => {
+                const scrollAmount = 400;
+                const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
+                
+                if (direction === 'next') {
+                    // Check if at end (with small tolerance)
+                    if (carousel.scrollLeft >= maxScrollLeft - 10) {
+                        // Loop back to start
+                        carousel.scrollTo({ left: 0, behavior: 'smooth' });
+                    } else {
+                        carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                    }
+                } else {
+                     // Check if at start
+                    if (carousel.scrollLeft <= 10) {
+                        // Loop to end
+                         carousel.scrollTo({ left: maxScrollLeft, behavior: 'smooth' });
+                    } else {
+                        carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                    }
+                }
+            };
+
+            prevBtn.addEventListener('click', () => scrollCarousel('prev'));
+            nextBtn.addEventListener('click', () => scrollCarousel('next'));
+        }
+    });
+  });
+</script>

@@ -1,0 +1,6 @@
+# Disable JWT verification for this function.
+# Shopify sends opt-in webhooks (products/*, orders/*, collections/*) with an
+# X-Shopify-Hmac-Sha256 header — NOT a Supabase JWT. HMAC is verified inside
+# the function, so the gateway-level JWT check must stay off.
+[functions.shopify-webhook-receiver]
+verify_jwt = false

@@ -1,0 +1,257 @@
+{%- comment -%}
+  Scarcity Bar - Minimalist stock indicator with random values
+  - Shows simulated real-time inventory
+  - Visual progress bar divided into 10 segments
+  - Reacts to variant changes via JS
+{%- endcomment -%}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign is_on_sale = false
+  if product.compare_at_price_min > product.price_min
+    assign is_on_sale = true
+  endif
+-%}
+
+{%- if is_on_sale -%}
+  <div class="scarcity-wrapper" id="scarcity-wrapper-{{ section.id }}" style="display: block;">
+    <!-- Data for JS -->
+    <script type="application/json" id="scarcity-data-{{ section.id }}">
+      {
+        {%- for variant in product.variants -%}
+          {%- liquid
+            assign size_option = variant.option1 | downcase
+            if size_option == blank
+              assign size_option = variant.option2 | downcase
+            endif
+            
+            assign variant_seed = variant.id | modulo: 10
+            
+            case size_option
+              when 'p', 's', 'xs', 'pp'
+                assign base_stock = 1 | plus: variant_seed | modulo: 3 | plus: 1
+              when 'm', 'l'
+                assign base_stock = 1 | plus: variant_seed | modulo: 2 | plus: 1
+              when 'g', 'gg', 'xl', 'xxl'
+                assign base_stock = 2 | plus: variant_seed | modulo: 3 | plus: 1
+              when '2g', '2gg', '3g', '3gg', '2xl', '3xl', 'xxl'
+                assign base_stock = 3 | plus: variant_seed | modulo: 4 | plus: 1
+              when '4g', '4gg', '4xl'
+                assign base_stock = 4 | plus: variant_seed | modulo: 4 | plus: 1
+              else
+                assign base_stock = 2 | plus: variant_seed | modulo: 4 | plus: 1
+            endcase
+            
+            if base_stock > 10
+              assign base_stock = 10
+            endif
+            
+            assign stock_percentage = base_stock | times: 10
+          -%}
+          "{{ variant.id }}": {
+            "stock": {{ base_stock }},
+            "percent": {{ stock_percentage }}
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      }
+    </script>
+
+    <div class="scarcity-content">
+      <div class="scarcity-header">
+        <span class="scarcity-icon-pulse">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 8V12" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 16H12.01" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="scarcity-message" id="scarcity-text-{{ section.id }}">Calculating stock...</span>
+      </div>
+      
+      <div class="scarcity-progress-track">
+        <div class="scarcity-progress-fill" id="scarcity-bar-{{ section.id }}" style="width: 0%;">
+          <div class="scarcity-glare"></div>
+        </div>
+        <!-- Segments overlay -->
+        <div class="scarcity-segments">
+          {% for i in (1..9) %}<div class="scarcity-segment-line"></div>{% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .scarcity-wrapper {
+      margin: 15px 0;
+      width: 100%;
+    }
+    
+    .scarcity-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      color: #ef4444; /* Red color */
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .scarcity-icon-pulse svg {
+      display: block;
+      animation: scarcity-pulse-icon 2s infinite;
+    }
+    
+    .scarcity-progress-track {
+      position: relative;
+      height: 10px;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      overflow: hidden;
+      width: 100%;
+    }
+    
+    .scarcity-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+      border-radius: 5px;
+      transition: width 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+      position: relative;
+    }
+    
+    .scarcity-glare {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: scarcity-shimmer 2s infinite linear;
+    }
+    
+    .scarcity-segments {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: space-evenly;
+      pointer-events: none;
+    }
+    
+    .scarcity-segment-line {
+      width: 1px;
+      height: 100%;
+      background-color: rgba(255,255,255,0.5);
+    }
+    
+    @keyframes scarcity-pulse-icon {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    @keyframes scarcity-shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    @media (max-width: 768px) {
+      .scarcity-wrapper {
+        margin: 12px 0;
+      }
+      .scarcity-progress-track {
+        height: 12px; /* Slightly thicker on mobile for visibility */
+      }
+    }
+  </style>
+
+  <script>
+    (function() {
+      const sectionId = "{{ section.id }}";
+      const wrapperId = `scarcity-wrapper-${sectionId}`;
+      const dataId = `scarcity-data-${sectionId}`;
+      const textId = `scarcity-text-${sectionId}`;
+      const barId = `scarcity-bar-${sectionId}`;
+      
+      let variantData = {};
+      
+      try {
+        const dataScript = document.getElementById(dataId);
+        if (dataScript) {
+          variantData = JSON.parse(dataScript.innerHTML);
+        }
+      } catch (e) {
+        console.error("Error parsing scarcity data", e);
+      }
+      
+      function updateScarcity(variantId) {
+        const data = variantData[variantId];
+        const textEl = document.getElementById(textId);
+        const barEl = document.getElementById(barId);
+        
+        // If variant data is missing (e.g. patch/addon), ignore update to keep current state
+        if (!data || !textEl || !barEl) {
+          return;
+        }
+        
+        // Update text
+        let msg = "";
+        if (data.stock === 1) {
+          msg = "Last unit available";
+        } else if (data.stock <= 3) {
+          msg = `Only ${data.stock} units left`;
+        } else {
+          msg = `Last ${data.stock} units in stock`;
+        }
+        textEl.innerText = msg;
+        
+        // Update bar width
+        // Ensure animation happens by forcing a reflow if needed, 
+        // but simple CSS transition handles it well.
+        barEl.style.width = `${data.percent}%`;
+        
+        // Change color based on urgency? (Optional, kept red as requested)
+      }
+      
+      // Initialize with current variant
+      const currentVariantId = "{{ product.selected_or_first_available_variant.id }}";
+      updateScarcity(currentVariantId);
+      
+      // Listen for variant changes
+      // 1. URL change listener (standard for many themes)
+      let lastUrl = location.href; 
+      new MutationObserver(() => {
+        const url = location.href;
+        if (url !== lastUrl) {
+          lastUrl = url;
+          const params = new URLSearchParams(window.location.search);
+          const vId = params.get('variant');
+          if (vId) updateScarcity(vId);
+        }
+      }).observe(document, {subtree: true, childList: true});
+      
+      // 2. Custom theme events (Dawn often uses 'variant:change' or similar on document)
+      document.addEventListener('variant:change', function(evt) {
+         if (evt.detail && evt.detail.variant) {
+           updateScarcity(evt.detail.variant.id);
+         }
+      });
+      
+      // 3. Fallback: Listen to input changes in the specific form
+      const productForm = document.querySelector('product-form, .product-form');
+      if (productForm) {
+        productForm.addEventListener('change', function(e) {
+             // Try to find selected variant ID from form data or inputs
+             // varies by theme, but often inputs with name="id"
+             const form = e.target.closest('form');
+             if(form) {
+               const formData = new FormData(form);
+               const vId = formData.get('id');
+               if(vId) updateScarcity(vId);
+             }
+        });
+      }
+    })();
+  </script>
+{%- endif -%}

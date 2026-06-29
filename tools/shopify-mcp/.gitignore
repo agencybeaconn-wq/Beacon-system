@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.log
+
+# Secrets — NEVER commit
+shops.json
+.env
+.env.*
+!.env.example
+
+.vercel

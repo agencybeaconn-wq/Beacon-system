@@ -1,0 +1,447 @@
+{%- comment -%}
+  clone-theme — PDP estilo Lucky Fours.
+  PARTE 1: galeria esquerda sticky + info direita (rating, title, color grid c/ imagens,
+           bullet features, description). Sticky add-to-cart bar.
+  Próximas partes: bundle offers, countdown, accordions, image-with-text.
+  Modular: cada item editável via Theme Editor.
+{%- endcomment -%}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign first_option = product.options_with_values[0]
+-%}
+
+<section class="clone-pdp"
+         data-product-id="{{ product.id }}"
+         data-section-id="{{ section.id }}">
+  <div class="clone-pdp__layout">
+
+    {%- comment -%} === GALERIA (esquerda) === {%- endcomment -%}
+    <div class="clone-pdp__gallery" data-pdp-gallery>
+      <div class="clone-pdp__media-main" data-pdp-media>
+        {% if current_variant.featured_image %}
+          <img data-pdp-main-image
+               src="{{ current_variant.featured_image | image_url: width: 1200 }}"
+               alt="{{ current_variant.featured_image.alt | default: product.title | escape }}"
+               width="1200" height="1500" loading="eager">
+        {% elsif product.featured_image %}
+          <img data-pdp-main-image
+               src="{{ product.featured_image | image_url: width: 1200 }}"
+               alt="{{ product.featured_image.alt | default: product.title | escape }}"
+               width="1200" height="1500" loading="eager">
+        {% else %}
+          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+      </div>
+
+      {%- if product.images.size > 1 -%}
+        <div class="clone-pdp__thumbs" data-pdp-thumbs>
+          <button type="button" class="clone-pdp__thumbs-nav clone-pdp__thumbs-nav--prev" data-thumbs-prev aria-label="Anterior">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="clone-pdp__thumbs-track" data-thumbs-track>
+            {%- for img in product.images limit: 12 -%}
+              <button type="button" class="clone-pdp__thumb{% if forloop.first %} is-active{% endif %}"
+                      data-pdp-thumb
+                      data-image="{{ img | image_url: width: 1200 }}"
+                      aria-label="Imagem {{ forloop.index }}">
+                <img src="{{ img | image_url: width: 200 }}" alt="" loading="lazy">
+              </button>
+            {%- endfor -%}
+          </div>
+          <button type="button" class="clone-pdp__thumbs-nav clone-pdp__thumbs-nav--next" data-thumbs-next aria-label="Próximo">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} === INFO (direita) === {%- endcomment -%}
+    <div class="clone-pdp__info">
+
+      {%- if section.settings.show_rating -%}
+        <div class="clone-pdp__rating">
+          <span class="clone-pdp__rating-stars" aria-hidden="true">★★★★★</span>
+          <span class="clone-pdp__rating-caption">
+            {%- if section.settings.rating_value != blank %}Rated {{ section.settings.rating_value }}{% if section.settings.rating_max != blank %}/{{ section.settings.rating_max }}{% endif %} {% endif -%}
+            {{- section.settings.rating_text -}}
+          </span>
+        </div>
+      {%- endif -%}
+
+      <h1 class="clone-pdp__title">{{ product.title | escape }}</h1>
+
+      {%- if first_option != blank and product.variants.size > 1 -%}
+        <div class="clone-pdp__variant-picker"
+             data-variant-picker
+             data-option-name="{{ first_option.name | escape }}">
+          <p class="clone-pdp__variant-label">{{ first_option.name }}</p>
+          <div class="clone-pdp__color-grid">
+            {%- for variant in product.variants -%}
+              {%- assign label = variant.option1 -%}
+              {%- assign var_image = variant.featured_image | default: product.featured_image -%}
+              <button type="button"
+                      class="clone-pdp__color-swatch{% if variant.id == current_variant.id %} is-active{% endif %}"
+                      data-variant-id="{{ variant.id }}"
+                      data-variant-title="{{ label | escape }}"
+                      data-image="{{ var_image | image_url: width: 1200 }}"
+                      aria-label="{{ label | escape }}">
+                {%- if var_image -%}
+                  <img src="{{ var_image | image_url: width: 80 }}" alt="" loading="lazy">
+                {%- else -%}
+                  <span class="clone-pdp__color-swatch-fallback"></span>
+                {%- endif -%}
+                <span class="clone-pdp__color-tooltip">{{ label }}</span>
+              </button>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.show_bullets and section.settings.bullets_text != blank -%}
+        <ul class="clone-pdp__bullets" style="--bullets-cols: {{ section.settings.bullets_columns | default: 2 }};">
+          {%- assign bullets_list = section.settings.bullets_text | newline_to_br | split: '<br />' -%}
+          {%- for line in bullets_list -%}
+            {%- assign line_clean = line | strip -%}
+            {%- if line_clean != blank -%}
+              <li>
+                <svg class="clone-pdp__bullet-check" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>{{ line_clean }}</span>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- comment -%} === BUNDLE OFFERS === {%- endcomment -%}
+      {%- assign has_bundle = false -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'bundle_offer' -%}{%- assign has_bundle = true -%}{%- endif -%}
+      {%- endfor -%}
+
+      {%- if has_bundle -%}
+        <div class="clone-pdp__bundles" data-bundles>
+          {%- if section.settings.bundles_heading != blank -%}
+            <div class="clone-pdp__bundles-divider">
+              <span>{{ section.settings.bundles_heading }}</span>
+            </div>
+          {%- endif -%}
+          {%- assign offer_index = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'bundle_offer' -%}
+              {%- assign offer_index = offer_index | plus: 1 -%}
+              {%- assign qty = block.settings.quantity | default: 1 -%}
+              {%- assign unit_price = current_variant.price -%}
+              {%- assign total_orig = unit_price | times: qty -%}
+              {%- assign total_sale = unit_price | times: qty | divided_by: 2 -%}
+              {%- if block.settings.quantity == 1 -%}{%- assign total_sale = unit_price -%}{%- endif -%}
+              <label class="clone-pdp__bundle{% if block.settings.default_selected %} is-selected{% endif %}"
+                     data-bundle-card data-bundle-qty="{{ qty }}"
+                     {{ block.shopify_attributes }}>
+                <input type="radio" name="clone-pdp-bundle" value="{{ offer_index }}"
+                       data-bundle-radio
+                       {% if block.settings.default_selected %}checked{% endif %}>
+                <div class="clone-pdp__bundle-head">
+                  <span class="clone-pdp__bundle-radio"></span>
+                  <div class="clone-pdp__bundle-info">
+                    <strong class="clone-pdp__bundle-title">{{ block.settings.title }}</strong>
+                    {%- if block.settings.subtitle != blank -%}
+                      <span class="clone-pdp__bundle-subtitle">{{ block.settings.subtitle }}</span>
+                    {%- endif -%}
+                  </div>
+                  <div class="clone-pdp__bundle-price">
+                    <strong data-bundle-sale>{{ total_sale | money }}</strong>
+                    {%- if qty > 1 -%}
+                      <span class="clone-pdp__bundle-compare" data-bundle-compare>{{ total_orig | money }}</span>
+                    {%- endif -%}
+                  </div>
+                  {%- if block.settings.badge_text != blank -%}
+                    <span class="clone-pdp__bundle-badge">{{ block.settings.badge_text }}</span>
+                  {%- endif -%}
+                </div>
+                {%- if qty > 1 -%}
+                  <div class="clone-pdp__bundle-selects">
+                    {%- for i in (1..qty) -%}
+                      <div class="clone-pdp__bundle-select-row">
+                        <span class="clone-pdp__bundle-select-num">#{{ i }}</span>
+                        <select class="clone-pdp__bundle-select" data-bundle-select aria-label="Variante #{{ i }}">
+                          {%- for v in product.variants -%}
+                            <option value="{{ v.id }}"{% if v.id == current_variant.id %} selected{% endif %}>{{ v.option1 }}</option>
+                          {%- endfor -%}
+                        </select>
+                      </div>
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+              </label>
+            {%- endif -%}
+          {%- endfor -%}
+          <button type="button" class="clone-pdp__bundle-cta" data-bundle-add>Add to cart</button>
+        </div>
+      {%- endif -%}
+
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'pdp_description' -%}
+            <div class="clone-pdp__block clone-pdp__description" {{ block.shopify_attributes }}>
+              {{ product.description }}
+            </div>
+          {%- when 'custom_text' -%}
+            <div class="clone-pdp__block clone-pdp__custom-text" {{ block.shopify_attributes }}>
+              {{ block.settings.text }}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+
+      <form method="post" action="{{ routes.cart_add_url }}" class="clone-pdp__form clone-grid__form" data-pdp-form>
+        <input type="hidden" name="id" value="{{ current_variant.id }}" data-pdp-variant-input>
+      </form>
+
+    </div>
+  </div>
+
+  {%- if section.settings.sticky_bar_enabled -%}
+    <div class="clone-pdp__sticky-bar is-visible" data-pdp-sticky aria-hidden="false">
+      <div class="clone-pdp__sticky-inner">
+        <div class="clone-pdp__sticky-left">
+          {%- if current_variant.featured_image or product.featured_image -%}
+            {%- assign sticky_img = current_variant.featured_image | default: product.featured_image -%}
+            <img data-pdp-sticky-image
+                 src="{{ sticky_img | image_url: width: 200 }}"
+                 alt="" loading="lazy">
+          {%- endif -%}
+          <div class="clone-pdp__sticky-info">
+            <strong class="clone-pdp__sticky-title">{{ product.title | escape }}</strong>
+            <div class="clone-pdp__sticky-price">
+              <strong data-pdp-sticky-price>{{ current_variant.price | money }}</strong>
+              {%- if current_variant.compare_at_price > current_variant.price -%}
+                <span class="clone-pdp__sticky-compare" data-pdp-sticky-compare>{{ current_variant.compare_at_price | money }}</span>
+              {%- endif -%}
+              <span class="clone-pdp__sticky-sep">—</span>
+            </div>
+          </div>
+        </div>
+        <div class="clone-pdp__sticky-right">
+          {%- if product.variants.size > 1 -%}
+            <select class="clone-pdp__sticky-select" data-pdp-sticky-select aria-label="Variante">
+              {%- for variant in product.variants -%}
+                <option value="{{ variant.id }}"{% if variant.id == current_variant.id %} selected{% endif %}>{{ variant.option1 }}</option>
+              {%- endfor -%}
+            </select>
+          {%- endif -%}
+          <button type="button" class="clone-pdp__sticky-add" data-pdp-add>Add to cart</button>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+<script>
+  (function () {
+    var section = document.querySelector('.clone-pdp[data-section-id="{{ section.id }}"]');
+    if (!section) return;
+
+    var mainImg = section.querySelector('[data-pdp-main-image]');
+    var stickyImg = section.querySelector('[data-pdp-sticky-image]');
+    var stickyPrice = section.querySelector('[data-pdp-sticky-price]');
+    var stickyCompare = section.querySelector('[data-pdp-sticky-compare]');
+    var variantInput = section.querySelector('[data-pdp-variant-input]');
+    var stickySelect = section.querySelector('[data-pdp-sticky-select]');
+    var stickyBar = section.querySelector('[data-pdp-sticky]');
+
+    var variantsData = {{ product.variants | json }};
+    var moneyFmt = {{ shop.money_format | json }};
+    function money(cents) {
+      var d = (cents / 100).toFixed(2);
+      // Shopify usa varios placeholders: {{amount}}, {{ amount }}, {{amount_no_decimals}}, etc.
+      return moneyFmt.replace(/\{\{\s*amount[a-zA-Z_]*\s*\}\}/g, d);
+    }
+
+    function setVariant(variantId) {
+      var v = variantsData.find(function (x) { return String(x.id) === String(variantId); });
+      if (!v) return;
+      if (variantInput) variantInput.value = v.id;
+      if (stickySelect) stickySelect.value = v.id;
+
+      if (v.featured_image && v.featured_image.src) {
+        var imgSrc = v.featured_image.src;
+        var bigSrc = imgSrc.replace(/(\.(jpg|jpeg|png|webp))/, '_1200x$1');
+        var smallSrc = imgSrc.replace(/(\.(jpg|jpeg|png|webp))/, '_200x$1');
+        if (mainImg && mainImg.src !== bigSrc) {
+          // Slide out → swap src → slide in
+          mainImg.classList.remove('is-slide-in');
+          mainImg.classList.add('is-slide-out');
+          var SLIDE_MS = 350;
+          setTimeout(function () {
+            mainImg.src = bigSrc;
+            mainImg.classList.remove('is-slide-out');
+            // Force reflow pra reiniciar animação
+            void mainImg.offsetWidth;
+            mainImg.classList.add('is-slide-in');
+            setTimeout(function () {
+              mainImg.classList.remove('is-slide-in');
+            }, SLIDE_MS);
+          }, SLIDE_MS);
+        }
+        if (stickyImg) stickyImg.src = smallSrc;
+      }
+
+      if (stickyPrice) stickyPrice.textContent = money(v.price);
+      if (stickyCompare) {
+        if (v.compare_at_price && v.compare_at_price > v.price) {
+          stickyCompare.textContent = money(v.compare_at_price);
+          stickyCompare.style.display = '';
+        } else {
+          stickyCompare.style.display = 'none';
+        }
+      }
+
+      try {
+        var url = new URL(window.location.href);
+        url.searchParams.set('variant', v.id);
+        history.replaceState({}, '', url);
+      } catch (e) {}
+
+      section.querySelectorAll('.clone-pdp__color-swatch').forEach(function (s) {
+        s.classList.toggle('is-active', String(s.getAttribute('data-variant-id')) === String(v.id));
+      });
+    }
+
+    section.addEventListener('click', function (e) {
+      var swatch = e.target.closest('.clone-pdp__color-swatch');
+      if (swatch) { e.preventDefault(); setVariant(swatch.getAttribute('data-variant-id')); return; }
+      var thumb = e.target.closest('[data-pdp-thumb]');
+      if (thumb) {
+        e.preventDefault();
+        var src = thumb.getAttribute('data-image');
+        if (mainImg && src) mainImg.src = src;
+        section.querySelectorAll('[data-pdp-thumb]').forEach(function (t) { t.classList.remove('is-active'); });
+        thumb.classList.add('is-active');
+        return;
+      }
+      if (e.target.closest('[data-thumbs-prev]')) { e.preventDefault(); var tp = section.querySelector('[data-thumbs-track]'); if (tp) tp.scrollBy({ left: -200, behavior: 'smooth' }); return; }
+      if (e.target.closest('[data-thumbs-next]')) { e.preventDefault(); var tn = section.querySelector('[data-thumbs-track]'); if (tn) tn.scrollBy({ left: 200, behavior: 'smooth' }); return; }
+      var addBtn = e.target.closest('[data-pdp-add]');
+      if (addBtn) {
+        e.preventDefault();
+        // Se há bundle selecionado, usa bundle add. Senão, single add.
+        var selectedBundle = section.querySelector('[data-bundle-card].is-selected') || section.querySelector('[data-bundle-card] input[type="radio"]:checked');
+        if (selectedBundle) {
+          var bundleCard = selectedBundle.closest ? selectedBundle.closest('[data-bundle-card]') : selectedBundle;
+          if (bundleCard) { addBundleToCart(bundleCard); return; }
+        }
+        var form = section.querySelector('[data-pdp-form]');
+        if (form) form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        return;
+      }
+
+      // Bundle: ao clicar no card, marca como selecionado
+      var bundleLabel = e.target.closest('[data-bundle-card]');
+      if (bundleLabel && !e.target.closest('select')) {
+        section.querySelectorAll('[data-bundle-card]').forEach(function (c) { c.classList.remove('is-selected'); });
+        bundleLabel.classList.add('is-selected');
+        var radio = bundleLabel.querySelector('[data-bundle-radio]');
+        if (radio) radio.checked = true;
+        return;
+      }
+
+      // Bundle CTA: adiciona N items ao carrinho conforme selects
+      var bundleCta = e.target.closest('[data-bundle-add]');
+      if (bundleCta) {
+        e.preventDefault();
+        var selected = section.querySelector('[data-bundle-card].is-selected') || section.querySelector('[data-bundle-card]');
+        if (selected) { addBundleToCart(selected); return; }
+      }
+    });
+
+    function addBundleToCart(bundleCard) {
+      var selects = bundleCard.querySelectorAll('[data-bundle-select]');
+      var ids = [];
+      if (selects.length === 0) {
+        // Bundle qty 1 (sem selects) usa variant atual
+        ids.push(variantInput ? variantInput.value : variantsData[0].id);
+      } else {
+        selects.forEach(function (sel) { ids.push(sel.value); });
+      }
+      // Mapeia em { id: qty }
+      var bag = {};
+      ids.forEach(function (id) { bag[id] = (bag[id] || 0) + 1; });
+      var items = Object.keys(bag).map(function (id) { return { id: id, quantity: bag[id] }; });
+
+      var cta = bundleCard.querySelector('[data-bundle-add]') || section.querySelector('[data-bundle-add]');
+      if (cta) { cta.disabled = true; var orig = cta.textContent; cta.textContent = 'Adding...'; }
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ items: items })
+      }).then(function (r) { return r.json(); })
+        .then(function () {
+          // Abre o cart drawer
+          var openTrigger = document.querySelector('[data-cart-open], a[href$="/cart"]');
+          if (openTrigger) openTrigger.click();
+        })
+        .finally(function () {
+          if (cta) { cta.disabled = false; cta.textContent = orig || 'Add to cart'; }
+        });
+    }
+
+    if (stickySelect) {
+      stickySelect.addEventListener('change', function () { setVariant(stickySelect.value); });
+    }
+
+    // Sticky bar: sempre visível na PDP (sem toggle por scroll)
+    if (stickyBar) {
+      stickyBar.classList.add('is-visible');
+      stickyBar.setAttribute('aria-hidden', 'false');
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Clone Product",
+  "tag": "section",
+  "class": "section-clone-product",
+  "settings": [
+    { "type": "header", "content": "Rating" },
+    { "type": "checkbox", "id": "show_rating", "default": true, "label": "Mostrar rating" },
+    { "type": "text", "id": "rating_value", "label": "Valor (ex: 4.8)", "default": "4.8" },
+    { "type": "text", "id": "rating_max", "label": "Máximo (ex: 5)", "default": "5" },
+    { "type": "text", "id": "rating_text", "label": "Texto após rating", "default": "by 10,000+ Happy Customers" },
+
+    { "type": "header", "content": "Features (Bullets)" },
+    { "type": "checkbox", "id": "show_bullets", "default": true, "label": "Mostrar bullets" },
+    { "type": "textarea", "id": "bullets_text", "label": "Bullets (1 por linha)", "default": "Adjustable Bracelet\n316L Stainless Steel\nQuartz Movement\n3ATM Waterproof" },
+    { "type": "range", "id": "bullets_columns", "min": 1, "max": 3, "step": 1, "default": 2, "label": "Colunas de bullets" },
+
+    { "type": "header", "content": "Sticky Add-to-Cart Bar" },
+    { "type": "checkbox", "id": "sticky_bar_enabled", "default": true, "label": "Mostrar barra fixa inferior" },
+
+    { "type": "header", "content": "Bundle Offers" },
+    { "type": "text", "id": "bundles_heading", "label": "Divisor (ex: 24-HOUR SALE)", "default": "24-HOUR SALE" }
+  ],
+  "blocks": [
+    { "type": "pdp_description", "name": "Descrição", "limit": 1 },
+    {
+      "type": "custom_text",
+      "name": "Texto customizado",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Texto" }
+      ]
+    },
+    {
+      "type": "bundle_offer",
+      "name": "Bundle Offer",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título", "default": "BUY 1 GET 1 FREE" },
+        { "type": "text", "id": "subtitle", "label": "Subtítulo", "default": "Offer Ends Tonight" },
+        { "type": "range", "id": "quantity", "min": 1, "max": 6, "step": 1, "default": 2, "label": "Quantidade de items" },
+        { "type": "text", "id": "badge_text", "label": "Badge (opcional, ex: MOTHER'S DAY SPECIAL)" },
+        { "type": "checkbox", "id": "default_selected", "default": false, "label": "Selecionado por padrão" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Clone Product", "category": "Custom" }]
+}
+{% endschema %}

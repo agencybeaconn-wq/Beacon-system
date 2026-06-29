@@ -1,0 +1,96 @@
+/* Component: Tabs Navigation - Pill Style with Sliding Indicator */
+
+.tabs-navigation {
+    display: inline-flex;
+    position: relative;
+    gap: 0;
+    flex-wrap: nowrap;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    justify-content: flex-start;
+    background: var(--sliding-selector-bg);
+    border-radius: 100px;
+    padding: 4px;
+    overflow: hidden;
+}
+
+/* Sliding indicator - pseudo element */
+.tabs-navigation::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: var(--indicator-left, 4px);
+    width: var(--indicator-width, 0);
+    height: calc(100% - 8px);
+    background: var(--sliding-selector-active-bg);
+    border-radius: 100px;
+    transition: left 0.3s ease, width 0.3s ease;
+    z-index: 1;
+}
+
+.tabs-navigation--left {
+    justify-content: flex-start;
+}
+
+.tabs-navigation--center {
+    justify-content: center;
+}
+
+.tabs-navigation__button {
+    font-family: var(--font-heading-family);
+    font-size: 1.5rem;
+    font-weight: 500;
+    padding: 0.7rem 1.4rem;
+    border: none;
+    border-radius: 100px;
+    background: transparent;
+    color: var(--sliding-selector-unselected-text, #000000);
+    cursor: pointer;
+    transition: color 0.2s ease;
+    white-space: nowrap;
+    position: relative;
+    z-index: 2;
+}
+
+.tabs-navigation__button:hover {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.tabs-navigation__button--active {
+    color: var(--sliding-selector-active-text);
+    font-weight: 600;
+}
+
+.tabs-navigation__button--active:hover,
+.tabs-navigation__button--active:focus-visible {
+    color: var(--sliding-selector-active-text);
+}
+
+/* Tab Panels */
+.tabs-panel {
+    display: none;
+}
+
+.tabs-panel--active {
+    display: block;
+}
+
+/* Mobile: Keep same style, allow horizontal scroll if needed */
+@media screen and (max-width: 749px) {
+    .tabs-navigation {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        max-width: 100%;
+    }
+
+    .tabs-navigation::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tabs-navigation__button {
+        font-size: 1.5rem;
+        padding: 0.6rem 1.2rem;
+    }
+}

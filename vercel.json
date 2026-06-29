@@ -1,0 +1,16 @@
+{
+    "rewrites": [
+        {
+            "source": "/api/shopify/callback",
+            "destination": "https://pxhmzpwvxvlwngjbjkrg.supabase.co/functions/v1/shopify-oauth-callback"
+        },
+        {
+            "source": "/api/shopify/auth",
+            "destination": "https://pxhmzpwvxvlwngjbjkrg.supabase.co/functions/v1/shopify-auth-start"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ]
+}

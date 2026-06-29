@@ -1,0 +1,55 @@
+{
+  "sections": {
+    "cart-items": {
+      "type": "main-cart-items",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "milestone_1_quantity": 3,
+        "milestone_1_badge": "Get 3",
+        "milestone_1_icon": "shirt",
+        "milestone_1_custom_svg": "",
+        "milestone_2_quantity": 5,
+        "milestone_2_badge": "Get 5",
+        "milestone_2_icon": "gift",
+        "milestone_2_custom_svg": "",
+        "milestone_0_icon": "home",
+        "milestone_0_custom_svg": "",
+        "message_0": "<p>Add <strong>3 shirts<\/strong> to get the 3rd one free!<\/p>",
+        "message_1": "<p><strong>2 more shirts<\/strong> to get the 3rd one free!<\/p>",
+        "message_2": "<p><strong>1 more shirt<\/strong> to get the 3rd one free!<\/p>",
+        "message_3": "<p><strong>Success!<\/strong> Goal 1 reached. Now go for Pay 3 Get 5!<\/p>",
+        "message_4": "<p><strong>1 more shirt<\/strong> to get the 5th one free!<\/p>",
+        "message_5": "<p><strong>Congrats!<\/strong> You unlocked all our promos!<\/p>",
+        "message_6_plus": "<p><strong>Congrats!<\/strong> You unlocked all our promos!<\/p>",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "cart-footer": {
+      "type": "main-cart-footer",
+      "blocks": {
+        "subtotal": {
+          "type": "subtotal",
+          "settings": {}
+        },
+        "buttons": {
+          "type": "buttons",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "subtotal",
+        "buttons"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "padding_top": 20,
+        "padding_bottom": 40
+      }
+    }
+  },
+  "order": [
+    "cart-items",
+    "cart-footer"
+  ]
+}

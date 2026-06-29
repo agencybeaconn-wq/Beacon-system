@@ -1,0 +1,23 @@
+{
+  "shop": "xdppna-zt.myshopify.com",
+  "theme_id": 128911474760,
+  "theme_name": "tema-lever-limpo",
+  "theme_role": "unpublished",
+  "total_assets": 408,
+  "icons": [
+    "snippets/icon-accordion.liquid",
+    "snippets/icon-app-stores.liquid",
+    "snippets/icon-gift.liquid",
+    "snippets/icon-shirt.liquid",
+    "snippets/icon-with-text.liquid"
+  ],
+  "pdp_related": [
+    "assets/product-form.js",
+    "assets/product-info.js",
+    "assets/section-main-product.css",
+    "sections/main-product.liquid",
+    "snippets/buy-buttons.liquid",
+    "snippets/custom-badges.liquid",
+    "snippets/scarcity-badge.liquid"
+  ]
+}

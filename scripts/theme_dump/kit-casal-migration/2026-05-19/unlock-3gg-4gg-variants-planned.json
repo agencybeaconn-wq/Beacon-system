@@ -1,0 +1,349 @@
+{
+  "product": {
+    "id": "gid://shopify/Product/8248726585539",
+    "title": "Kit Casal 2 Camisas Brasil Home 26/27 - Torcedor",
+    "handle": "kit-casal-camisa-brasil-home-26-27-nike-torcedor"
+  },
+  "existingCount": 100,
+  "planned": [
+    {
+      "tamanho": "3GG/P",
+      "pers": "Nenhum",
+      "price": "359.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "P"
+    },
+    {
+      "tamanho": "3GG/P",
+      "pers": "Só Camisa Masculina",
+      "price": "389.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "P"
+    },
+    {
+      "tamanho": "3GG/P",
+      "pers": "Só Camisa Feminina",
+      "price": "389.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "P"
+    },
+    {
+      "tamanho": "3GG/P",
+      "pers": "Ambas as camisas",
+      "price": "419.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "P"
+    },
+    {
+      "tamanho": "3GG/M",
+      "pers": "Nenhum",
+      "price": "359.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "M"
+    },
+    {
+      "tamanho": "3GG/M",
+      "pers": "Só Camisa Masculina",
+      "price": "389.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "M"
+    },
+    {
+      "tamanho": "3GG/M",
+      "pers": "Só Camisa Feminina",
+      "price": "389.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "M"
+    },
+    {
+      "tamanho": "3GG/M",
+      "pers": "Ambas as camisas",
+      "price": "419.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "M"
+    },
+    {
+      "tamanho": "3GG/G",
+      "pers": "Nenhum",
+      "price": "359.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "G"
+    },
+    {
+      "tamanho": "3GG/G",
+      "pers": "Só Camisa Masculina",
+      "price": "389.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "G"
+    },
+    {
+      "tamanho": "3GG/G",
+      "pers": "Só Camisa Feminina",
+      "price": "389.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "G"
+    },
+    {
+      "tamanho": "3GG/G",
+      "pers": "Ambas as camisas",
+      "price": "419.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "G"
+    },
+    {
+      "tamanho": "3GG/GG",
+      "pers": "Nenhum",
+      "price": "359.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "GG"
+    },
+    {
+      "tamanho": "3GG/GG",
+      "pers": "Só Camisa Masculina",
+      "price": "389.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "GG"
+    },
+    {
+      "tamanho": "3GG/GG",
+      "pers": "Só Camisa Feminina",
+      "price": "389.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "GG"
+    },
+    {
+      "tamanho": "3GG/GG",
+      "pers": "Ambas as camisas",
+      "price": "419.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "GG"
+    },
+    {
+      "tamanho": "3GG/2GG",
+      "pers": "Nenhum",
+      "price": "369.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "2GG"
+    },
+    {
+      "tamanho": "3GG/2GG",
+      "pers": "Só Camisa Masculina",
+      "price": "399.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "2GG"
+    },
+    {
+      "tamanho": "3GG/2GG",
+      "pers": "Só Camisa Feminina",
+      "price": "399.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "2GG"
+    },
+    {
+      "tamanho": "3GG/2GG",
+      "pers": "Ambas as camisas",
+      "price": "429.90",
+      "compareAt": "450.00",
+      "masc": "3GG",
+      "fem": "2GG"
+    },
+    {
+      "tamanho": "4GG/P",
+      "pers": "Nenhum",
+      "price": "369.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "P"
+    },
+    {
+      "tamanho": "4GG/P",
+      "pers": "Só Camisa Masculina",
+      "price": "399.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "P"
+    },
+    {
+      "tamanho": "4GG/P",
+      "pers": "Só Camisa Feminina",
+      "price": "399.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "P"
+    },
+    {
+      "tamanho": "4GG/P",
+      "pers": "Ambas as camisas",
+      "price": "429.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "P"
+    },
+    {
+      "tamanho": "4GG/M",
+      "pers": "Nenhum",
+      "price": "369.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "M"
+    },
+    {
+      "tamanho": "4GG/M",
+      "pers": "Só Camisa Masculina",
+      "price": "399.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "M"
+    },
+    {
+      "tamanho": "4GG/M",
+      "pers": "Só Camisa Feminina",
+      "price": "399.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "M"
+    },
+    {
+      "tamanho": "4GG/M",
+      "pers": "Ambas as camisas",
+      "price": "429.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "M"
+    },
+    {
+      "tamanho": "4GG/G",
+      "pers": "Nenhum",
+      "price": "369.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "G"
+    },
+    {
+      "tamanho": "4GG/G",
+      "pers": "Só Camisa Masculina",
+      "price": "399.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "G"
+    },
+    {
+      "tamanho": "4GG/G",
+      "pers": "Só Camisa Feminina",
+      "price": "399.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "G"
+    },
+    {
+      "tamanho": "4GG/G",
+      "pers": "Ambas as camisas",
+      "price": "429.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "G"
+    },
+    {
+      "tamanho": "4GG/GG",
+      "pers": "Nenhum",
+      "price": "369.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "GG"
+    },
+    {
+      "tamanho": "4GG/GG",
+      "pers": "Só Camisa Masculina",
+      "price": "399.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "GG"
+    },
+    {
+      "tamanho": "4GG/GG",
+      "pers": "Só Camisa Feminina",
+      "price": "399.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "GG"
+    },
+    {
+      "tamanho": "4GG/GG",
+      "pers": "Ambas as camisas",
+      "price": "429.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "GG"
+    },
+    {
+      "tamanho": "4GG/2GG",
+      "pers": "Nenhum",
+      "price": "379.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "2GG"
+    },
+    {
+      "tamanho": "4GG/2GG",
+      "pers": "Só Camisa Masculina",
+      "price": "409.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "2GG"
+    },
+    {
+      "tamanho": "4GG/2GG",
+      "pers": "Só Camisa Feminina",
+      "price": "409.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "2GG"
+    },
+    {
+      "tamanho": "4GG/2GG",
+      "pers": "Ambas as camisas",
+      "price": "439.90",
+      "compareAt": "450.00",
+      "masc": "4GG",
+      "fem": "2GG"
+    }
+  ],
+  "pricing": {
+    "base": 339.9,
+    "compareAt": "450.00",
+    "sizeExtra": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 0,
+      "2GG": 10,
+      "3GG": 20,
+      "4GG": 30
+    },
+    "persExtra": {
+      "Nenhum": 0,
+      "Só Camisa Masculina": 30,
+      "Só Camisa Feminina": 30,
+      "Ambas as camisas": 60
+    }
+  }
+}

@@ -1,0 +1,12 @@
+node_modules/
+.session/
+output/
+inputs/
+*.log
+
+# Prompts gerados dinamicamente por execução (cada run de cliente cria um novo)
+# A skill regenera baseada no template — não precisa commitar
+prompts/*.txt
+
+# Scratches de desenvolvimento (qualquer arquivo iniciado com _)
+_*

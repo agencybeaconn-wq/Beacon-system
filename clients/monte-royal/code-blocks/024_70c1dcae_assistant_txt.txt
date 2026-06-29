@@ -1,0 +1,3 @@
+
+Pra rollback do `index.json`, basta rodar build-index.mjs com a versão antiga (commitada no Git no Lever System).
+

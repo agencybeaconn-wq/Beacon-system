@@ -1,0 +1,23 @@
+{
+  "products_delta": 11,
+  "products_before": 105,
+  "products_after": 116,
+  "collections_custom_delta": 1,
+  "collections_custom_before": 1,
+  "collections_custom_after": 2,
+  "menu_items_delta": 1,
+  "menu_items_before": 5,
+  "menu_items_after": 6,
+  "new_collection": {
+    "id": 281256362056,
+    "handle": "acessorios",
+    "title": "Acessórios"
+  },
+  "new_menu_item": {
+    "id": "gid://shopify/MenuItem/459871387720",
+    "title": "Acessórios",
+    "url": "/collections/acessorios",
+    "type": "COLLECTION",
+    "resourceId": "gid://shopify/Collection/281256362056"
+  }
+}

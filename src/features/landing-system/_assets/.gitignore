@@ -1,0 +1,5 @@
+# Assets gerados via skill `lever:gen-image` (Higgsfield Nano Banana Pro)
+# São iterativos e regeráveis — não inflar o repo.
+# Quando uma asset for promovida pra produção, mover pra src/assets/ ou public/.
+*
+!.gitignore

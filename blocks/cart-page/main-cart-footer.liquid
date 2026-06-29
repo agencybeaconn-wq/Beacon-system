@@ -1,0 +1,224 @@
+{{ 'component-cart.css' | asset_url | stylesheet_tag }}
+{{ 'component-totals.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-discounts.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div
+  class="gradient color-{{ section.settings.color_scheme }}{% if cart == empty %} is-empty{% endif %}"
+  id="main-cart-footer"
+  data-id="{{ section.id }}"
+>
+  <div class="page-width">
+    <div class="cart__footer isolate section-{{ section.id }}-padding">
+      {%- if settings.show_cart_note -%}
+        <cart-note class="cart__note field">
+          <label for="Cart-note">{{ 'sections.cart.note' | t }}</label>
+          <textarea
+            class="text-area field__input"
+            name="note"
+            form="cart"
+            id="Cart-note"
+            placeholder="{{ 'sections.cart.note' | t }}"
+          >{{ cart.note }}</textarea>
+        </cart-note>
+      {%- endif -%}
+
+      <div class="cart__blocks">
+        {% for block in section.blocks %}
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              {% render block %}
+            {%- when 'subtotal' -%}
+              <div class="js-contents" {{ block.shopify_attributes }}>
+                <div>
+                  <!-- ============================================ -->
+                  <!-- SUBTOTAL (preço original antes dos descontos) -->
+                  <!-- ============================================ -->
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0;">
+                    <span style="font-weight: 600; font-size: 1.5rem; color: rgba(var(--color-foreground), 0.75);">Subtotal</span>
+                    <span style="font-weight: 600; font-size: 1.5rem; color: rgba(var(--color-foreground), 0.75);">{{ cart.original_total_price | money | replace: ' ', '' }}</span>
+                  </div>
+
+                  <!-- ============================================ -->
+                  <!-- BANNER VERDE COM CUPOM (aparece só se houver desconto) -->
+                  <!-- ============================================ -->
+                  {%- if cart.total_discount > 0 -%}
+                    {%- for discount in cart.discount_applications -%}
+                      <div style="
+                        background-color: #dcfce7;
+                        border-radius: 6px;
+                        padding: 1rem 1.4rem;
+                        margin: 0.8rem 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                      ">
+                        <!-- Lado esquerdo: Ícone de tag + Nome do cupom -->
+                        <div style="display: flex; align-items: center; gap: 0.8rem; color: #15803d; font-weight: 600; font-size: 1.4rem;">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                            <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="7" cy="7" r="1" fill="currentColor"/>
+                          </svg>
+                          {{ discount.title }}
+                        </div>
+                        <!-- Lado direito: Valor do desconto -->
+                        <span style="color: #15803d; font-weight: 800; font-size: 1.5rem;">
+                          -{{ discount.total_allocated_amount | money }}
+                        </span>
+                      </div>
+                    {%- endfor -%}
+                  {%- endif -%}
+                </div>
+
+                <!-- ============================================ -->
+                <!-- TOTAL (valor final) -->
+                <!-- ============================================ -->
+                <div class="totals" style="display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; margin-top: 0.4rem; border-top: 1px solid rgba(var(--color-foreground), 0.08);">
+                  <h2 class="totals__total" style="margin: 0; text-transform: uppercase; font-weight: 800; font-size: 2.22rem; color: #151515;">TOTAL</h2>
+                  <p class="totals__total-value" style="margin: 0; font-weight: 900; font-size: 2.4rem; color: #151515;">{{ cart.total_price | money | replace: ' ', '' }}</p>
+                </div>
+              </div>
+            {%- when 'shipping_calculator' -%}
+              <div class="cart__shipping-calculator-block" style="margin-top: 2rem;" {{ block.shopify_attributes }}>
+                {% render 'shipping-calculator', block: block, section_id: section.id %}
+              </div>
+            {%- when 'buttons' -%}
+              <style>
+                #main-cart-footer .cart__checkout-button {
+                  width: 100% !important;
+                  min-height: 5.5rem !important;
+                  font-size: 1.8rem !important;
+                  font-weight: 800 !important;
+                  text-transform: uppercase !important;
+                  letter-spacing: 0.1rem !important;
+                  border-radius: 12px !important;
+                }
+              </style>
+                <div class="cart__ctas" {{ block.shopify_attributes }}>
+                    <button
+                      type="submit"
+                      name="checkout"
+                      class="cart__checkout-button button"
+                      form="cart"
+                      {% if cart == empty %}disabled{% endif %}
+                    >
+                      Finalizar Compra
+                    </button>
+                 </div>
+          {%- endcase -%}
+        {% endfor %}
+
+        <div id="cart-errors"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main-cart-footer.name",
+  "class": "cart__footer-wrapper",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },    
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "subtotal",
+      "name": "t:sections.main-cart-footer.blocks.subtotal.name",
+      "limit": 1
+    },
+    {
+      "type": "buttons",
+      "name": "t:sections.main-cart-footer.blocks.buttons.name",
+      "limit": 1
+    },
+    {
+      "type": "shipping_calculator",
+      "name": "Calculadora de Frete",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Calcule O Frete E Prazo De Entrega"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtítulo",
+          "default": "Simule com seu CEP"
+        },
+        {
+          "type": "text",
+          "id": "option_1_title",
+          "label": "Título Opção 1 (Grátis)",
+          "default": "Frete Padrão Grátis (7 a 15 dias úteis)"
+        },
+        {
+          "type": "text",
+          "id": "option_2_title",
+          "label": "Título Opção 2",
+          "default": "Frete Expresso - R$27,90 (4 a 9 dias úteis)"
+        },
+        {
+          "type": "text",
+          "id": "option_3_title",
+          "label": "Opção 3"
+        },
+        {
+          "type": "text",
+          "id": "option_4_title",
+          "label": "Opção 4"
+        }
+      ]
+    },
+    {
+      "type": "@app"
+    }
+  ]
+}
+{% endschema %}

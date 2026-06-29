@@ -1,0 +1,189 @@
+/* ============================================
+   BASELINE DEFENSIVO — gerado pela skill clone-theme.
+   Resolve: overflow horizontal, box-sizing, grid sem stretch,
+   cards de produto com aspect-ratio consistente.
+   ============================================ */
+
+/* Prevenção global de overflow horizontal */
+html, body { overflow-x: hidden; max-width: 100vw; }
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ============================================
+   PRODUCT GRID — cards canonical (Lucky Fours-style).
+   ============================================ */
+.clone-grid {
+  display: grid;
+  gap: 24px;
+  max-width: var(--clone-container, 1200px);
+  margin: 0 auto;
+  padding: 0 20px 40px;
+  width: 100%;
+}
+.clone-grid--2col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.clone-grid--3col { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.clone-grid--4col { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.clone-grid--5col { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.clone-grid:not([class*='clone-grid--']) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.clone-grid__card {
+  background: var(--clone-color-background, #fff);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  position: relative;
+  min-width: 0;
+}
+.clone-grid__media-wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+  background: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  aspect-ratio: var(--clone-card-aspect, 4 / 5);
+  flex: 0 0 auto;
+}
+.clone-grid__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.clone-grid__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: var(--clone-card-fit, contain);
+  display: block;
+}
+.clone-grid__img {
+  transition: opacity 0.35s ease;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: var(--clone-card-fit, contain) !important;
+}
+.clone-grid__img--primary { z-index: 1; opacity: 1; }
+.clone-grid__img--secondary { z-index: 2; opacity: 0; pointer-events: none; }
+.clone-grid__media-wrap:hover .clone-grid__img--secondary { opacity: 1; }
+.clone-grid__media-wrap:hover .clone-grid__img--primary { opacity: 0; }
+
+.clone-grid__info {
+  padding: 16px 6px 4px;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+.clone-grid__form { margin-top: auto; }
+
+/* ============================================
+   RESPONSIVO — 3 breakpoints canônicos.
+   ============================================ */
+@media (max-width: 990px) {
+  .clone-grid,
+  .clone-grid--2col,
+  .clone-grid--3col,
+  .clone-grid--4col,
+  .clone-grid--5col { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 0 12px 30px; }
+}
+@media (max-width: 600px) {
+  .clone-grid,
+  .clone-grid--2col,
+  .clone-grid--3col,
+  .clone-grid--4col,
+  .clone-grid--5col { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px; padding: 0 8px 24px; }
+  .clone-grid__title { font-size: 13px; line-height: 1.2; }
+  .clone-grid__info { padding: 10px 4px 0; }
+  .clone-grid__price { font-size: 14px; margin-bottom: 8px; }
+  .clone-grid__variant-picks { grid-template-columns: 1fr; gap: 6px; margin-bottom: 10px; }
+}
+@media (max-width: 380px) {
+  .clone-grid__title { font-size: 12px; }
+  .clone-grid__price { font-size: 13px; }
+}
+
+/* ============================================
+   HEADER — CSS vars pra cor configurável via Theme Editor.
+   ============================================ */
+.header-wrapper a,
+.header-wrapper .header__menu-item,
+.header-wrapper .matignon-logo,
+.header-wrapper summary,
+.header-wrapper .header__icon,
+.header-wrapper .header__icon svg {
+  color: var(--clone-header-text, #ffffff) !important;
+}
+
+/* MOBILE: header sólido (cor configurável). */
+@media (max-width: 990px) {
+  body.template-index .section-header,
+  body.template-index .section-header .header-wrapper,
+  body.template-index .section-header.color-scheme-1,
+  body.template-index .section-header.color-scheme-1.gradient,
+  body.template-index .header-wrapper.color-scheme-1,
+  body.template-index .header-wrapper.color-scheme-1.gradient {
+    background: var(--clone-header-bg, #1b2a26) !important;
+    background-color: var(--clone-header-bg, #1b2a26) !important;
+  }
+  body.template-index #MainContent { margin-top: 0 !important; }
+}
+
+/* Desktop sticky: cor sólida configurável. */
+body.template-index .section-header.shopify-section-header-sticky,
+body.template-index .section-header.shopify-section-header-sticky .header-wrapper,
+body.template-index .section-header.shopify-section-header-sticky.color-scheme-1,
+body.template-index .section-header.shopify-section-header-sticky.color-scheme-1.gradient,
+body.template-index .section-header.shopify-section-header-sticky .header-wrapper.color-scheme-1,
+body.template-index .section-header.shopify-section-header-sticky .header-wrapper.color-scheme-1.gradient {
+  background: var(--clone-header-bg, #1b2a26) !important;
+  background-color: var(--clone-header-bg, #1b2a26) !important;
+  background-image: none !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* Dropdown menu — cores configuráveis. */
+.header__submenu,
+.header__submenu.list-menu,
+.header__submenu.list-menu--disclosure,
+.header__submenu.color-scheme-1,
+.header__submenu.color-scheme-1.gradient {
+  background: var(--clone-header-dropdown-bg, #1b2a26) !important;
+  background-color: var(--clone-header-dropdown-bg, #1b2a26) !important;
+  background-image: none !important;
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+  padding: 8px 0 !important;
+  min-width: 220px;
+}
+.header__submenu .header__menu-item,
+.header__submenu a {
+  color: var(--clone-header-dropdown-text, #ffffff) !important;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 22px !important;
+  display: block !important;
+  text-decoration: none;
+}
+.header__submenu .header__menu-item:hover,
+.header__submenu a:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* ============================================
+   ANNOUNCEMENT BAR — cor configurável.
+   ============================================ */
+.utility-bar,
+.announcement-bar-section .utility-bar {
+  background: var(--clone-announcement-bg, #000) !important;
+  color: var(--clone-announcement-text, #fff);
+}
+.utility-bar a,
+.utility-bar .announcement,
+.announcement-bar__announcement,
+.announcement-bar__message {
+  color: var(--clone-announcement-text, #fff) !important;
+}

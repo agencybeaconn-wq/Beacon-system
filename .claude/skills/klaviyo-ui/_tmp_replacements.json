@@ -1,0 +1,6 @@
+[
+  {
+    "find": "|default:\"https://respeitasports.myshopify.com/cart\"",
+    "replace": "|default:'https://respeitasports.myshopify.com/cart'"
+  }
+]

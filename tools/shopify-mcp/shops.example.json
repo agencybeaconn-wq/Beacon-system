@@ -1,0 +1,29 @@
+{
+  "$schema": "./shops.schema.json",
+  "defaults": {
+    "apiVersion": "2025-01"
+  },
+  "shops": {
+    "kron": {
+      "label": "Kron / Respeita Esportes (UK + BR)",
+      "domain": "respeitasports.myshopify.com",
+      "tokenEnv": "SHOPIFY_KRON_TOKEN"
+    },
+    "supremo": {
+      "label": "Supremo Esportes",
+      "domain": "supremosports.myshopify.com",
+      "tokenEnv": "SHOPIFY_SUPREMO_TOKEN"
+    },
+    "fg": {
+      "label": "FG Atacado (Giovanni)",
+      "domain": "fg-atacado.myshopify.com",
+      "tokenEnv": "SHOPIFY_FG_TOKEN"
+    },
+    "mantos": {
+      "label": "Mantos do PH (Lever Tier S)",
+      "domain": "mantos-do-ph.myshopify.com",
+      "tokenEnv": "SHOPIFY_MANTOS_TOKEN",
+      "apiVersion": "2025-01"
+    }
+  }
+}

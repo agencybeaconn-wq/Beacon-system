@@ -1,0 +1,240 @@
+{% schema %}
+{
+  "name": "The Black Hype Promise",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "The Black Hype Promise"
+    },
+    {
+        "type": "header",
+        "content": "Section Padding"
+    },
+    {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Top",
+        "default": 40
+    },
+    {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding Bottom",
+        "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "grid_benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "html",
+          "id": "icon_svg",
+          "label": "Icon SVG",
+          "info": "Paste the SVG code here."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Benefit Title"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Description",
+          "default": "Benefit description goes here."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "The Black Hype Promise",
+      "blocks": [
+        {
+          "type": "grid_benefit",
+          "settings": {
+            "title": "WORLDWIDE SHIPPING",
+            "text": "Express & tracked delivery to most countries.",
+            "icon_svg": "<svg viewBox='0 0 612 612' xmlns='http://www.w3.org/2000/svg'><path d='M504.9,395.756c-28.684,0-52.02,23.342-52.02,52.02c0,28.684,23.336,52.02,52.02,52.02c28.678,0,52.02-23.336,52.02-52.02C556.92,419.098,533.578,395.756,504.9,395.756z M504.9,463.076c-8.439,0-15.3-6.861-15.3-15.3c0-8.439,6.861-15.3,15.3-15.3s15.3,6.861,15.3,15.3C520.2,456.215,513.339,463.076,504.9,463.076z'/><path d='M499.918,179.518H410.04c-6.763,0-12.24,5.484-12.24,12.24v238.68c0,6.756,5.477,12.24,12.24,12.24h12.981c6.059,0,11.426-4.364,12.209-10.373c4.804-36.806,34.162-59.633,69.676-59.633s64.872,22.828,69.676,59.633c0.783,6.01,6.144,10.373,12.209,10.373h12.968c6.756,0,12.24-5.484,12.24-12.24v-119.34c0-2.876-1.01-5.655-2.852-7.852l-99.842-119.34C506.981,181.128,503.541,179.518,499.918,179.518z M422.28,277.438v-61.2c0-6.756,5.477-12.24,12.24-12.24h53.917c3.629,0,7.075,1.616,9.4,4.406l50.998,61.2c6.64,7.974,0.973,20.074-9.406,20.074H434.52C427.757,289.678,422.28,284.201,422.28,277.438z'/><path d='M12.24,442.684h31.341c6.059,0,11.426-4.364,12.209-10.373c4.804-36.806,34.162-59.633,69.676-59.633s64.872,22.828,69.676,59.633c0.783,6.01,6.144,10.373,12.209,10.373H361.08c6.757,0,12.24-5.484,12.24-12.24v-306c0-6.756-5.484-12.24-12.24-12.24H12.24c-6.763,0-12.24,5.484-12.24,12.24v306C0,437.201,5.477,442.684,12.24,442.684z'/><path d='M125.46,395.756c-28.684,0-52.02,23.342-52.02,52.02c0,28.684,23.336,52.02,52.02,52.02c28.678,0,52.02-23.336,52.02-52.02C177.48,419.098,154.138,395.756,125.46,395.756z M125.46,463.076c-8.439,0-15.3-6.861-15.3-15.3c0-8.439,6.861-15.3,15.3-15.3s15.3,6.861,15.3,15.3C140.76,456.215,133.899,463.076,125.46,463.076z'/></svg>"
+          }
+        },
+        {
+          "type": "grid_benefit",
+          "settings": {
+            "title": "EASY RETURNS",
+            "text": "30-day hassle-free returns. Fast refunds after inspection.",
+            "icon_svg": "<svg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'><path d='m227.6 19.35 64.72 37.366-209.829 121.145v89.769c0 3.587 1.778 6.667 4.885 8.461l48.638 28.081c1.553.897 3.331.897 4.885 0 1.553-.897 2.442-2.437 2.442-4.23v-86.949l209.83-121.145 64.72 37.366c6.213 3.587 9.77 9.747 9.77 16.921v112.29c-17.571-5.927-36.163-9.124-54.733-10.257v-7.528c0-8.202-4.682-15.557-12.114-19.027-7.429-3.469-16.076-2.339-22.364 2.923l-74.499 62.353c-6.18 5.172-9.557 12.714-9.299 20.768.258 8.088 4.083 15.346 10.607 20.133l74.248 54.473c6.412 4.704 14.819 5.395 21.913 1.801 7.101-3.598 11.509-10.772 11.509-18.732v-8.312c15.453 1.843 30.75 6.594 43.311 15.688 2.437 1.764 4.747 3.685 6.897 5.75-1.438 1.685-3.197 3.146-5.244 4.328l-190.293 109.864c-6.213 3.587-13.326 3.587-19.539 0l-190.29-109.864c-6.214-3.587-9.77-9.747-9.77-16.922v-219.728c0-7.175 3.556-13.335 9.77-16.921l190.291-109.865c6.213-3.587 13.325-3.587 19.538 0zm129.328 320.743c104.49 0 134.102 99.8 48.275 144.657-.471.244-.672.807-.456 1.291.202.451.68.69 1.159.57 142.596-35.074 132.627-222.924-48.978-222.924v-23.047c0-1.988-1.083-3.689-2.884-4.53s-3.8-.58-5.325.696l-74.499 62.354c-2.436 2.039-3.678 4.813-3.577 7.988.102 3.175 1.519 5.864 4.08 7.743l74.248 54.473c1.558 1.143 3.494 1.302 5.217.429s2.74-2.529 2.74-4.46z'/></svg>"
+          }
+        },
+        {
+            "type": "grid_benefit",
+            "settings": {
+                "title": "SECURE PAYMENTS",
+                "text": "SSL checkout. All major cards, Apple Pay, PayPal, etc.",
+                "icon_svg": "<svg viewBox='0 -86 512 512' xmlns='http://www.w3.org/2000/svg'><path d='m90.046875 120.070312h40.058594v40.058594h-40.058594zm0 0'/><path d='m0 0v340.246094h512v-340.246094zm170.664062 250.199219v30h-110.628906v-30zm-110.617187-60.070313v-100.058594h100.058594v100.058594zm391.917969-70.03125v30h-251.816406v-30zm-251.816406-30.050781v-30h251.816406v30zm251.816406 160.152344v30h-110.628906v-30zm-140.652344 0v30h-110.625v-30zm0 0'/></svg>"
+            }
+        },
+        {
+            "type": "grid_benefit",
+            "settings": {
+                "title": "24/7 SUPPORT",
+                "text": "Need help with sizing, shipping or custom orders? We're here anytime.",
+                "icon_svg": "<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><path d='m64.499 58.733h-29.002c-12.162 1.111-21.688 11.335-21.688 23.788 0 11.895 8.691 12.479 20.073 12.479 1.242 0 2.515-.006 3.817-.006h24.604c1.293 0 2.569.006 3.811.006 11.382 0 20.078-.583 20.078-12.479-.004-12.454-9.531-22.679-21.693-23.788z' fill='#000'/><path d='m54.391 46.439h3.656c1.205 0 2.351.41 3.274 1.14 2.104-.282 4.091-.829 5.813-1.574.497-.736.929-1.518 1.327-2.319v-8.001c0-1.809.673-3.494 1.84-4.778-1.705-9.679-10.135-17.037-20.303-17.037-10.165 0-18.597 7.359-20.302 17.038 1.166 1.283 1.84 2.968 1.84 4.777v8.001c3.381 6.786 10.368 11.458 18.461 11.458.126 0 .248-.016.373-.019-.781-.923-1.271-2.099-1.271-3.399.001-2.915 2.375-5.287 5.292-5.287z' fill='#000'/><path d='m24.177 49.469h.231c2.536 0 4.594-2.058 4.594-4.603v-9.182c0-1.804-1.041-3.358-2.556-4.111.655-12.425 10.967-22.33 23.551-22.33s22.9 9.904 23.553 22.33c-1.515.752-2.555 2.307-2.555 4.111v9.182c0 .61.119 1.178.327 1.71-2.679 1.913-6.576 3.279-10.965 3.657-.497-.755-1.344-1.26-2.312-1.26h-3.656c-1.524 0-2.756 1.234-2.756 2.752 0 1.52 1.231 2.756 2.756 2.756h3.656c1.065 0 1.973-.607 2.431-1.487 5.096-.402 9.527-1.958 12.64-4.259.713.462 1.559.733 2.472.733h.23c2.539 0 4.593-2.058 4.593-4.603v-9.182c0-1.829-1.072-3.408-2.619-4.141-.674-14.744-12.882-26.542-27.794-26.542s-27.122 11.798-27.791 26.544c-1.549.732-2.624 2.312-2.624 4.141v9.182c0 2.544 2.06 4.602 4.594 4.602z' fill='#000'/></svg>"
+            }
+        },
+        {
+            "type": "grid_benefit",
+            "settings": {
+                "title": "QUALITY CHECKED",
+                "text": "Each jersey is individually inspected for quality before shipping.",
+                "icon_svg": "<svg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='m23 12-2.44-2.79.34-3.69-3.61-.82-1.89-3.2-3.4 1.46-3.4-1.46-1.89 3.19-3.61.81.34 3.7-2.44 2.8 2.44 2.79-.34 3.7 3.61.82 1.89 3.19 3.4-1.47 3.4 1.46 1.89-3.19 3.61-.82-.34-3.69zm-12.91 4.72-3.8-3.81 1.48-1.48 2.32 2.33 5.85-5.87 1.48 1.48z' fill='#000'/></svg>"
+            }
+        },
+        {
+            "type": "grid_benefit",
+            "settings": {
+                "title": "TRUSTED BY FANS",
+                "text": "1000+ happy customers. Quality jerseys, loved worldwide.",
+                "icon_svg": "<svg viewBox='0 0 38 38' xmlns='http://www.w3.org/2000/svg'><g><path d='m23.39 12a1 1 0 0 0 .59-.19 1 1 0 0 0 .39-1l-.37-2.4 1.72-1.68a1 1 0 0 0 -.58-1.73l-2.39-.34-1.07-2.15a1 1 0 0 0 -1.79 0l-1.07 2.17-2.39.32a1 1 0 0 0 -.55 1.71l1.73 1.68-.41 2.38a1 1 0 0 0 .4 1 1 1 0 0 0 1 .08l2.14-1.13 2.13 1.13a1.12 1.12 0 0 0 .52.15z'/><path d='m18.49 14-2.38-.35-1.11-2.14a1 1 0 0 0 -1.79 0l-1.07 2.16-2.35.33a1 1 0 0 0 -.55 1.7l1.76 1.71-.4 2.38a1 1 0 0 0 1.4 1.05l2.13-1.12 2.14 1.12a.93.93 0 0 0 .46.12 1 1 0 0 0 .59-.2 1 1 0 0 0 .4-1l-.41-2.38 1.73-1.69a1 1 0 0 0 -.56-1.7z'/><path d='m32.59 14.7a1 1 0 0 0 -.81-.68l-2.38-.35-1.07-2.16a1 1 0 0 0 -.9-.56 1 1 0 0 0 -.89.56l-1.07 2.16-2.39.33a1 1 0 0 0 -.81.68 1 1 0 0 0 .26 1l1.72 1.69-.4 2.38a1 1 0 0 0 .39 1 1 1 0 0 0 1.06.08l2.13-1.12 2.14 1.12a.93.93 0 0 0 .43.17 1 1 0 0 0 .59-.2 1 1 0 0 0 .4-1l-.41-2.38 1.73-1.69a1 1 0 0 0 .28-1.03z'/><path d='m5.33 23.65h-1.66a1.78 1.78 0 0 0 -1.67 1.93v8a1.78 1.78 0 0 0 1.67 1.93h1.66a1.78 1.78 0 0 0 1.67-1.97v-8a1.78 1.78 0 0 0 -1.67-1.89z'/><path d='m35.35 26.38a3 3 0 0 0 -3.61-.51l-7.44 4.13h-5.74a1 1 0 0 1 0-2h4.5a2.5 2.5 0 1 0 0-5h-11.5a1 1 0 0 0 -.56.17l-2.47 1.65v.3 8.76.3l2.47 1.65a1 1 0 0 0 .56.17h14a1 1 0 0 0 .48-.12l8.62-4.7a3 3 0 0 0 .69-4.8z'/></g></svg>"
+            }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .product-benefits {
+    margin: 0px 0;
+    background-color: #f9f9f9;
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 24px;
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Roboto", sans-serif;
+  }
+
+  .product-benefits__title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 30px;
+    color: #111;
+    text-transform: uppercase;
+  }
+
+  .product-benefits__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .benefit-card {
+    background-color: #fff;
+    border-radius: 24px;
+    padding: 20px 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    gap: 12px;
+    min-height: 140px;
+    transition: all 0.25s ease;
+    border: 1px solid rgba(0,0,0,0.04);
+  }
+
+  .benefit-card:hover {
+    transform: translateY(-3px);
+    /* Dynamic shadow using primary color variable */
+    box-shadow: 0 6px 20px rgba(var(--color-button), 0.3);
+    border-color: rgba(var(--color-button), 0.5);
+  }
+
+  .benefit-icon {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .benefit-icon svg {
+    width: 36px;
+    height: 36px;
+    display: block;
+  }
+  
+  /* Ensure SVGs inside the configured code scale correctly if no dimensions provided */
+  .benefit-icon svg * {
+      fill: currentColor; /* Inherit color if needed, or stick to provided SVG colors */
+  }
+
+  .benefit-card h4 {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0;
+    color: #111;
+    line-height: 1.4;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .benefit-card p {
+    font-size: 13px;
+    color: #555;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  @media (min-width: 768px) {
+    .product-benefits__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .benefit-card {
+      min-height: 160px;
+    }
+  }
+</style>
+
+<section class="product-benefits">
+  {% if section.settings.title != blank %}
+    <h3 class="product-benefits__title">{{ section.settings.title | escape }}</h3>
+  {% endif %}
+
+  <div class="product-benefits__grid">
+    {% for block in section.blocks %}
+      <div class="benefit-card" {{ block.shopify_attributes }}>
+        <div class="benefit-icon">
+          {% if block.settings.icon_svg != blank %}
+            {{ block.settings.icon_svg }}
+          {% endif %}
+        </div>
+        <h4>{{ block.settings.title | escape }}</h4>
+        <p>{{ block.settings.text | escape }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>

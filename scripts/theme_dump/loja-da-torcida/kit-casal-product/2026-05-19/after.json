@@ -1,0 +1,169 @@
+{
+  "data": {
+    "home": {
+      "id": "gid://shopify/Product/7058587779144",
+      "title": "Kit Casal 2 Camisas Brasil Home 26/27 - Torcedor",
+      "handle": "kit-casal-2-camisas-brasil-home-26-27-torcedor",
+      "status": "ACTIVE",
+      "tags": [
+        "brasil",
+        "copa-do-mundo-2026",
+        "excluded-from-promo",
+        "kit-casal",
+        "lancamento",
+        "selecoes"
+      ],
+      "variants": {
+        "edges": [
+          {
+            "node": {
+              "price": "319.90",
+              "compareAtPrice": "450.00"
+            }
+          },
+          {
+            "node": {
+              "price": "349.90",
+              "compareAtPrice": "450.00"
+            }
+          },
+          {
+            "node": {
+              "price": "349.90",
+              "compareAtPrice": "450.00"
+            }
+          },
+          {
+            "node": {
+              "price": "379.90",
+              "compareAtPrice": "450.00"
+            }
+          },
+          {
+            "node": {
+              "price": "319.90",
+              "compareAtPrice": "450.00"
+            }
+          }
+        ]
+      },
+      "onlineStoreUrl": "https://www.lojadatorcida.com/products/kit-casal-2-camisas-brasil-home-26-27-torcedor",
+      "onlineStorePreviewUrl": "https://www.lojadatorcida.com/products/kit-casal-2-camisas-brasil-home-26-27-torcedor",
+      "collections": {
+        "edges": [
+          {
+            "node": {
+              "handle": "brasil",
+              "title": "Brasil"
+            }
+          },
+          {
+            "node": {
+              "handle": "masculino-brasil",
+              "title": "Masculino Brasil"
+            }
+          },
+          {
+            "node": {
+              "handle": "selecoes",
+              "title": "Seleções"
+            }
+          }
+        ]
+      }
+    },
+    "away": {
+      "id": "gid://shopify/Product/7058587844680",
+      "title": "Kit Casal 2 Camisas Brasil Away 26/27 - Torcedor",
+      "handle": "kit-casal-2-camisas-brasil-away-26-27-torcedor",
+      "status": "ACTIVE",
+      "tags": [
+        "brasil",
+        "copa-do-mundo-2026",
+        "excluded-from-promo",
+        "kit-casal",
+        "lancamento",
+        "selecoes"
+      ],
+      "variants": {
+        "edges": [
+          {
+            "node": {
+              "price": "319.90",
+              "compareAtPrice": "450.00"
+            }
+          },
+          {
+            "node": {
+              "price": "349.90",
+              "compareAtPrice": "450.00"
+            }
+          },
+          {
+            "node": {
+              "price": "349.90",
+              "compareAtPrice": "450.00"
+            }
+          },
+          {
+            "node": {
+              "price": "379.90",
+              "compareAtPrice": "450.00"
+            }
+          },
+          {
+            "node": {
+              "price": "319.90",
+              "compareAtPrice": "450.00"
+            }
+          }
+        ]
+      },
+      "onlineStoreUrl": "https://www.lojadatorcida.com/products/kit-casal-2-camisas-brasil-away-26-27-torcedor",
+      "onlineStorePreviewUrl": "https://www.lojadatorcida.com/products/kit-casal-2-camisas-brasil-away-26-27-torcedor",
+      "collections": {
+        "edges": [
+          {
+            "node": {
+              "handle": "brasil",
+              "title": "Brasil"
+            }
+          },
+          {
+            "node": {
+              "handle": "masculino-brasil",
+              "title": "Masculino Brasil"
+            }
+          },
+          {
+            "node": {
+              "handle": "selecoes",
+              "title": "Seleções"
+            }
+          }
+        ]
+      }
+    },
+    "brasil": {
+      "productsCount": {
+        "count": 112
+      }
+    },
+    "selecoes": {
+      "productsCount": {
+        "count": 113
+      }
+    }
+  },
+  "extensions": {
+    "cost": {
+      "requestedQueryCost": 28,
+      "actualQueryCost": 24,
+      "throttleStatus": {
+        "maximumAvailable": 2000,
+        "currentlyAvailable": 1976,
+        "restoreRate": 100
+      }
+    }
+  }
+}

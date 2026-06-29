@@ -1,0 +1,17 @@
+Plano: 82 produtos pra ajustar
+
+[0/82] Camisa Bélgica 2026/27 I...
+
+[50/82] Camisa Feminina Uruguai 2026/27 I...
+
+=== RESULTADO ===
+Renames aplicados: 0
+Variants criadas: 284
+Erros: 5
+
+Primeiros 10 erros:
+  gid://shopify/Product/8998114066674: bulkCreate 3GG,4GG → {"field":["variants","0"],"message":"You need to add option values for Nome e Número","code":"NEED_TO_ADD_OPTION_VALUES"}
+  gid://shopify/Product/8998115574002: bulkCreate 3GG,4GG → {"field":["variants","0"],"message":"You need to add option values for Nome e Número","code":"NEED_TO_ADD_OPTION_VALUES"}
+  gid://shopify/Product/8998114164978: bulkCreate 3GG,4GG → {"field":["variants","0"],"message":"You need to add option values for Nome e Número","code":"NEED_TO_ADD_OPTION_VALUES"}
+  gid://shopify/Product/8998114197746: bulkCreate 3GG,4GG → {"field":["variants","0"],"message":"You need to add option values for Nome e Número","code":"NEED_TO_ADD_OPTION_VALUES"}
+  gid://shopify/Product/8998115541234: bulkCreate 4GG → {"field":["variants","0"],"message":"You need to add option values for Nome e Número","code":"NEED_TO_ADD_OPTION_VALUES"}

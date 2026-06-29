@@ -1,0 +1,21 @@
+[Unit]
+Description=Lever client-onboarder worker (runner headless)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=onboarder
+WorkingDirectory=/opt/lever-onboarder/client-onboarder
+EnvironmentFile=/opt/lever-onboarder/client-onboarder/.env
+Environment=HEADLESS=true
+# npm resolvido via PATH do node; ajuste se usar nvm
+ExecStart=/usr/bin/npm run worker
+Restart=always
+RestartSec=15
+# Reinicia se travar; logs via journalctl -u onboarder-worker -f
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

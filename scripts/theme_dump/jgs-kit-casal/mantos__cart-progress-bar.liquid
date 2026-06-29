@@ -1,0 +1,282 @@
+{%- liquid
+  assign has_section_settings = false
+  if section and section.settings.message_1 != blank
+    assign has_section_settings = true
+  endif
+
+  # Recebe a section como parâmetro (se disponível)
+  if has_section_settings
+    assign goal_1 = section.settings.milestone_1_quantity | default: 3
+    assign goal_2 = section.settings.milestone_2_quantity | default: 5
+    assign milestone_1_badge = section.settings.milestone_1_badge | default: "Leve 3"
+    assign milestone_2_badge = section.settings.milestone_2_badge | default: "Leve 5"
+    assign milestone_1_icon = section.settings.milestone_1_icon | default: "star"
+    assign milestone_2_icon = section.settings.milestone_2_icon | default: "star"
+    assign milestone_0_icon = section.settings.milestone_0_icon | default: "home"
+  else
+    # Valores padrão caso não tenha section
+    assign goal_1 = 3
+    assign goal_2 = 5
+    assign milestone_1_badge = "Leve 3"
+    assign milestone_2_badge = "Leve 5"
+    assign milestone_1_icon = "star"
+    assign milestone_2_icon = "star"
+    assign milestone_0_icon = "home"
+  endif
+
+  # Obter e tratar palavras de inclusão e exclusão das configurações do tema
+  assign include_tags_setting = settings.cart_progress_include_tags | default: ''
+  assign exclude_tags_setting = settings.cart_progress_exclude_tags | default: ''
+
+  assign include_tags = include_tags_setting | split: ','
+  assign exclude_tags = exclude_tags_setting | split: ','
+
+  # Contar itens (excluindo patches e filtrando por palavras no título)
+  assign shirt_count = 0
+  for item in cart.items
+    assign count_item = true
+    assign item_title_down = item.product.title | downcase
+
+    # 1. Regra base do tema: exclusão de patches
+    assign is_patch = false
+    if item.properties['Posição'] != blank or item.product.title contains 'Patch'
+      assign is_patch = true
+    endif
+
+    if is_patch
+      assign count_item = false
+    endif
+
+    # 1b. Kit Casal: já é promoção à parte, não conta nos milestones
+    if item.product.tags contains 'kit-casal'
+      assign count_item = false
+    endif
+
+    # 2. Verificação de palavras EXCLUÍDAS no título
+    if count_item and exclude_tags.size > 0 and exclude_tags_setting != ''
+      for ex_tag in exclude_tags
+        assign ex_tag_down = ex_tag | downcase | strip
+        if item_title_down contains ex_tag_down and ex_tag_down != ''
+          assign count_item = false
+          break
+        endif
+      endfor
+    endif
+
+    # 3. Verificação de palavras INCLUÍDAS no título
+    if count_item and include_tags.size > 0 and include_tags_setting != ''
+      assign has_include_tag = false
+      for in_tag in include_tags
+        assign in_tag_down = in_tag | downcase | strip
+        if item_title_down contains in_tag_down and in_tag_down != ''
+          assign has_include_tag = true
+          break
+        endif
+      endfor
+
+      if has_include_tag == false
+        assign count_item = false
+      endif
+    endif
+
+    # 4. Adicionar à contagem se passou por todas as regras
+    if count_item
+      assign shirt_count = shirt_count | plus: item.quantity
+    endif
+  endfor
+
+  # Calcular progresso
+  assign progress_percent = 0
+  if shirt_count > 0
+    if shirt_count >= goal_2
+      assign progress_percent = 100
+    elsif shirt_count >= goal_1
+      assign base = 50.0
+      assign extra_count = shirt_count | minus: goal_1
+      assign range = goal_2 | minus: goal_1
+      assign extra_progress = extra_count | times: 50.0 | divided_by: range
+      assign progress_percent = base | plus: extra_progress
+    else
+      assign progress_percent = shirt_count | times: 50.0 | divided_by: goal_1
+    endif
+  endif
+-%}
+
+<div class="cart-progress-bar-container {% if shirt_count < goal_1 %}stage-1{% else %}stage-2{% endif %}" id="CartProgressBar" data-shirt-count="{{ shirt_count }}" style="margin-top: 20px;">
+  <div class="cart-progress-bar__header">
+    <div class="cart-progress-bar__message-wrapper">
+       <div class="cart-progress-bar__message">
+        {%- if has_section_settings -%}
+          {%- case shirt_count -%}
+            {%- when 0 -%}
+              {{ section.settings.message_0 }}
+            {%- when 1 -%}
+              {{ section.settings.message_1 }}
+            {%- when 2 -%}
+              {{ section.settings.message_2 }}
+            {%- when 3 -%}
+              {{ section.settings.message_3 }}
+            {%- when 4 -%}
+              {{ section.settings.message_4 }}
+            {%- else -%}
+              {%- if shirt_count >= 5 -%}
+                {{ section.settings.message_5_plus | default: section.settings.message_6_plus }}
+              {%- endif -%}
+          {%- endcase -%}
+        {%- else -%}
+          {%- comment -%} Mensagens padrão caso não tenha section {%- endcomment -%}
+          {% case shirt_count %}
+            {% when 0 %}
+              Adicione <strong>3 camisas</strong> para ganhar a 3ª de presente! 🎁
+            {% when 1 %}
+              Mais <strong>2 camisas</strong> para você ganhar a 3ª de graça!
+            {% when 2 %}
+              Mais <strong>1 camisa</strong> para você ganhar a 3ª de graça! 🚀
+            {% when 3 %}
+              <strong>Sucesso!</strong> Meta 1 atingida. Agora vamos pro Leve 5?
+            {% when 4 %}
+              Mais <strong>1 camisa</strong> para ganhar a 5ª de presente!
+            {% else %}
+              {% if shirt_count >= 5 %}
+                <strong>Incrível!</strong> Você desbloqueou o benefício máximo de 2 brindes. 🏆
+              {% endif %}
+          {% endcase %}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="cart-progress-bar__track-wrapper">
+    <div class="cart-progress-bar__track">
+      <div class="cart-progress-bar__fill" data-width="{{ progress_percent }}"></div>
+      
+      {%- comment -%} Milestone 0 (Início) {%- endcomment -%}
+      <div class="cart-progress-bar__milestone milestone-0 is-reached">
+        <div class="milestone__icon-container">
+          <div class="milestone__icon">
+            {%- case milestone_0_icon -%}
+              {%- when 'home' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M224,115.55V208a16,16,0,0,1-16,16H168a16,16,0,0,1-16-16V168a8,8,0,0,0-8-8H112a8,8,0,0,0-8,8v40a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V115.55a16,16,0,0,1,5.17-11.78l80-75.48a16,16,0,0,1,21.66,0l80,75.48A16,16,0,0,1,224,115.55Z"></path>
+                </svg>
+              {%- when 'cart' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M216,64H176a48,48,0,0,0-96,0H40A16,16,0,0,0,24,80V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64ZM128,32a32,32,0,0,1,32,32H96A32,32,0,0,1,128,32Z"></path>
+                </svg>
+              {%- when 'shop' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM128,176a48,48,0,1,1,48-48A48.05,48.05,0,0,1,128,176Z"></path>
+                </svg>
+              {%- when 'custom' -%}
+                {%- if has_section_settings and section.settings.milestone_0_custom_svg != blank -%}
+                  {{ section.settings.milestone_0_custom_svg }}
+                {%- endif -%}
+              {%- else -%}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M224,115.55V208a16,16,0,0,1-16,16H168a16,16,0,0,1-16-16V168a8,8,0,0,0-8-8H112a8,8,0,0,0-8,8v40a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V115.55a16,16,0,0,1,5.17-11.78l80-75.48a16,16,0,0,1,21.66,0l80,75.48A16,16,0,0,1,224,115.55Z"></path>
+                </svg>
+            {%- endcase -%}
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} Steps intermediários {%- endcomment -%}
+      <div class="cart-progress-bar__steps">
+        {% for i in (1..goal_2) %}
+          {%- liquid
+             assign is_milestone = false
+             if i == goal_1 or i == goal_2 or i == 0
+               assign is_milestone = true
+             endif
+          -%}
+          {% unless is_milestone %}
+            <div class="cart-progress-bar__step step-{{ i }} {% if shirt_count >= i %}is-reached{% endif %}" style="left: {{ i | times: 100.0 | divided_by: goal_2 }}%;">
+              <div class="step__icon">
+                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+              </div>
+              <div class="step__checkmark">
+                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+          {% endunless %}
+        {% endfor %}
+      </div>
+
+      {%- comment -%} Milestone 1 {%- endcomment -%}
+      <div class="cart-progress-bar__milestone milestone-1 {% if shirt_count >= goal_1 %}is-reached{% endif %}">
+        <span class="milestone__badge">{{ milestone_1_badge }}</span>
+        <div class="milestone__icon-container">
+          <div class="milestone__icon">
+            {%- case milestone_1_icon -%}
+              {%- when 'shirt' -%}
+                {% render 'icon-shirt' %}
+              {%- when 'gift' -%}
+                {% render 'icon-gift' %}
+              {%- when 'trophy' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M232,64H208V56a16,16,0,0,0-16-16H168a16,16,0,0,0-16,16v8H104V56A16,16,0,0,0,88,40H64A16,16,0,0,0,48,56v8H24A16,16,0,0,0,8,80V96a40,40,0,0,0,40,40h3.65A80.13,80.13,0,0,0,120,191.61V216H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V191.58c31.94-3.23,58.44-25.64,68.08-55.58H208a40,40,0,0,0,40-40V80A16,16,0,0,0,232,64Z"></path>
+                </svg>
+              {%- when 'star' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M234.5,114.38l-45.1,39.36,13.51,58.6a16,16,0,0,1-23.84,17.34l-51.11-31-51,31a16,16,0,0,1-23.84-17.34L66.61,153.8,21.5,114.38a16,16,0,0,1,9.11-28.06l59.46-5.15,23.21-55.36a16,16,0,0,1,29.44,0h0L166,81.17l59.44,5.15a16,16,0,0,1,9.11,28.06Z"></path>
+                </svg>
+              {%- when 'ball' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm87.63,96H175.8c-1.37-34.19-11.32-65.82-27.52-90.13A88.2,88.2,0,0,1,215.63,120ZM128,207.83c-16.13-4.52-39.48-24.68-47.53-79.83h95.06C167.48,183.15,144.13,203.31,128,207.83ZM80.47,112C88.52,56.85,111.87,36.69,128,32.17c16.13,4.52,39.48,24.68,47.53,79.83ZM107.72,29.87C91.52,54.18,81.57,85.81,80.2,120H40.37A88.2,88.2,0,0,1,107.72,29.87ZM40.37,136H80.2c1.37,34.19,11.32,65.82,27.52,90.13A88.2,88.2,0,0,1,40.37,136Zm107.91,90.13c16.2-24.31,26.15-55.94,27.52-90.13h39.83A88.2,88.2,0,0,1,148.28,226.13Z"></path>
+                </svg>
+              {%- when 'custom' -%}
+                {%- if has_section_settings and section.settings.milestone_1_custom_svg != blank -%}
+                  {{ section.settings.milestone_1_custom_svg }}
+                {%- else -%}
+                  {% render 'icon-shirt' %}
+                {%- endif -%}
+              {%- else -%}
+                {% render 'icon-shirt' %}
+            {%- endcase -%}
+          </div>
+          <div class="milestone__checkmark">
+             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} Milestone 2 {%- endcomment -%}
+      <div class="cart-progress-bar__milestone milestone-2 {% if shirt_count >= goal_2 %}is-reached{% endif %}">
+        <span class="milestone__badge">{{ milestone_2_badge }}</span>
+        <div class="milestone__icon-container">
+          <div class="milestone__icon">
+            {%- case milestone_2_icon -%}
+              {%- when 'shirt' -%}
+                {% render 'icon-shirt' %}
+              {%- when 'gift' -%}
+                {% render 'icon-gift' %}
+              {%- when 'trophy' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M232,64H208V56a16,16,0,0,0-16-16H168a16,16,0,0,0-16,16v8H104V56A16,16,0,0,0,88,40H64A16,16,0,0,0,48,56v8H24A16,16,0,0,0,8,80V96a40,40,0,0,0,40,40h3.65A80.13,80.13,0,0,0,120,191.61V216H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V191.58c31.94-3.23,58.44-25.64,68.08-55.58H208a40,40,0,0,0,40-40V80A16,16,0,0,0,232,64Z"></path>
+                </svg>
+              {%- when 'star' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M234.5,114.38l-45.1,39.36,13.51,58.6a16,16,0,0,1-23.84,17.34l-51.11-31-51,31a16,16,0,0,1-23.84-17.34L66.61,153.8,21.5,114.38a16,16,0,0,1,9.11-28.06l59.46-5.15,23.21-55.36a16,16,0,0,1,29.44,0h0L166,81.17l59.44,5.15a16,16,0,0,1,9.11,28.06Z"></path>
+                </svg>
+              {%- when 'ball' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm87.63,96H175.8c-1.37-34.19-11.32-65.82-27.52-90.13A88.2,88.2,0,0,1,215.63,120ZM128,207.83c-16.13-4.52-39.48-24.68-47.53-79.83h95.06C167.48,183.15,144.13,203.31,128,207.83ZM80.47,112C88.52,56.85,111.87,36.69,128,32.17c16.13,4.52,39.48,24.68,47.53,79.83ZM107.72,29.87C91.52,54.18,81.57,85.81,80.2,120H40.37A88.2,88.2,0,0,1,107.72,29.87ZM40.37,136H80.2c1.37,34.19,11.32,65.82,27.52,90.13A88.2,88.2,0,0,1,40.37,136Zm107.91,90.13c16.2-24.31,26.15-55.94,27.52-90.13h39.83A88.2,88.2,0,0,1,148.28,226.13Z"></path>
+                </svg>
+              {%- when 'custom' -%}
+                {%- if has_section_settings and section.settings.milestone_2_custom_svg != blank -%}
+                  {{ section.settings.milestone_2_custom_svg }}
+                {%- else -%}
+                  {% render 'icon-gift' %}
+                {%- endif -%}
+              {%- else -%}
+                {% render 'icon-gift' %}
+            {%- endcase -%}
+          </div>
+          <div class="milestone__checkmark">
+             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

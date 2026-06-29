@@ -1,0 +1,190 @@
+// curate-variants — aplica matriz de combinações vencedoras nas variantes
+// dos produtos masculinos da Mont Royal.
+//
+// Matriz (8 combinações que ficam vivas):
+//   preto+preto, preto+verde, preto+azul (hero only)
+//   prata+branco, prata+azul, prata+preto
+//   dourado+preto, dourado+azul, dourado+verde
+//
+// Despublica (status=ARCHIVED) variantes fora da matriz.
+// Sempre mantém pelo menos 2 variantes por produto (ou todas se já <=2).
+// Limita a 3 variantes por produto.
+//
+// Uso:
+//   node curate-variants.mjs MontRoyal           # dry-run
+//   node curate-variants.mjs MontRoyal --apply
+//   node curate-variants.mjs MontRoyal --only=skeleton,laurent  # limitar
+
+import 'dotenv/config';
+import { getCreds, shopifyGraphQL, delay } from '../../lib/shopify-api.mjs';
+import { fetchClient } from '../../lib/supabase-rest.mjs';
+
+const args = process.argv.slice(2);
+const apply = args.includes('--apply');
+const clientArg = args.find(a => !a.startsWith('--')) || 'MontRoyal';
+const onlyArg = args.find(a => a.startsWith('--only='))?.slice(7);
+const onlyHandles = onlyArg ? new Set(onlyArg.split(',').map(s => s.trim())) : null;
+
+// ─── Decoder cromático ──────────────────────────────────────────────
+// Retorna { case, dial } — case = preto|prata|dourado|outro; dial = branco|preto|azul|verde|outro
+const CASE_KEYS = {
+  black: ['obsidian', 'noir', 'iron', 'midnight', 'onyx', 'jet', 'panther', 'shadow', 'eclipse', 'raven'],
+  silver: ['platinum', 'ice', 'pearl', 'silver', 'frost', 'chrome', 'steel', 'arctic', 'crystal'],
+  gold: ['gold', 'rose gold', 'saffron', 'amber', 'bronze', 'rosé', 'sunset', 'champagne'],
+};
+const DIAL_KEYS = {
+  black: ['obsidian', 'noir', 'iron', 'midnight', 'onyx', 'jet', 'shadow', 'eclipse'],
+  white: ['ice', 'pearl', 'platinum', 'frost', 'arctic', 'crystal', 'snow'],
+  blue: ['ocean', 'cobalt', 'tiffany', 'sapphire', 'azure', 'navy', 'royal'],
+  green: ['emerald', 'jade', 'forest', 'olive', 'verde', 'mint'],
+};
+
+function decodeVariant(title) {
+  const t = title.toLowerCase();
+
+  // 1) Detecta case
+  let caseColor = 'outro';
+  if (t.includes('gold')) caseColor = 'gold';
+  else if (CASE_KEYS.black.some(k => t.includes(k))) caseColor = 'black';
+  else if (CASE_KEYS.silver.some(k => t.includes(k))) caseColor = 'silver';
+
+  // 2) Detecta dial — pega a "última palavra-chave" significativa
+  // Se variante tem 2 termos (ex "Gold Ocean" = case dourado, dial azul), o segundo é o dial
+  let dialColor = 'outro';
+  for (const [color, keys] of Object.entries(DIAL_KEYS)) {
+    if (keys.some(k => t.includes(k))) dialColor = color;
+  }
+  // Caso especial: se case é gold, o segundo termo decide o dial
+  if (caseColor === 'gold') {
+    const rest = t.replace(/gold|rose|rosé/g, '').trim();
+    if (CASE_KEYS.black.some(k => rest.includes(k))) dialColor = 'black';
+    else if (CASE_KEYS.silver.some(k => rest.includes(k))) dialColor = 'white';
+    else if (DIAL_KEYS.blue.some(k => rest.includes(k))) dialColor = 'blue';
+    else if (DIAL_KEYS.green.some(k => rest.includes(k))) dialColor = 'green';
+    else if (rest === '') dialColor = 'gold-mono'; // só "Gold" = dourado total
+  }
+  // Caso "Single term = case e dial mesmas"
+  if (caseColor !== 'outro' && dialColor === 'outro') dialColor = caseColor === 'silver' ? 'white' : caseColor === 'black' ? 'black' : 'gold-mono';
+
+  return { case: caseColor, dial: dialColor };
+}
+
+// ─── Matriz de pontuação (maior = melhor; 0 = cortar) ──────────────
+// Linha = case, coluna = dial
+const SCORE = {
+  black: { black: 100, green: 95, blue: 70, white: 0, 'gold-mono': 0, outro: 30 },
+  silver: { white: 100, blue: 100, black: 95, green: 0, 'gold-mono': 0, outro: 30 },
+  gold: { black: 100, blue: 95, green: 70, 'gold-mono': 60, white: 0, outro: 30 },
+  outro: { black: 40, white: 40, blue: 40, green: 40, 'gold-mono': 40, outro: 30 },
+};
+
+function scoreVariant(title) {
+  const { case: c, dial: d } = decodeVariant(title);
+  return { score: SCORE[c]?.[d] ?? 30, case: c, dial: d };
+}
+
+// ─── Main ───────────────────────────────────────────────────────────
+async function main() {
+  const client = await fetchClient(clientArg);
+  if (!client) { console.error(`Cliente ${clientArg} não encontrado`); process.exit(1); }
+  const creds = await getCreds(client.id);
+
+  console.log(`\n=== curate-variants ${apply ? '[APPLY]' : '[DRY-RUN]'} — ${creds.name} ===\n`);
+
+  // Pega todos os produtos ativos com variantes
+  const allProducts = [];
+  let cursor = null;
+  while (true) {
+    const q = `query($c: String) {
+      products(first: 100, after: $c, query: "status:active") {
+        pageInfo { hasNextPage endCursor }
+        edges { node {
+          id title handle status
+          variants(first: 50) { edges { node { id title } } }
+        } }
+      }
+    }`;
+    const r = await shopifyGraphQL(creds.shop, creds.token, q, { c: cursor });
+    for (const e of r.data.products.edges) allProducts.push(e.node);
+    if (!r.data.products.pageInfo.hasNextPage) break;
+    cursor = r.data.products.pageInfo.endCursor;
+    await delay(300);
+  }
+
+  console.log(`${allProducts.length} produtos masculinos ativos`);
+
+  const targets = onlyHandles
+    ? allProducts.filter(p => onlyHandles.has(p.handle))
+    : allProducts.filter(p => p.variants.edges.length >= 2);
+
+  console.log(`${targets.length} produtos com 2+ variantes pra avaliar\n`);
+
+  let totalArchived = 0;
+  const plans = [];
+
+  for (const p of targets) {
+    const variants = p.variants.edges.map(e => ({ id: e.node.id, title: e.node.title }));
+    const scored = variants.map(v => ({ ...v, ...scoreVariant(v.title) }))
+      .sort((a, b) => b.score - a.score);
+
+    // Mantém top 3 (ou top 2 se score 4º for muito baixo)
+    const keep = scored.slice(0, 3).filter(v => v.score >= 60); // pelo menos 60 pra entrar
+    // Garante mínimo 2 (se score for baixo demais, pega top 2 mesmo assim)
+    const minKeep = scored.slice(0, Math.min(2, scored.length));
+    const final = keep.length >= 2 ? keep : minKeep;
+    const archive = scored.filter(v => !final.find(f => f.id === v.id));
+
+    if (archive.length === 0) continue;
+
+    plans.push({ product: p, keep: final, archive });
+    totalArchived += archive.length;
+
+    console.log(`[${p.handle}] ${p.title}`);
+    console.log(`  KEEP (${final.length}):`);
+    final.forEach(v => console.log(`    ✓ ${v.title.padEnd(20)} score=${v.score}  [${v.case}/${v.dial}]`));
+    console.log(`  ARCHIVE (${archive.length}):`);
+    archive.forEach(v => console.log(`    ✗ ${v.title.padEnd(20)} score=${v.score}  [${v.case}/${v.dial}]`));
+    console.log('');
+  }
+
+  console.log(`\n=== Resumo ===`);
+  console.log(`Produtos a editar: ${plans.length}`);
+  console.log(`Variantes a arquivar: ${totalArchived}`);
+
+  if (!apply) {
+    console.log(`\n[DRY-RUN] Rode com --apply pra executar.`);
+    return;
+  }
+
+  // ─── APPLY: atualiza productOptions/variants
+  console.log(`\nAplicando…\n`);
+  let okP = 0, failP = 0;
+  for (const plan of plans) {
+    const variantIdsToDelete = plan.archive.map(v => v.id);
+    const mut = `mutation($productId: ID!, $variantsIds: [ID!]!) {
+      productVariantsBulkDelete(productId: $productId, variantsIds: $variantsIds) {
+        product { id }
+        userErrors { field message }
+      }
+    }`;
+    const r = await shopifyGraphQL(creds.shop, creds.token, mut, {
+      productId: plan.product.id,
+      variantsIds: variantIdsToDelete,
+    });
+    const errs = r.data?.productVariantsBulkDelete?.userErrors || [];
+    if (errs.length) {
+      failP++;
+      console.error(`  ✗ ${plan.product.handle}: ${errs.map(e => e.message).join('; ')}`);
+    } else {
+      okP++;
+      console.log(`  ✓ ${plan.product.handle}: ${plan.archive.length} variantes deletadas`);
+    }
+    await delay(400);
+  }
+
+  console.log(`\n=== Resultado ===`);
+  console.log(`Produtos: ok=${okP} fail=${failP}`);
+}
+
+main().catch(e => { console.error('FATAL:', e); process.exit(1); });
+

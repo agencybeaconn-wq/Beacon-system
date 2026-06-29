@@ -1,0 +1,17 @@
+{
+  "name": "klaviyo-ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "login": "tsx src/cli.ts login",
+    "flow": "tsx src/cli.ts",
+    "doctor": "tsx src/cli.ts doctor"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "playwright": "^1.48.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}

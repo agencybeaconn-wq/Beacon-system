@@ -1,0 +1,1422 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "slideshow_bYRrVM": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_7HY9cd": {
+          "type": "slide",
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        },
+        "slide_zjcrJe": {
+          "type": "slide",
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        },
+        "slide_k6DFeM": {
+          "type": "slide",
+          "disabled": true,
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_7HY9cd",
+        "slide_zjcrJe",
+        "slide_k6DFeM"
+      ],
+      "name": "t:sections.slideshow.presets.name",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "adapt_image",
+        "slider_visual": "dots",
+        "auto_rotate": true,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": false,
+        "accessibility_info": ""
+      }
+    },
+    "collection_list_tabs_UJDyKf": {
+      "type": "collection-list-tabs",
+      "blocks": {
+        "tab_header_VApcjC": {
+          "type": "tab_header",
+          "settings": {
+            "tab_label": "Nacionais"
+          }
+        },
+        "collection_item_PVENdx": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "flamengo",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/flamengo.avif"
+          }
+        },
+        "collection_item_UqHUJx": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "palmeiras",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/palmeiras%20(2).avif"
+          }
+        },
+        "collection_item_JBWtwA": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "atletico-mineiro",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/minerin%20(2).avif"
+          }
+        },
+        "collection_item_cCjF9B": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "cruzeiro",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/cruzeiro%20(2).avif"
+          }
+        },
+        "collection_item_jnjpVf": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "corinthians",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/corinthians%20(1).png"
+          }
+        },
+        "collection_item_8TQFjc": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "internacional",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/interr%20(2).avif"
+          }
+        },
+        "collection_item_ADAUr7": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "gremio",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/gremio%20(2).avif"
+          }
+        },
+        "collection_item_xqa3fG": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "santos",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/sanney%20(2).avif"
+          }
+        },
+        "collection_item_XfnQbF": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "vasco",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/vasco%20(2).avif"
+          }
+        },
+        "collection_item_ggwx3h": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "botafogo",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/fire%20(2).avif"
+          }
+        },
+        "collection_item_rVYHj6": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "sao-paulo",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/spfc%20(2).avif"
+          }
+        },
+        "collection_item_NRFKA6": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "fluminense",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Brasileiros/fluzao%20(2).avif"
+          }
+        },
+        "tab_header_RGnpLR": {
+          "type": "tab_header",
+          "settings": {
+            "tab_label": "Internacionais"
+          }
+        },
+        "collection_item_G6wfhB": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "real-madrid",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/3.webp"
+          }
+        },
+        "collection_item_nmA6Yh": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "barcelona",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/2.webp"
+          }
+        },
+        "collection_item_YnYQTh": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "atletico-de-madrid",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/7.webp"
+          }
+        },
+        "collection_item_RdCwX6": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "juventus",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/5.webp"
+          }
+        },
+        "collection_item_MMzQaj": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "bayern-de-munique",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/6.webp"
+          }
+        },
+        "collection_item_xrBNwP": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "inter-de-milao",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/8.webp"
+          }
+        },
+        "collection_item_j34Da8": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "milan",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/10.webp"
+          }
+        },
+        "collection_item_pm99YL": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "psg",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/1.webp"
+          }
+        },
+        "collection_item_BUyMPR": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "liverpool",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/12.webp"
+          }
+        },
+        "collection_item_mf8YLP": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "arsenal",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/9.webp"
+          }
+        },
+        "collection_item_bTQfqj": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "manchester-united",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/manutd.png"
+          }
+        },
+        "collection_item_di4Rx7": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "manchester-city",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/13.webp"
+          }
+        },
+        "collection_item_dLVtLH": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "tottenham",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/a.webp"
+          }
+        },
+        "collection_item_bR8byV": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "chelsea",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Clubes/Internacionais/zz.webp"
+          }
+        },
+        "tab_header_9BbH93": {
+          "type": "tab_header",
+          "settings": {
+            "tab_label": "Seleções"
+          }
+        },
+        "collection_item_6x9HVw": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "brasil",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/brasil.webp"
+          }
+        },
+        "collection_item_EgafJY": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "argentina",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/argentina.webp"
+          }
+        },
+        "collection_item_3CUdyE": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "alemanha",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/alemanha%20(1).webp"
+          }
+        },
+        "collection_item_Mc4DGG": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "colombia",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_hUekBm": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "croacia",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/croacia.webp"
+          }
+        },
+        "collection_item_9aUnYt": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "inglaterra",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/inglaterra.webp"
+          }
+        },
+        "collection_item_deaFLF": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "italia",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_nnD6EN": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "franca",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/franc%CC%A7a.webp"
+          }
+        },
+        "collection_item_P6Khmh": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "espanha",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/espanha.webp"
+          }
+        },
+        "collection_item_KdeBN6": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "estados-unidos",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_38EbWY": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "japao",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_GwqiQg": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "holanda",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_nNif7j": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "mexico",
+            "custom_image_url": "https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/Site%20Lever/Logos%20Sele%C3%A7%C3%B5es/mexico.webp"
+          }
+        },
+        "collection_item_GpVhCF": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "portugal",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_QCWpQn": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "uruguai",
+            "custom_image_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "tab_header_VApcjC",
+        "collection_item_PVENdx",
+        "collection_item_UqHUJx",
+        "collection_item_JBWtwA",
+        "collection_item_cCjF9B",
+        "collection_item_jnjpVf",
+        "collection_item_8TQFjc",
+        "collection_item_ADAUr7",
+        "collection_item_xqa3fG",
+        "collection_item_XfnQbF",
+        "collection_item_ggwx3h",
+        "collection_item_rVYHj6",
+        "collection_item_NRFKA6",
+        "tab_header_RGnpLR",
+        "collection_item_G6wfhB",
+        "collection_item_nmA6Yh",
+        "collection_item_YnYQTh",
+        "collection_item_RdCwX6",
+        "collection_item_MMzQaj",
+        "collection_item_xrBNwP",
+        "collection_item_j34Da8",
+        "collection_item_pm99YL",
+        "collection_item_BUyMPR",
+        "collection_item_mf8YLP",
+        "collection_item_bTQfqj",
+        "collection_item_di4Rx7",
+        "collection_item_dLVtLH",
+        "collection_item_bR8byV",
+        "tab_header_9BbH93",
+        "collection_item_6x9HVw",
+        "collection_item_EgafJY",
+        "collection_item_3CUdyE",
+        "collection_item_Mc4DGG",
+        "collection_item_hUekBm",
+        "collection_item_9aUnYt",
+        "collection_item_deaFLF",
+        "collection_item_nnD6EN",
+        "collection_item_P6Khmh",
+        "collection_item_KdeBN6",
+        "collection_item_38EbWY",
+        "collection_item_GwqiQg",
+        "collection_item_nNif7j",
+        "collection_item_GpVhCF",
+        "collection_item_QCWpQn"
+      ],
+      "name": "Coleções com Abas",
+      "settings": {
+        "header_style": "standard",
+        "title": "Compre pelo time",
+        "heading_size": "h1",
+        "description": "",
+        "description_style": "body",
+        "header_alignment": "center",
+        "image_ratio": "square",
+        "columns_desktop": 6,
+        "enable_desktop_slider": true,
+        "color_scheme": "scheme-1",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "show_desktop_arrows": true,
+        "show_mobile_arrows": false,
+        "unselected_tab_text_color": "#ffffff",
+        "active_tab_text_color": "#121212",
+        "padding_top": 4,
+        "padding_bottom": 0
+      }
+    },
+    "collection_list_tabs_YBkWPw": {
+      "type": "collection-list-tabs",
+      "blocks": {
+        "tab_header_YjjFYW": {
+          "type": "tab_header",
+          "settings": {
+            "tab_label": "Seleções"
+          }
+        },
+        "collection_item_7Qr4gE": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "masculino",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_pkKQKz": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "feminino",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_37VtEr": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "conjuntos-infantis",
+            "custom_image_url": ""
+          }
+        },
+        "collection_item_QbiTTw": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "retro",
+            "custom_image_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "tab_header_YjjFYW",
+        "collection_item_7Qr4gE",
+        "collection_item_pkKQKz",
+        "collection_item_37VtEr",
+        "collection_item_QbiTTw"
+      ],
+      "name": "Coleções com Abas",
+      "settings": {
+        "header_style": "standard",
+        "title": "Compre por Categoria",
+        "heading_size": "h1",
+        "description": "",
+        "description_style": "body",
+        "header_alignment": "center",
+        "image_ratio": "square",
+        "columns_desktop": 4,
+        "enable_desktop_slider": true,
+        "color_scheme": "",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "show_desktop_arrows": true,
+        "show_mobile_arrows": false,
+        "unselected_tab_text_color": "#000000",
+        "active_tab_text_color": "#ffffff",
+        "padding_top": 20,
+        "padding_bottom": 36
+      }
+    },
+    "slideshow_FaCmFT": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_q3cXDq": {
+          "type": "slide",
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-1"
+          }
+        }
+      },
+      "block_order": [
+        "slide_q3cXDq"
+      ],
+      "name": "t:sections.slideshow.presets.name",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "adapt_image",
+        "slider_visual": "dots",
+        "auto_rotate": true,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": false,
+        "accessibility_info": "Apresentação de slides sobre nossa marca"
+      }
+    },
+    "featured_collection_tabs_xyG79t": {
+      "type": "featured-collection-tabs",
+      "blocks": {
+        "tab_Qfg34F": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Masculino",
+            "collection": "masculino-brasil"
+          }
+        },
+        "tab_9PmMCW": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Feminino",
+            "collection": "feminina-brasil"
+          }
+        },
+        "tab_LCJPnJ": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Infantil",
+            "collection": "infantil-selecao"
+          }
+        }
+      },
+      "block_order": [
+        "tab_Qfg34F",
+        "tab_9PmMCW",
+        "tab_LCJPnJ"
+      ],
+      "name": "Coleção Destaque + Abas",
+      "settings": {
+        "products_to_show": 25,
+        "header_style": "standard",
+        "title": "Rumo ao Hexa",
+        "heading_size": "h1",
+        "description": "<p>Vista os mantos do Brasil e acompanhe nossa seleção nessa jornada histórica.</p>",
+        "description_style": "body",
+        "header_alignment": "center",
+        "collection": "vitrine-copa-do-mundo-2026",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
+        "full_width": false,
+        "show_view_all": true,
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": true,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "unselected_tab_text_color": "#ffffff",
+        "active_tab_text_color": "#121212",
+        "padding_top": 20,
+        "padding_bottom": 36
+      }
+    },
+    "slideshow_N8GYTX": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_gUHfgX": {
+          "type": "slide",
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-1"
+          }
+        }
+      },
+      "block_order": [
+        "slide_gUHfgX"
+      ],
+      "name": "t:sections.slideshow.presets.name",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "adapt_image",
+        "slider_visual": "dots",
+        "auto_rotate": true,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": false,
+        "accessibility_info": "Apresentação de slides sobre nossa marca"
+      }
+    },
+    "featured_collection_tabs_egXwyR": {
+      "type": "featured-collection-tabs",
+      "blocks": {
+        "tab_rbzeUj": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Masculino",
+            "collection": "vitrine-lancamentos-26-27"
+          }
+        },
+        "tab_96hzPN": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Feminino",
+            "collection": "feminina"
+          }
+        },
+        "tab_4R8Ktn": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Infantil",
+            "collection": "infantil"
+          }
+        }
+      },
+      "block_order": [
+        "tab_rbzeUj",
+        "tab_96hzPN",
+        "tab_4R8Ktn"
+      ],
+      "name": "Coleção Destaque + Abas",
+      "settings": {
+        "products_to_show": 25,
+        "header_style": "standard",
+        "title": "Lançamentos 2026/27",
+        "heading_size": "h1",
+        "description": "<p>Lançamentos 2026 para toda a família! </p>",
+        "description_style": "body",
+        "header_alignment": "center",
+        "collection": "vitrine-lancamentos-26-27",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
+        "full_width": false,
+        "show_view_all": true,
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": true,
+        "view_all_style": "solid",
+        "color_scheme": "",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "unselected_tab_text_color": "#ffffff",
+        "active_tab_text_color": "#121212",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "featured_collection_tabs_VzcGpC": {
+      "type": "featured-collection-tabs",
+      "blocks": {
+        "tab_cMJEED": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Nacionais",
+            "collection": "vitrine-infantil"
+          }
+        },
+        "tab_xp7eHM": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Internacionais",
+            "collection": "conjuntos-infantis-internacionais"
+          }
+        }
+      },
+      "block_order": [
+        "tab_cMJEED",
+        "tab_xp7eHM"
+      ],
+      "name": "Coleção Destaque + Abas",
+      "settings": {
+        "products_to_show": 25,
+        "header_style": "standard",
+        "title": "Conjuntos Infantis",
+        "heading_size": "h1",
+        "description": "<p>Porque torcer é desde pequeno!</p>",
+        "description_style": "body",
+        "header_alignment": "center",
+        "collection": "vitrine-infantil",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
+        "full_width": false,
+        "show_view_all": true,
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": true,
+        "view_all_style": "solid",
+        "color_scheme": "",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "unselected_tab_text_color": "#ffffff",
+        "active_tab_text_color": "#121212",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "video_stories_inrDbm": {
+      "type": "video-stories",
+      "blocks": {
+        "story_xCMcaA": {
+          "type": "story",
+          "settings": {
+            "title": "Story",
+            "video_url": "",
+            "custom_video_url": ""
+          }
+        },
+        "story_KyTrqN": {
+          "type": "story",
+          "settings": {
+            "title": "Story",
+            "video_url": "",
+            "custom_video_url": ""
+          }
+        },
+        "story_LHftY6": {
+          "type": "story",
+          "settings": {
+            "title": "Story",
+            "video_url": "",
+            "custom_video_url": ""
+          }
+        },
+        "story_bjwiqG": {
+          "type": "story",
+          "settings": {
+            "title": "Story",
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "custom_video_url": ""
+          }
+        },
+        "story_8EeBHf": {
+          "type": "story",
+          "settings": {
+            "title": "Vídeo",
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "custom_video_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "story_xCMcaA",
+        "story_KyTrqN",
+        "story_LHftY6",
+        "story_bjwiqG",
+        "story_8EeBHf"
+      ],
+      "name": "Video Stories",
+      "settings": {
+        "header_style": "standard",
+        "title": "Nossos Clientes",
+        "heading_size": "h1",
+        "description": "<p>Faça parte da nossa família!</p>",
+        "description_style": "body",
+        "header_alignment": "center",
+        "video_format": "9-16",
+        "columns_desktop": 4,
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 36
+      }
+    },
+    "slideshow_38ewKF": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_6ttDNi": {
+          "type": "slide",
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_6ttDNi"
+      ],
+      "name": "t:sections.slideshow.presets.name",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "adapt_image",
+        "slider_visual": "dots",
+        "auto_rotate": true,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": false,
+        "accessibility_info": "Apresentação de slides sobre nossa marca"
+      }
+    },
+    "collection_list_tabs_ypQzW3": {
+      "type": "collection-list-tabs",
+      "blocks": {
+        "tab_header_rDrDak": {
+          "type": "tab_header",
+          "settings": {
+            "tab_label": "Nacionais"
+          }
+        },
+        "collection_item_aHnhCw": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "brasileirao",
+            "custom_image_url": "https://cdn.shopify.com/s/files/1/0621/7937/7407/files/BRASILEIRAO.png?v=1772416306"
+          }
+        },
+        "collection_item_fPPxkf": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "premier-league",
+            "custom_image_url": "https://cdn.shopify.com/s/files/1/0621/7937/7407/files/PREMIER_LEAGUE.png?v=1772416448"
+          }
+        },
+        "collection_item_AAXjgr": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "la-liga",
+            "custom_image_url": "https://cdn.shopify.com/s/files/1/0621/7937/7407/files/LA_LIGA.png?v=1772416448"
+          }
+        },
+        "collection_item_NGwNmR": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "ligue-1",
+            "custom_image_url": "https://cdn.shopify.com/s/files/1/0621/7937/7407/files/LIGA_1.png?v=1772416448"
+          }
+        },
+        "collection_item_JQ3mwL": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "portugal",
+            "custom_image_url": "https://cdn.shopify.com/s/files/1/0621/7937/7407/files/LIGA_PORTUGAL.png?v=1772416448"
+          }
+        },
+        "collection_item_TFTAfz": {
+          "type": "collection_item",
+          "settings": {
+            "collection": "serie-a",
+            "custom_image_url": "https://cdn.shopify.com/s/files/1/0621/7937/7407/files/SERIE_A_714a581e-7dd2-4a16-8c75-53f5514f978c.png?v=1772416448"
+          }
+        }
+      },
+      "block_order": [
+        "tab_header_rDrDak",
+        "collection_item_aHnhCw",
+        "collection_item_fPPxkf",
+        "collection_item_AAXjgr",
+        "collection_item_NGwNmR",
+        "collection_item_JQ3mwL",
+        "collection_item_TFTAfz"
+      ],
+      "name": "Coleções com Abas",
+      "settings": {
+        "header_style": "standard",
+        "title": "Compre pela liga",
+        "heading_size": "h1",
+        "description": "",
+        "description_style": "body",
+        "header_alignment": "center",
+        "image_ratio": "square",
+        "columns_desktop": 6,
+        "enable_desktop_slider": true,
+        "color_scheme": "",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "show_desktop_arrows": true,
+        "show_mobile_arrows": false,
+        "unselected_tab_text_color": "#000000",
+        "active_tab_text_color": "#ffffff",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "slideshow_HTzjPa": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_eQKc3r": {
+          "type": "slide",
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "shopify://collections/retro",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-1"
+          }
+        }
+      },
+      "block_order": [
+        "slide_eQKc3r"
+      ],
+      "name": "t:sections.slideshow.presets.name",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "adapt_image",
+        "slider_visual": "dots",
+        "auto_rotate": true,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": false,
+        "accessibility_info": "Apresentação de slides sobre nossa marca"
+      }
+    },
+    "featured_collection_tabs_ywambc": {
+      "type": "featured-collection-tabs",
+      "blocks": {
+        "tab_ETKCnQ": {
+          "type": "tab",
+          "settings": {
+            "tab_label": "Masculino",
+            "collection": "vitrine-retro"
+          }
+        }
+      },
+      "block_order": [
+        "tab_ETKCnQ"
+      ],
+      "name": "Coleção Destaque + Abas",
+      "settings": {
+        "products_to_show": 25,
+        "header_style": "standard",
+        "title": "Camisas Retrô",
+        "heading_size": "h1",
+        "description": "<p>Camisas lendárias que fizeram história.</p>",
+        "description_style": "body",
+        "header_alignment": "center",
+        "collection": "vitrine-retro",
+        "columns_desktop": 5,
+        "enable_desktop_slider": true,
+        "full_width": false,
+        "show_view_all": true,
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": true,
+        "view_all_style": "solid",
+        "color_scheme": "",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "unselected_tab_text_color": "#ffffff",
+        "active_tab_text_color": "#121212",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "image_with_text_xhnpLX": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_pryhgk": {
+          "type": "heading",
+          "settings": {
+            "heading": "Sobre Nós",
+            "heading_size": "h1"
+          }
+        },
+        "text_rcnbn8": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Somos uma loja especializada em camisas de time, com a missão de oferecer produtos de alta qualidade com preços acessíveis para todo o Brasil.</p>",
+            "text_style": "subtitle"
+          }
+        }
+      },
+      "block_order": [
+        "heading_pryhgk",
+        "text_rcnbn8"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "scheme-3",
+        "color_scheme": "scheme-3",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "slideshow_tFBaxn": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_CjCcJQ": {
+          "type": "slide",
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-1"
+          }
+        }
+      },
+      "block_order": [
+        "slide_CjCcJQ"
+      ],
+      "name": "t:sections.slideshow.presets.name",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "adapt_image",
+        "slider_visual": "dots",
+        "auto_rotate": true,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": false,
+        "accessibility_info": "Apresentação de slides sobre nossa marca"
+      }
+    },
+    "custom_patch_rules_auto": {
+      "type": "custom-patch-rules",
+      "blocks": {
+        "auto_patch_champions_league_15_trofeus": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Real Madrid",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180290802",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_champions_league_7_trofeus": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Real Madrid, Milan, AC Milan",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180258034",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_champions_league_6": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Real Madrid, Milan, AC Milan, Liverpool, Bayern",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180192498",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_champions_league_5_trofeus": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Real Madrid, Milan, AC Milan, Liverpool, Bayern, Barcelona, Ajax",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180323570",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_kit_patch_campeao_libertadores_tetra_2025": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Flamengo",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180815090",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_libertadores_3": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Flamengo, São Paulo, Palmeiras, Santos, Peñarol, Penarol, Nacional, Olimpia, Independiente, Boca, River, Estudiantes",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180421874",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patches_libertadores_2_trofeus": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Flamengo, São Paulo, Palmeiras, Santos, Grêmio, Cruzeiro, Internacional, Peñarol, Penarol, Nacional, Olimpia, Independiente, Boca, River, Estudiantes",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180454642",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_brasileirao_participacao": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Flamengo, Palmeiras, Corinthians, São Paulo, Santos, Fluminense, Botafogo, Vasco, Cruzeiro, Atlético Mineiro, Atletico Mineiro, Grêmio, Internacional, Bahia, Fortaleza, Ceará, Mirassol, Juventude, Sport, Vitória, Bragantino",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180389106",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_copa_do_brasil_participacao": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Flamengo, Palmeiras, Corinthians, São Paulo, Santos, Fluminense, Botafogo, Vasco, Cruzeiro, Atlético Mineiro, Atletico Mineiro, Grêmio, Internacional, Bahia, Fortaleza, Ceará, Mirassol, Juventude, Sport, Vitória, Bragantino, Athletico, Coritiba, Chapecoense, Paysandu, Remo, Criciúma",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180618482",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_premier_league_participacao": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Arsenal, Aston Villa, Bournemouth, Brentford, Brighton, Chelsea, Crystal Palace, Everton, Fulham, Ipswich, Leicester, Liverpool, Manchester City, Manchester United, Newcastle, Nottingham, Southampton, Tottenham, West Ham, Wolves",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180061426",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_laliga_participacao": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Real Madrid, Barcelona, Atlético de Madrid, Atletico de Madrid, Athletic Bilbao, Sevilla, Valencia, Villarreal, Real Sociedad, Real Betis, Espanyol, Celta de Vigo, Getafe, Girona, Las Palmas, Leganes, Mallorca, Osasuna, Rayo Vallecano, Alaves",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180126962",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_serie_a_participacao": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "AC Milan, Milan, AS Roma, Roma, Atalanta, Bologna, Cagliari, Como, Empoli, Fiorentina, Genoa, Hellas Verona, Inter de Milão, Internazionale, Juventus, Lecce, Lazio, Lázio, Monza, Napoli, Parma, Torino, Udinese, Venezia",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998179897586",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_bundesliga_participacao": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Bayern, Leverkusen, Dortmund, RB Leipzig, Leipzig, Eintracht, Wolfsburg, Borussia, Hoffenheim, Stuttgart, Union Berlin, Freiburg, Mainz, Bochum, Augsburg, Schalke, Werder, Heidenheim, Holstein, St. Pauli",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998179963122",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_ligue_1_participacao": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "PSG, Paris Saint, Marseille, Lyon, Monaco, Lille, Rennes, Nice, Montpellier, Nantes, Strasbourg, Reims, Brest, Lens, Toulouse, Auxerre, Angers, Le Havre, Saint-Etienne",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180028658",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_liga_portugal_participacao": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Benfica, Sporting, Porto, Braga, Vitória, Boavista, Arouca, Nacional, Estoril, Rio Ave, Casa Pia, Famalicão, Estrela",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180094194",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_liga_mx_participacao": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "América do MX, Cruz Azul, Chivas, Guadalajara, Pumas, Tigres, Monterrey, Pachuca, Toluca, León, Puebla, Atlas, Necaxa, Mazatlán, Querétaro, Santos Laguna, San Luis, Tijuana, Juárez",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180585714",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_champions_league": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Real Madrid, Barcelona, Atlético de Madrid, Atletico de Madrid, Manchester City, Liverpool, Arsenal, Aston Villa, Bayern, Leverkusen, Dortmund, Leipzig, Stuttgart, Juventus, Inter, Milan, Atalanta, Bologna, PSG, Paris Saint, Monaco, Brest, Lille, Benfica, Sporting, Porto, Girona, Young Boys, Celtic, Feyenoord, Sturm, Dinamo, Red Star, Slovan, PSV, Shakhtar",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998179995890",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_libertadores_participacao": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Flamengo, Palmeiras, São Paulo, Fluminense, Botafogo, Internacional, Atlético Mineiro, Atletico Mineiro, Bahia, Boca, River, Estudiantes, Racing, Peñarol, Penarol, Nacional, Colo Colo, Universidad, Atlético Nacional, Barcelona de Guayaquil, LDU, Cerro Porteño, Olimpia, Libertad, Alianza Lima, Sporting Cristal",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180487410",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_sudamericana_participacao": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Corinthians, Cruzeiro, Vasco, Grêmio, Vitória, Athletico Paranaense, Bragantino, Criciúma, Juventude, Sport, Defensa, Independiente, Lanús, Newell, San Lorenzo, Velez, Vélez, América de Cali, Once Caldas, Universidad Católica",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180552946",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_fifa_copa_do_mundo_2026_participacao": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Brasil, Argentina, Portugal, Espanha, França, Alemanha, Itália, Inglaterra, Holanda, Uruguai, Colômbia, México, Japão, Croácia, EUA, Estados Unidos, Coreia, Chile, Peru, Equador, Senegal, Marrocos, Camarões, Arábia Saudita, Qatar, Catar, Dinamarca, Suíça, Suécia, Noruega, Bélgica, Escócia, Irlanda, País de Gales, Austrália, Nova Zelândia, África do Sul, Nigéria, Gana, Egito, Tunísia, Argélia, Polônia, Hungria, Canadá, Venezuela, Paraguai, Bolívia",
+            "exclude_keywords": "Brasileirão, Brasileirao, Flamengo, Palmeiras, Corinthians, São Paulo, Santos, Fluminense, Botafogo, Vasco, Cruzeiro, Atlético Mineiro, Atletico Mineiro, Grêmio, Internacional, Bahia, Fortaleza, Ceará, Mirassol, Juventude, Sport, Vitória, Bragantino, Athletico, Coritiba, Chapecoense, Paysandu, Remo, Criciúma, Real Madrid, Barcelona, Bayern, Liverpool, Arsenal, Chelsea, Tottenham, Milan, Inter de Milão, Roma, Juventus, Napoli, Ajax, Benfica, Porto, Sporting, PSG, Manchester, Newcastle, Dortmund, Atlético de Madrid, Sevilla, Valencia, Villarreal, Al Nassr, Al Hilal, Al Ittihad, Al Ahli, Inter Miami, Boca, River Plate, Pumas, América do MX, Cruz Azul, Chivas",
+            "patch_product": "gid://shopify/product/9003352228082",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_fifa_copa_do_mundo_2026_qualifiers": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Brasil, Argentina, Portugal, Espanha, França, Alemanha, Itália, Inglaterra, Holanda, Uruguai, Colômbia, México, Japão, Croácia, EUA, Estados Unidos, Coreia, Senegal, Marrocos, Camarões, Arábia Saudita, Bélgica, Austrália, Nova Zelândia",
+            "exclude_keywords": "Brasileirão, Brasileirao, Flamengo, Palmeiras, Corinthians, São Paulo, Santos, Fluminense, Botafogo, Vasco, Cruzeiro, Atlético Mineiro, Atletico Mineiro, Grêmio, Internacional, Bahia, Fortaleza, Ceará, Mirassol, Juventude, Sport, Vitória, Bragantino, Athletico, Coritiba, Chapecoense, Paysandu, Remo, Criciúma, Real Madrid, Barcelona, Bayern, Liverpool, Arsenal, Chelsea, Tottenham, Milan, Inter de Milão, Roma, Juventus, Napoli, Ajax, Benfica, Porto, Sporting, PSG, Manchester, Newcastle, Dortmund, Atlético de Madrid, Sevilla, Valencia, Villarreal, Al Nassr, Al Hilal, Al Ittihad, Al Ahli, Inter Miami, Boca, River Plate, Pumas, América do MX, Cruz Azul, Chivas",
+            "patch_product": "gid://shopify/product/8998180684018",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_campeao_supercopa_rei_2025": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Flamengo",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998111248626",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_final_libertadores_2025": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Flamengo, Racing",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180651250",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_world_champions": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Real Madrid, Barcelona, Bayern, Liverpool, Manchester United, Milan, AC Milan, Inter, Corinthians, São Paulo, Santos, Flamengo",
+            "exclude_keywords": "",
+            "patch_product": "gid://shopify/product/8998180356338",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        },
+        "auto_patch_world_cup_2025_participation": {
+          "type": "patch_rule",
+          "settings": {
+            "keywords": "Brasil, Argentina, Portugal, Espanha, França, Alemanha, Itália, Inglaterra, Holanda, Uruguai, Colômbia, México, Japão, Croácia, EUA, Estados Unidos, Coreia, Chile, Peru, Equador, Senegal, Marrocos, Camarões, Arábia Saudita, Qatar, Catar, Dinamarca, Suíça, Suécia, Noruega, Bélgica, Escócia, Irlanda, País de Gales, Austrália, Nova Zelândia, África do Sul, Nigéria, Gana, Egito, Tunísia, Argélia, Polônia, Hungria, Canadá, Venezuela, Paraguai, Bolívia",
+            "exclude_keywords": "Brasileirão, Brasileirao, Flamengo, Palmeiras, Corinthians, São Paulo, Santos, Fluminense, Botafogo, Vasco, Cruzeiro, Atlético Mineiro, Atletico Mineiro, Grêmio, Internacional, Bahia, Fortaleza, Ceará, Mirassol, Juventude, Sport, Vitória, Bragantino, Athletico, Coritiba, Chapecoense, Paysandu, Remo, Criciúma, Real Madrid, Barcelona, Bayern, Liverpool, Arsenal, Chelsea, Tottenham, Milan, Inter de Milão, Roma, Juventus, Napoli, Ajax, Benfica, Porto, Sporting, PSG, Manchester, Newcastle, Dortmund, Atlético de Madrid, Sevilla, Valencia, Villarreal, Al Nassr, Al Hilal, Al Ittihad, Al Ahli, Inter Miami, Boca, River Plate, Pumas, América do MX, Cruz Azul, Chivas",
+            "patch_product": "gid://shopify/product/8998180749554",
+            "position": "manga",
+            "patch_type": "participacao"
+          }
+        }
+      },
+      "block_order": [
+        "auto_patch_champions_league_15_trofeus",
+        "auto_patch_champions_league_7_trofeus",
+        "auto_patch_champions_league_6",
+        "auto_patch_champions_league_5_trofeus",
+        "auto_kit_patch_campeao_libertadores_tetra_2025",
+        "auto_patch_libertadores_3",
+        "auto_patches_libertadores_2_trofeus",
+        "auto_patch_brasileirao_participacao",
+        "auto_patch_copa_do_brasil_participacao",
+        "auto_patch_premier_league_participacao",
+        "auto_patch_laliga_participacao",
+        "auto_patch_serie_a_participacao",
+        "auto_patch_bundesliga_participacao",
+        "auto_patch_ligue_1_participacao",
+        "auto_patch_liga_portugal_participacao",
+        "auto_patch_liga_mx_participacao",
+        "auto_patch_champions_league",
+        "auto_patch_libertadores_participacao",
+        "auto_patch_sudamericana_participacao",
+        "auto_patch_fifa_copa_do_mundo_2026_participacao",
+        "auto_patch_fifa_copa_do_mundo_2026_qualifiers",
+        "auto_patch_campeao_supercopa_rei_2025",
+        "auto_patch_final_libertadores_2025",
+        "auto_patch_world_champions",
+        "auto_patch_world_cup_2025_participation"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "slideshow_bYRrVM",
+    "collection_list_tabs_UJDyKf",
+    "collection_list_tabs_YBkWPw",
+    "slideshow_FaCmFT",
+    "featured_collection_tabs_xyG79t",
+    "slideshow_N8GYTX",
+    "featured_collection_tabs_egXwyR",
+    "featured_collection_tabs_VzcGpC",
+    "video_stories_inrDbm",
+    "slideshow_38ewKF",
+    "collection_list_tabs_ypQzW3",
+    "slideshow_HTzjPa",
+    "featured_collection_tabs_ywambc",
+    "image_with_text_xhnpLX",
+    "slideshow_tFBaxn",
+    "custom_patch_rules_auto"
+  ]
+}

@@ -1,0 +1,436 @@
+[
+  {
+    "name": "TRAVE ",
+    "domain": "zyjt3c-av.myshopify.com",
+    "themeId": 136815116496,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 374
+  },
+  {
+    "name": "Foot Mania",
+    "domain": "fcrn0i-5c.myshopify.com",
+    "error": "no_cart_drawer"
+  },
+  {
+    "name": "Furia",
+    "domain": "furiaimports.myshopify.com",
+    "themeId": 129753645138,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 399
+  },
+  {
+    "name": "Jhon Atacado",
+    "domain": "8n5ezn-r1.myshopify.com",
+    "themeId": 134946586831,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": false,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 5,
+    "lines": 373
+  },
+  {
+    "name": "JGS Sports",
+    "domain": "gg-jgs.myshopify.com",
+    "themeId": 154109313213,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 372
+  },
+  {
+    "name": "Dribla Club ",
+    "domain": "dribla-club.myshopify.com",
+    "themeId": 159626100965,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 422
+  },
+  {
+    "name": "Setor Esportes",
+    "domain": "wbreb0-cs.myshopify.com",
+    "themeId": 153049596094,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 422
+  },
+  {
+    "name": "Diario Stores",
+    "domain": "diario-stores.myshopify.com",
+    "themeId": 138974855264,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 422
+  },
+  {
+    "name": "Loja da torcida",
+    "domain": "xdppna-zt.myshopify.com",
+    "themeId": 128963772488,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 422
+  },
+  {
+    "name": "Mantos do PH",
+    "domain": "a9dc24-2.myshopify.com",
+    "themeId": 142207811779,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 437
+  },
+  {
+    "name": "foot kids",
+    "domain": "5edf96.myshopify.com",
+    "themeId": 185067766040,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 422
+  },
+  {
+    "name": "Triton Sports",
+    "domain": "71f700-89.myshopify.com",
+    "themeId": 166843646252,
+    "features": {
+      "savings_calculator": false,
+      "milestones_progress": false,
+      "patches_as_properties": false,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 3,
+    "lines": 554
+  },
+  {
+    "name": "Loja de Estruturação e Desenvolvimento - Nova",
+    "domain": "testeloja-9899.myshopify.com",
+    "themeId": 160282804466,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 422
+  },
+  {
+    "name": "Mega mantos",
+    "domain": "loja-mega-manto.myshopify.com",
+    "themeId": 180589559919,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": false,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": true,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 651
+  },
+  {
+    "name": "Golaço",
+    "domain": "smyvkp-2j.myshopify.com",
+    "error": "no_cart_drawer"
+  },
+  {
+    "name": "Brasileiríssimo",
+    "domain": "jdheep-z7.myshopify.com",
+    "themeId": 173331185687,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 374
+  },
+  {
+    "name": "Dropfut Global",
+    "domain": "iemdvr-15.myshopify.com",
+    "error": "no_cart_drawer"
+  },
+  {
+    "name": "Coringão Shop",
+    "domain": "nbdxec-gx.myshopify.com",
+    "error": "no_cart_drawer"
+  },
+  {
+    "name": "Loja de Desenvolvimento - BR",
+    "domain": "testeloja-9899.myshopify.com",
+    "themeId": 160282804466,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 422
+  },
+  {
+    "name": "Loja do Belo",
+    "domain": "lojabotafogopb.myshopify.com",
+    "themeId": 186821017893,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 422
+  },
+  {
+    "name": "Puskas",
+    "domain": "jersey-store-puskas.myshopify.com",
+    "themeId": 154552303768,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 413
+  },
+  {
+    "name": "TG Jersey",
+    "domain": "store-tg-jersey.myshopify.com",
+    "themeId": 157588324582,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": true,
+      "jersey_filter_milestone": false,
+      "free_item_badge": true,
+      "patch_thumbnails": true,
+      "modern_liquid_render": true
+    },
+    "count": 9,
+    "lines": 625
+  },
+  {
+    "name": "jerseys fanatics.com",
+    "domain": "bvpjeb-es.myshopify.com",
+    "error": "no_cart_drawer"
+  },
+  {
+    "name": "Julico Sports",
+    "domain": "julico-sports.myshopify.com",
+    "themeId": 138604216395,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 422
+  },
+  {
+    "name": "Boutique do boleiro",
+    "domain": "boutique-do-boleiro.myshopify.com",
+    "themeId": 159664505087,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 540
+  },
+  {
+    "name": "Boutique do Boleiro 2.0",
+    "domain": "qpur7u-jp.myshopify.com",
+    "error": "no_main_theme"
+  },
+  {
+    "name": "Loja de Desenvolvimento - EN",
+    "domain": "loja-de-estruturacao-e-desenvolvimento-en.myshopify.com",
+    "themeId": 129577091130,
+    "features": {
+      "savings_calculator": true,
+      "milestones_progress": true,
+      "patches_as_properties": true,
+      "qty_selector_conditional": true,
+      "custom_layout": true,
+      "colored_checkout_btn": false,
+      "jersey_filter_milestone": false,
+      "free_item_badge": false,
+      "patch_thumbnails": false,
+      "modern_liquid_render": true
+    },
+    "count": 6,
+    "lines": 374
+  },
+  {
+    "name": "De Boleiro",
+    "domain": "55138c-1b.myshopify.com",
+    "error": "no_cart_drawer"
+  }
+]
