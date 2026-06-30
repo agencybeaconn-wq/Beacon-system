@@ -227,9 +227,9 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
 
             if (error) throw error;
 
-            // Auto-provision "Lever" internal client if it doesn't exist
+            // Auto-provision "Beacon" internal client if it doesn't exist
             let allClients = data || [];
-            const hasLever = allClients.some((c: any) => c.name === 'Lever');
+            const hasLever = allClients.some((c: any) => c.name === 'Beacon');
             if (!hasLever && !isClientUser) {
                 try {
                     // Get workspace_id from existing clients or query directly
@@ -248,7 +248,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
                     if (wsId) {
                         const { data: newLever, error: leverErr } = await (supabase as any)
                             .from('agency_clients')
-                            .insert({ name: 'Lever', is_archived: false, workspace_id: wsId })
+                            .insert({ name: 'Beacon', is_archived: false, workspace_id: wsId })
                             .select('*')
                             .single();
                         if (leverErr) {

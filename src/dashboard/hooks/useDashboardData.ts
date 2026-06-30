@@ -369,8 +369,8 @@ export function useDashboardData(options: UseDashboardDataOptions = {}) {
         };
     }, [metrics, shopify.summary, cartPandaSummary, shopifyConnected, profitSettings, totalSupplierPayments, clientData]);
 
-    // ─── Agency aggregate view ("Lever") ──────────────────────────
-    const isAgencyAggregateView = clientData?.name === "Lever";
+    // ─── Agency aggregate view ("Beacon") ──────────────────────────
+    const isAgencyAggregateView = clientData?.name === "Beacon";
     const aggregatePeriod: SmartDataPeriod =
         dateFilter === "today" ? "today" : dateFilter === "7d" ? "7d" : dateFilter === "month" ? "month" : "30d";
     const { summary: agencySummary, isLoadingLive: isAgencyLoading, changePeriod: changeAggregatePeriod } =

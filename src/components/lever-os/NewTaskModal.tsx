@@ -182,7 +182,7 @@ export function NewTaskModal({ trigger, defaultPhase, onTaskCreated }: NewTaskMo
                             <option value="">Selecionar cliente...</option>
                             {clients.filter(c => c && c.id && c.name).map(client => (
                                 <option key={client.id} value={client.id}>
-                                    {client.name}{client.name === 'Lever' ? ' (Interno)' : ''}
+                                    {client.name}{client.name === 'Beacon' ? ' (Interno)' : ''}
                                 </option>
                             ))}
                         </select>

@@ -275,7 +275,7 @@ export function ClientRankingView({ embedded = false, active = true }: ClientRan
         }
 
         const eligibleClients = (clients as any[]).filter(
-            (c) => c.name !== 'Lever' && !c.is_internal && c.is_ecommerce !== false
+            (c) => c.name !== 'Beacon' && !c.is_internal && c.is_ecommerce !== false
         );
 
         const result: RankedClient[] = eligibleClients.map((client) => {

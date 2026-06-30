@@ -20,8 +20,8 @@ import { useSelectedClient } from "@/contexts/DashboardContext";
 import { useState, useMemo, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-// Find the Lever internal client from the clients list
-export const LEVER_INTERNAL_NAME = "Lever";
+// Find the Beacon internal client from the clients list
+export const LEVER_INTERNAL_NAME = "Beacon";
 
 // Generate a color based on client name
 const generateColor = (name: string): string => {
@@ -43,7 +43,7 @@ export function AdAccountSelector() {
   useEffect(() => { localStorage.setItem('client_picker_scope', scope); }, [scope]);
 
   // Find the real Lever client from the clients list
-  const leverClient = useMemo(() => clients.find((c: any) => c.name === 'Lever'), [clients]);
+  const leverClient = useMemo(() => clients.find((c: any) => c.name === 'Beacon'), [clients]);
 
   const getSelectedLabel = () => {
     if (selectedClientId && selectedClientName) {
@@ -198,7 +198,7 @@ export function AdAccountSelector() {
                   <CommandGroup heading="Interno">
                     <CommandItem
                       value="lever-interno"
-                      onSelect={() => handleSelectClient(leverClient.id, "Lever")}
+                      onSelect={() => handleSelectClient(leverClient.id, "Beacon")}
                       className="cursor-pointer"
                     >
                       Beacon
@@ -224,7 +224,7 @@ export function AdAccountSelector() {
                   </div>
                 ) : (
                   clients
-                    .filter((c: any) => c.name !== 'Lever' && !c.is_internal && c.is_ecommerce !== false)
+                    .filter((c: any) => c.name !== 'Beacon' && !c.is_internal && c.is_ecommerce !== false)
                     .filter((c: any) => scope === 'geral' || (c.client_type || 'avulso') === 'fixo')
                     .map((client: any) => (
                     <CommandItem
