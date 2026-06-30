@@ -13,24 +13,6 @@ export const MOCK_CLIENT_DETAILS: Client = {
         contractStartDate: "2024-01-15"
     },
     progress: 35,
-    credentials: [
-        {
-            id: "c1",
-            platform: "shopify",
-            name: "Loja Shopify Principial",
-            url: "https://modafitness.myshopify.com/admin",
-            username: "admin@modafitness.com.br",
-            password: "••••••••",
-            notes: "Acesso de colaborador pendente"
-        },
-        {
-            id: "c2",
-            platform: "google_ads",
-            name: "Google Ads Conta 1",
-            username: "ID: 123-456-7890",
-            notes: "Acesso via MCC solicitado"
-        }
-    ],
     onboardingPhases: [
         {
             id: "phase1",

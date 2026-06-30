@@ -8,7 +8,6 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { ProductSelectorModal } from "@/components/clients/ProductSelector";
-import { ClientCredentialsSection } from "@/components/lever-os/ClientCredentialsSection";
 import { InlineEditableValue, EditableAvatar } from "@/components/clients/InlineEditing";
 import { WhatsAppGroupPicker } from "@/components/clients/WhatsAppGroupPicker";
 import { ImageIcon, Tag, Archive, Trash2, MoreVertical, Loader2, Pencil, Check, X, MessageCircle } from "lucide-react";
@@ -1028,9 +1027,6 @@ export function ClientSettingsView({ client, clientId, onClientUpdate }: ClientS
                         </div>
                     </CardContent>
                 </Card>
-
-                {/* 2.5 Credenciais & Acessos */}
-                <ClientCredentialsSection clientId={clientId} />
 
                 {/* 3. Products Card */}
                 <Card className="overflow-hidden border-border/40 bg-gradient-to-b from-card to-muted/20 shadow-none">

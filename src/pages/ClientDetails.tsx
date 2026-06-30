@@ -3,7 +3,6 @@ import { useEffect, useState, useMemo } from "react";
 import { ClientHeader } from "@/components/lever-os/ClientHeader";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Loader2, AlertCircle, ArrowLeft, Package, Folder, LayoutGrid, Layers } from "lucide-react";
-import { AccessVault } from "@/components/lever-os/AccessVault";
 import { ConnectionsHub } from "@/components/lever-os/ConnectionsHub";
 import { ClientBriefingTab } from "@/components/lever-os/ClientBriefingTab";
 import { OrdersTab } from "@/components/lever-os/OrdersTab";
@@ -74,7 +73,6 @@ export default function ClientDetails() {
                 currency: "BRL",
                 contractStartDate: clientData.created_at || new Date().toISOString()
             },
-            credentials: [],
             onboardingPhases: productBasedPhases.length > 0 ? productBasedPhases : [],
             assignedProductIds: (clientData as any)?.assigned_products || [],
             payment_due_day: (clientData as any)?.payment_due_day,

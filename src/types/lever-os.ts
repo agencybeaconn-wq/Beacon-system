@@ -9,16 +9,6 @@ export interface ClientFinancials {
     contractStartDate: string;
 }
 
-export interface AccessCredential {
-    id: string;
-    platform: 'shopify' | 'google_ads' | 'meta_ads' | 'reportana' | 'cardpanda' | 'drive' | 'kartpanda' | 'other';
-    name: string;
-    url?: string;
-    username: string;
-    password?: string; // Em produção seria criptografado ou não retornado
-    notes?: string;
-}
-
 export interface ProcessStep {
     id: string;
     title: string;
@@ -50,7 +40,6 @@ export interface Client {
     financials: ClientFinancials;
     progress: number; // 0-100
     onboardingPhases: OnboardingPhase[];
-    credentials: AccessCredential[];
     assignedProductIds?: string[];
     payment_due_day?: number;
     workspace_id?: string;
