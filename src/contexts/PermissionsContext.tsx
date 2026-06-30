@@ -79,9 +79,16 @@ export function PermissionsProvider({ children }: { children: ReactNode }) {
     const [linkedClientId, setLinkedClientId] = useState<string | null>(null);
     const [linkedClientName, setLinkedClientName] = useState<string | null>(null);
     const [abacRole, setAbacRole] = useState<Role | null>(null);
+    // Contador de tentativas de resolução. Logo após o login (SPA, sem reload),
+    // as queries de RLS podem rodar antes do JWT estar anexado ao client → o
+    // Postgres filtra com auth.uid()=NULL e retorna 0 linhas SEM erro. Em vez de
+    // marcar identidade pendente na primeira falha, re-tentamos com backoff até
+    // o token anexar (tipicamente < 1s). Ver root cause: token-race no login.
+    const [resolveAttempt, setResolveAttempt] = useState(0);
+    const MAX_RESOLVE_ATTEMPTS = 6;
 
     const { workspaceId, selectedClientId, selectedClientName, setWorkspaceId, isLoading: dashboardIsLoading } = useDashboard();
-    const { user, isLoading: authIsLoading } = useAuth();
+    const { user, session, isLoading: authIsLoading } = useAuth();
 
     // Derived loading state: wait for auth, dashboard (workspaceId), and internal fetch
     const isLoading = authIsLoading || dashboardIsLoading || internalLoading;
@@ -92,14 +99,75 @@ export function PermissionsProvider({ children }: { children: ReactNode }) {
             return;
         }
 
+        // Reagenda a resolução com backoff exponencial quando há sessão mas a
+        // identidade ainda não resolveu (provável token-race do RLS). Retorna
+        // true se um retry foi agendado — nesse caso o caller deve skipFinally+return.
+        const scheduleRetry = (reason: string): boolean => {
+            if (session?.access_token && resolveAttempt < MAX_RESOLVE_ATTEMPTS) {
+                const delay = Math.min(300 * 2 ** resolveAttempt, 4000); // 300→4000ms
+                console.warn(`[Permissions] ${reason}. Token pode não estar anexado — retry ${resolveAttempt + 1}/${MAX_RESOLVE_ATTEMPTS} em ${delay}ms.`);
+                setInternalLoading(true); // mantém spinner, NÃO mostra recovery
+                setTimeout(() => setResolveAttempt(a => a + 1), delay);
+                return true;
+            }
+            return false;
+        };
+
         console.log('[Permissions] Starting load. Workspace:', workspaceId || 'NONE');
         setInternalLoading(true);
         let skipFinally = false;
 
         try {
-            // Se workspaceId for null, aguarda pois o DashboardContext agora gerencia isso
+            // Se workspaceId for null, tenta resolver direto antes de desistir.
+            // Sem isso, uma corrida na resolução do DashboardContext prendia o
+            // usuário num spinner infinito (abacRole nunca era setado).
             if (!workspaceId) {
-                console.warn('[Permissions] Dashboard loaded mas não tem workspace. Identidade pendente.');
+                console.warn('[Permissions] Sem workspace no contexto. Tentando rescue direto antes de marcar identidade pendente.');
+
+                // Rescue 1: usuário é OWNER de algum workspace?
+                const { data: ownedWs, error: ownedErr } = await supabase
+                    .from('workspaces')
+                    .select('id')
+                    .eq('owner_id', user.id)
+                    .limit(1)
+                    .maybeSingle();
+
+                let rescuedWs = ownedWs?.id as string | undefined;
+
+                // Rescue 2: usuário é membro de algum workspace?
+                let memberErr: any = null;
+                if (!rescuedWs) {
+                    const memberRes = await (supabase as any)
+                        .from('team_members')
+                        .select('workspace_id')
+                        .ilike('email', user.email)
+                        .in('status', ['active', 'invited'])
+                        .limit(1)
+                        .maybeSingle();
+                    memberErr = memberRes.error;
+                    rescuedWs = memberRes.data?.workspace_id;
+                }
+
+                if (rescuedWs) {
+                    console.log('[Permissions] Rescue encontrou workspace:', rescuedWs, '— sincronizando.');
+                    setResolveAttempt(0);
+                    setIsPendingIdentity(false);
+                    setWorkspaceId(rescuedWs); // dispara re-run do effect com o workspace correto
+                    skipFinally = true;
+                    return;
+                }
+
+                if (ownedErr || memberErr) {
+                    console.error('[Permissions] Erro nas queries de rescue:', ownedErr || memberErr);
+                }
+
+                // 0 linhas pode ser token-race (RLS filtrou) — re-tenta antes de desistir.
+                if (scheduleRetry('Rescue de workspace retornou vazio')) {
+                    skipFinally = true;
+                    return;
+                }
+
+                console.warn('[Permissions] Rescue falhou após retries. Identidade realmente pendente.');
                 setIsPendingIdentity(true);
                 setInternalLoading(false);
                 return;
@@ -142,6 +210,7 @@ export function PermissionsProvider({ children }: { children: ReactNode }) {
             // ⚡ FAST PATH: If user is OWNER, grant full access immediately
             if (isOwner) {
                 console.log('[Permissions] FAST PATH: User is owner. Granting instant admin.');
+                setResolveAttempt(0);
                 const ownerRole: Role = 'ADMIN';
                 setAbacRole(ownerRole);
                 setPermissions(buildPermissionsConfig(ownerRole));
@@ -336,6 +405,24 @@ export function PermissionsProvider({ children }: { children: ReactNode }) {
                 }
             }
 
+            // Autenticado mas SEM papel resolvido: sob token-race, tanto a query de
+            // owner (wsResult) quanto a de member retornam vazio (RLS com auth.uid()
+            // null), levando a finalRole=null. Isso é o mesmo estado terminal do
+            // rescue. Re-tenta antes de comitar null (que prenderia o usuário).
+            if (!finalRole) {
+                if (scheduleRetry('Papel não resolvido (queries retornaram vazio)')) {
+                    skipFinally = true;
+                    return;
+                }
+                // Esgotou os retries com sessão válida e ainda sem papel → identidade
+                // genuinamente pendente. Sinaliza pro ProtectedRoute mostrar recovery.
+                console.warn('[Permissions] Papel não resolvido após retries. Identidade pendente.');
+                setIsPendingIdentity(true);
+            } else {
+                // Resolveu — zera o contador pra futuras re-execuções.
+                setResolveAttempt(0);
+            }
+
             // Build permissions config from unified engine
             const finalPermissions = finalRole
                 ? buildPermissionsConfig(finalRole, finalOverrides)
@@ -375,11 +462,13 @@ export function PermissionsProvider({ children }: { children: ReactNode }) {
     };
 
     useEffect(() => {
-        // Trigger whenever auth, workspace OR selected client changes
+        // Trigger whenever auth, workspace, selected client OR retry-attempt changes.
+        // resolveAttempt nas deps é o que faz o auto-retry da token-race re-rodar.
         if (!authIsLoading && !dashboardIsLoading) {
             loadPermissions();
         }
-    }, [workspaceId, user?.email, authIsLoading, dashboardIsLoading, selectedClientId]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [workspaceId, user?.email, authIsLoading, dashboardIsLoading, selectedClientId, resolveAttempt]);
 
     // ─── Unified canView / canEdit — delegates to can.ts engine ───────────
 
@@ -436,7 +525,13 @@ export function PermissionsProvider({ children }: { children: ReactNode }) {
                 canView,
                 canEdit,
                 getDataFilter,
-                refreshPermissions: loadPermissions,
+                // Retry manual: zera contador + pending. A mudança de resolveAttempt
+                // re-dispara o effect (loadPermissions) com o ciclo de retry renovado.
+                refreshPermissions: () => {
+                    setIsPendingIdentity(false);
+                    setResolveAttempt(0);
+                    loadPermissions();
+                },
             }}
         >
             {children}

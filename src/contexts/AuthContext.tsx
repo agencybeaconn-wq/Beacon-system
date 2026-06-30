@@ -29,7 +29,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setIsLoading(false);
         });
 
-        // Listen for auth changes
+        // Listen for auth changes.
+        // IMPORTANTE: não chamar métodos async do supabase.auth (getSession/getUser)
+        // DENTRO deste callback — é o anti-padrão de deadlock do supabase-js (o
+        // callback roda segurando o lock de auth). A token-race do login é tratada
+        // no PermissionsContext (auto-retry com backoff), que é livre de deadlock.
         const {
             data: { subscription },
         } = supabase.auth.onAuthStateChange((_event, session) => {
