@@ -356,7 +356,7 @@ export default function ClientPortal() {
                         dailyData={chartsData.dailyEvolution}
                         clientCosts={clientCosts}
                         dailyConversions={metrics.conversions}
-                        primaryColor="#dc2626"
+                        primaryColor="#e5e5e5"
                     />
                 </div>
 

@@ -913,7 +913,7 @@ const Overview = ({ isPortalView = false }: OverviewProps) => {
                     'text-emerald-500': '#10b981',
                     'text-rose-500': '#f43f5e',
                     'text-pink-500': '#ec4899',
-                    'text-primary': '#e11d48',
+                    'text-primary': '#e5e5e5',
                     'text-fuchsia-500': '#d946ef',
                     'text-red-400': '#f87171',
                     'text-rose-400': '#fb7185',
