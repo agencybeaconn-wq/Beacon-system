@@ -56,7 +56,11 @@ Deno.serve(instrument("shopify-auth-start", async (req: Request) => {
     })
   }
 
-  const redirectUri = "https://app.leverag.digital/api/shopify/callback"
+  // redirect_uri tem que bater com o whitelistado no app Shopify e rotear pro callback do Beacon.
+  // Usa VITE_APP_URL (mesma env que o shopify-oauth-callback usa pro redirect de volta).
+  // @ts-ignore
+  const appUrl = Deno.env.get('VITE_APP_URL') || 'https://agencybeacon.site'
+  const redirectUri = `${appUrl}/api/shopify/callback`
   const authUrl = `https://${shop}/admin/oauth/authorize?client_id=${apiKey}&scope=${encodeURIComponent(scopes)}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${clientId}`;
 
   if (req.method === 'GET') {

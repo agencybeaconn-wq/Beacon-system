@@ -607,7 +607,12 @@ export function ConnectionsHub({ onConnectionChange }: ConnectionsHubProps) {
         // Antes pedia só 13 hardcoded — o token saía capado (sem markets, inventory,
         // metaobjects, translations, etc). Fonte única em @/constants/shopifyScopes.
         const scopes = LEVER_SHOPIFY_SCOPES_CSV;
-        const redirectUri = 'https://app.leverag.digital/api/shopify/callback';
+        // redirect_uri tem que (a) bater exatamente com o whitelistado no app Shopify do cliente
+        // e (b) rotear pro edge function do Beacon. window.location.origin resolve pro domínio
+        // atual (ex: https://agencybeacon.site) e o rewrite do vercel.json manda /api/shopify/callback
+        // pro shopify-oauth-callback no Supabase do Beacon. NUNCA hardcodar domínio da Lever aqui —
+        // senão o token OAuth é gravado no banco errado.
+        const redirectUri = `${window.location.origin}/api/shopify/callback`;
         const authUrl = `https://${shopifyDomain}/admin/oauth/authorize?client_id=${shopifyClientId}&scope=${encodeURIComponent(scopes)}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${selectedClientId}`;
 
         window.location.href = authUrl;
