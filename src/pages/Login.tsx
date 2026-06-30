@@ -83,9 +83,9 @@ const Login = () => {
         <div className="w-full max-w-sm space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
           {/* Logo + Branding */}
           <div className="text-left space-y-4 mb-6">
-            <div className="flex items-center gap-0">
+            <div className="flex items-end gap-0">
               <img src={leverLogo} alt="Beacon" className="h-28 w-auto" />
-              <h1 className="text-3xl font-extrabold text-foreground tracking-tight -ml-1">eacon</h1>
+              <h1 className="text-4xl font-extrabold text-foreground tracking-tight -ml-1 pb-3">eacon</h1>
             </div>
           </div>
 

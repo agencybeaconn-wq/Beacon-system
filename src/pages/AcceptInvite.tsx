@@ -170,9 +170,9 @@ const AcceptInvite = () => {
         return (
             <div className="min-h-screen w-full flex items-center justify-center p-4 bg-background">
                 <div className="w-full max-w-md text-center space-y-6">
-                    <div className="flex items-center justify-center gap-0">
+                    <div className="flex items-end justify-center gap-0">
                         <img src={leverLogo} alt="Beacon" className="h-28 w-auto" />
-                        <h1 className="text-3xl font-extrabold text-foreground -ml-1">eacon</h1>
+                        <h1 className="text-4xl font-extrabold text-foreground -ml-1 pb-3">eacon</h1>
                     </div>
                     <div className="bg-destructive/10 p-6 rounded-lg border border-destructive/30">
                         <p className="text-destructive font-medium">{error}</p>
@@ -190,9 +190,9 @@ const AcceptInvite = () => {
             <div className="w-full max-w-md space-y-8">
                 {/* Logo */}
                 <div className="text-left space-y-4 mb-6">
-                    <div className="flex items-center gap-0">
+                    <div className="flex items-end gap-0">
                         <img src={leverLogo} alt="Beacon" className="h-28 w-auto" />
-                        <h1 className="text-3xl font-extrabold text-foreground -ml-1">eacon</h1>
+                        <h1 className="text-4xl font-extrabold text-foreground -ml-1 pb-3">eacon</h1>
                     </div>
                 </div>
 
