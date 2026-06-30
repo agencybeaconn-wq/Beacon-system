@@ -1,6 +1,6 @@
 /**
  * Send Academy Invite — Edge Function
- * Envia o link de convite do Lever Academy pra um email via Resend.
+ * Envia o link de convite do Beacon Academy pra um email via Resend.
  * Body esperado: { invite_id: uuid } — busca o convite, gera link + email, envia.
  */
 
@@ -42,7 +42,7 @@ const getAcademyEmailHtml = (opts: {
 <body style="margin: 0; padding: 0; font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #fafafa;">
   <div style="max-width: 560px; margin: 0 auto; padding: 40px 24px;">
     <div style="background: #0a0a0a; padding: 32px; border-radius: 16px 16px 0 0; text-align: center;">
-      <img src="https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/lever-system/Logos/LeverPng-Vermelho.png" alt="Lever" style="width: 160px; height: auto; margin: 0 auto 8px; display: block;" />
+      <span style="display: block; font-size: 24px; font-weight: 900; letter-spacing: -0.02em; color: #ffffff; margin: 0 0 8px;">Beacon</span>
       <p style="color: #fff; font-size: 11px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; margin: 0; opacity: 0.8;">
         Academy
       </p>
@@ -161,7 +161,7 @@ Deno.serve(instrument("send-academy-invite", async (req) => {
       override_link_base
       || Deno.env.get('APP_PUBLIC_URL')
       || Deno.env.get('NEXT_PUBLIC_APP_URL')
-      || 'https://leverag.digital'
+      || 'https://agencybeacon.site'
     ).replace(/\/$/, '');
     const inviteLink = `${linkBase}/academy/convite/${invite.token}`;
 
@@ -172,7 +172,7 @@ Deno.serve(instrument("send-academy-invite", async (req) => {
       });
     }
 
-    const FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL') || 'Lever Academy <contato@leverag.digital>';
+    const FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL') || 'Beacon Academy <contato@agencybeacon.site>';
     const moduleTitle = invite.academy_modules?.title || 'Beacon Academy';
     const moduleType = (invite.academy_modules?.type || 'course') as 'course' | 'mentoria';
 

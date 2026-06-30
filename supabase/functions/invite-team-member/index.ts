@@ -52,7 +52,7 @@ const getInviteEmailHtml = (inviteLink: string) => `
     <div class="wrapper">
         <div class="container">
             <div class="header">
-                <img src="https://pub-741e79c7a4b84c228594bbc296d1fbdd.r2.dev/lever-system/Logos/LeverPng-Vermelho.png" alt="Lever System" style="width: 180px; height: auto; margin-bottom: 5px;">
+                <span style="font-size: 26px; font-weight: 900; letter-spacing: -0.02em; color: #ffffff;">Beacon System</span>
             </div>
             <div class="content">
                 <h1 class="title">Você foi convidado!</h1>
@@ -170,7 +170,7 @@ serve(instrument("invite-team-member", async (req) => {
             }
         }
 
-        const PRODUCTION_URL = 'https://app.leverag.digital';
+        const PRODUCTION_URL = 'https://agencybeacon.site';
         let siteUrl = Deno.env.get('VITE_APP_URL') || PRODUCTION_URL;
         if (site_url && !site_url.includes('localhost') && !site_url.includes('127.0.0.1')) {
             siteUrl = site_url;
@@ -280,7 +280,7 @@ serve(instrument("invite-team-member", async (req) => {
         }
 
         const inviteLink = linkData.properties.action_link;
-        const FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL') || 'Lever System <contato@leverag.digital>';
+        const FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL') || 'Beacon System <contato@agencybeacon.site>';
 
         const resEmail = await fetch('https://api.resend.com/emails', {
             method: 'POST',
