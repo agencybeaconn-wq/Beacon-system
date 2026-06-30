@@ -11,7 +11,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAcademyContext } from '@/contexts/AcademyContext';
 import { toast } from 'sonner';
 import { AcademyLogo } from '@/components/academy/AcademyLogo';
-import { ThemeToggleButton } from '@/components/ThemeToggleButton';
 
 export default function AcademyAuth() {
   const navigate = useNavigate();
@@ -76,10 +75,6 @@ export default function AcademyAuth() {
 
   return (
     <div className="min-h-screen flex bg-background relative overflow-hidden">
-      <div className="absolute top-5 right-5 z-20">
-        <ThemeToggleButton />
-      </div>
-
       <aside className="hidden lg:block lg:w-1/2 relative overflow-hidden bg-black">
         <img
           src="/academy/hero-login.png"

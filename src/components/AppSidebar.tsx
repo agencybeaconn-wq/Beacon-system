@@ -3,7 +3,6 @@ import { cn } from "@/lib/utils";
 import { AdAccountSelector } from "@/components/AdAccountSelector";
 import { useLocation } from "react-router-dom";
 import leverLogo from "@/assets/lever-logo.png";
-import { ThemeToggleButton } from "@/components/ThemeToggleButton";
 import {
   Sidebar,
   SidebarContent,
@@ -554,15 +553,6 @@ export function AppSidebar() {
               <AccountDetailsPopover collapsed={isCollapsed} onOpenChange={setIsPopoverOpen} />
             </div>
           </div>
-
-          {!isCollapsed ? (
-            <div className="flex items-center justify-between w-full px-1">
-              <span className="text-xs text-muted-foreground">Tema</span>
-              <ThemeToggleButton />
-            </div>
-          ) : (
-            <ThemeToggleButton />
-          )}
         </SidebarFooter>
       </Sidebar >
     </div>

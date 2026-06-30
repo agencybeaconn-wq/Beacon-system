@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useDashboard } from "@/contexts/DashboardContext";
 import { usePermissions } from "@/contexts/PermissionsContext";
-import { ThemeToggleButton } from "@/components/ThemeToggleButton";
 import { PortalLogo } from "./PortalLogo";
 import { AccountDetailsPopover } from "@/components/sidebar/AccountDetailsPopover";
 
@@ -115,9 +114,6 @@ export function PortalSidebar({ onNavigate }: { onNavigate?: () => void }) {
             <div className="p-3 border-t border-border/40 flex items-center gap-2">
                 <div className="flex-1 min-w-0">
                     <AccountDetailsPopover />
-                </div>
-                <div className="p-1 bg-muted/30 rounded-lg flex-shrink-0">
-                    <ThemeToggleButton />
                 </div>
             </div>
         </div>

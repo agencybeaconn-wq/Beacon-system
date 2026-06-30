@@ -10,14 +10,13 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { CreditCard, Bell, Shield, Settings, Check, Globe, Clock, Moon, Sun, Minus, LogOut, User, Building2, Users, Archive, ArchiveRestore, Loader2, Trash2, Link, ClipboardCheck, Flag, Target, Phone, Mail, Store } from "lucide-react";
+import { CreditCard, Bell, Shield, Settings, Check, Globe, Clock, Minus, LogOut, User, Building2, Users, Archive, ArchiveRestore, Loader2, Trash2, Link, ClipboardCheck, Flag, Target, Phone, Mail, Store } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import UsageProgressBar from "@/components/UsageProgressBar";
 import { usePlanUsage } from "@/hooks/usePlanUsage";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { NotificationSettingsForm } from "@/components/NotificationSettingsForm";
-import { useTheme } from "next-themes";
 import { useTranslation } from "react-i18next";
 
 import Profile from "./Profile";
@@ -33,7 +32,6 @@ const SettingsPage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { data: planUsage, isLoading: isLoadingUsage } = usePlanUsage();
-  const { theme, setTheme } = useTheme();
   const { t, i18n } = useTranslation();
   const { refreshClients, workspaceId } = useDashboard();
   const { openTaskDetail, selectedTask, closeTaskDetail } = useTasks();
@@ -396,29 +394,6 @@ const SettingsPage = () => {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                {/* THEME */}
-                <div className="space-y-2">
-                  <Label>{t('settings.theme')}</Label>
-                  <Select value={theme} onValueChange={setTheme}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="light">
-                        <div className="flex items-center gap-2">
-                          <Sun className="h-4 w-4" /> {t('settings.light')}
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="dark">
-                        <div className="flex items-center gap-2">
-                          <Moon className="h-4 w-4" /> {t('settings.dark')}
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="system">{t('settings.system')}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
 
                 {/* UI LANGUAGE */}
                 <div className="space-y-2">

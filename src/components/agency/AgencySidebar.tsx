@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDashboard } from "@/contexts/DashboardContext";
 import { usePermissions } from "@/contexts/PermissionsContext";
-import { ThemeToggleButton } from "@/components/ThemeToggleButton";
 import { AccountDetailsPopover } from "@/components/sidebar/AccountDetailsPopover";
 
 import leverLogo from "@/assets/lever-logo.png";
@@ -276,10 +275,6 @@ export function AgencySidebar({ onNavigate }: { onNavigate?: () => void }) {
             <div className="p-4 border-t border-border/50 flex flex-col gap-3">
                 <div className="flex items-center justify-between w-full">
                     <AccountDetailsPopover />
-                </div>
-                <div className="flex items-center justify-between w-full px-2">
-                    <span className="text-xs text-muted-foreground font-medium tracking-wide">Tema</span>
-                    <ThemeToggleButton />
                 </div>
             </div>
         </div>

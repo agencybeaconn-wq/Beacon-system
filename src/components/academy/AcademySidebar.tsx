@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAcademyContext } from '@/contexts/AcademyContext';
 import { AcademyLogo } from './AcademyLogo';
-import { ThemeToggleButton } from '@/components/ThemeToggleButton';
 import { AccountDetailsPopover } from '@/components/sidebar/AccountDetailsPopover';
 
 interface MenuItem { title: string; icon: any; path: string; adminOnly?: boolean; }
@@ -89,13 +88,10 @@ export function AcademySidebar({ onNavigate }: { onNavigate?: () => void }) {
         )}
       </nav>
 
-      {/* Footer: perfil + theme toggle lado a lado */}
+      {/* Footer: perfil */}
       <div className="p-3 border-t border-border/40 flex items-center gap-2">
         <div className="flex-1 min-w-0">
           <AccountDetailsPopover />
-        </div>
-        <div className="p-1 bg-muted/30 rounded-lg flex-shrink-0">
-          <ThemeToggleButton />
         </div>
       </div>
     </div>

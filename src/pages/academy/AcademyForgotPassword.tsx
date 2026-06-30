@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { AcademyLogo } from '@/components/academy/AcademyLogo';
-import { ThemeToggleButton } from '@/components/ThemeToggleButton';
 import { toast } from 'sonner';
 
 export default function AcademyForgotPassword() {
@@ -28,9 +27,6 @@ export default function AcademyForgotPassword() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/10 p-4 relative">
-      <div className="absolute top-4 right-4">
-        <ThemeToggleButton />
-      </div>
       <div className="w-full max-w-md">
         <div className="text-center mb-8 flex flex-col items-center">
           <AcademyLogo size="lg" className="mb-4" />
