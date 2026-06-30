@@ -255,7 +255,15 @@ export default function Solicitacoes() {
             const { data, error } = await query;
 
             if (error) throw error;
-            setDemands(data || []);
+            const fetchedDemands = data || [];
+            setDemands(fetchedDemands);
+
+            // Auto-aprova demandas pendentes que vieram do portal
+            const pending = fetchedDemands.filter((d: DemandRequest) => d.status === 'pending');
+            for (const demand of pending) {
+                // Roda em background sem travar a UI
+                autoApproveDemand(demand.id);
+            }
         } catch (error: any) {
             console.error("Error fetching demands:", error);
             const errorMsg = error.message || "Erro desconhecido";
@@ -509,6 +517,12 @@ export default function Solicitacoes() {
         } finally {
             setIsUpdatingResource(false);
         }
+    };
+
+    // Auto-aprovação: demandas pendentes do portal são aprovadas automaticamente
+    // e atribuídas diretamente no Kanban sem intervenção manual.
+    const autoApproveDemand = async (id: string) => {
+        await handleAction(id, 'approved');
     };
 
     const handleAction = async (id: string, newStatus: DemandStatus, assigneeId?: string) => {
@@ -903,39 +917,6 @@ export default function Solicitacoes() {
                                                         Ver Detalhes Completos
                                                     </Button>
 
-                                                    {demand.status === 'pending' && (
-                                                        <div className="space-y-4 pt-4">
-                                                            {/* Assignee Selector */}
-                                                            <div className="flex items-center gap-2">
-                                                                <UserCircle2 className="h-4 w-4 text-muted-foreground shrink-0" />
-                                                                <Select
-                                                                    value={demandAssignees[demand.id] || ''}
-                                                                    onValueChange={(val) => setDemandAssignees(prev => ({ ...prev, [demand.id]: val }))}
-                                                                >
-                                                                    <SelectTrigger className="h-9 text-sm bg-muted/30 border-border/50">
-                                                                        <SelectValue placeholder="Responsável (opcional)" />
-                                                                    </SelectTrigger>
-                                                                    <SelectContent>
-                                                                        <SelectItem value="none">Sem responsável</SelectItem>
-                                                                        {teamMembers.map(m => (
-                                                                            <SelectItem key={m.id} value={m.id}>{m.name}</SelectItem>
-                                                                        ))}
-                                                                    </SelectContent>
-                                                                </Select>
-                                                            </div>
-                                                            <div className="grid grid-cols-2 gap-2">
-                                                                <Button variant="outline" className="h-10 text-red-500 border-red-500/20" disabled={processingIds.has(demand.id)} onClick={() => handleAction(demand.id, 'rejected')}>
-                                                                    {processingIds.has(demand.id) ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <X className="h-4 w-4 mr-2" />} Recusar
-                                                                </Button>
-                                                                <Button className="h-10 bg-green-600 hover:bg-green-700 font-bold" disabled={processingIds.has(demand.id)} onClick={() => {
-                                                                    const assignee = demandAssignees[demand.id];
-                                                                    handleAction(demand.id, 'approved', assignee && assignee !== 'none' ? assignee : undefined);
-                                                                }}>
-                                                                    {processingIds.has(demand.id) ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Check className="h-4 w-4 mr-2" />} Aprovar
-                                                                </Button>
-                                                            </div>
-                                                        </div>
-                                                    )}
                                                 </div>
                                             </Card>
                                         ))}

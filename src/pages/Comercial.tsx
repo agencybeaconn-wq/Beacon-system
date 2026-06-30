@@ -283,10 +283,10 @@ export default function Comercial() {
 
                         <button
                             onClick={handleAddLead}
-                            className="flex items-center gap-2.5 h-11 px-4 bg-primary border border-primary/20 rounded-xl hover:bg-primary/90 transition-all cursor-pointer group shadow-none"
+                            className="flex items-center gap-2.5 h-11 px-5 rounded-xl transition-all cursor-pointer group bg-amber-500 hover:bg-amber-400 border border-amber-400/30"
                         >
-                            <Plus className="h-4.5 w-4.5 text-white group-hover:rotate-90 transition-transform" strokeWidth={3} />
-                            <span className="font-bold text-[11px] uppercase tracking-widest text-white">Novo Lead</span>
+                            <Plus className="h-4 w-4 text-black group-hover:rotate-90 transition-transform" strokeWidth={3} />
+                            <span className="font-bold text-[11px] uppercase tracking-widest text-black">Novo Lead</span>
                         </button>
                     </div>
                 )}
