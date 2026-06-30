@@ -1,4 +1,4 @@
-import { Home, PlusCircle, LayoutDashboard, ListTodo, Wrench, Film, FileText, LucideIcon, LogOut } from "lucide-react";
+import { PlusCircle, LayoutDashboard, FileText, LucideIcon } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useDashboard } from "@/contexts/DashboardContext";
@@ -21,17 +21,8 @@ export function PortalSidebar({ onNavigate }: { onNavigate?: () => void }) {
     const companyName = linkedClientName || clientData?.name || "Minha Loja";
 
     // MENU FOR CLIENTS (External - Restricted)
+    // Apenas as 3 seções essenciais: Briefing, Nova Solicitação e Quadro de Demandas
     const clientMenuItems: MenuItem[] = [
-        {
-            title: "Início",
-            icon: Home,
-            path: "/portal",
-        },
-        {
-            title: "Visão Geral",
-            icon: LayoutDashboard,
-            path: "/portal/visao-geral",
-        },
         {
             title: "Briefing",
             icon: FileText,
@@ -46,21 +37,6 @@ export function PortalSidebar({ onNavigate }: { onNavigate?: () => void }) {
             title: "Quadro de Demandas",
             icon: LayoutDashboard,
             path: "/portal/tasks",
-        },
-        {
-            title: "Minhas Tarefas",
-            icon: ListTodo,
-            path: "/portal/my-tasks",
-        },
-        {
-            title: "Ferramentas",
-            icon: Wrench,
-            path: "/portal/resources",
-        },
-        {
-            title: "Biblioteca",
-            icon: Film,
-            path: "/portal/biblioteca",
         },
     ];
 

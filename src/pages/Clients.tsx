@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useSelectedClient, useDashboard } from "@/contexts/DashboardContext";
-import { ArrowRight, Users, Plus, Loader2, Check, ExternalLink, Filter, Timer, Search, X } from "lucide-react";
+import { ArrowRight, Users, Plus, Loader2, Check, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
@@ -11,14 +11,9 @@ import { useTranslation } from "react-i18next";
 import { NewClientModal } from "@/components/clients/NewClientModal";
 import { usePermissions } from "@/contexts/PermissionsContext";
 import { useState, useEffect } from "react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { supabase } from "@/integrations/supabase/client";
 
-type ClientTypeFilter = 'all' | 'fixo' | 'avulso';
-
-// Normaliza string para busca insensível a caixa e a acentos
-const normalize = (s: string): string =>
-    s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
 const Clients = () => {
   const { t } = useTranslation();
@@ -26,7 +21,6 @@ const Clients = () => {
   const { setSelectedClient, selectedClientId, clients, isLoading: isLoadingClients } = useSelectedClient();
   const { workspaceId } = useDashboard();
   const { canEdit } = usePermissions();
-  const [typeFilter, setTypeFilter] = useState<ClientTypeFilter>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [clientTaskInfo, setClientTaskInfo] = useState<Map<string, { count: number; latestDue: string | null }>>(new Map());
 
@@ -67,10 +61,11 @@ const Clients = () => {
     navigate(`/client-config`);
   };
 
+  // Normaliza string para busca insensível a caixa e a acentos
+  const normalize = (s: string): string =>
+    s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
   const filteredClients = clients.filter((client: any) => {
-    // 1. Filtro por tipo
-    if (typeFilter !== 'all' && (client.client_type || 'avulso') !== typeFilter) return false;
-    // 2. Filtro por termo de busca (nome + project_name)
     if (searchTerm.trim()) {
       const q = normalize(searchTerm.trim());
       const haystack = normalize(`${client.name || ''} ${client.project_name || ''}`);
@@ -78,12 +73,6 @@ const Clients = () => {
     }
     return true;
   });
-
-  const countByType = {
-    all: clients.length,
-    fixo: clients.filter((c: any) => c.client_type === 'fixo').length,
-    avulso: clients.filter((c: any) => !c.client_type || c.client_type === 'avulso').length,
-  };
 
   if (isLoadingClients) {
     return (
@@ -127,19 +116,6 @@ const Clients = () => {
               </button>
             )}
           </div>
-          <Tabs value={typeFilter} onValueChange={(val) => setTypeFilter(val as ClientTypeFilter)}>
-            <TabsList className="h-10">
-              <TabsTrigger value="all" className="flex items-center gap-2">
-                <span>Todos ({countByType.all})</span>
-              </TabsTrigger>
-              <TabsTrigger value="fixo" className="flex items-center gap-2">
-                <span>Fixo / MRR ({countByType.fixo})</span>
-              </TabsTrigger>
-              <TabsTrigger value="avulso" className="flex items-center gap-2">
-                <span>Avulso ({countByType.avulso})</span>
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
         </div>
       </div>
 
@@ -153,7 +129,6 @@ const Clients = () => {
             .join('')
             .toUpperCase();
 
-          const clientType = client.client_type || 'avulso';
           const isSelected = selectedClientId === client.id;
 
           return (
@@ -180,16 +155,6 @@ const Clients = () => {
                       {initials}
                     </AvatarFallback>
                   </Avatar>
-                  <Badge
-                    className={cn(
-                      "text-[10px] font-bold uppercase tracking-wider border-0 px-2.5 py-0.5",
-                      clientType === 'fixo'
-                        ? "bg-emerald-500/10 text-emerald-500"
-                        : "bg-orange-500/10 text-orange-500"
-                    )}
-                  >
-                    {clientType === 'fixo' ? 'Fixo (MRR)' : 'Avulso'}
-                  </Badge>
                 </div>
                 <CardTitle className="mt-4 text-xl font-bold truncate">{client.name}</CardTitle>
               </CardHeader>

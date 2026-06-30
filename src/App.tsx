@@ -225,17 +225,19 @@ const App = () => (
                               <Route path="/academy/minhas-aulas/:lessonId" element={<AcademyProvider><AcademyPrivateLesson /></AcademyProvider>} />
 
                               {/* PORTAL ROUTES (Client Facing) */}
-                              <Route path="/portal" element={<ProtectedRoute><PortalLayout><PortalDashboard /></PortalLayout></ProtectedRoute>} />
-                              <Route path="/portal/visao-geral" element={<ProtectedRoute><PortalLayout><PortalDashboardKpi /></PortalLayout></ProtectedRoute>} />
-                              <Route path="/portal/new-demand" element={<ProtectedRoute><PortalLayout><PortalNewDemand /></PortalLayout></ProtectedRoute>} />
-                              <Route path="/portal/general-board" element={<ProtectedRoute><PortalLayout><PortalGeneralBoard /></PortalLayout></ProtectedRoute>} />
-                              <Route path="/portal/clients" element={<ProtectedRoute><PortalLayout><PortalClients /></PortalLayout></ProtectedRoute>} />
-                              <Route path="/portal/client-tasks" element={<ProtectedRoute><PortalLayout><PortalClientTasks /></PortalLayout></ProtectedRoute>} />
-                              <Route path="/portal/tasks" element={<ProtectedRoute><PortalLayout><PortalTasks /></PortalLayout></ProtectedRoute>} />
-                              <Route path="/portal/my-tasks" element={<ProtectedRoute><PortalLayout><PortalMyTasks /></PortalLayout></ProtectedRoute>} />
-                              <Route path="/portal/resources" element={<ProtectedRoute><PortalLayout><PortalResources /></PortalLayout></ProtectedRoute>} />
-                              <Route path="/portal/biblioteca" element={<ProtectedRoute><PortalLayout><PortalBiblioteca /></PortalLayout></ProtectedRoute>} />
+                              {/* Página inicial do portal → redireciona direto para Briefing */}
+                              <Route path="/portal" element={<Navigate to="/portal/briefing" replace />} />
                               <Route path="/portal/briefing" element={<ProtectedRoute><PortalLayout><BriefingForm /></PortalLayout></ProtectedRoute>} />
+                              <Route path="/portal/new-demand" element={<ProtectedRoute><PortalLayout><PortalNewDemand /></PortalLayout></ProtectedRoute>} />
+                              <Route path="/portal/tasks" element={<ProtectedRoute><PortalLayout><PortalTasks /></PortalLayout></ProtectedRoute>} />
+                              {/* Rotas legadas mantidas para não quebrar links existentes */}
+                              <Route path="/portal/visao-geral" element={<Navigate to="/portal/briefing" replace />} />
+                              <Route path="/portal/general-board" element={<Navigate to="/portal/tasks" replace />} />
+                              <Route path="/portal/clients" element={<Navigate to="/portal/briefing" replace />} />
+                              <Route path="/portal/client-tasks" element={<Navigate to="/portal/tasks" replace />} />
+                              <Route path="/portal/my-tasks" element={<Navigate to="/portal/tasks" replace />} />
+                              <Route path="/portal/resources" element={<Navigate to="/portal/briefing" replace />} />
+                              <Route path="/portal/biblioteca" element={<Navigate to="/portal/briefing" replace />} />
 
 
                               {/* PUBLIC ROUTE - Legacy Share Portal */}

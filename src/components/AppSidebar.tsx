@@ -40,7 +40,6 @@ import {
   Home as HomeIcon,
   Users,
   Folder,
-  Image,
   PieChart,
   BarChart3,
   FileText,
@@ -76,7 +75,6 @@ import {
   GraduationCap,
   Play,
   Settings2,
-  Repeat,
   Trophy,
 } from "lucide-react";
 
@@ -102,20 +100,7 @@ interface MenuItem {
 // O agrupamento visual é controlado pelo campo `section`, não por slice/index.
 const mainMenuItems: MenuItem[] = [
   // ─── Seção: Agência ───
-  { section: 'agency', title: "Visão Geral", transKey: "sidebar.dashboard", url: "/dashboard", icon: LayoutDashboard },
-  {
-    section: 'agency',
-    title: "Demandas",
-    transKey: "sidebar.tasks",
-    url: "/tasks",
-    icon: ClipboardList,
-    submenu: [
-      { title: "Fixo (MRR)", transKey: "sidebar.tasks_fixo", url: "/tasks?type=fixo", icon: Repeat },
-      { title: "Avulso", transKey: "sidebar.tasks_avulso", url: "/tasks?type=avulso", icon: Briefcase },
-    ]
-  },
-  { section: 'agency', title: "Prazos de Entrega", transKey: "sidebar.active_projects", url: "/active-projects", icon: Briefcase },
-  { section: 'agency', title: "Solicitações", transKey: "sidebar.request_demand", icon: ClipboardCheck, url: "/solicitacoes" },
+  { section: 'agency', title: "Demandas", transKey: "sidebar.tasks", url: "/tasks", icon: ClipboardList },
   { section: 'agency', title: "Comercial", transKey: "sidebar.crm", url: "/comercial", icon: FileText },
   {
     section: 'agency',
@@ -133,36 +118,10 @@ const mainMenuItems: MenuItem[] = [
       { title: "Configurações", transKey: "sidebar.client_config", url: "/client-config", icon: Settings2 },
     ]
   },
-  {
-    section: 'agency',
-    title: "Ferramentas",
-    transKey: "sidebar.tools",
-    icon: Wrench,
-    submenu: [
-      { title: "Shopify Manager", transKey: "sidebar.shopify_manager", url: "/shopify-manager", icon: ShoppingCart },
-      { title: "Estúdio IA", transKey: "sidebar.studio_ia", url: "/estudio-ia", icon: Image },
-      { title: "Claude Skills", transKey: "sidebar.skills", url: "/skills", icon: Sparkles }
-    ]
-  },
-  { section: 'agency', title: "Google Calendar", transKey: "sidebar.google_calendar", url: "/google-calendar", icon: Calendar },
 
   // ─── Seção: Gestão e Ajustes ───
   { section: 'management', title: "Financeiro Agência", transKey: "sidebar.financial_agency", url: "/financeiro", icon: Wallet },
-  { section: 'management', title: "Financeiro Academy", transKey: "sidebar.financial_academy", url: "/financeiro-academy", icon: GraduationCap },
-  { section: 'management', title: "Painéis", transKey: "sidebar.paineis", url: "/paineis", icon: BarChart3 },
-  { section: 'management', title: "Dados Inteligentes", transKey: "sidebar.smart_data", url: "/smart-data", icon: Sparkles },
   { section: 'management', title: "Produtos", transKey: "sidebar.products", url: "/products", icon: Package },
-
-  {
-    section: 'management',
-    title: "Treinamentos",
-    transKey: "sidebar.training",
-    icon: GraduationCap,
-    submenu: [
-      { title: "Biblioteca", transKey: "sidebar.training_library", url: "/treinamentos", icon: Play },
-      { title: "Gerenciar", transKey: "sidebar.training_manage", url: "/treinamentos/gerenciar", icon: Settings2 },
-    ]
-  },
 
   {
     section: 'management',
@@ -175,7 +134,6 @@ const mainMenuItems: MenuItem[] = [
     ]
   },
 
-  { section: 'management', title: "Grupos de Contas", transKey: "sidebar.account_groups", url: "/account-groups", icon: Briefcase },
   { section: 'management', title: "Ajustes", transKey: "sidebar.settings", url: "/settings", icon: Settings },
 ];
 
