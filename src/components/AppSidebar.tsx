@@ -470,7 +470,8 @@ export function AppSidebar() {
           "flex flex-col border-b border-border/40 transition-all duration-200 h-16 justify-center",
           isCollapsed ? "items-center px-0" : "px-5"
         )}>
-          <NavLink to="/" className="hover:opacity-80 transition-opacity">
+          {/* Logo apenas identitário — não é link/botão (não navega ao clicar). */}
+          <div className="select-none">
             {!isCollapsed ? (
               <div className="flex items-center gap-2">
                 <img src={leverLogo} alt="Beacon" className="h-7 w-auto" />
@@ -479,7 +480,7 @@ export function AppSidebar() {
             ) : (
               <img src={leverLogo} alt="Beacon" className="h-6 w-6 object-contain" />
             )}
-          </NavLink>
+          </div>
         </div>
 
         <SidebarContent className="p-0">

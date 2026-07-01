@@ -25,7 +25,8 @@ export const LandingRedirect = () => {
         console.log('[LandingRedirect] Permissions loaded. abacRole:', abacRole);
 
         if (abacRole === 'ADMIN') {
-            navigate("/dashboard", { replace: true });
+            // Tela inicial do admin = Demandas (/tasks), não o dashboard/Visão Geral.
+            navigate("/tasks", { replace: true });
         } else if (abacRole === 'FUNCIONARIO') {
             navigate("/agency", { replace: true });
         } else if (abacRole === 'CLIENTE') {
