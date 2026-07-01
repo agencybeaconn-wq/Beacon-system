@@ -12,20 +12,28 @@ import { Button } from "@/components/ui/button";
 export function PortalLayout({ children }: { children: React.ReactNode }) {
     const navigate = useNavigate();
     const location = useLocation();
-    const { abacRole, isLoading } = usePermissions();
+    const { abacRole, isClient, linkedClientId, isPendingIdentity, isLoading } = usePermissions();
 
-    // Guard: Only clients can access portal directly via this layout's normal checks (Admins might impersonate but let's stick to abacRole for now)
+    // Guard: o portal é do CLIENTE. Fica quem é cliente real (isClient) OU admin impersonando
+    // um cliente selecionado (abacRole ADMIN + linkedClientId setado). Um agency admin/operator
+    // SEM cliente vinculado (ex.: admin recém-convidado) é devolvido ao dashboard — senão fica
+    // preso aqui e o briefing roda sem client_id ("Verificando briefing..." eterno).
+    // Só decide/expulsa com a identidade RESOLVIDA: nunca durante loading nem na janela de
+    // token-race pós-login (isPendingIdentity), pra não chutar cliente real que ainda resolve.
+    const canAccessPortal = isClient || (abacRole === 'ADMIN' && !!linkedClientId);
+
     useEffect(() => {
-        if (!isLoading && abacRole !== 'CLIENTE' && abacRole !== 'ADMIN') {
-            console.log('[PortalLayout] Non-client/admin detected, redirecting to home...');
+        if (!isLoading && !isPendingIdentity && !canAccessPortal) {
+            console.log('[PortalLayout] Sem identidade de cliente no portal, voltando ao dashboard...');
             navigate('/', { replace: true });
         }
-    }, [abacRole, isLoading, navigate]);
+    }, [canAccessPortal, isLoading, isPendingIdentity, navigate]);
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    // Show loading while determining permissions
-    if (isLoading) {
+    // Show loading while determining permissions (inclui a janela de token-race pós-login:
+    // enquanto a identidade não resolve, spinner — não decide portal-sim/não com dado transitório).
+    if (isLoading || isPendingIdentity) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-background">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -33,8 +41,9 @@ export function PortalLayout({ children }: { children: React.ReactNode }) {
         );
     }
 
-    // If not client (shouldn't happen due to effect, but safety)
-    if (abacRole !== 'CLIENTE' && abacRole !== 'ADMIN') {
+    // Rede de segurança: identidade já resolvida e sem acesso de cliente → não renderiza
+    // (o effect acima redireciona pro dashboard). Evita piscar o portal pra quem não é cliente.
+    if (!canAccessPortal) {
         return null;
     }
 

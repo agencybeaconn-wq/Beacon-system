@@ -160,20 +160,26 @@ const AcceptInvite = () => {
                 description: "Sua conta foi ativada com sucesso."
             });
 
-            // Redirect logic based on identity
+            // Redirect logic based on identity.
+            // Só cliente REAL vai pro portal. p_client_id != null é o sinal forte de cliente
+            // (dono de workspace e staff de agência voltam com p_client_id NULL). NÃO usar
+            // length>0: resolve_client_identity devolve 1 linha pra QUALQUER membro — inclusive
+            // agency admin (p_user_type='agency', p_client_id=NULL) — e era isso que jogava
+            // admin recém-convidado no portal do cliente.
             if (userData.user.email) {
                 const { data: identity } = await (supabase as any).rpc('resolve_client_identity', {
                     user_email: userData.user.email
                 });
 
-                if (identity && identity.length > 0) {
-                    console.log('AcceptInvite: Redirecting to portal based on identity');
+                const iden = Array.isArray(identity) ? identity[0] : null;
+                if (iden && iden.p_client_id != null) {
+                    console.log('AcceptInvite: cliente real -> /portal');
                     navigate("/portal");
                     return;
                 }
             }
 
-            navigate("/");
+            navigate("/"); // agency admin/operator vai pro dashboard
         } catch (err: any) {
             toast({
                 title: "Erro",

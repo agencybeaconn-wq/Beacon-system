@@ -228,16 +228,23 @@ export default function BriefingForm() {
             setClientSearch(linkedClientName || '');
             setClients([{ id: linkedClientId, name: linkedClientName || 'Minha Loja' }]);
 
-            // Checa se já existe briefing concluído pra esse cliente
-            const { data: existing } = await (supabase as any)
-                .from('briefings')
-                .select('id, status')
-                .eq('client_group_id', linkedClientId)
-                .eq('status', 'completed')
-                .limit(1)
-                .maybeSingle();
+            try {
+                // Checa se já existe briefing concluído pra esse cliente
+                const { data: existing } = await (supabase as any)
+                    .from('briefings')
+                    .select('id, status')
+                    .eq('client_group_id', linkedClientId)
+                    .eq('status', 'completed')
+                    .limit(1)
+                    .maybeSingle();
 
-            setPortalStatus(existing ? 'exists' : 'new');
+                setPortalStatus(existing ? 'exists' : 'new');
+            } catch (e) {
+                // Falha explícita: nunca deixar o portal preso em "Verificando briefing..." —
+                // libera o form em vez de spinner eterno (regra: nada de erro silencioso).
+                console.error('[BriefingForm] erro ao checar briefing existente:', e);
+                setPortalStatus('new');
+            }
         })();
     }, [isPortalMode, workspaceId, linkedClientId, linkedClientName]);
 
