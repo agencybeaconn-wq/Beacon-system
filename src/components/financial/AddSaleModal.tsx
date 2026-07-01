@@ -111,7 +111,7 @@ export function AddSaleModal({ isOpen, onOpenChange, onAddSale }: AddSaleModalPr
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Adicionar Nova Venda</DialogTitle>
                 </DialogHeader>

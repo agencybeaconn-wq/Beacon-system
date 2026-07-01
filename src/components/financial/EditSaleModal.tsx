@@ -118,7 +118,7 @@ export function EditSaleModal({ sale, isOpen, onOpenChange, onUpdateSale }: Edit
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Editar Venda</DialogTitle>
                 </DialogHeader>
