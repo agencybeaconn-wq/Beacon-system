@@ -26,8 +26,10 @@ const proxySchema = z.object({
 })
 
 // Whitelist de origens permitidas. Endpoint expõe JWT do usuário em headers — sem whitelist, qualquer site malicioso pode invocar.
+// Beacon roda em agencybeacon.site (apex + www, dependendo de como o Vercel canonicaliza). NÃO usar domínio da Lever aqui.
 const ALLOWED_ORIGINS = [
-    'https://app.leverag.digital',
+    'https://agencybeacon.site',
+    'https://www.agencybeacon.site',
     'http://localhost:8080',
     'http://localhost:5173',
     'http://localhost:3000',
