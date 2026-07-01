@@ -27,7 +27,7 @@ Deno.serve(instrument("fb-oauth-callback", async (req) => {
     const errorDescription = url.searchParams.get('error_description')
 
     // Parse state - supports both JSON format and legacy plain URL format
-    let appUrl = Deno.env.get('VITE_APP_URL') || 'https://app.leverag.digital'
+    let appUrl = Deno.env.get('VITE_APP_URL') || 'https://agencybeacon.site'
     let stateUserId: string | null = null
     let stateWorkspaceId: string | null = null
 
@@ -247,7 +247,7 @@ Deno.serve(instrument("fb-oauth-callback", async (req) => {
 
   } catch (error: any) {
     console.error('fb-oauth-callback error:', error)
-    const appUrl = Deno.env.get('VITE_APP_URL') || 'https://app.leverag.digital'
+    const appUrl = Deno.env.get('VITE_APP_URL') || 'https://agencybeacon.site'
     return Response.redirect(`${appUrl}/connections?error=${encodeURIComponent(error.message || 'Erro interno')}`)
   }
 }))

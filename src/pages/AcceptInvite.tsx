@@ -19,16 +19,43 @@ const AcceptInvite = () => {
     const { toast } = useToast();
 
     useEffect(() => {
-        // Check for hash parameters (Supabase sends tokens in hash)
+        // Fluxo NOVO — token_hash na query string (link autossuficiente vindo do e-mail de convite).
+        const queryParams = new URLSearchParams(window.location.search);
+        const tokenHash = queryParams.get("token_hash");
+        const queryType = queryParams.get("type");
+
+        // Fluxo ANTIGO/implícito — tokens no hash (Supabase redireciona com #access_token).
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         const accessToken = hashParams.get("access_token");
         const refreshToken = hashParams.get("refresh_token");
-        const errorDescription = hashParams.get("error_description");
-        const type = hashParams.get("type"); // "invite" for invitation links
+        const errorDescription = hashParams.get("error_description") || queryParams.get("error_description");
+        const type = hashParams.get("type") || queryType; // "invite"/"magiclink"
 
         if (errorDescription) {
             setError(decodeURIComponent(errorDescription.replace(/\+/g, " ")));
             setIsLoading(false);
+            return;
+        }
+
+        // Verifica o token_hash direto no cliente (verifyOtp). Não depende do redirect do GoTrue,
+        // então o convite nunca mais cai em localhost / Site URL errada.
+        if (tokenHash) {
+            supabase.auth
+                .verifyOtp({ token_hash: tokenHash, type: (queryType || "magiclink") as any })
+                .then(({ data, error }) => {
+                    if (error) {
+                        setError(error.message || "Link de convite inválido ou expirado.");
+                        setIsLoading(false);
+                        return;
+                    }
+                    if (data.user) {
+                        setUserEmail(data.user.email || null);
+                        setIsLoading(false); // mostra o formulário de criação de senha
+                    } else {
+                        setError("Link de convite inválido ou expirado.");
+                        setIsLoading(false);
+                    }
+                });
             return;
         }
 

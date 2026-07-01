@@ -39,11 +39,11 @@ const getInviteEmailHtml = (inviteLink: string) => `
         body { background-color: #f4f4f5; color: #18181b; margin: 0; padding: 0; }
         .wrapper { background-color: #f4f4f5; padding: 40px 20px; }
         .container { max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        .header { background: #000000; padding: 32px; text-align: center; }
+        .header { background: #09090b; padding: 32px; text-align: center; }
         .content { padding: 40px; text-align: center; }
         .title { font-size: 24px; font-weight: 700; margin-bottom: 16px; color: #09090b; letter-spacing: -0.02em; }
         .text { font-size: 16px; line-height: 1.6; color: #52525b; margin-bottom: 32px; font-weight: 400; }
-        .btn { display: inline-block; background-color: #ff0000; color: #ffffff !important; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 700; font-size: 16px; }
+        .btn { display: inline-block; background-color: #18181b; color: #ffffff !important; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 700; font-size: 16px; }
         .footer { padding: 24px; text-align: center; font-size: 12px; color: #a1a1aa; background-color: #fafafa; border-top: 1px solid #f4f4f5; font-weight: 500; }
         .link-text { color: #a1a1aa; font-size: 11px; word-break: break-all; margin-top: 20px; font-weight: 400; }
     </style>
@@ -74,6 +74,17 @@ const getInviteEmailHtml = (inviteLink: string) => `
 </body>
 </html>
 `;
+
+// Versão texto puro do e-mail. Enviar html + text reduz o spam score (mensagens só-HTML
+// pontuam pior nos filtros) e cobre clientes que não renderizam HTML.
+const getInviteEmailText = (inviteLink: string) => `Você foi convidado para colaborar no Beacon System.
+
+Para aceitar o convite e criar sua senha, acesse:
+${inviteLink}
+
+Se você não esperava este convite, pode ignorar este e-mail com segurança.
+
+— Beacon System`;
 
 serve(instrument("invite-team-member", async (req) => {
     // 1. CORS Preflight
@@ -279,7 +290,16 @@ serve(instrument("invite-team-member", async (req) => {
             throw new Error("API Key do Resend não configurada no Supabase");
         }
 
-        const inviteLink = linkData.properties.action_link;
+        // Link autossuficiente: aponta DIRETO pra produção carregando o token_hash (fluxo verifyOtp).
+        // Independe da Site URL do GoTrue (que estava redirecionando o convite pra localhost) e
+        // mantém o domínio do link IGUAL ao do remetente (@agencybeacon.site) — reduz spam.
+        const tokenHash = linkData?.properties?.hashed_token;
+        const verificationType = linkData?.properties?.verification_type || 'magiclink';
+        if (!tokenHash) {
+            console.error(">>> [ERROR] hashed_token ausente na resposta do generateLink");
+            throw new Error("Falha ao gerar o token do convite (hashed_token ausente)");
+        }
+        const inviteLink = `${siteUrl}/auth/accept-invite?token_hash=${encodeURIComponent(tokenHash)}&type=${encodeURIComponent(verificationType)}`;
         const FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL') || 'Beacon System <contato@agencybeacon.site>';
 
         const resEmail = await fetch('https://api.resend.com/emails', {
@@ -292,7 +312,8 @@ serve(instrument("invite-team-member", async (req) => {
                 from: FROM_EMAIL,
                 to: [normalizedEmail],
                 subject: 'Você foi convidado para o Beacon System',
-                html: getInviteEmailHtml(inviteLink)
+                html: getInviteEmailHtml(inviteLink),
+                text: getInviteEmailText(inviteLink)
             })
         });
 

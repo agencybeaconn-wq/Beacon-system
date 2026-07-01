@@ -27,7 +27,7 @@ Deno.serve(instrument("google-oauth-callback", async (req) => {
         const errorParam = url.searchParams.get('error')
 
         // Parse state — expects JSON: { returnUrl, userId, workspaceId }
-        let appUrl = Deno.env.get('VITE_APP_URL') || 'https://app.leverag.digital'
+        let appUrl = Deno.env.get('VITE_APP_URL') || 'https://agencybeacon.site'
         let stateUserId: string | null = null
         let stateWorkspaceId: string | null = null
 
@@ -154,7 +154,7 @@ Deno.serve(instrument("google-oauth-callback", async (req) => {
     } catch (error: unknown) {
         const message = error instanceof Error ? error.message : 'Internal error'
         console.error('google-oauth-callback error:', error)
-        const appUrl = Deno.env.get('VITE_APP_URL') || 'https://app.leverag.digital'
+        const appUrl = Deno.env.get('VITE_APP_URL') || 'https://agencybeacon.site'
         return Response.redirect(
             `${appUrl}/connections?error=${encodeURIComponent(message)}`
         )

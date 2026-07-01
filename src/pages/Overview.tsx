@@ -537,7 +537,7 @@ const Overview = ({ isPortalView = false }: OverviewProps) => {
       }
 
       // Build the share URL - Always use production domain
-      const prodDomain = import.meta.env.VITE_APP_URL || 'https://app.leverag.digital';
+      const prodDomain = import.meta.env.VITE_APP_URL || 'https://agencybeacon.site';
       const link = `${prodDomain}/portal/${token}`;
       setShareLink(link);
       toast.success(t('overview.share.success', "Share link created!"));

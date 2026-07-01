@@ -10,7 +10,7 @@ const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 const GOOGLE_DRIVE_CLIENT_ID = Deno.env.get('GOOGLE_DRIVE_CLIENT_ID');
 const GOOGLE_DRIVE_CLIENT_SECRET = Deno.env.get('GOOGLE_DRIVE_CLIENT_SECRET');
 // URL pra onde redirecionamos o usuário depois de salvar (frontend)
-const APP_URL = Deno.env.get('APP_URL') || 'http://localhost:8080';
+const APP_URL = Deno.env.get('APP_URL') || 'https://agencybeacon.site';
 function htmlRedirect(url, msg = 'Redirecionando...') {
   // HTML simples com meta refresh — confiável mesmo se JS desabilitado
   return new Response(`<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=${url}"></head><body><p>${msg}</p><script>window.location.href=${JSON.stringify(url)}</script></body></html>`, {

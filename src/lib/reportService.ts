@@ -159,7 +159,7 @@ export async function sendReportEmail(data: ReportEmailData): Promise<{ success:
             metrics: data.metrics,
             reportLink: data.reportLink,
             agencyColor: data.agencyColor || '#7C3AED',
-            agencyName: data.agencyName || 'Leverads',
+            agencyName: data.agencyName || 'Beacon',
             agencyLogo: data.agencyLogo || '',
         };
 
@@ -290,7 +290,7 @@ export async function resendReportEmail(
 
     // Get agency branding from localStorage
     const color = agencyColor || localStorage.getItem('lads_agency_color') || '#7C3AED';
-    const name = localStorage.getItem('lads_agency_name') || 'Leverads';
+    const name = localStorage.getItem('lads_agency_name') || 'Beacon';
     let logo = localStorage.getItem('lads_agency_logo') || '';
 
     // Upload logo if it's base64

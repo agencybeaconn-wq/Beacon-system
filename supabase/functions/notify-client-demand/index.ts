@@ -8,7 +8,7 @@ import { corsHeaders } from '../_shared/cors.ts'
 
 const EVOLUTION_API_URL = Deno.env.get('EVOLUTION_API_URL') || 'https://evo.jotabot.site'
 const EVOLUTION_API_KEY = Deno.env.get('EVOLUTION_API_KEY') || ''
-const PORTAL_URL = Deno.env.get('PORTAL_URL') || 'https://app.leverag.digital'
+const PORTAL_URL = Deno.env.get('PORTAL_URL') || 'https://agencybeacon.site'
 
 const PRIORITY_LABELS: Record<string, string> = {
     low: '🟢 Baixa',

@@ -522,22 +522,23 @@ async function handleDeployStep(supabase: any, body: any) {
 
                 results.created = updated;
 
-                // Create license in external Supabase project (Lever Site - Licenças)
+                // Cria a licença no PRÓPRIO Supabase Beacon (a function roda aqui dentro).
+                // Independente da Lever: usa SUPABASE_URL/SERVICE_ROLE_KEY injetados no runtime.
                 // IMPORTANTE: Shopify tem compiled cache do snippet que não invalida por API,
                 // então após setar o lever_license_key no tema, validamos via HTML público
                 // e se não casar, atualizamos o Supabase pra casar com o HTML (fallback).
                 // Veja memory feedback_shopify_compiled_snippet_cache.md
                 if (data.createLicense !== false) {
                     try {
-                        const licUrl = Deno.env.get('LEVER_SITE_SUPABASE_URL') || 'https://ykctllrqygchllhxnkjh.supabase.co';
-                        const licServiceKey = Deno.env.get('LEVER_SITE_SERVICE_ROLE_KEY');
+                        const licUrl = Deno.env.get('SUPABASE_URL')!;
+                        const licServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
                         if (licServiceKey) {
                             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
                             const seg = (n: number) => Array.from({length: n}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
-                            const licenseKey = `LEVER-${seg(4)}-${seg(4)}`;
+                            const licenseKey = `BEACON-${seg(4)}-${seg(4)}`;
                             const clientName = data.clientName || shop.replace('.myshopify.com', '');
 
-                            // 1. Cria registro no Supabase externo (upsert: se shop_url já existe, atualiza)
+                            // 1. Cria registro no Supabase Beacon (upsert: se shop_url já existe, atualiza)
                             const licRes = await fetch(`${licUrl}/rest/v1/licenses?on_conflict=shop_url`, {
                                 method: 'POST',
                                 headers: {

@@ -147,13 +147,13 @@ export function useAcademyInvites() {
 
   const buildMailto = useCallback((invite: AcademyInvite) => {
     const link = buildLink(invite.token);
-    const moduleTitle = invite.academy_modules?.title || 'Lever Academy';
+    const moduleTitle = invite.academy_modules?.title || 'Beacon Academy';
     const subject = encodeURIComponent(`Seu acesso: ${moduleTitle}`);
     const body = encodeURIComponent(
       `Olá!\n\n` +
       `Você foi convidado pra ${invite.academy_modules?.type === 'mentoria' ? 'mentoria' : 'o curso'}: ${moduleTitle}.\n\n` +
       `Clica no link abaixo pra ativar seu acesso:\n${link}\n\n` +
-      `Se ainda não tiver conta no Lever Academy, é só criar uma na hora do acesso — o convite ativa automaticamente.\n\n` +
+      `Se ainda não tiver conta no Beacon Academy, é só criar uma na hora do acesso — o convite ativa automaticamente.\n\n` +
       (invite.expires_at ? `⏰ Este link expira em ${new Date(invite.expires_at).toLocaleDateString('pt-BR')}.\n\n` : '') +
       `Qualquer dúvida, fala comigo.\n` +
       `Abraço!`
