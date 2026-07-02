@@ -31,11 +31,10 @@ const getInviteEmailHtml = (inviteLink: string) => `
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light only">
     <style>
-        body, h1, h2, h3, p, a, span, div { font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important; }
+        body, h1, h2, h3, p, a, span, div { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important; }
         body { background-color: #f4f4f5; color: #18181b; margin: 0; padding: 0; }
         .wrapper { background-color: #f4f4f5; padding: 40px 20px; }
         .container { max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
@@ -301,6 +300,9 @@ serve(instrument("invite-team-member", async (req) => {
         }
         const inviteLink = `${siteUrl}/auth/accept-invite?token_hash=${encodeURIComponent(tokenHash)}&type=${encodeURIComponent(verificationType)}`;
         const FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL') || 'Beacon System <contato@agencybeacon.site>';
+        // reply_to em mailbox monitorada faz o e-mail parecer correspondência real (não robô),
+        // o que reduz a chance de cair no spam. Sobrescrevível por env.
+        const REPLY_TO = Deno.env.get('RESEND_REPLY_TO') || 'contato@agencybeacon.site';
 
         const resEmail = await fetch('https://api.resend.com/emails', {
             method: 'POST',
@@ -311,6 +313,7 @@ serve(instrument("invite-team-member", async (req) => {
             body: JSON.stringify({
                 from: FROM_EMAIL,
                 to: [normalizedEmail],
+                reply_to: REPLY_TO,
                 subject: 'Você foi convidado para o Beacon System',
                 html: getInviteEmailHtml(inviteLink),
                 text: getInviteEmailText(inviteLink)
