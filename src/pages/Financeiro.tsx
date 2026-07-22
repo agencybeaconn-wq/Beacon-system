@@ -64,7 +64,6 @@ import { InvoicesList } from "@/components/financial/InvoicesList";
 import { ClientProfitabilityModal } from "@/components/financial/ClientProfitabilityModal";
 import { AddTransactionModal } from "@/components/financial/AddTransactionModal";
 import { SalesTab } from "@/components/financial/SalesTab";
-import { DREGerencialView } from "@/components/financial/DREGerencialView";
 import { useSales } from "@/hooks/useSales";
 import { useOneOffReceivables } from "@/hooks/useOneOffReceivables";
 
@@ -327,7 +326,7 @@ const SalesSummaryCards = ({
 const Financeiro = () => {
     const { t } = useTranslation();
     console.log('[Financeiro] Render start');
-    const { dateFilter, dateRange, setDateFilter, setDateRange, workspaceId } = useDashboard();
+    const { dateFilter, dateRange, setDateFilter, setDateRange } = useDashboard();
     const {
         clients,
         expenses,
@@ -354,10 +353,10 @@ const Financeiro = () => {
     const salesData = useSales();
     const oneOffData = useOneOffReceivables();
 
-    // Persistência da aba ativa ("overview" foi removida — cai em "sales")
+    // Persistência da aba ativa ("overview" e "dre" foram removidas — caem em "sales")
     const [activeTab, setActiveTabRaw] = useState(() => {
         const saved = localStorage.getItem('financeiro_active_tab');
-        return !saved || saved === 'overview' ? 'sales' : saved;
+        return !saved || saved === 'overview' || saved === 'dre' ? 'sales' : saved;
     });
 
     const setActiveTab = (val: string) => {
@@ -548,7 +547,6 @@ const Financeiro = () => {
                     <TabsList className="h-10 mr-2">
                         <TabsTrigger value="sales">Vendas</TabsTrigger>
                         <TabsTrigger value="expenses">Despesas & Custos</TabsTrigger>
-                        <TabsTrigger value="dre">DRE Gerencial</TabsTrigger>
                     </TabsList>
 
                     <div className="flex gap-1 items-center bg-secondary/30 p-1 rounded-md border border-white/5 mr-2">
@@ -742,18 +740,6 @@ const Financeiro = () => {
                         onAddPartner={addPartnerProlabore}
                         onUpdatePartner={updatePartnerProlabore}
                         onDeletePartner={deletePartnerProlabore}
-                    />
-                </TabsContent>
-
-                <TabsContent value="dre">
-                    <DREGerencialView
-                        clients={clients}
-                        staffFinancials={staffFinancials}
-                        expenses={expenses}
-                        invoices={invoices}
-                        partnersProlabore={partnersProlabore}
-                        salesTotal={salesData.monthlySummary?.totalInvoiced || 0}
-                        workspaceId={workspaceId}
                     />
                 </TabsContent>
 
