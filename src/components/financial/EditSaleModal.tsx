@@ -30,7 +30,7 @@ import {
     PopoverTrigger
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon, Check, ChevronsUpDown, User } from "lucide-react";
+import { CalendarIcon, Check, ChevronsUpDown, User, Users } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
@@ -57,6 +57,7 @@ export function EditSaleModal({ sale, isOpen, onOpenChange, onUpdateSale }: Edit
     const [balanceDueDate, setBalanceDueDate] = useState<Date | undefined>(undefined);
     const [notes, setNotes] = useState("");
     const [recurrence, setRecurrence] = useState<"one_off" | "recurring">("one_off");
+    const [soldBy, setSoldBy] = useState<"joao" | "matheus" | "">("")
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const selectedClient = clients.find(c => c.id === selectedClientId);
@@ -79,6 +80,7 @@ export function EditSaleModal({ sale, isOpen, onOpenChange, onUpdateSale }: Edit
             setBalanceDueDate(sale.balance_due_date ? parseISO(sale.balance_due_date) : undefined);
             setNotes(sale.notes || "");
             setRecurrence(sale.recurrence || "one_off");
+            setSoldBy(sale.sold_by || "");
         }
     }, [sale, clients]);
 
@@ -107,7 +109,8 @@ export function EditSaleModal({ sale, isOpen, onOpenChange, onUpdateSale }: Edit
                 balance_due_date: balanceDueDate ? format(balanceDueDate, "yyyy-MM-dd") : null,
                 status: status as any,
                 notes: notes || null,
-                recurrence
+                recurrence,
+                sold_by: soldBy as 'joao' | 'matheus' || null
             });
 
             onOpenChange(false);
@@ -124,6 +127,40 @@ export function EditSaleModal({ sale, isOpen, onOpenChange, onUpdateSale }: Edit
                 </DialogHeader>
 
                 <div className="grid gap-4 py-4">
+                    {/* Vendedor Selector */}
+                    <div className="grid gap-2">
+                        <Label>Vendedor</Label>
+                        <div className="flex gap-2">
+                            <Button
+                                type="button"
+                                variant={soldBy === 'joao' ? 'default' : 'outline'}
+                                className={cn(
+                                    "flex-1 gap-2 transition-all",
+                                    soldBy === 'joao'
+                                        ? "bg-blue-600 hover:bg-blue-700 text-white border-blue-600"
+                                        : "hover:border-blue-500/50 hover:text-blue-500"
+                                )}
+                                onClick={() => setSoldBy('joao')}
+                            >
+                                <Users className="h-4 w-4" />
+                                João
+                            </Button>
+                            <Button
+                                type="button"
+                                variant={soldBy === 'matheus' ? 'default' : 'outline'}
+                                className={cn(
+                                    "flex-1 gap-2 transition-all",
+                                    soldBy === 'matheus'
+                                        ? "bg-purple-600 hover:bg-purple-700 text-white border-purple-600"
+                                        : "hover:border-purple-500/50 hover:text-purple-500"
+                                )}
+                                onClick={() => setSoldBy('matheus')}
+                            >
+                                <Users className="h-4 w-4" />
+                                Matheus
+                            </Button>
+                        </div>
+                    </div>
                     {/* Client Selector */}
                     <div className="grid gap-2">
                         <Label>Cliente *</Label>

@@ -19,14 +19,16 @@ if (!customElements.get('slideshow-drag')) {
             this.animationFrame = null;
 
             // Events
-            const options = { passive: false, capture: true };
             this.slider.addEventListener('mousedown', this.onMouseDown.bind(this), true);
             document.addEventListener('mouseup', this.onMouseUp.bind(this), true);
             document.addEventListener('mousemove', this.onMouseMove.bind(this), true);
 
             this.slider.addEventListener('touchstart', this.onMouseDown.bind(this), { passive: true, capture: true });
             document.addEventListener('touchend', this.onMouseUp.bind(this), { passive: true, capture: true });
-            this.slider.addEventListener('touchmove', this.onMouseMove.bind(this), options);
+            // Lever fix (performance): touchmove passivo. O handler retorna cedo no
+            // toque (usa snap nativo) e nunca chama preventDefault, entao passive:true
+            // libera o navegador pra rolar sem esperar o JS (scroll mais fluido no mobile).
+            this.slider.addEventListener('touchmove', this.onMouseMove.bind(this), { passive: true, capture: true });
 
             this.slider.addEventListener('dragstart', (e) => {
                 if (this.isDown) e.preventDefault();

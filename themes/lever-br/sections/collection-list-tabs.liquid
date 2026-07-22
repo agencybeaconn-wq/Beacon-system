@@ -5,7 +5,6 @@
 
 <script src="{{ 'section-tabs.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'slideshow-drag.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'slideshow-drag.js' | asset_url }}" defer="defer"></script>
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -110,23 +109,23 @@
     }
   }
 
+  /* Lever fix: posicionamento das setas, sem forcar visibilidade no mobile */
   .section-{{ section.id }}-padding .slider-buttons {
-    margin-top: 2rem !important;
+    margin-top: 0 !important;
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
     position: relative;
     z-index: 2;
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
   }
 
-  .section-{{ section.id }}-padding .slider-buttons {
-    margin-top: 0 !important; /* Was -3.5rem, moving down to increase space */
-    margin-bottom: 0 !important;
-    padding-bottom: 0 !important;
-    position: relative;
-    z-index: 2;
+  /* So no desktop as setas sao forcadas visiveis; no mobile respeitam o
+     mobile-hidden / o padrao do tema (swipe no lugar de setas) */
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding .slider-buttons:not(.desktop-hidden) {
+      display: flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
   }
 
   .section-{{ section.id }}-padding .slider {

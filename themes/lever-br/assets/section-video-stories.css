@@ -16,6 +16,7 @@
     padding: 1rem 0;
     /* Align with edge */
     scroll-snap-type: x mandatory;
+    scroll-padding-left: 1.5rem;
     -webkit-overflow-scrolling: touch;
     /* Hide scrollbar */
     scrollbar-width: none;
@@ -29,7 +30,7 @@
 .video-stories__item {
     flex: 0 0 auto;
     width: 100px;
-    scroll-snap-align: center;
+    scroll-snap-align: start;
 }
 
 .video-stories__button {
@@ -72,9 +73,10 @@
 
 @media screen and (max-width: 749px) {
     .video-stories__item {
-        /* Mobile: One smaller card focused, others peeking */
+        /* Mobile: cards menores, primeiro alinhado a esquerda (start) para
+           que o primeiro e o ultimo sejam totalmente alcancaveis no swipe */
         width: 60vw;
-        scroll-snap-align: center;
+        scroll-snap-align: start;
     }
 }
 

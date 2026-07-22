@@ -467,6 +467,24 @@
     color: rgb(var(--color-foreground)) !important;
 }
 
+/* ── Lever fix (mobile): titulo do card alinhado e sem sobreposicao de linhas ──
+   - line-height:1.25 vence o line-height:1 herdado de .card-information>* (as linhas colavam)
+   - no mobile (grid 2-col estreito) limita a 2 linhas e reserva a altura,
+     pra que cards vizinhos com titulos de tamanhos diferentes fiquem alinhados */
+.card-information .card__heading {
+    line-height: 1.25 !important;
+}
+
+@media screen and (max-width: 749px) {
+    .card-information .card__heading {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        min-height: 2.5em;
+    }
+}
+
 .card-price-wrapper {
     margin-top: 1rem !important;
 }

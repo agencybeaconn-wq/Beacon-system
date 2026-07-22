@@ -77,7 +77,7 @@
             class="video-stories__button"
             data-video-url="{{ block.settings.video_url }}"
             data-custom-video-url="{{ block.settings.custom_video_url }}"
-            data-video-type="{% if has_shopify_video %}shopify{% elsif has_custom_url %}custom{% else %}external{% endif %}"
+            data-video-type="{% if has_shopify_video %}shopify{% elsif has_custom_url %}custom{% elsif has_external_url %}{{ block.settings.video_url.type }}{% else %}external{% endif %}"
             {% if has_shopify_video %}
               data-shopify-video-src="{{ block.settings.video.sources[1].url }}"
               data-shopify-video-type="{{ block.settings.video.sources[1].mime_type }}"

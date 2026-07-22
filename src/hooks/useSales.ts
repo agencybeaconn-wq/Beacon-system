@@ -18,6 +18,7 @@ export interface SaleRecord {
     status: 'pendente' | 'parcial' | 'pago';
     notes: string | null;
     recurrence?: 'one_off' | 'recurring';
+    sold_by?: 'joao' | 'matheus' | null;
     created_at: string;
 }
 
@@ -207,6 +208,7 @@ export function useSales() {
 
             if (error) throw error;
             setSales(prev => [data, ...prev]);
+            setAllMonthSales(prev => [data, ...prev]);
             toast.success('Venda registrada com sucesso!');
             return data;
         } catch (error: any) {
@@ -226,6 +228,7 @@ export function useSales() {
 
             if (error) throw error;
             setSales(prev => prev.map(s => s.id === id ? data : s));
+            setAllMonthSales(prev => prev.map(s => s.id === id ? data : s));
             toast.success('Venda atualizada');
             return data;
         } catch (error: any) {
@@ -243,6 +246,7 @@ export function useSales() {
 
             if (error) throw error;
             setSales(prev => prev.filter(s => s.id !== id));
+            setAllMonthSales(prev => prev.filter(s => s.id !== id));
             toast.success('Venda removida');
         } catch (error: any) {
             console.error('Error deleting sale:', error);
@@ -277,6 +281,7 @@ export function useSales() {
     return {
         isLoading,
         sales,
+        allMonthSales,
         goal,
         summary: monthlySummary,
         monthlySummary,
