@@ -199,6 +199,7 @@ const ClientFinancialRowItem = ({ client, monthReference, invoices, onInvoiceAct
 // Sales Summary Cards Component (displayed horizontally above tabs)
 const SalesSummaryCards = ({
     mrr,
+    mrrBillable,
     accountsReceivable,
     revenuePaid,
     totalCosts,
@@ -210,6 +211,7 @@ const SalesSummaryCards = ({
     isOneOffLoading
 }: {
     mrr: number,
+    mrrBillable: number,
     accountsReceivable: number,
     revenuePaid: number,
     totalCosts: number,
@@ -220,8 +222,8 @@ const SalesSummaryCards = ({
     isSalesLoading: boolean,
     isOneOffLoading: boolean
 }) => {
-    // Faturado Total = MRR (sempre do mês) + Vendas Avulsas FILTRADAS
-    const combinedInvoiced = (filteredSalesSummary?.totalInvoiced || 0) + (mrr || 0);
+    // Faturado Total = MRR faturável (exclui clientes no 1º mês) + Vendas Avulsas FILTRADAS
+    const combinedInvoiced = (filteredSalesSummary?.totalInvoiced || 0) + (mrrBillable || 0);
 
     // Recebido Total = Recebido das Vendas FILTRADAS + Faturas Pagas FILTRADAS
     const combinedReceived = (filteredSalesSummary?.totalReceived || 0) + (revenuePaid || 0);
@@ -352,9 +354,10 @@ const Financeiro = () => {
     const salesData = useSales();
     const oneOffData = useOneOffReceivables();
 
-    // Persistência da aba ativa
+    // Persistência da aba ativa ("overview" foi removida — cai em "sales")
     const [activeTab, setActiveTabRaw] = useState(() => {
-        return localStorage.getItem('financeiro_active_tab') || 'overview';
+        const saved = localStorage.getItem('financeiro_active_tab');
+        return !saved || saved === 'overview' ? 'sales' : saved;
     });
 
     const setActiveTab = (val: string) => {
@@ -426,7 +429,19 @@ const Financeiro = () => {
             return d >= start && d <= end;
         };
 
-        const filteredInvoices = safeInvoices.filter(i => filterByDate(i.payment_date || i.due_date));
+        // Cliente criado no mês filtrado: o fee do 1º mês já vem embutido na venda de
+        // fechamento (registrada em Vendas), então o fixo e a fatura dele ficam fora das
+        // somas deste mês pra não contar duplicado. A partir do mês seguinte conta normal.
+        const currentMonth = apiDates.endDate.split(' ')[0].substring(0, 7);
+        const firstMonthClientIds = new Set(
+            safeClients
+                .filter(c => String(c.created_at || '').substring(0, 7) === currentMonth)
+                .map(c => c.id)
+        );
+
+        const filteredInvoices = safeInvoices.filter(i =>
+            filterByDate(i.payment_date || i.due_date) && !firstMonthClientIds.has(i.client_id)
+        );
         const filteredExpenses = safeExpenses.filter(e => filterByDate(e.payment_date || e.due_date));
 
         const totalFeesPaid = filteredInvoices.filter(i => i.status === 'paid').reduce((acc, i) => acc + (i.amount || 0), 0);
@@ -452,11 +467,17 @@ const Financeiro = () => {
 
         const mrrSum = safeClients.reduce((acc, c) => acc + (c.fee_fixed || 0), 0);
 
+        // MRR que entra no Faturado do mês (exclui clientes no 1º mês)
+        const mrrBillable = safeClients
+            .filter(c => !firstMonthClientIds.has(c.id))
+            .reduce((acc, c) => acc + (c.fee_fixed || 0), 0);
+
         return {
             revenuePaid: totalFeesPaid,
             totalFeesInvoiced: totalFeesInvoiced,
             accountsReceivable: accountsReceivable,
             mrr: mrrSum,
+            mrrBillable: mrrBillable,
             totalCosts: totalCosts
         };
     }, [invoices, expenses, clients, staffFinancials, partnersProlabore, oneOffData.summary, apiDates]);
@@ -525,7 +546,6 @@ const Financeiro = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                     <TabsList className="h-10 mr-2">
-                        <TabsTrigger value="overview">Visão Geral</TabsTrigger>
                         <TabsTrigger value="sales">Vendas</TabsTrigger>
                         <TabsTrigger value="expenses">Despesas & Custos</TabsTrigger>
                         <TabsTrigger value="dre">DRE Gerencial</TabsTrigger>
@@ -594,8 +614,8 @@ const Financeiro = () => {
             </div>
 
             <div className="space-y-6">
-                <TabsContent value="overview" className="space-y-6 mt-0">
-                    {/* Global Sales Summary Cards - Horizontal */}
+                <TabsContent value="sales" className="space-y-6 mt-0">
+                    {/* Resumo financeiro - Horizontal */}
                     <SalesSummaryCards
                         {...stats}
                         salesSummary={salesData.monthlySummary}
@@ -605,14 +625,14 @@ const Financeiro = () => {
                         isOneOffLoading={oneOffData.isLoading}
                     />
 
-                    {/* Metrics moved to header as requested by USER */}
+                    <SalesTab {...salesData} />
 
-                    {/* Clients Table */}
+                    {/* Clientes com fee fixo (MRR) */}
                     <Card className="border border-border/50 bg-background/50 overflow-hidden">
                         <div className="px-6 pt-6 pb-4">
                             <div className="flex items-center justify-between">
                                 <h3 className="text-lg font-bold">
-                                    Detalhamento por Operação
+                                    Clientes Fixo (MRR)
                                     <span className="ml-2 text-xs font-normal text-muted-foreground">
                                         ({apiDates.startDate.split(' ')[0].split('-').reverse().join('/')} a {apiDates.endDate.split(' ')[0].split('-').reverse().join('/')})
                                     </span>
@@ -707,12 +727,6 @@ const Financeiro = () => {
                         )}
                     </Card>
                 </TabsContent>
-
-                <TabsContent value="sales">
-                    <SalesTab {...salesData} />
-                </TabsContent>
-
-
 
                 <TabsContent value="expenses">
                     <ExpensesList
