@@ -331,8 +331,8 @@ export function SalesTab({
                 </Card>
 
                 {/* Right: Progress (total) */}
-                <Card className="p-6 bg-background border border-border/50">
-                    <div className="flex items-center justify-between mb-4">
+                <Card className="p-6 bg-background border border-border/50 flex flex-col justify-between">
+                    <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             {sellerSummary.isAboveGoal ? (
                                 <TrendingUp className="h-5 w-5 text-emerald-500" />
@@ -353,14 +353,14 @@ export function SalesTab({
                         </Badge>
                     </div>
 
-                    <div className="space-y-2">
+                    <div className="space-y-4 my-auto py-4">
                         <div className="flex justify-between text-sm">
                             <span className="text-muted-foreground">Total Vendido</span>
                             <span className="font-semibold">{formatCurrency(sellerSummary.totalSold)}</span>
                         </div>
 
                         {/* Progress Bar */}
-                        <div className="h-3 bg-muted rounded-full overflow-hidden">
+                        <div className="h-3.5 bg-muted rounded-full overflow-hidden">
                             <div
                                 className={cn(
                                     "h-full rounded-full transition-all duration-500",
@@ -444,10 +444,10 @@ export function SalesTab({
                             <TableHead className="pl-6 border-r border-border/50">Cliente</TableHead>
                             <TableHead className="border-r border-border/50">Serviço</TableHead>
                             <TableHead className="border-r border-border/50">Vendedor</TableHead>
-                            <TableHead className="border-r border-border/50">Tipo</TableHead>
                             <TableHead className="border-r border-border/50">Data</TableHead>
                             <TableHead className="border-r border-border/50">Valor Total</TableHead>
                             <TableHead className="border-r border-border/50">Entrada</TableHead>
+                            <TableHead className="border-r border-border/50">A Receber</TableHead>
                             <TableHead className="border-r border-border/50">Pagamento</TableHead>
                             <TableHead className="border-r border-border/50">Status</TableHead>
                             <TableHead className="text-left pr-6">Ações</TableHead>
@@ -487,23 +487,16 @@ export function SalesTab({
                                         {getSellerBadge(sale.sold_by)}
                                     </TableCell>
                                     <TableCell className="border-r border-border/50">
-                                        <Badge variant="outline" className={cn(
-                                            "text-[10px] font-bold uppercase",
-                                            sale.recurrence === 'recurring'
-                                                ? "border-purple-500/20 text-purple-500 bg-purple-500/5"
-                                                : "border-blue-500/20 text-blue-500 bg-blue-500/5"
-                                        )}>
-                                            {sale.recurrence === 'recurring' ? 'MRR' : 'Avulso'}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell className="border-r border-border/50">
                                         {format(parseISO(sale.sale_date), "dd/MM/yy")}
                                     </TableCell>
                                     <TableCell className="font-semibold border-r border-border/50">
                                         {formatCurrency(sale.total_amount)}
                                     </TableCell>
-                                    <TableCell className="border-r border-border/50">
+                                    <TableCell className="border-r border-border/50 text-emerald-500 font-medium">
                                         {formatCurrency(sale.entry_amount)}
+                                    </TableCell>
+                                    <TableCell className="border-r border-border/50 text-amber-500 font-medium">
+                                        {formatCurrency(sale.status === 'pago' ? 0 : Math.max(0, (sale.total_amount || 0) - (sale.entry_amount || 0)))}
                                     </TableCell>
                                     <TableCell className="border-r border-border/50">
                                         {getPaymentMethodLabel(sale.payment_method)}

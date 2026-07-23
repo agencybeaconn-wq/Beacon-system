@@ -134,6 +134,7 @@ const mainMenuItems: MenuItem[] = [
     ]
   },
 
+  { section: 'management', title: "Google Calendar", transKey: "sidebar.google_calendar", url: "/google-calendar", icon: Calendar },
   { section: 'management', title: "Ajustes", transKey: "sidebar.settings", url: "/settings", icon: Settings },
 ];
 
