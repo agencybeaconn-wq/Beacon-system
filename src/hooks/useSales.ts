@@ -17,8 +17,10 @@ export interface SaleRecord {
     balance_due_date: string | null;
     status: 'pendente' | 'parcial' | 'pago';
     notes: string | null;
-    recurrence?: 'one_off' | 'recurring';
+    recurrence?: 'one_off' | 'recurring' | null;
     sold_by?: 'joao' | 'matheus' | null;
+    referral_name?: string | null;
+    commission_pct?: number | null;
     created_at: string;
 }
 
@@ -34,6 +36,8 @@ export interface SalesSummary {
     totalSold: number;     // Volume (All Sales)
     totalReceived: number;
     totalPending: number;
+    totalCommission: number;          // Comissões de indicação (todas as vendas do escopo)
+    totalCommissionInvoiced: number;  // Comissões só das vendas one-off (consistente com totalInvoiced)
     goalAmount: number;
     goalPercentage: number;
     remainingToGoal: number;
@@ -144,6 +148,13 @@ export function useSales() {
             return acc;
         }, 0);
 
+        // Comissões de indicação = total_amount * commission_pct / 100 (valor sempre derivado)
+        const totalCommission = safeSales.reduce(
+            (acc, s) => acc + ((s.total_amount || 0) * (s.commission_pct || 0)) / 100, 0);
+        const totalCommissionInvoiced = safeSales
+            .filter(s => s.recurrence !== 'recurring')
+            .reduce((acc, s) => acc + ((s.total_amount || 0) * (s.commission_pct || 0)) / 100, 0);
+
         const goalAmount = goal?.goal_amount || 0;
         const goalPercentage = goalAmount > 0 ? (totalSold / goalAmount) * 100 : 0;
         const remainingToGoal = Math.max(0, goalAmount - totalSold);
@@ -154,6 +165,8 @@ export function useSales() {
             totalSold,
             totalReceived,
             totalPending,
+            totalCommission,
+            totalCommissionInvoiced,
             goalAmount,
             goalPercentage,
             remainingToGoal,
@@ -181,11 +194,19 @@ export function useSales() {
             return acc;
         }, 0);
 
+        const totalCommission = safeSales.reduce(
+            (acc, s) => acc + ((s.total_amount || 0) * (s.commission_pct || 0)) / 100, 0);
+        const totalCommissionInvoiced = safeSales
+            .filter(s => s.recurrence !== 'recurring')
+            .reduce((acc, s) => acc + ((s.total_amount || 0) * (s.commission_pct || 0)) / 100, 0);
+
         return {
             totalInvoiced,
             totalSold,
             totalReceived,
             totalPending,
+            totalCommission,
+            totalCommissionInvoiced,
             goalAmount: goal?.goal_amount || 0,
             goalPercentage: 0,
             remainingToGoal: 0,

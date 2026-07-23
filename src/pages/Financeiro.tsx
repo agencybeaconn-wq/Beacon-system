@@ -23,7 +23,8 @@ import {
     FileText,
     BarChart3,
     ChevronLeft,
-    ChevronRight
+    ChevronRight,
+    HandCoins
 } from "lucide-react";
 import {
     Table,
@@ -227,17 +228,21 @@ const SalesSummaryCards = ({
     // Recebido Total = Recebido das Vendas FILTRADAS + Faturas Pagas FILTRADAS
     const combinedReceived = (filteredSalesSummary?.totalReceived || 0) + (revenuePaid || 0);
 
-    // A Receber = Faturado - Recebido (no período filtrado) -- ou global? 
+    // A Receber = Faturado - Recebido (no período filtrado) -- ou global?
     // Para "A Receber", geralmente olhamos o saldo pendente total por segurança
     const combinedPending = Math.max(0, combinedInvoiced - combinedReceived);
 
-    // Lucro = Recebido - Custos
-    const profit = combinedReceived - totalCosts;
+    // Comissões de indicação (derivadas de total_amount * commission_pct / 100)
+    const totalCommission = filteredSalesSummary?.totalCommission || 0;
+    const totalCommissionInvoiced = filteredSalesSummary?.totalCommissionInvoiced || 0;
+
+    // Lucro = Recebido - Custos - Comissões pagas a indicadores
+    const profit = combinedReceived - totalCosts - totalCommission;
 
     const isLoading = isSalesLoading || isOneOffLoading;
 
     return (
-        <div className="grid gap-3 grid-cols-2 lg:grid-cols-6">
+        <div className="grid gap-3 grid-cols-2 lg:grid-cols-7">
             {/* 1. MRR */}
             <Card className="p-3 bg-background border border-border/50 hover:border-emerald-500/50 transition-colors">
                 <div className="flex items-center justify-between">
@@ -257,7 +262,14 @@ const SalesSummaryCards = ({
                 </div>
                 <div className="mt-1">
                     {isLoading ? <Skeleton className="h-5 w-20" /> : (
-                        <span className="text-base font-bold">{formatCurrency(combinedInvoiced)}</span>
+                        <>
+                            <span className="text-base font-bold">{formatCurrency(combinedInvoiced)}</span>
+                            {totalCommissionInvoiced > 0 && (
+                                <p className="text-[9px] text-muted-foreground leading-tight">
+                                    líquido: {formatCurrency(combinedInvoiced - totalCommissionInvoiced)}
+                                </p>
+                            )}
+                        </>
                     )}
                 </div>
             </Card>
@@ -299,7 +311,20 @@ const SalesSummaryCards = ({
                 </div>
             </Card>
 
-            {/* 6. Lucro Real */}
+            {/* 6. Comissões (pagas a indicadores no período) */}
+            <Card className="p-3 bg-background border border-border/50 hover:border-orange-500/50 transition-colors">
+                <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-muted-foreground capitalize tracking-tight">Comissões</span>
+                    <HandCoins className="h-3 w-3 text-orange-500" />
+                </div>
+                <div className="mt-1">
+                    {isLoading ? <Skeleton className="h-5 w-20" /> : (
+                        <span className="text-base font-bold text-orange-500">{formatCurrency(totalCommission)}</span>
+                    )}
+                </div>
+            </Card>
+
+            {/* 7. Lucro Real */}
             <Card className="p-3 bg-background border border-border/50 hover:border-purple-500/50 transition-colors">
                 <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-muted-foreground capitalize tracking-tight">Lucro Real</span>
@@ -504,7 +529,8 @@ const Financeiro = () => {
                         <Skeleton className="h-6 w-64" />
                     </div>
                 </div>
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                    <Skeleton className="h-24 w-full" />
                     <Skeleton className="h-24 w-full" />
                     <Skeleton className="h-24 w-full" />
                     <Skeleton className="h-24 w-full" />

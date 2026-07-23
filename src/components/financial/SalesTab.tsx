@@ -123,6 +123,13 @@ export function SalesTab({
             return acc;
         }, 0);
 
+        // Comissões de indicação (derivadas de total_amount * commission_pct / 100)
+        const totalCommission = safeSales.reduce(
+            (acc, s) => acc + ((s.total_amount || 0) * (s.commission_pct || 0)) / 100, 0);
+        const totalCommissionInvoiced = safeSales
+            .filter(s => s.recurrence !== 'recurring')
+            .reduce((acc, s) => acc + ((s.total_amount || 0) * (s.commission_pct || 0)) / 100, 0);
+
         // Meta dividida por 2 quando filtro por vendedor
         const goalAmount = (goal?.goal_amount || 0) / 2;
         const goalPercentage = goalAmount > 0 ? (totalSold / goalAmount) * 100 : 0;
@@ -134,6 +141,8 @@ export function SalesTab({
             totalSold,
             totalReceived,
             totalPending,
+            totalCommission,
+            totalCommissionInvoiced,
             goalAmount,
             goalPercentage,
             remainingToGoal,
@@ -359,6 +368,13 @@ export function SalesTab({
                             <span className="font-semibold">{formatCurrency(sellerSummary.totalSold)}</span>
                         </div>
 
+                        {(sellerSummary.totalCommission || 0) > 0 && (
+                            <div className="flex justify-between text-xs -mt-3">
+                                <span className="text-muted-foreground/70">líquido de comissões</span>
+                                <span className="text-muted-foreground">{formatCurrency(sellerSummary.totalSold - sellerSummary.totalCommission)}</span>
+                            </div>
+                        )}
+
                         {/* Progress Bar */}
                         <div className="h-3.5 bg-muted rounded-full overflow-hidden">
                             <div
@@ -482,7 +498,14 @@ export function SalesTab({
                             paginatedSales.map((sale) => (
                                 <TableRow key={sale.id} className="group hover:bg-muted/50">
                                     <TableCell className="font-medium pl-6 border-r border-border/50">{sale.client_name}</TableCell>
-                                    <TableCell className="text-muted-foreground border-r border-border/50">{sale.service || "-"}</TableCell>
+                                    <TableCell className="text-muted-foreground border-r border-border/50">
+                                        <div>{sale.service || "-"}</div>
+                                        {(sale.commission_pct || 0) > 0 && (
+                                            <div className="text-[10px] text-orange-500/90 mt-0.5 whitespace-nowrap">
+                                                Indicação: {sale.referral_name || "—"} ({Number(sale.commission_pct)}% · {formatCurrency(((sale.total_amount || 0) * (sale.commission_pct || 0)) / 100)})
+                                            </div>
+                                        )}
+                                    </TableCell>
                                     <TableCell className="border-r border-border/50">
                                         {getSellerBadge(sale.sold_by)}
                                     </TableCell>

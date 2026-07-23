@@ -30,10 +30,11 @@ import {
     PopoverTrigger
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon, Check, ChevronsUpDown, User, Users } from "lucide-react";
+import { CalendarIcon, Check, ChevronsUpDown, HandCoins, User, Users } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
+import { formatCurrencyBRL as formatCurrency } from "@/lib/formatters";
 import { SaleRecord } from "@/hooks/useSales";
 import { useDashboard } from "@/contexts/DashboardContext";
 
@@ -57,9 +58,19 @@ export function AddSaleModal({ isOpen, onOpenChange, onAddSale }: AddSaleModalPr
     const [notes, setNotes] = useState("");
     const [recurrence, setRecurrence] = useState<"one_off" | "recurring">("one_off");
     const [soldBy, setSoldBy] = useState<"joao" | "matheus" | "">("")
+    const [hasCommission, setHasCommission] = useState(false);
+    const [referralName, setReferralName] = useState("");
+    const [commissionPct, setCommissionPct] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const selectedClient = clients.find(c => c.id === selectedClientId);
+
+    // Comissionamento (indicação): % sempre sobre o valor total da venda
+    const pctParsed = Math.min(100, Math.max(0, parseFloat(commissionPct.replace(",", ".")) || 0));
+    const commissionPreview = hasCommission
+        ? ((parseFloat(totalAmount.replace(",", ".")) || 0) * pctParsed) / 100
+        : 0;
+    const commissionInvalid = hasCommission && (!referralName.trim() || pctParsed <= 0);
 
     const resetForm = () => {
         setSelectedClientId("");
@@ -73,6 +84,9 @@ export function AddSaleModal({ isOpen, onOpenChange, onAddSale }: AddSaleModalPr
         setNotes("");
         setRecurrence("one_off");
         setSoldBy("");
+        setHasCommission(false);
+        setReferralName("");
+        setCommissionPct("");
     };
 
     const handleSubmit = async () => {
@@ -102,7 +116,9 @@ export function AddSaleModal({ isOpen, onOpenChange, onAddSale }: AddSaleModalPr
                 status: status as any,
                 notes: notes || null,
                 recurrence,
-                sold_by: soldBy as 'joao' | 'matheus'
+                sold_by: soldBy as 'joao' | 'matheus',
+                referral_name: hasCommission && referralName.trim() ? referralName.trim() : null,
+                commission_pct: hasCommission && pctParsed > 0 ? pctParsed : null
             });
 
             resetForm();
@@ -261,6 +277,61 @@ export function AddSaleModal({ isOpen, onOpenChange, onAddSale }: AddSaleModalPr
                         />
                     </div>
 
+                    {/* Comissionamento (indicação) */}
+                    <div className="grid gap-2">
+                        <Label>Comissionamento?</Label>
+                        <div className="flex gap-2">
+                            <Button
+                                type="button"
+                                variant={!hasCommission ? 'default' : 'outline'}
+                                className="flex-1 gap-2 transition-all"
+                                onClick={() => setHasCommission(false)}
+                            >
+                                Não
+                            </Button>
+                            <Button
+                                type="button"
+                                variant={hasCommission ? 'default' : 'outline'}
+                                className={cn(
+                                    "flex-1 gap-2 transition-all",
+                                    hasCommission
+                                        ? "bg-orange-600 hover:bg-orange-700 text-white border-orange-600"
+                                        : "hover:border-orange-500/50 hover:text-orange-500"
+                                )}
+                                onClick={() => setHasCommission(true)}
+                            >
+                                <HandCoins className="h-4 w-4" />
+                                Sim
+                            </Button>
+                        </div>
+                        {hasCommission && (
+                            <div className="grid grid-cols-2 gap-4 pt-1">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="referralName">Quem indicou</Label>
+                                    <Input
+                                        id="referralName"
+                                        value={referralName}
+                                        onChange={(e) => setReferralName(e.target.value)}
+                                        placeholder="Ex: Lucas"
+                                    />
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="commissionPct">% de comissão</Label>
+                                    <Input
+                                        id="commissionPct"
+                                        value={commissionPct}
+                                        inputMode="decimal"
+                                        onChange={(e) => setCommissionPct(e.target.value)}
+                                        placeholder="10"
+                                    />
+                                </div>
+                                <p className="col-span-2 text-[10px] text-muted-foreground">
+                                    Comissão: <span className="font-semibold text-orange-500">{formatCurrency(commissionPreview)}</span> (descontada do lucro; a venda conta o valor cheio na meta)
+                                </p>
+                            </div>
+                        )}
+                    </div>
+
                     <div className="grid gap-2">
                         <Label>Tipo de Venda</Label>
                         <Select value={recurrence} onValueChange={(v: any) => setRecurrence(v)}>
@@ -369,7 +440,7 @@ export function AddSaleModal({ isOpen, onOpenChange, onAddSale }: AddSaleModalPr
                     </Button>
                     <Button
                         onClick={handleSubmit}
-                        disabled={isSubmitting || !selectedClientId || !totalAmount || !soldBy}
+                        disabled={isSubmitting || !selectedClientId || !totalAmount || !soldBy || commissionInvalid}
                         className="bg-primary"
                     >
                         {isSubmitting ? "Salvando..." : "Registrar Venda"}

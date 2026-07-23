@@ -1049,6 +1049,10 @@ export interface Database {
           balance_due_date: string | null
           status: 'pendente' | 'parcial' | 'pago'
           notes: string | null
+          recurrence: 'one_off' | 'recurring' | null
+          sold_by: 'joao' | 'matheus' | null
+          referral_name: string | null
+          commission_pct: number | null
           created_at: string
           updated_at: string
         }
@@ -1065,6 +1069,10 @@ export interface Database {
           balance_due_date?: string | null
           status?: 'pendente' | 'parcial' | 'pago'
           notes?: string | null
+          recurrence?: 'one_off' | 'recurring' | null
+          sold_by?: 'joao' | 'matheus' | null
+          referral_name?: string | null
+          commission_pct?: number | null
           created_at?: string
           updated_at?: string
         }
@@ -1081,6 +1089,10 @@ export interface Database {
           balance_due_date?: string | null
           status?: 'pendente' | 'parcial' | 'pago'
           notes?: string | null
+          recurrence?: 'one_off' | 'recurring' | null
+          sold_by?: 'joao' | 'matheus' | null
+          referral_name?: string | null
+          commission_pct?: number | null
           created_at?: string
           updated_at?: string
         }
