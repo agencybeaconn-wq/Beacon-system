@@ -974,8 +974,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
                     client_id: cleanedClientId,
                     title: taskData.title,
                     description: taskData.description || "",
-                    status: (taskData.status || 'todo') === 'done' ? 'completed' :
-                        (taskData.status === 'todo' ? 'pending' : taskData.status),
+                    status: (taskData.status || 'todo') === 'done' ? 'concluido' : (taskData.status || 'todo'),
                     priority: taskData.priority || 'medium',
                     area: taskData.area || 'strategy',
                     assignee_id: cleanedAssigneeId,
