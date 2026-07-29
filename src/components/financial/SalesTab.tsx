@@ -77,6 +77,7 @@ export function SalesTab({
     const [isEditGoalOpen, setIsEditGoalOpen] = useState(false);
     const [goalInput, setGoalInput] = useState("");
     const [sellerFilter, setSellerFilter] = useState<'all' | 'joao' | 'matheus'>('all');
+    const [statusFilter, setStatusFilter] = useState<'all' | 'pago' | 'parcial' | 'pendente'>('all');
 
     // Pagination states
     const [currentPage, setCurrentPage] = useState(1);
@@ -89,11 +90,17 @@ export function SalesTab({
         setGoalInput("");
     };
 
-    // Filter sales by seller
+    // Filter sales by seller + status
     const filteredSales = useMemo(() => {
-        if (sellerFilter === 'all') return sales || [];
-        return (sales || []).filter(s => s.sold_by === sellerFilter);
-    }, [sales, sellerFilter]);
+        let result = sales || [];
+        if (sellerFilter !== 'all') {
+            result = result.filter(s => s.sold_by === sellerFilter);
+        }
+        if (statusFilter !== 'all') {
+            result = result.filter(s => (s.status || 'pendente') === statusFilter);
+        }
+        return result;
+    }, [sales, sellerFilter, statusFilter]);
 
     // Filter allMonthSales by seller for progress recalculation
     const filteredMonthSales = useMemo(() => {
@@ -446,6 +453,50 @@ export function SalesTab({
                                     Matheus
                                 </Button>
                             </div>
+                            {/* Status Filter Buttons */}
+                            <div className="flex gap-1 items-center bg-secondary/30 p-1 rounded-md border border-white/5">
+                                <Button
+                                    variant={statusFilter === 'all' ? 'default' : 'ghost'}
+                                    size="sm"
+                                    onClick={() => { setStatusFilter('all'); setCurrentPage(1); }}
+                                    className={cn("rounded-sm text-xs h-7 px-3", statusFilter === 'all' && "font-semibold")}
+                                >
+                                    Todos
+                                </Button>
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => { setStatusFilter('pago'); setCurrentPage(1); }}
+                                    className={cn(
+                                        "rounded-sm text-xs h-7 px-3 text-emerald-500 hover:text-emerald-500 hover:bg-emerald-500/10",
+                                        statusFilter === 'pago' && "font-semibold bg-emerald-500/15"
+                                    )}
+                                >
+                                    Recebidos
+                                </Button>
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => { setStatusFilter('parcial'); setCurrentPage(1); }}
+                                    className={cn(
+                                        "rounded-sm text-xs h-7 px-3 text-amber-500 hover:text-amber-500 hover:bg-amber-500/10",
+                                        statusFilter === 'parcial' && "font-semibold bg-amber-500/15"
+                                    )}
+                                >
+                                    Parciais
+                                </Button>
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => { setStatusFilter('pendente'); setCurrentPage(1); }}
+                                    className={cn(
+                                        "rounded-sm text-xs h-7 px-3 text-red-500 hover:text-red-500 hover:bg-red-500/10",
+                                        statusFilter === 'pendente' && "font-semibold bg-red-500/15"
+                                    )}
+                                >
+                                    A Receber
+                                </Button>
+                            </div>
                         </div>
                         <Button onClick={() => setIsAddModalOpen(true)}>
                             <Plus className="h-4 w-4 mr-2" />
@@ -488,8 +539,8 @@ export function SalesTab({
                         ) : filteredSales.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={10} className="text-center text-muted-foreground py-8">
-                                    {sellerFilter !== 'all'
-                                        ? `Nenhuma venda de ${sellerFilter === 'joao' ? 'João' : 'Matheus'} neste período.`
+                                    {sellerFilter !== 'all' || statusFilter !== 'all'
+                                        ? 'Nenhuma venda encontrada com os filtros selecionados.'
                                         : 'Nenhuma venda registrada neste período.'
                                     }
                                 </TableCell>
