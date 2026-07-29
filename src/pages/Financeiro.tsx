@@ -511,9 +511,10 @@ const Financeiro = () => {
         return (clients || []).filter((client: any) => (client.fee_fixed || 0) > 0);
     }, [clients]);
 
-    const totalPages = Math.ceil(overviewClients.length / itemsPerPage);
+    const totalPages = itemsPerPage > 0 ? Math.ceil(overviewClients.length / itemsPerPage) : 1;
 
     const paginatedClients = useMemo(() => {
+        if (itemsPerPage === 0) return overviewClients;
         const start = (currentPage - 1) * itemsPerPage;
         const end = start + itemsPerPage;
         return overviewClients.slice(start, end);
@@ -707,7 +708,7 @@ const Financeiro = () => {
                         {!isLoading && overviewClients.length > 0 && (
                             <div className="flex items-center justify-between border-t border-border/50 px-6 py-4">
                                 <div className="text-sm text-muted-foreground">
-                                    Mostrando <span className="font-medium text-foreground">{Math.min(((currentPage - 1) * itemsPerPage) + 1, overviewClients.length)}</span> a <span className="font-medium text-foreground">{Math.min(currentPage * itemsPerPage, overviewClients.length)}</span> de <span className="font-medium text-foreground">{overviewClients.length}</span> resultados
+                                    Mostrando <span className="font-medium text-foreground">{Math.min(((currentPage - 1) * itemsPerPage) + 1, overviewClients.length)}</span> a <span className="font-medium text-foreground">{itemsPerPage > 0 ? Math.min(currentPage * itemsPerPage, overviewClients.length) : overviewClients.length}</span> de <span className="font-medium text-foreground">{overviewClients.length}</span> resultados
                                 </div>
 
                                 <div className="flex items-center space-x-6 lg:space-x-8">
@@ -721,6 +722,7 @@ const Financeiro = () => {
                                             <option value="10">10</option>
                                             <option value="20">20</option>
                                             <option value="50">50</option>
+                                            <option value="0">Todos</option>
                                         </select>
                                     </div>
                                     <div className="flex w-[100px] items-center justify-center text-sm font-medium">

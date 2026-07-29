@@ -72,9 +72,10 @@ export function OneOffReceivablesTab({
         setIsModalOpen(true);
     };
 
-    // Pagination logic
-    const totalPages = Math.ceil((receivables?.length || 0) / itemsPerPage);
+    // Pagination logic (itemsPerPage 0 = sem limite)
+    const totalPages = itemsPerPage > 0 ? Math.ceil((receivables?.length || 0) / itemsPerPage) : 1;
     const paginatedReceivables = useMemo(() => {
+        if (itemsPerPage === 0) return receivables || [];
         const start = (currentPage - 1) * itemsPerPage;
         const end = start + itemsPerPage;
         return (receivables || []).slice(start, end);
@@ -310,7 +311,7 @@ export function OneOffReceivablesTab({
                     {!isLoading && receivables.length > 0 && (
                         <div className="flex items-center justify-between border-t border-border/50 px-6 py-4">
                             <div className="text-sm text-muted-foreground">
-                                Mostrando <span className="font-medium text-foreground">{Math.min(((currentPage - 1) * itemsPerPage) + 1, receivables.length)}</span> a <span className="font-medium text-foreground">{Math.min(currentPage * itemsPerPage, receivables.length)}</span> de <span className="font-medium text-foreground">{receivables.length}</span> resultados
+                                Mostrando <span className="font-medium text-foreground">{Math.min(((currentPage - 1) * itemsPerPage) + 1, receivables.length)}</span> a <span className="font-medium text-foreground">{itemsPerPage > 0 ? Math.min(currentPage * itemsPerPage, receivables.length) : receivables.length}</span> de <span className="font-medium text-foreground">{receivables.length}</span> resultados
                             </div>
 
                             <div className="flex items-center space-x-6 lg:space-x-8">
@@ -324,6 +325,7 @@ export function OneOffReceivablesTab({
                                         <option value="10">10</option>
                                         <option value="20">20</option>
                                         <option value="50">50</option>
+                                        <option value="0">Todos</option>
                                     </select>
                                 </div>
                                 <div className="flex w-[100px] items-center justify-center text-sm font-medium">
