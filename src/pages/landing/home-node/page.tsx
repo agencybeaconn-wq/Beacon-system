@@ -6,6 +6,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import nodeLogo from '@/assets/node-logo.png';
+import LightRays from './LightRays';
 
 const WHATS = 'https://wa.me/5531984083376?text=Ol%C3%A1%2C%20quero%20falar%20com%20a%20NODE%20sobre%20um%20projeto.';
 const INSTA = 'https://www.instagram.com/noode.dev/';
@@ -204,7 +205,8 @@ export default function HomeNode() {
         .nlp-hero{position:relative;padding-top:170px!important;padding-bottom:90px!important}
         .nlp-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;
           mask-image:radial-gradient(120% 90% at 50% 30%,#000 30%,transparent 78%)}
-        .nlp-hero-in{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:26px}
+        .nlp-rays{opacity:.9;mask-image:linear-gradient(180deg,#000 60%,transparent 98%)}
+        .nlp-hero-in{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:26px;z-index:1}
         .nlp-hero p{font-size:clamp(1rem,1.4vw,1.18rem)}
         .nlp-ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
         .nlp-stats{display:flex;justify-content:center;flex-wrap:wrap;margin-top:70px;width:100%}
@@ -299,6 +301,19 @@ export default function HomeNode() {
             {/* HERO */}
             <section className="nlp-hero" id="top">
                 <canvas ref={canvasRef} className="nlp-canvas" />
+                <LightRays
+                    raysOrigin="top-center"
+                    raysColor="#ffffff"
+                    raysSpeed={1.2}
+                    lightSpread={1.3}
+                    rayLength={2.4}
+                    fadeDistance={1.4}
+                    followMouse
+                    mouseInfluence={0.12}
+                    noiseAmount={0.08}
+                    distortion={0.05}
+                    className="nlp-rays"
+                />
                 <div className="nlp-wrap nlp-hero-in">
                     <span className="nlp-chip nlp-reveal"><i />operando agora</span>
                     <span className="nlp-mono nlp-reveal">{'// sistemas · e-commerce · ia aplicada'}</span>
