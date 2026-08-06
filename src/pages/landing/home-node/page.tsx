@@ -6,7 +6,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import nodeLogo from '@/assets/node-logo.png';
-import LightRays from './LightRays';
+import Galaxy from './Galaxy';
 
 const WHATS = 'https://wa.me/5531984083376?text=Ol%C3%A1%2C%20quero%20falar%20com%20a%20NODE%20sobre%20um%20projeto.';
 const INSTA = 'https://www.instagram.com/noode.dev/';
@@ -60,60 +60,6 @@ const FAQS = [
     { q: 'Quais tecnologias vocês dominam?', a: 'Shopify, WooCommerce, VTEX, NuvemShop e Yampi no e-commerce. Supabase, Vercel e Stripe em sistemas. OpenAI e Claude na parte de IA.' },
 ];
 
-// ─── Canvas: rede de nós (assinatura visual do nome) ────────────────────────
-function useNodeGraph(canvasRef: React.RefObject<HTMLCanvasElement>) {
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-        let raf = 0;
-        const DPR = Math.min(window.devicePixelRatio || 1, 2);
-        const N = 42;
-        let W = 0, H = 0;
-        const pts = Array.from({ length: N }, () => ({ x: Math.random(), y: Math.random(), vx: (Math.random() - .5) * .0004, vy: (Math.random() - .5) * .0004 }));
-        const resize = () => {
-            W = canvas.offsetWidth; H = canvas.offsetHeight;
-            canvas.width = W * DPR; canvas.height = H * DPR;
-            ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-        };
-        resize();
-        window.addEventListener('resize', resize);
-        const tick = () => {
-            ctx.clearRect(0, 0, W, H);
-            for (const p of pts) {
-                p.x += p.vx; p.y += p.vy;
-                if (p.x < 0 || p.x > 1) p.vx *= -1;
-                if (p.y < 0 || p.y > 1) p.vy *= -1;
-            }
-            for (let i = 0; i < N; i++) {
-                for (let j = i + 1; j < N; j++) {
-                    const dx = (pts[i].x - pts[j].x) * W, dy = (pts[i].y - pts[j].y) * H;
-                    const d = Math.hypot(dx, dy);
-                    if (d < 130) {
-                        ctx.strokeStyle = `rgba(255,255,255,${(1 - d / 130) * .10})`;
-                        ctx.lineWidth = 1;
-                        ctx.beginPath();
-                        ctx.moveTo(pts[i].x * W, pts[i].y * H);
-                        ctx.lineTo(pts[j].x * W, pts[j].y * H);
-                        ctx.stroke();
-                    }
-                }
-            }
-            ctx.fillStyle = 'rgba(255,255,255,.35)';
-            for (const p of pts) {
-                ctx.beginPath();
-                ctx.arc(p.x * W, p.y * H, 1.4, 0, Math.PI * 2);
-                ctx.fill();
-            }
-            raf = requestAnimationFrame(tick);
-        };
-        raf = requestAnimationFrame(tick);
-        return () => { cancelAnimationFrame(raf); window.removeEventListener('resize', resize); };
-    }, [canvasRef]);
-}
-
 // ─── Contador animado no reveal ─────────────────────────────────────────────
 function Counter({ value, prefix = '', suffix = '' }: { value: number; prefix?: string; suffix?: string }) {
     const ref = useRef<HTMLSpanElement>(null);
@@ -143,9 +89,7 @@ function Counter({ value, prefix = '', suffix = '' }: { value: number; prefix?: 
 }
 
 export default function HomeNode() {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
     const [faqOpen, setFaqOpen] = useState<number | null>(0);
-    useNodeGraph(canvasRef);
 
     // Reveal on scroll
     useEffect(() => {
@@ -203,9 +147,7 @@ export default function HomeNode() {
         .nlp-btn-sm{padding:9px 20px;font-size:.85rem}
         /* hero */
         .nlp-hero{position:relative;padding-top:170px!important;padding-bottom:90px!important}
-        .nlp-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;
-          mask-image:radial-gradient(120% 90% at 50% 30%,#000 30%,transparent 78%)}
-        .nlp-rays{opacity:.9;mask-image:linear-gradient(180deg,#000 60%,transparent 98%)}
+        .nlp-galaxy{opacity:.85;mask-image:linear-gradient(180deg,#000 62%,transparent 98%)}
         .nlp-hero-in{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:26px;z-index:1}
         .nlp-hero p{font-size:clamp(1rem,1.4vw,1.18rem)}
         .nlp-ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
@@ -300,19 +242,18 @@ export default function HomeNode() {
 
             {/* HERO */}
             <section className="nlp-hero" id="top">
-                <canvas ref={canvasRef} className="nlp-canvas" />
-                <LightRays
-                    raysOrigin="top-center"
-                    raysColor="#ffffff"
-                    raysSpeed={1.2}
-                    lightSpread={1.3}
-                    rayLength={2.4}
-                    fadeDistance={1.4}
-                    followMouse
-                    mouseInfluence={0.12}
-                    noiseAmount={0.08}
-                    distortion={0.05}
-                    className="nlp-rays"
+                <Galaxy
+                    density={1.2}
+                    glowIntensity={0.35}
+                    saturation={0}
+                    starSpeed={0.4}
+                    speed={0.7}
+                    twinkleIntensity={0.4}
+                    rotationSpeed={0.04}
+                    mouseRepulsion
+                    repulsionStrength={1.6}
+                    transparent
+                    className="nlp-galaxy"
                 />
                 <div className="nlp-wrap nlp-hero-in">
                     <span className="nlp-chip nlp-reveal"><i />operando agora</span>
