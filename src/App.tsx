@@ -62,6 +62,7 @@ import MetaCallback from "./pages/MetaCallback";
 import AcceptInvite from "./pages/AcceptInvite";
 import Home from "./pages/Home";
 import { LandingRedirect } from "./components/LandingRedirect";
+import HomeNode from "./pages/landing/home-node/page";
 import FinancialDashboard from "./pages/financial/Dashboard";
 import FinancialCosts from "./pages/financial/Costs";
 import SmartDataViz from "./pages/SmartDataViz";
@@ -254,8 +255,10 @@ const App = () => (
                                   </ProtectedRoute>
                                 }
                               />
+                              {/* Home pública — landing NODE (botão Entrar leva ao /login) */}
+                              <Route path="/" element={<HomeNode />} />
                               <Route
-                                path="/"
+                                path="/app"
                                 element={
                                   <ProtectedRoute>
                                     <LandingRedirect />
