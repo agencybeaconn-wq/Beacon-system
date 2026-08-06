@@ -11,10 +11,10 @@ const WHATS = 'https://wa.me/5531984083376?text=Ol%C3%A1%2C%20quero%20falar%20co
 const INSTA = 'https://www.instagram.com/noode.dev/';
 
 const STATS = [
-    { value: 170, prefix: 'R$', suffix: 'M+', label: 'faturamento gerado' },
-    { value: 1700, prefix: '', suffix: '+', label: 'projetos entregues' },
-    { value: 750, prefix: '', suffix: '+', label: 'marcas atendidas' },
-    { value: 1400, prefix: '', suffix: '+', label: 'clientes ativos' },
+    { value: 168, prefix: 'R$', suffix: 'M+', label: 'faturamento gerado' },
+    { value: 1732, prefix: '', suffix: '', label: 'projetos entregues' },
+    { value: 742, prefix: '', suffix: '', label: 'marcas atendidas' },
+    { value: 1389, prefix: '', suffix: '', label: 'clientes ativos' },
 ];
 
 const SOLUTIONS = [
@@ -191,14 +191,14 @@ export default function HomeNode() {
         .nlp-links a:hover{color:var(--fg)}
         @media(max-width:760px){.nlp-links{display:none}}
         /* botões */
-        .nlp-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;border-radius:999px;font-weight:600;font-size:.92rem;border:1px solid transparent;
-          transition:transform var(--dur) var(--ease),background var(--dur) var(--ease),border-color var(--dur) var(--ease);cursor:pointer}
+        .nlp-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:999px;font-weight:600;font-size:.94rem;border:1px solid transparent;
+          transition:transform var(--dur) var(--ease),background var(--dur) var(--ease),border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease);cursor:pointer}
         .nlp-btn:hover{transform:translateY(-2px)}
         .nlp-btn:active{transform:translateY(0) scale(.97)}
-        .nlp .nlp-btn-solid{background:var(--fg);color:#0a0a0a}
-        .nlp .nlp-btn-solid:hover{background:#fff;color:#0a0a0a}
-        .nlp .nlp-btn-ghost{border-color:var(--line);color:var(--fg)}
-        .nlp .nlp-btn-ghost:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.04)}
+        .nlp .nlp-btn-solid{background:var(--fg);color:#0a0a0a;box-shadow:0 0 24px rgba(255,255,255,.18),inset 0 -2px 6px rgba(0,0,0,.12)}
+        .nlp .nlp-btn-solid:hover{background:#fff;color:#0a0a0a;box-shadow:0 0 44px rgba(255,255,255,.32),inset 0 -2px 6px rgba(0,0,0,.12)}
+        .nlp .nlp-btn-ghost{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.05);color:var(--fg);backdrop-filter:blur(8px)}
+        .nlp .nlp-btn-ghost:hover{border-color:rgba(255,255,255,.45);background:rgba(255,255,255,.10);box-shadow:0 0 24px rgba(255,255,255,.07)}
         .nlp-btn-sm{padding:9px 20px;font-size:.85rem}
         /* hero */
         .nlp-hero{position:relative;padding-top:170px!important;padding-bottom:90px!important}
@@ -207,11 +207,12 @@ export default function HomeNode() {
         .nlp-hero-in{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:26px}
         .nlp-hero p{font-size:clamp(1rem,1.4vw,1.18rem)}
         .nlp-ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
-        .nlp-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:64px;width:100%}
-        .nlp-stat{background:var(--bg);padding:26px 14px;text-align:center}
-        .nlp-stat b{display:block;font-family:'Space Grotesk',sans-serif;font-size:clamp(1.5rem,2.6vw,2.2rem);font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+        .nlp-stats{display:flex;justify-content:center;flex-wrap:wrap;margin-top:70px;width:100%}
+        .nlp-stat{padding:6px 44px;text-align:center;border-left:1px solid var(--line)}
+        .nlp-stat:first-child{border-left:none}
+        .nlp-stat b{display:block;font-family:'Space Grotesk',sans-serif;font-size:clamp(1.5rem,2.6vw,2.2rem);font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-bottom:6px}
         .nlp-stat span.nlp-mono{font-size:.62rem}
-        @media(max-width:760px){.nlp-stats{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:760px){.nlp-stat{flex:1 1 40%;border-left:none;padding:14px 10px}}
         /* section head */
         .nlp-head{display:flex;flex-direction:column;gap:14px;margin-bottom:52px}
         /* bento soluções */
@@ -265,9 +266,16 @@ export default function HomeNode() {
         .nlp-a p{padding:0 24px 22px;font-size:.94rem}
         /* cta final + footer */
         .nlp-final{text-align:center;display:flex;flex-direction:column;align-items:center;gap:26px}
-        .nlp-footer{border-top:1px solid var(--line);padding-block:34px}
-        .nlp-footer-in{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
-        .nlp-footer .nlp-mono{font-size:.66rem}
+        .nlp-footer{border-top:1px solid var(--line);padding-top:64px}
+        .nlp-footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:44px;padding-bottom:52px}
+        @media(max-width:760px){.nlp-footer-grid{grid-template-columns:1fr;gap:36px}}
+        .nlp-footer-col{display:flex;flex-direction:column;gap:14px}
+        .nlp-footer-col p{font-size:.92rem;max-width:34ch}
+        .nlp-footer-title{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+        .nlp-footer-col a{color:var(--muted);font-size:.98rem;width:fit-content;transition:color var(--dur) var(--ease),transform var(--dur) var(--ease)}
+        .nlp-footer-col a:hover{color:var(--fg);transform:translateX(3px)}
+        .nlp-footer-bottom{border-top:1px solid var(--line);padding-block:22px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+        .nlp-footer-bottom .nlp-mono{font-size:.64rem}
         @media(prefers-reduced-motion:reduce){
           .nlp *,.nlp *::before,.nlp *::after{animation:none!important;transition:none!important}
           .nlp-reveal{opacity:1;transform:none}
@@ -295,7 +303,7 @@ export default function HomeNode() {
                     <span className="nlp-chip nlp-reveal"><i />operando agora</span>
                     <span className="nlp-mono nlp-reveal">{'// sistemas · e-commerce · ia aplicada'}</span>
                     <h1 className="nlp-reveal nlp-d1">Tecnologia que transforma<br />marcas em máquinas de venda</h1>
-                    <p className="nlp-reveal nlp-d2">Sistemas, lojas e aplicações de IA construídos sob medida — entregues em dias, operando com resultado desde o primeiro dia.</p>
+                    <p className="nlp-reveal nlp-d2">Sistemas, lojas e aplicações de IA sob medida, entregues em dias e gerando resultado desde o primeiro dia.</p>
                     <div className="nlp-ctas nlp-reveal nlp-d3">
                         <a href={WHATS} target="_blank" rel="noopener" className="nlp-btn nlp-btn-solid">Falar com a NODE</a>
                         <Link to="/login" className="nlp-btn nlp-btn-ghost">Acessar o sistema</Link>
@@ -422,10 +430,32 @@ export default function HomeNode() {
 
             {/* FOOTER */}
             <footer className="nlp-footer">
-                <div className="nlp-wrap nlp-footer-in">
-                    <img src={nodeLogo} alt="NODE" style={{ height: 14, width: 'auto' }} />
-                    <span className="nlp-mono">Seg à Dom · 9h às 23h · (31) 98408-3376 · nodedev@gmail.com</span>
-                    <span className="nlp-mono"><a href={INSTA} target="_blank" rel="noopener" style={{ transition: 'color .7s' }}>@noode.dev</a> · © 2026 NODE</span>
+                <div className="nlp-wrap">
+                    <div className="nlp-footer-grid">
+                        <div className="nlp-footer-col">
+                            <img src={nodeLogo} alt="NODE" style={{ height: 22, width: 'auto', alignSelf: 'flex-start' }} />
+                            <p>Sistemas, e-commerce e IA aplicada pra marcas que querem vender mais.</p>
+                        </div>
+                        <div className="nlp-footer-col">
+                            <span className="nlp-footer-title">{'// navegação'}</span>
+                            <a href="#solucoes">Soluções</a>
+                            <a href="#resultados">Resultados</a>
+                            <a href="#processo">Processo</a>
+                            <a href="#faq">FAQ</a>
+                            <Link to="/login">Área do cliente</Link>
+                        </div>
+                        <div className="nlp-footer-col">
+                            <span className="nlp-footer-title">{'// contato'}</span>
+                            <a href={WHATS} target="_blank" rel="noopener">(31) 98408-3376</a>
+                            <a href="mailto:nodedev@gmail.com">nodedev@gmail.com</a>
+                            <a href={INSTA} target="_blank" rel="noopener">@noode.dev</a>
+                            <span style={{ color: 'var(--muted)', fontSize: '.85rem' }}>Seg à Dom · 9h às 23h</span>
+                        </div>
+                    </div>
+                    <div className="nlp-footer-bottom">
+                        <span className="nlp-mono">© 2026 NODE. Todos os direitos reservados.</span>
+                        <span className="nlp-mono">Feito pela própria NODE</span>
+                    </div>
                 </div>
             </footer>
         </div>
