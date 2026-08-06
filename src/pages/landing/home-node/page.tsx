@@ -11,26 +11,26 @@ const WHATS = 'https://wa.me/5531984083376?text=Ol%C3%A1%2C%20quero%20falar%20co
 const INSTA = 'https://www.instagram.com/noode.dev/';
 
 const STATS = [
-    { value: 575, prefix: 'R$', suffix: 'M+', label: 'faturamento gerado' },
-    { value: 5654, prefix: '', suffix: '+', label: 'projetos entregues' },
-    { value: 2523, prefix: '', suffix: '+', label: 'marcas atendidas' },
-    { value: 4800, prefix: '', suffix: '+', label: 'clientes ativos' },
+    { value: 170, prefix: 'R$', suffix: 'M+', label: 'faturamento gerado' },
+    { value: 1700, prefix: '', suffix: '+', label: 'projetos entregues' },
+    { value: 750, prefix: '', suffix: '+', label: 'marcas atendidas' },
+    { value: 1400, prefix: '', suffix: '+', label: 'clientes ativos' },
 ];
 
 const SOLUTIONS = [
     {
         num: '01', title: 'Sistemas & Aplicações de IA',
-        desc: 'Dashboards, automações e agentes de IA operando dentro do seu negócio — não demos, sistemas em produção.',
+        desc: 'Dashboards, automações e agentes que trabalham 24h dentro da sua operação. Nada de demo bonita: aqui é sistema rodando de verdade.',
         tags: 'agentes · automação · dados',
     },
     {
         num: '02', title: 'E-commerce de alta conversão',
-        desc: 'Não criamos vitrines bonitas. Criamos lojas que vendem — Shopify, checkout otimizado e operação completa desde o primeiro dia.',
+        desc: 'Loja não é vitrine. A gente monta e opera lojas pensadas pra converter, do catálogo ao checkout, prontas pra vender no dia do lançamento.',
         tags: 'shopify · cro · operação',
     },
     {
         num: '03', title: 'Sites & Landing pages',
-        desc: 'Páginas de alto padrão com engenharia de conversão: rápidas, medidas e desenhadas para o seu público, não para um template.',
+        desc: 'Páginas rápidas, bonitas e medidas. Cada seção existe por um motivo: levar quem chega até a ação.',
         tags: 'performance · design · tracking',
     },
 ];
@@ -43,20 +43,20 @@ const RESULTS = [
 ];
 
 const STEPS = [
-    { num: '01', title: 'Alinhamento estratégico', desc: 'Entendemos o negócio, o público e a meta. Nada começa sem saber o que é sucesso pra você.' },
-    { num: '02', title: 'Arquitetura & identidade', desc: 'Design system, estrutura e tecnologia definidos sob medida — cada decisão justificada.' },
-    { num: '03', title: 'Build acelerado por IA', desc: 'Nossa engenharia usa IA aplicada de verdade: entregamos em dias o que o mercado entrega em meses.' },
-    { num: '04', title: 'Lançamento & operação', desc: 'No ar com tracking, suporte e evolução contínua. A entrega é o começo, não o fim.' },
+    { num: '01', title: 'Alinhamento estratégico', desc: 'Sentamos com você, entendemos o negócio e definimos a meta. Sem meta clara, nada começa.' },
+    { num: '02', title: 'Arquitetura & identidade', desc: 'Desenhamos a estrutura, o visual e a stack sob medida pro seu projeto. Nada sai de template.' },
+    { num: '03', title: 'Build acelerado por IA', desc: 'Nossa engenharia usa IA no dia a dia de verdade. É por isso que entregamos em dias, e não em meses.' },
+    { num: '04', title: 'Lançamento & operação', desc: 'Projeto no ar com tracking e suporte. Depois do lançamento, a gente continua junto na operação.' },
 ];
 
 const STACK = ['Shopify', 'Supabase', 'Vercel', 'Stripe', 'Meta Ads', 'Klaviyo', 'WooCommerce', 'VTEX', 'NuvemShop', 'Yampi', 'OpenAI', 'Claude'];
 
 const FAQS = [
-    { q: 'Como começa um projeto com a NODE?', a: 'Você chama no WhatsApp, fazemos um alinhamento estratégico e devolvemos escopo, prazo e investimento. Aprovou, entramos em produção no mesmo dia.' },
-    { q: 'Qual o prazo de entrega?', a: 'Depende do escopo — mas nosso build acelerado por IA entrega lojas e sites completos em dias, não meses. O prazo fechado vem no alinhamento.' },
+    { q: 'Como começa um projeto com a NODE?', a: 'Você chama no WhatsApp e a gente marca um papo rápido de alinhamento. Dali sai escopo, prazo e investimento. Aprovou, entramos em produção no mesmo dia.' },
+    { q: 'Qual o prazo de entrega?', a: 'Depende do escopo, mas trabalhamos em outra velocidade: lojas e sites completos costumam sair em dias. O prazo fechado você recebe no alinhamento.' },
     { q: 'Como funciona o suporte?', a: 'Suporte ilimitado via WhatsApp e e-mail durante a vigência do plano, das 9h às 23h, todos os dias.' },
-    { q: 'O tema NODE para Shopify tem licença?', a: 'Sim. Cada licença é vinculada a uma loja/URL, com atualizações inclusas para clientes ativos. Para uma segunda loja, basta uma licença adicional.' },
-    { q: 'Quais tecnologias vocês dominam?', a: 'Shopify, WooCommerce, VTEX, NuvemShop e Yampi no e-commerce; Supabase, Vercel e Stripe em sistemas; OpenAI e Claude em IA aplicada.' },
+    { q: 'O tema NODE para Shopify tem licença?', a: 'Sim. Cada licença vale pra uma loja, com atualizações inclusas enquanto você for cliente ativo. Pra uma segunda loja, basta uma licença adicional.' },
+    { q: 'Quais tecnologias vocês dominam?', a: 'Shopify, WooCommerce, VTEX, NuvemShop e Yampi no e-commerce. Supabase, Vercel e Stripe em sistemas. OpenAI e Claude na parte de IA.' },
 ];
 
 // ─── Canvas: rede de nós (assinatura visual do nome) ────────────────────────
@@ -160,13 +160,21 @@ export default function HomeNode() {
         <div className="nlp">
             <style>{`
         .nlp{--bg:#050505;--elev:#0e0e10;--fg:#fafafa;--muted:#a1a1aa;--line:rgba(255,255,255,.08);--dur:.7s;--ease:cubic-bezier(.22,1,.36,1);
-          background:var(--bg);color:var(--fg);font-family:'Inter Tight',sans-serif;min-height:100vh;overflow-x:hidden}
+          background-color:var(--bg);
+          background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+          background-size:72px 72px;
+          color:var(--fg);font-family:'Inter Tight',sans-serif;min-height:100vh;overflow-x:hidden}
         .nlp *{box-sizing:border-box}
         .nlp ::selection{background:#fafafa;color:#050505}
-        .nlp-mono{font-family:'Geist Mono','JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+        .nlp-mono{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
         .nlp-wrap{max-width:1140px;margin-inline:auto;padding-inline:24px}
         .nlp section{padding-block:clamp(72px,9vw,130px)}
-        .nlp h1,.nlp h2{letter-spacing:-.03em;line-height:1.04;font-weight:800;margin:0}
+        .nlp h1,.nlp h2,.nlp h3{font-family:'Space Grotesk','Inter Tight',sans-serif}
+        .nlp h1,.nlp h2{letter-spacing:-.03em;line-height:1.06;font-weight:700;margin:0}
+        .nlp-chip{display:inline-flex;align-items:center;gap:9px;padding:7px 16px;border:1px solid var(--line);border-radius:999px;
+          font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+        .nlp-chip i{width:6px;height:6px;border-radius:50%;background:var(--fg);animation:nlp-pulse 2.2s var(--ease) infinite}
+        @keyframes nlp-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.8)}}
         .nlp h1{font-size:clamp(2.6rem,6.5vw,4.9rem)}
         .nlp h2{font-size:clamp(1.9rem,3.6vw,2.9rem)}
         .nlp p{color:var(--muted);line-height:1.65;max-width:62ch;margin:0}
@@ -201,7 +209,7 @@ export default function HomeNode() {
         .nlp-ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
         .nlp-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:64px;width:100%}
         .nlp-stat{background:var(--bg);padding:26px 14px;text-align:center}
-        .nlp-stat b{display:block;font-size:clamp(1.5rem,2.6vw,2.2rem);font-weight:800;letter-spacing:-.02em}
+        .nlp-stat b{display:block;font-family:'Space Grotesk',sans-serif;font-size:clamp(1.5rem,2.6vw,2.2rem);font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
         .nlp-stat span.nlp-mono{font-size:.62rem}
         @media(max-width:760px){.nlp-stats{grid-template-columns:repeat(2,1fr)}}
         /* section head */
@@ -209,19 +217,23 @@ export default function HomeNode() {
         /* bento soluções */
         .nlp-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
         @media(max-width:860px){.nlp-grid3{grid-template-columns:1fr}}
-        .nlp-card{background:var(--elev);border:1px solid var(--line);border-radius:16px;padding:30px;display:flex;flex-direction:column;gap:14px;
-          transition:transform var(--dur) var(--ease),border-color var(--dur) var(--ease)}
-        .nlp-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.22)}
+        .nlp-card{background:var(--elev);border:1px solid var(--line);border-radius:10px;padding:30px;display:flex;flex-direction:column;gap:14px;position:relative;
+          transition:transform var(--dur) var(--ease),border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
+        .nlp-card::before,.nlp-card::after,.nlp-res::before,.nlp-res::after{content:'';position:absolute;width:14px;height:14px;opacity:.3;transition:opacity var(--dur) var(--ease)}
+        .nlp-card::before,.nlp-res::before{top:-1px;left:-1px;border-top:1px solid var(--fg);border-left:1px solid var(--fg)}
+        .nlp-card::after,.nlp-res::after{bottom:-1px;right:-1px;border-bottom:1px solid var(--fg);border-right:1px solid var(--fg)}
+        .nlp-card:hover::before,.nlp-card:hover::after,.nlp-res:hover::before,.nlp-res:hover::after{opacity:.85}
+        .nlp-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.22);box-shadow:0 0 32px rgba(255,255,255,.05)}
         .nlp-card h3{margin:0;font-size:1.22rem;font-weight:700;letter-spacing:-.01em}
         .nlp-card .nlp-mono{margin-top:auto;padding-top:14px;border-top:1px solid var(--line)}
         /* resultados */
         .nlp-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
         @media(max-width:960px){.nlp-grid4{grid-template-columns:repeat(2,1fr)}}
         @media(max-width:520px){.nlp-grid4{grid-template-columns:1fr}}
-        .nlp-res{background:var(--elev);border:1px solid var(--line);border-radius:16px;padding:28px;
-          transition:transform var(--dur) var(--ease),border-color var(--dur) var(--ease)}
-        .nlp-res:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.22)}
-        .nlp-res b{display:block;font-size:clamp(2.2rem,4vw,3.2rem);font-weight:800;letter-spacing:-.03em;line-height:1}
+        .nlp-res{background:var(--elev);border:1px solid var(--line);border-radius:10px;padding:28px;position:relative;
+          transition:transform var(--dur) var(--ease),border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
+        .nlp-res:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.22);box-shadow:0 0 32px rgba(255,255,255,.05)}
+        .nlp-res b{display:block;font-family:'Space Grotesk',sans-serif;font-size:clamp(2.2rem,4vw,3.2rem);font-weight:700;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
         .nlp-res small{color:var(--muted);font-size:.9rem}
         /* processo */
         .nlp-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
@@ -280,7 +292,8 @@ export default function HomeNode() {
             <section className="nlp-hero" id="top">
                 <canvas ref={canvasRef} className="nlp-canvas" />
                 <div className="nlp-wrap nlp-hero-in">
-                    <span className="nlp-mono nlp-reveal">Sistemas · E-commerce · IA aplicada</span>
+                    <span className="nlp-chip nlp-reveal"><i />operando agora</span>
+                    <span className="nlp-mono nlp-reveal">{'// sistemas · e-commerce · ia aplicada'}</span>
                     <h1 className="nlp-reveal nlp-d1">Tecnologia que transforma<br />marcas em máquinas de venda</h1>
                     <p className="nlp-reveal nlp-d2">Sistemas, lojas e aplicações de IA construídos sob medida — entregues em dias, operando com resultado desde o primeiro dia.</p>
                     <div className="nlp-ctas nlp-reveal nlp-d3">
@@ -302,7 +315,7 @@ export default function HomeNode() {
             <section id="solucoes">
                 <div className="nlp-wrap">
                     <div className="nlp-head nlp-reveal">
-                        <span className="nlp-mono">O que construímos</span>
+                        <span className="nlp-mono">{'// o que construímos'}</span>
                         <h2>Engenharia completa,<br />da ideia à operação</h2>
                     </div>
                     <div className="nlp-grid3">
@@ -322,7 +335,7 @@ export default function HomeNode() {
             <section id="resultados">
                 <div className="nlp-wrap">
                     <div className="nlp-head nlp-reveal">
-                        <span className="nlp-mono">Resultados reais</span>
+                        <span className="nlp-mono">{'// resultados reais'}</span>
                         <h2>Números de quem opera<br />com a NODE</h2>
                     </div>
                     <div className="nlp-grid4">
@@ -341,7 +354,7 @@ export default function HomeNode() {
             <section id="processo">
                 <div className="nlp-wrap">
                     <div className="nlp-head nlp-reveal">
-                        <span className="nlp-mono">Como funciona</span>
+                        <span className="nlp-mono">{'// como funciona'}</span>
                         <h2>Do alinhamento ao ar<br />em quatro movimentos</h2>
                     </div>
                     <div className="nlp-steps">
@@ -368,8 +381,8 @@ export default function HomeNode() {
                 <div className="nlp-wrap nlp-manif">
                     <h2 className="nlp-reveal">Não construímos vitrines.<br />Construímos tecnologia<br />que vende.</h2>
                     <div className="nlp-reveal nlp-d1" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-                        <p>A NODE nasceu dentro da operação de e-commerce — não de uma agência de design. Cada sistema, loja e página que entregamos carrega o que aprendemos gerando mais de R$575 milhões para nossos clientes.</p>
-                        <p>IA aqui não é discurso: é o motor que nos deixa construir em dias o que o mercado entrega em meses, com acabamento de produto e engenharia de verdade.</p>
+                        <p>A NODE nasceu dentro da operação de e-commerce, não numa agência de design. Tudo que entregamos carrega o que aprendemos gerando mais de R$170 milhões pros nossos clientes.</p>
+                        <p>IA aqui não é discurso de palco. É o motor que deixa a gente construir em dias o que o mercado entrega em meses, com acabamento de produto de verdade.</p>
                     </div>
                 </div>
             </section>
@@ -378,7 +391,7 @@ export default function HomeNode() {
             <section id="faq">
                 <div className="nlp-wrap" style={{ maxWidth: 780 }}>
                     <div className="nlp-head nlp-reveal">
-                        <span className="nlp-mono">FAQ</span>
+                        <span className="nlp-mono">{'// perguntas frequentes'}</span>
                         <h2>Tire suas dúvidas</h2>
                     </div>
                     <div className="nlp-faq nlp-reveal">
@@ -398,7 +411,7 @@ export default function HomeNode() {
             {/* CTA FINAL */}
             <section>
                 <div className="nlp-wrap nlp-final">
-                    <span className="nlp-mono nlp-reveal">Pronto pra começar?</span>
+                    <span className="nlp-mono nlp-reveal">{'// pronto pra começar?'}</span>
                     <h2 className="nlp-reveal nlp-d1">Seu próximo sistema<br />começa numa conversa</h2>
                     <div className="nlp-ctas nlp-reveal nlp-d2">
                         <a href={WHATS} target="_blank" rel="noopener" className="nlp-btn nlp-btn-solid">Falar com a NODE</a>
