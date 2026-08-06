@@ -6,7 +6,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import nodeLogo from '@/assets/node-logo.png';
-import Galaxy from './Galaxy';
+import Threads from './Threads';
 
 const WHATS = 'https://wa.me/5531984083376?text=Ol%C3%A1%2C%20quero%20falar%20com%20a%20NODE%20sobre%20um%20projeto.';
 const INSTA = 'https://www.instagram.com/noode.dev/';
@@ -147,7 +147,7 @@ export default function HomeNode() {
         .nlp-btn-sm{padding:9px 20px;font-size:.85rem}
         /* hero */
         .nlp-hero{position:relative;padding-top:170px!important;padding-bottom:90px!important}
-        .nlp-galaxy{opacity:.85;mask-image:linear-gradient(180deg,#000 62%,transparent 98%)}
+        .nlp-threads{opacity:.55;mask-image:linear-gradient(180deg,#000 65%,transparent 98%)}
         .nlp-hero-in{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:26px;z-index:1}
         .nlp-hero p{font-size:clamp(1rem,1.4vw,1.18rem)}
         .nlp-ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
@@ -242,18 +242,12 @@ export default function HomeNode() {
 
             {/* HERO */}
             <section className="nlp-hero" id="top">
-                <Galaxy
-                    density={1.2}
-                    glowIntensity={0.35}
-                    saturation={0}
-                    starSpeed={0.4}
-                    speed={0.7}
-                    twinkleIntensity={0.4}
-                    rotationSpeed={0.04}
-                    mouseRepulsion
-                    repulsionStrength={1.6}
-                    transparent
-                    className="nlp-galaxy"
+                <Threads
+                    color={[1, 1, 1]}
+                    amplitude={2.2}
+                    distance={0.25}
+                    enableMouseInteraction
+                    className="nlp-threads"
                 />
                 <div className="nlp-wrap nlp-hero-in">
                     <span className="nlp-chip nlp-reveal"><i />operando agora</span>
