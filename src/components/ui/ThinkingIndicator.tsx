@@ -7,7 +7,7 @@ interface ThinkingIndicatorProps {
 export function ThinkingIndicator({ lastUserMessage }: ThinkingIndicatorProps) {
     // Determine contextual message based on user input
     const getContextualMessage = () => {
-        if (!lastUserMessage) return "Beacon AI está pensando...";
+        if (!lastUserMessage) return "NODE AI está pensando...";
 
         const lowerMessage = lastUserMessage.toLowerCase();
 
@@ -24,7 +24,7 @@ export function ThinkingIndicator({ lastUserMessage }: ThinkingIndicatorProps) {
             return "Buscando informações...";
         }
 
-        return "Beacon AI está pensando...";
+        return "NODE AI está pensando...";
     };
 
     return (

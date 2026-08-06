@@ -172,7 +172,7 @@ export default function AcademyHome() {
     <AcademyLayout>
       <div className="mb-8 animate-in fade-in slide-in-from-top-2 duration-500">
         <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-primary mb-3">
-          Beacon Academy
+          NODE Academy
         </p>
         <h1 className="text-4xl md:text-5xl font-extrabold tracking-[-0.03em] leading-[1.05] mb-3">
           Olá, {student?.full_name?.split(' ')[0] || 'aluno'}

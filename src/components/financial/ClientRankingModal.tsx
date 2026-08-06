@@ -575,7 +575,7 @@ export function ClientRankingView({ embedded = false, active = true }: ClientRan
                             { icon: BarChart3, color: "text-sky-400", label: "ROAS Meta 30d", value: isLoading ? "—" : (totals.avgMetaRoas > 0 ? `${totals.avgMetaRoas.toFixed(2)}x` : "—"), sub: "média ponderada", valueColor: "text-sky-400" },
                             { icon: Repeat, color: "text-emerald-500", label: "MRR Fees", value: isLoading ? "—" : formatCurrency(totals.totalFeeFixed), sub: "fixo mensal", valueColor: "text-emerald-500" },
                             { icon: DollarSign, color: "text-yellow-400", label: "Comissão 30d", value: isLoading ? "—" : formatCurrency(totals.totalCommission30d), sub: "variável estimada", valueColor: "text-yellow-400" },
-                            { icon: Crown, color: "text-amber-400", label: "Receita Beacon 30d", value: isLoading ? "—" : formatCurrency(totals.totalBeaconRevenue30d), sub: "MRR + comissão", valueColor: "text-amber-400" },
+                            { icon: Crown, color: "text-amber-400", label: "Receita NODE 30d", value: isLoading ? "—" : formatCurrency(totals.totalBeaconRevenue30d), sub: "MRR + comissão", valueColor: "text-amber-400" },
                         ].map((card, i) => (
                             <Card key={i} className="p-3 bg-secondary/20 border-border/10 hover:bg-secondary/30 transition-colors shadow-none">
                                 <div className="flex items-center gap-2 mb-1">
@@ -617,7 +617,7 @@ export function ClientRankingView({ embedded = false, active = true }: ClientRan
                                 {renderSortableHeader('Spend Meta', 'metaSpend30d', 'right')}
                                 {renderSortableHeader('ROAS', 'metaRoas30d', 'center')}
                                 {renderSortableHeader('Comissão 30d', 'commission30d', 'right')}
-                                {renderSortableHeader('Receita Beacon 30d', 'leverRevenue30d', 'right')}
+                                {renderSortableHeader('Receita NODE 30d', 'leverRevenue30d', 'right')}
                                 <th className="text-center text-[10px] text-muted-foreground uppercase font-bold tracking-wider px-3 py-2">Tipo</th>
                                 <th className="text-center text-[10px] text-muted-foreground uppercase font-bold tracking-wider px-3 py-2">Tendência</th>
                                 {renderSortableHeader('Cliente Há', 'monthsAsClient', 'center')}

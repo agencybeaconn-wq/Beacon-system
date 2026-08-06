@@ -35,7 +35,7 @@ export function CommissionCard({ commission, isLoading = false }: Props) {
     return (
         <Card className="bg-card border-border text-card-foreground shadow-none rounded-2xl">
             <CardHeader className="pb-1 px-6 flex flex-row items-center justify-between">
-                <CardTitle className="text-base font-bold text-foreground">Comissão Beacon</CardTitle>
+                <CardTitle className="text-base font-bold text-foreground">Comissão NODE</CardTitle>
                 <button
                     type="button"
                     onClick={() => setShowCommission((v) => !v)}

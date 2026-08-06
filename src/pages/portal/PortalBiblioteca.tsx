@@ -175,7 +175,7 @@ export default function PortalBiblioteca() {
                     <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/80 via-transparent to-transparent" />
 
                     <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12 space-y-4">
-                        <img src={leverLogo} alt="Beacon" className="h-9 w-auto" />
+                        <img src={leverLogo} alt="NODE" className="h-5 w-auto" />
 
                         <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[0.9]">
                             Biblioteca de Criativos
@@ -240,7 +240,7 @@ export default function PortalBiblioteca() {
                             {/* RIGHT: Info Panel — always scrollable */}
                             <div className="w-full md:w-[340px] lg:w-[400px] shrink-0 border-t md:border-t-0 md:border-l border-white/5 bg-[#111] overflow-y-auto flex flex-col max-h-[50vh] md:max-h-[85vh]">
                                 <div className="p-6 md:p-8 space-y-5">
-                                    <img src={leverLogo} alt="Beacon" className="h-6 w-auto opacity-50" />
+                                    <img src={leverLogo} alt="NODE" className="h-4 w-auto opacity-50" />
 
                                     <h2 className="text-xl md:text-2xl font-black text-white tracking-tight leading-tight">
                                         {selectedVideo.title}

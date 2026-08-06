@@ -405,7 +405,7 @@ export function NewClientModal({ trigger }: { trigger?: React.ReactNode }) {
                                             </>
                                         ) : (
                                             <>
-                                                <SelectItem value="avulso_tema">Tema Beacon (Licença)</SelectItem>
+                                                <SelectItem value="avulso_tema">Tema NODE (Licença)</SelectItem>
                                                 <SelectItem value="avulso_reformulacao">Reformulação de Site</SelectItem>
                                                 <SelectItem value="avulso_arte">Arte / Design</SelectItem>
                                             </>

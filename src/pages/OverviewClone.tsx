@@ -990,7 +990,7 @@ Responda em português brasileiro.`,
                                             const dates = apiDates;
                                             const periodStr = `${new Date(dates.startDate + 'T12:00:00').toLocaleDateString('pt-BR')} a ${new Date(dates.endDate + 'T12:00:00').toLocaleDateString('pt-BR')}`;
                                             reportText = [
-                                                `📊 *Relatório Semanal – Beacon*`,
+                                                `📊 *Relatório Semanal – NODE*`,
                                                 `🗓️ *Período:* ${periodStr}`,
                                                 `${clientData?.name ? `👤 *Cliente:* ${clientData.name}` : ''}`,
                                                 ``,
@@ -1069,7 +1069,7 @@ Responda em português brasileiro.`,
                                     const dates = apiDates;
                                     const periodStr = `${new Date(dates.startDate + 'T12:00:00').toLocaleDateString('pt-BR')} a ${new Date(dates.endDate + 'T12:00:00').toLocaleDateString('pt-BR')}`;
                                     text = [
-                                        `📊 *Relatório Semanal – Beacon*`,
+                                        `📊 *Relatório Semanal – NODE*`,
                                         `🗓️ *Período:* ${periodStr}`,
                                         clientData?.name ? `👤 *Cliente:* ${clientData.name}` : '',
                                         '',

@@ -106,7 +106,7 @@ const DEMO_DATA: Record<string, { columns: string[]; rows: string[][] }> = {
     temas: {
         columns: ['Nome', 'Status', 'Ultima Atualizacao'],
         rows: [
-            ['Beacon Theme v3.2', 'Publicado', '27/03/2026'],
+            ['NODE Theme v3.2', 'Publicado', '27/03/2026'],
             ['Dawn (backup)', 'Nao publicado', '15/02/2026'],
         ],
     },

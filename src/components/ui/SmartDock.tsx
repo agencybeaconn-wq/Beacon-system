@@ -233,7 +233,7 @@ export const SmartDock = ({
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="font-medium">{t('campaigns.actions.with_ai', 'Com IA')}</span>
-                                                    <span className="text-[10px] text-muted-foreground">{t('campaigns.actions.ai_description', 'Beacon Brain cria para você')}</span>
+                                                    <span className="text-[10px] text-muted-foreground">{t('campaigns.actions.ai_description', 'NODE Brain cria para você')}</span>
                                                 </div>
                                             </DropdownMenuItem>
 

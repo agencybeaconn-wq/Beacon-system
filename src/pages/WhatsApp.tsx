@@ -311,7 +311,7 @@ export default function WhatsApp() {
                 ) : (
                     <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-50">
                         <UserCircle2 className="w-20 h-20 mb-4" />
-                        <h3 className="text-xl font-bold">WhatsApp Beacon</h3>
+                        <h3 className="text-xl font-bold">WhatsApp NODE</h3>
                         <p className="max-w-xs text-sm mt-2">
                             Selecione uma conversa ao lado para começar a enviar mensagens.
                         </p>

@@ -124,7 +124,7 @@ export function ClientFormsView() {
                     <div className="flex flex-col gap-2 text-muted-foreground pt-4">
                         <div className="flex items-center gap-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                            <span className="text-xs font-medium italic">Powered by Beacon System AI</span>
+                            <span className="text-xs font-medium italic">Powered by NODE System AI</span>
                         </div>
                         <span className="text-xs pl-3.5">Seguro e Protegido</span>
                     </div>

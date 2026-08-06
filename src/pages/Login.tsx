@@ -84,8 +84,7 @@ const Login = () => {
           {/* Logo + Branding */}
           <div className="text-left space-y-4 mb-6">
             <div className="flex items-end gap-0">
-              <img src={leverLogo} alt="Beacon" className="h-28 w-auto" />
-              <h1 className="text-5xl font-extrabold text-foreground tracking-tight leading-none ml-3 pb-2">eacon</h1>
+              <img src={leverLogo} alt="NODE" className="h-12 w-auto" />
             </div>
           </div>
 

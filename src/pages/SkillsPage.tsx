@@ -54,7 +54,7 @@ const CAPABILITIES: Capability[] = [
     ],
   },
   {
-    title: 'Tema Beacon',
+    title: 'Tema NODE',
     icon: <Palette className="h-5 w-5" />,
     items: [
       'Configurar contato no cabecalho (telefone, email)',
@@ -80,8 +80,8 @@ const CAPABILITIES: Capability[] = [
 
 const MANUAL_STEPS = [
   { step: 'Instalar app custom na Shopify', detail: 'Admin > Apps > Desenvolver app > Instalar' },
-  { step: 'Conectar no Beacon System', detail: 'Clientes > Conexoes > Conectar Shopify' },
-  { step: 'Importar zip do tema Beacon', detail: 'Admin > Temas > Adicionar tema > Upload zip' },
+  { step: 'Conectar no NODE System', detail: 'Clientes > Conexoes > Conectar Shopify' },
+  { step: 'Importar zip do tema NODE', detail: 'Admin > Temas > Adicionar tema > Upload zip' },
 ];
 
 const FLOW_STEPS = [

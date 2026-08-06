@@ -175,7 +175,7 @@ export function SmartDataDashboardV2() {
 
                 <Card className="p-4 bg-background border border-border/50">
                     <div className="flex items-center justify-between mb-2">
-                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Comissão Beacon</span>
+                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Comissão NODE</span>
                         <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
                     </div>
                     <div className="text-2xl font-black tracking-tight text-emerald-500">

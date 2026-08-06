@@ -160,7 +160,7 @@ const SKILLS: SkillEntry[] = [
   },
   {
     id: 'component', family: 'dev', icon: Code, name: '/component',
-    description: 'Cria componente React interno do Beacon System (shadcn/ui + Tailwind).',
+    description: 'Cria componente React interno do NODE System (shadcn/ui + Tailwind).',
     naturalLanguageExamples: ['"criar componente X"'],
     whenToUse: 'Dev interno do dashboard',
   },

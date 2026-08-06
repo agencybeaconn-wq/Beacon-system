@@ -149,7 +149,7 @@ const TrackingDashboard = () => {
                         {t('tracking.title')}
                     </h1>
                     <p className="text-muted-foreground font-medium">
-                        Sistema de Gestão Logística Beacon
+                        Sistema de Gestão Logística NODE
                     </p>
                 </div>
                 <div className="flex flex-wrap gap-3 w-full lg:w-auto">
@@ -411,7 +411,7 @@ const ShipmentRowCard = ({ shipment, onSync, isSyncing }: any) => {
                                             />
                                             <TimelineItem
                                                 date={shipment.created_at}
-                                                content="Código registrado no sistema Beacon OS."
+                                                content="Código registrado no sistema NODE OS."
                                             />
                                         </>
                                     )}

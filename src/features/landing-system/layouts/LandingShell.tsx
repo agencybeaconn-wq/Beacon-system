@@ -32,7 +32,7 @@ export function LandingShell({ meta, nav = [], footer, children }: LandingShellP
       <header className="sticky top-0 z-40 bg-background/80 backdrop-blur border-b border-border">
         <div className={`${tokens.layout.containerWide} flex h-16 items-center justify-between`}>
           <a href="/" className="text-lg font-bold tracking-tight text-foreground">
-            Beacon
+            NODE
           </a>
           {nav.length > 0 && (
             <nav className="flex items-center gap-6">

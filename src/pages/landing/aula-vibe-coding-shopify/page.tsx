@@ -55,7 +55,7 @@ const USE_CASES: UseCase[] = [
             },
             {
                 prompt: '"Aplica template em PT/EN/ES nas Camisas de Time"',
-                explain: "Aplica template Beacon com placeholders do briefing (preço, prazo, contato).",
+                explain: "Aplica template NODE com placeholders do briefing (preço, prazo, contato).",
                 skill: "bulk-descriptions --template",
             },
             {
@@ -134,11 +134,11 @@ const USE_CASES: UseCase[] = [
         items: [
             {
                 prompt: '"Padroniza meta title pra \'{título} | Loja X\' em tudo"',
-                explain: "Aplica template SEO Beacon — preenche meta_title e meta_description vazios.",
+                explain: "Aplica template SEO NODE — preenche meta_title e meta_description vazios.",
                 skill: "bulk-product-meta --seo-auto",
             },
             {
-                prompt: '"Troca o vendor de todos os produtos pra Beacon Ecomm"',
+                prompt: '"Troca o vendor de todos os produtos pra NODE Ecomm"',
                 explain: "vendor field via productUpdate bulk — usado pra filtros internos.",
                 skill: "bulk-product-meta --vendor=...",
             },
@@ -413,7 +413,7 @@ export default function AulaVibeCodingShopify() {
                 <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-bold shadow-sm">L</div>
                     <div>
-                        <div className="text-sm font-bold leading-tight">Beacon Academy</div>
+                        <div className="text-sm font-bold leading-tight">NODE Academy</div>
                         <div className="text-xs text-slate-500 leading-tight">Vibe Coding com Shopify</div>
                     </div>
                 </div>

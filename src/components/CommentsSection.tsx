@@ -117,7 +117,7 @@ export function CommentsSection({ adId, postId, insightType, initialComments }: 
                         replies: {
                             data: [{
                                 id: 'r1',
-                                from: { id: 'page', name: 'Beacon AI' },
+                                from: { id: 'page', name: 'NODE AI' },
                                 message: 'Ficamos felizes que gostou, Ana! Aproveite seu novo produto.',
                                 created_time: new Date(Date.now() - 6000000).toISOString()
                             }]

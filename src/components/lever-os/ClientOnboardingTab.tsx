@@ -185,7 +185,7 @@ export function ClientOnboardingTab({ clientId }: ClientOnboardingTabProps) {
             <SelectContent>
               <SelectItem value="mrr_start">MRR Start</SelectItem>
               <SelectItem value="mrr_growth">MRR Growth</SelectItem>
-              <SelectItem value="avulso_tema">Avulso — Tema Beacon</SelectItem>
+              <SelectItem value="avulso_tema">Avulso — Tema NODE</SelectItem>
               <SelectItem value="avulso_reformulacao">Avulso — Reformulação</SelectItem>
               <SelectItem value="avulso_arte">Avulso — Arte/Design</SelectItem>
             </SelectContent>
@@ -907,7 +907,7 @@ export function ClientOnboardingTab({ clientId }: ClientOnboardingTabProps) {
             <SelectContent>
               <SelectItem value="mrr_start">MRR Start</SelectItem>
               <SelectItem value="mrr_growth">MRR Growth</SelectItem>
-              <SelectItem value="avulso_tema">Avulso — Tema Beacon</SelectItem>
+              <SelectItem value="avulso_tema">Avulso — Tema NODE</SelectItem>
               <SelectItem value="avulso_reformulacao">Avulso — Reformulação</SelectItem>
               <SelectItem value="avulso_arte">Avulso — Arte/Design</SelectItem>
             </SelectContent>

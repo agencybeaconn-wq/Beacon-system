@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useBriefings } from '@/hooks/useBriefings';
 import { AiAnalysisService } from '@/services/aiAnalysisService';
 import { supabase } from '@/integrations/supabase/client';
-import leverLogo from '@/assets/lever-logo.png';
+import nodeTile from '@/assets/node-tile.png';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -409,7 +409,7 @@ export default function BriefingForm() {
                     .join('\n');
 
                 const result = await AiAnalysisService.analyze({
-                    prompt: `Você é um estrategista sênior de e-commerce e branding na agência Beacon. Crie um RESUMO EXECUTIVO profissional deste briefing de cliente.
+                    prompt: `Você é um estrategista sênior de e-commerce e branding na agência NODE. Crie um RESUMO EXECUTIVO profissional deste briefing de cliente.
 
 REGRAS:
 - Escreva de forma natural, em parágrafos fluidos. NÃO use marcadores com asteriscos ou bullets em excesso.
@@ -514,7 +514,7 @@ ${answersText}`,
             {/* Header: versão portal (cliente) vs interno (agência) */}
             {isPortalMode ? (
                 <div className="flex items-center gap-4 pb-2">
-                    <img src={leverLogo} alt="Beacon" className="w-12 h-12 rounded-xl object-contain" />
+                    <img src={nodeTile} alt="NODE" className="w-12 h-12 rounded-xl object-contain" />
                     <div>
                         <h1 className="text-2xl font-bold tracking-tight">Briefing do Projeto</h1>
                         <p className="text-muted-foreground text-sm">Preencha as informações da sua loja pra começarmos o desenvolvimento.</p>
@@ -523,7 +523,7 @@ ${answersText}`,
             ) : (
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 pb-2">
                     <div className="flex items-center gap-4">
-                        <img src={leverLogo} alt="Beacon" className="w-12 h-12 rounded-xl object-contain" />
+                        <img src={nodeTile} alt="NODE" className="w-12 h-12 rounded-xl object-contain" />
                         <div>
                             <h1 className="text-2xl font-bold tracking-tight">Briefing Interno</h1>
                             <p className="text-muted-foreground text-sm">Preencha todas as informações do cliente.</p>
@@ -686,7 +686,7 @@ ${answersText}`,
 
                     <Section number="6" title="Banners & Comunicação Visual" defaultOpen={false}>
                         <div className="rounded-lg border border-border/60 bg-muted/20 px-4 py-3 space-y-3">
-                            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Banners que a Beacon vai criar pra sua loja</p>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Banners que a NODE vai criar pra sua loja</p>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-sm">
                                 <div>
                                     <p className="font-semibold text-foreground mb-1">Capa de coleção</p>
@@ -752,7 +752,7 @@ ${answersText}`,
                             <span className="block mt-1">
                                 Admin da loja → <span className="font-medium text-foreground">Configurações</span> → <span className="font-medium text-foreground">Usuários e permissões</span> → aba <span className="font-medium text-foreground">Segurança</span> → seção <span className="font-medium text-foreground">Colaboradores</span> → copie o código exibido (ou clique em <span className="font-medium text-foreground">Gerar novo código</span>).
                             </span>
-                            <span className="block mt-1 opacity-80">Esse código permite o time da Beacon enviar a solicitação de acesso à sua loja. Você ainda aprova a solicitação em Usuários.</span>
+                            <span className="block mt-1 opacity-80">Esse código permite o time da NODE enviar a solicitação de acesso à sua loja. Você ainda aprova a solicitação em Usuários.</span>
                         </div>
 
                         <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mt-4 mb-2">Contato / SAC</p>

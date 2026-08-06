@@ -38,7 +38,7 @@ export function AgencyLayout({ children }: { children: React.ReactNode }) {
             {/* Mobile Header & Sidebar */}
             <div className="md:hidden fixed top-0 left-0 right-0 h-16 border-b border-border bg-background/80 backdrop-blur-md z-40 flex items-center px-4 justify-between">
                 <div className="flex items-center gap-2">
-                    <img src={leverLogo} alt="Beacon" className="h-7 w-auto" />
+                    <img src={leverLogo} alt="NODE" className="h-4 w-auto" />
                     <span className="font-semibold text-lg text-foreground tracking-tight">System</span>
                 </div>
 

@@ -37,7 +37,7 @@ import {
     Eye,
     Pencil
 } from "lucide-react";
-import leverLogo from "@/assets/lever-logo.png";
+import nodeTile from "@/assets/node-tile.png";
 
 const MetaLogo = ({ className }: { className?: string }) => (
     <svg
@@ -579,7 +579,7 @@ const AutomationsInner = () => {
                                             <SelectTrigger><SelectValue /></SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="META_NATIVE">{t('automations_tab.modal.type_meta', 'Meta (Sincronizada)')}</SelectItem>
-                                                <SelectItem value="LOCAL">{t('automations_tab.modal.type_local', 'Local (Beacon)')}</SelectItem>
+                                                <SelectItem value="LOCAL">{t('automations_tab.modal.type_local', 'Local (NODE)')}</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
@@ -725,7 +725,7 @@ const AutomationsInner = () => {
                                                 <div>
                                                     <div className="flex items-center gap-2">
                                                         <CardTitle className="text-base">{rule.name}</CardTitle>
-                                                        {(rule.rule_type === "META_NATIVE" || rule.meta_rule_id) ? <MetaLogo className={`w-4 h-4 ${rule.status !== "ACTIVE" ? "grayscale opacity-50" : ""}`} /> : <img src={leverLogo} alt="Beacon" className={`w-4 h-4 object-contain ${rule.status !== "ACTIVE" ? "grayscale opacity-50" : ""}`} />}
+                                                        {(rule.rule_type === "META_NATIVE" || rule.meta_rule_id) ? <MetaLogo className={`w-4 h-4 ${rule.status !== "ACTIVE" ? "grayscale opacity-50" : ""}`} /> : <img src={nodeTile} alt="NODE" className={`w-4 h-4 object-contain rounded-sm ${rule.status !== "ACTIVE" ? "grayscale opacity-50" : ""}`} />}
                                                     </div>
                                                     {rule.description && <CardDescription className="text-sm mt-1">{rule.description}</CardDescription>}
                                                 </div>

@@ -195,7 +195,7 @@ export default function TrainingLibrary() {
                             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 to-blue-600 flex items-center justify-center">
                                 <GraduationCap className="w-5 h-5 text-white" />
                             </div>
-                            <img src={leverLogo} alt="Beacon" className="h-7 w-auto opacity-60" />
+                            <img src={leverLogo} alt="NODE" className="h-4 w-auto opacity-60" />
                         </div>
 
                         <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-[0.9]">

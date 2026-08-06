@@ -198,10 +198,10 @@ export function AdAccountSelector() {
                   <CommandGroup heading="Interno">
                     <CommandItem
                       value="lever-interno"
-                      onSelect={() => handleSelectClient(leverClient.id, "Beacon")}
+                      onSelect={() => handleSelectClient(leverClient.id, "NODE")}
                       className="cursor-pointer"
                     >
-                      Beacon
+                      NODE
                       {selectedClientId === leverClient.id && (
                         <Check className="ml-auto h-4 w-4 text-primary" />
                       )}

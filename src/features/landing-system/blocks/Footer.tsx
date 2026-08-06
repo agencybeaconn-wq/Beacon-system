@@ -14,14 +14,14 @@ export interface FooterProps {
 
 export function Footer({ groups = [], tagline, copyright, legal = [] }: FooterProps) {
   const year = new Date().getFullYear();
-  const copy = copyright ?? `© ${year} Beacon. Todos os direitos reservados.`;
+  const copy = copyright ?? `© ${year} NODE. Todos os direitos reservados.`;
 
   return (
     <footer className={`${tokens.surface.muted} border-t border-border`}>
       <div className={`${tokens.layout.containerWide} py-16 md:py-20`}>
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
           <div className="md:col-span-4">
-            <div className="text-xl font-bold tracking-tight text-foreground">Beacon</div>
+            <div className="text-xl font-bold tracking-tight text-foreground">NODE</div>
             {tagline && <p className={`${tokens.typography.small} mt-3 max-w-xs`}>{tagline}</p>}
           </div>
           {groups.length > 0 && (

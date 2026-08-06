@@ -153,7 +153,7 @@ export function AgencySidebar({ onNavigate }: { onNavigate?: () => void }) {
             <div className="flex flex-col border-b border-border/40 transition-all duration-200 h-16 justify-center px-5 shrink-0 mb-6">
                 <Link to="/agency/dashboard" className="hover:opacity-80 transition-opacity">
                     <div className="flex items-center gap-2">
-                        <img src={leverLogo} alt="Beacon" className="h-7 w-auto" />
+                        <img src={leverLogo} alt="NODE" className="h-4 w-auto" />
                         <span className="font-bold text-lg text-foreground tracking-tight">System</span>
                     </div>
                 </Link>

@@ -150,7 +150,7 @@ export default function ClientPortal() {
                                 className="h-8 w-auto object-contain"
                             />
                         ) : (
-                            <img src={leverLogo} alt="Beacon" className="h-8 w-auto" />
+                            <img src={leverLogo} alt="NODE" className="h-5 w-auto" />
                         )}
                         <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
                             {t('overview.title', 'Overview')}
@@ -431,7 +431,7 @@ export default function ClientPortal() {
             <footer className="text-center text-xs text-muted-foreground py-4 border-t border-border/50">
                 <p>
                     Powered by{' '}
-                    <span className="font-bold text-primary">Beacon</span>
+                    <span className="font-bold text-primary">NODE</span>
                 </p>
             </footer>
         </div>

@@ -153,7 +153,7 @@ export default function Chat() {
       <div className="mb-2 sm:mb-6 w-full max-w-full">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <h1 className="text-xl sm:text-3xl font-bold mb-1 sm:mb-2">Beacon AI</h1>
+            <h1 className="text-xl sm:text-3xl font-bold mb-1 sm:mb-2">NODE AI</h1>
             {campaignContext && (
               <Badge variant="secondary" className="mb-1 sm:mb-2">
                 {campaignContext.selectedItems.length} {campaignContext.entityType}

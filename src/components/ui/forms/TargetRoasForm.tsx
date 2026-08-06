@@ -102,7 +102,7 @@ export function TargetRoasForm({ accountId }: TargetRoasFormProps) {
         setTargetRoas(value);
         toast({
           title: "Meta salva com sucesso!",
-          description: `Target ROAS definido como ${value}x. A Beacon AI usará este valor nas análises.`,
+          description: `Target ROAS definido como ${value}x. A NODE AI usará este valor nas análises.`,
           variant: "default"
         });
       } else {
@@ -143,7 +143,7 @@ export function TargetRoasForm({ accountId }: TargetRoasFormProps) {
       <CardHeader>
         <CardTitle>Target ROAS</CardTitle>
         <CardDescription>
-          Defina o ROAS mínimo aceitável que a Beacon AI usará como referência nas análises de desempenho. Esta meta é global para todas as suas contas. Se não definido, será usado o valor padrão de 2.0x.
+          Defina o ROAS mínimo aceitável que a NODE AI usará como referência nas análises de desempenho. Esta meta é global para todas as suas contas. Se não definido, será usado o valor padrão de 2.0x.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

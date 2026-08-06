@@ -81,7 +81,7 @@ const FinanceiroAcademy = () => {
             <div className="flex items-start justify-between mb-4">
                 <div>
                     <h1 className="text-3xl font-black tracking-tight text-foreground">Financeiro Academy</h1>
-                    <p className="text-muted-foreground mt-1 max-w-2xl">Controle financeiro dos cursos e treinamentos da Beacon Academy.</p>
+                    <p className="text-muted-foreground mt-1 max-w-2xl">Controle financeiro dos cursos e treinamentos da NODE Academy.</p>
                 </div>
                 <div className="flex items-center space-x-2">
                     <TabsList className="h-10 mr-2">

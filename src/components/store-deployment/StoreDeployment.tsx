@@ -265,7 +265,7 @@ export function StoreDeployment() {
                         </div>
                         <div className="space-y-2">
                             <Label className="text-xs font-bold text-muted-foreground uppercase">Nome da marca template (para substituição)</Label>
-                            <Input placeholder="Ex: Beacon Store" value={sourceBrandName} onChange={e => setSourceBrandName(e.target.value)} />
+                            <Input placeholder="Ex: NODE Store" value={sourceBrandName} onChange={e => setSourceBrandName(e.target.value)} />
                             <p className="text-[10px] text-muted-foreground">Será substituído pelo nome da marca do cliente em todos os textos</p>
                         </div>
                     </Card>

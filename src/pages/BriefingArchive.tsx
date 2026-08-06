@@ -154,7 +154,7 @@ function buildPrompt(clientName: string, answers: Record<string, any>) {
         return `${sec.title}\n${entries.join('\n')}`;
     }).filter(Boolean).join('\n\n');
 
-    return `Você é um estrategista sênior de e-commerce e branding na agência Beacon. Crie um RESUMO EXECUTIVO profissional deste briefing de cliente.
+    return `Você é um estrategista sênior de e-commerce e branding na agência NODE. Crie um RESUMO EXECUTIVO profissional deste briefing de cliente.
 
 REGRAS:
 - Escreva de forma natural, em parágrafos fluidos. NÃO use marcadores com asteriscos ou bullets em excesso.

@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { AdAccountSelector } from "@/components/AdAccountSelector";
 import { useLocation } from "react-router-dom";
 import leverLogo from "@/assets/lever-logo.png";
+import nodeTile from "@/assets/node-tile.png";
 import {
   Sidebar,
   SidebarContent,
@@ -475,11 +476,11 @@ export function AppSidebar() {
           <div className="select-none">
             {!isCollapsed ? (
               <div className="flex items-center gap-2">
-                <img src={leverLogo} alt="Beacon" className="h-7 w-auto" />
+                <img src={leverLogo} alt="NODE" className="h-4 w-auto" />
                 <span className="font-semibold text-lg text-foreground tracking-tight">System</span>
               </div>
             ) : (
-              <img src={leverLogo} alt="Beacon" className="h-6 w-6 object-contain" />
+              <img src={nodeTile} alt="NODE" className="h-6 w-6 object-contain rounded" />
             )}
           </div>
         </div>

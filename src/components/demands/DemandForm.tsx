@@ -17,7 +17,7 @@ import {
 import { DemandPrioritySelector, DemandPriority } from "./DemandPrioritySelector";
 import { Loader2, Upload, X, FileIcon, Image as ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import leverLogo from "@/assets/lever-logo.png";
+import nodeTile from "@/assets/node-tile.png";
 
 interface DemandFormProps {
     clientId?: string;
@@ -155,7 +155,7 @@ export function DemandForm({ clientId: propClientId, workspaceId, clientName: pr
             {/* Header with Logo */}
             <div className="flex items-center gap-3 mb-8">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center border border-primary/20">
-                    <img src={leverLogo} alt="Beacon" className="w-7 h-7" />
+                    <img src={nodeTile} alt="NODE" className="w-7 h-7 rounded" />
                 </div>
                 <div>
                     <h2 className="text-xl font-bold text-foreground">
