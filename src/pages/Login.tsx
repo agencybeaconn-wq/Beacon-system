@@ -20,7 +20,7 @@ const Login = () => {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        navigate("/");
+        navigate("/app");
       }
     });
   }, [navigate]);
@@ -63,7 +63,7 @@ const Login = () => {
         });
         if (error) throw error;
         toast({ title: "Login realizado!" });
-        navigate("/");
+        navigate("/app");
       }
     } catch (error: any) {
       toast({

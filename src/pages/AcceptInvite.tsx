@@ -77,7 +77,7 @@ const AcceptInvite = () => {
                             setIsLoading(false);
                         } else {
                             // User is already set up, redirect to home
-                            navigate("/");
+                            navigate("/app");
                         }
                     }
                 });
@@ -87,7 +87,7 @@ const AcceptInvite = () => {
                 if (data.session?.user) {
                     const user = data.session.user;
                     handleActivateMember(user.id, user.email || "").then(() => {
-                        navigate("/");
+                        navigate("/app");
                     });
                 } else {
                     setError("Link de convite inválido ou expirado.");
@@ -179,7 +179,7 @@ const AcceptInvite = () => {
                 }
             }
 
-            navigate("/"); // agency admin/operator vai pro dashboard
+            navigate("/app"); // agency admin/operator vai pro dashboard
         } catch (err: any) {
             toast({
                 title: "Erro",
