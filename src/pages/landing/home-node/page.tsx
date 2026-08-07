@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Home NODE — landing pública da rota "/" (agencybeacon.site)
  * Direção: DIRECAO.md (Dark Immersive + Terminal/Dev-Tool, monocromático NODE)
  * Self-contained: CSS escopado em .nlp-, canvas vanilla, zero dependência nova.
@@ -6,16 +6,31 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import nodeLogo from '@/assets/node-logo.png';
+import lojaPacerun from '@/assets/loja-pacerun.jpg';
+import lojaThimports from '@/assets/loja-thimports.jpg';
+import lojaMundotimao from '@/assets/loja-mundotimao.jpg';
 import BrainField from './BrainField';
+import { registrar, observarProfundidade } from './rastreio';
 
 const WHATS = 'https://wa.me/5531984083376?text=Ol%C3%A1%2C%20quero%20falar%20com%20a%20NODE%20sobre%20um%20projeto.';
 const INSTA = 'https://www.instagram.com/noode.dev/';
 
+// Foco em SERVIÇO PRESTADO, não em vaidade de escala: "clientes ativos" saiu porque
+// afirmava um volume que a página não prova, e prometer o que não se mostra derruba
+// a confiança justamente na seção que existe pra construí-la.
 const STATS = [
     { value: 168, prefix: 'R$', suffix: 'M+', label: 'faturamento gerado' },
     { value: 1732, prefix: '', suffix: '', label: 'projetos entregues' },
-    { value: 742, prefix: '', suffix: '', label: 'marcas atendidas' },
-    { value: 1389, prefix: '', suffix: '', label: 'clientes ativos' },
+    { value: 742, prefix: '', suffix: '', label: 'clientes atendidos' },
+    { texto: '9h–23h', label: 'suporte todo dia' },
+];
+
+// Operações reais no ar — prova de entrega, não peça de conversão:
+// sem preço, sem CTA de compra. A loja, o que foi entregue, e o link.
+const OPERACOES = [
+    { nome: 'Pace Run', url: 'https://lojapacerun.com.br/', img: lojaPacerun, entrega: 'Loja completa e checkout transparente' },
+    { nome: 'TH Imports', url: 'https://thimportsloja.com.br/', img: lojaThimports, entrega: 'Tema próprio, catálogo e operação' },
+    { nome: 'Mundo Timão', url: 'https://mundotimao.com.br/', img: lojaMundotimao, entrega: 'Identidade de clube e vitrine sazonal' },
 ];
 
 const SOLUTIONS = [
@@ -36,12 +51,97 @@ const SOLUTIONS = [
     },
 ];
 
-const RESULTS = [
-    { brand: 'Mantos do PH', value: 180, prefix: '+', suffix: '%', metric: 'em vendas' },
-    { brand: 'TrybuteHA', value: 7, prefix: '', suffix: 'x', metric: 'de ROAS' },
-    { brand: 'Vargard & Co', value: 320, prefix: '+', suffix: '%', metric: 'em leads' },
-    { brand: 'TrackSoul', value: 150, prefix: '+', suffix: '%', metric: 'em conversão' },
+// As três frentes que a NODE vende. Cada uma diz O QUE é e COMO funciona na prática —
+// é o elemento de venda da página, não um resumo institucional.
+const OFERTAS = [
+    {
+        num: '01', titulo: 'Sites & Landing Pages',
+        linha: 'Desenvolvimento personalizado de verdade. A gente não adapta layout pronto: constrói exatamente o que a sua operação precisa vender, do jeito que o seu negócio funciona.',
+        grupos: [
+            {
+                label: 'o que entra',
+                itens: [
+                    'E-commerce completo — Shopify, WooCommerce, VTEX ou NuvemShop',
+                    'Landing page de campanha, desenhada pra uma ação só',
+                    'Site institucional e portfólio com identidade autoral',
+                    'Catálogo, variações, frete e checkout configurados',
+                    'Checkout transparente (Yampi, Appmax) quando faz sentido',
+                    'Design do zero — nenhum tema reaproveitado de terceiro',
+                ],
+            },
+            {
+                label: 'como funciona',
+                itens: [
+                    'Partimos do seu produto e do seu público, nunca de um layout',
+                    'Cada seção existe por um motivo ligado à venda',
+                    'Pixel, GA4 e eventos instalados e testados antes de subir',
+                    'Você recebe acessos e documentação: a loja é sua, não nossa',
+                ],
+            },
+        ],
+        cta: 'Fazer meu orçamento',
+        wa: 'Olá! Quero entender mais sobre o desenvolvimento de site / landing page com a NODE.',
+    },
+    {
+        num: '02', titulo: 'Sistemas & IA aplicada',
+        linha: 'Software que entra na operação e resolve gargalo real. Antes de escrever uma linha de código, a gente entende como você trabalha hoje e onde o processo trava.',
+        grupos: [
+            {
+                label: 'o que entra',
+                itens: [
+                    'Painéis e dashboards com os seus dados, em tempo real',
+                    'Automações que eliminam trabalho manual repetido',
+                    'Agentes de IA que atendem, triam e respondem 24h',
+                    'Integração com Shopify, WhatsApp, planilhas, ERP e CRM',
+                    'Área de cliente com login e permissão por perfil',
+                    'Banco próprio, com isolamento de dados e segurança',
+                ],
+            },
+            {
+                label: 'como funciona',
+                itens: [
+                    'Mapeamos a operação atual e achamos onde o tempo vaza',
+                    'Definimos qual resultado o sistema precisa entregar',
+                    'Entregamos em ciclos curtos, com você usando desde cedo',
+                    'Depois do lançamento seguimos operando junto com você',
+                ],
+            },
+        ],
+        cta: 'Fazer meu orçamento',
+        wa: 'Olá! Quero entender mais sobre sistemas e IA aplicada na minha operação com a NODE.',
+    },
+    {
+        num: '03', titulo: 'Mentorias',
+        linha: 'Formação 100% na prática. Você não assiste aula: constrói um projeto real do zero até o ar, com a gente do lado revisando cada decisão.',
+        grupos: [
+            {
+                label: 'o que você aprende',
+                itens: [
+                    'IA aplicada de verdade — onde ela entra e onde não entra',
+                    'Desenvolvimento de sites e LPs, do zero ao deploy',
+                    'Construção de sistemas: banco, login, painel e automação',
+                    'Geração de imagem e criativo com IA, do prompt ao entregável',
+                    'Agentes de código no dia a dia, sem enrolação',
+                    'Precificação e escopo: como vender o que você aprendeu',
+                ],
+            },
+            {
+                label: 'como é o ensino',
+                itens: [
+                    'Cada encontro termina com uma coisa funcionando, não com anotação',
+                    'O projeto é seu, é real, e vai pro ar no final',
+                    'Revisão do seu código e das suas decisões, uma a uma',
+                    'Acompanhamento direto, sem turma gigante',
+                ],
+            },
+        ],
+        cta: 'Quero saber da mentoria',
+        wa: 'Olá! Quero entender mais sobre as mentorias da NODE.',
+    },
 ];
+
+// cada frente abre o WhatsApp já com o assunto certo — quem chega não precisa explicar
+const waLink = (texto: string) => `https://wa.me/5531984083376?text=${encodeURIComponent(texto)}`;
 
 const STEPS = [
     { num: '01', title: 'Alinhamento estratégico', desc: 'Sentamos com você, entendemos o negócio e definimos a meta. Sem meta clara, nada começa.' },
@@ -90,6 +190,19 @@ function Counter({ value, prefix = '', suffix = '' }: { value: number; prefix?: 
 
 export default function HomeNode() {
     const [faqOpen, setFaqOpen] = useState<number | null>(0);
+    const [ato, setAto] = useState(0);
+    const [abrindo, setAbrindo] = useState(true);
+
+    // ABERTURA: segura a página o mínimo necessário pras fontes assentarem, pra ela
+    // ABRIR em vez de "aparecer". Teto rígido de 1.4s — nunca vira tela de espera.
+    useEffect(() => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setAbrindo(false); return; }
+        let fechado = false;
+        const fechar = () => { if (!fechado) { fechado = true; setAbrindo(false); } };
+        const teto = setTimeout(fechar, 1400);
+        document.fonts?.ready.then(() => setTimeout(fechar, 240));
+        return () => clearTimeout(teto);
+    }, []);
 
     // Reveal on scroll
     useEffect(() => {
@@ -101,14 +214,81 @@ export default function HomeNode() {
         return () => io.disconnect();
     }, []);
 
+    // PROFUNDIDADE (DESIGN.md §5.3): a camada do meio anda mais devagar que o texto.
+    // Aplicada só em elementos SEM .nlp-reveal — reveal também usa transform e os dois
+    // brigariam pela mesma propriedade.
+    useEffect(() => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const els = Array.from(document.querySelectorAll<HTMLElement>('.nlp-par'));
+        if (!els.length) return;
+        let raf = 0;
+        const update = () => {
+            raf = 0;
+            const h = window.innerHeight;
+            for (const el of els) {
+                const r = el.getBoundingClientRect();
+                if (r.bottom < -200 || r.top > h + 200) continue;
+                const c = (r.top + r.height / 2 - h / 2) / h;   // -1 (topo) .. 1 (base)
+                const d = parseFloat(el.dataset.par || '1');
+                el.style.transform = `translate3d(0,${(-c * 30 * d).toFixed(1)}px,0)`;
+            }
+        };
+        const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+        update();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+            window.removeEventListener('resize', onScroll);
+            if (raf) cancelAnimationFrame(raf);
+        };
+    }, []);
+
+    // Indicador dos 4 atos — o mapa tem que bater com a ARTE, não com a contagem de
+    // seções. Os marcos são exatamente onde cada ato do cérebro assume.
+    useEffect(() => {
+        const marcos = () => ['solucoes', 'resultados', 'faq']
+            .map(id => document.getElementById(id))
+            .map(el => (el ? el.getBoundingClientRect().top + window.scrollY : Infinity));
+        let raf = 0;
+        const update = () => {
+            raf = 0;
+            const h = window.innerHeight;
+            const y = window.scrollY + h * 0.42;
+            const [sol, res, faq] = marcos();
+            // mesmos limiares das rampas do BrainField, pra ponto aceso == ato na tela
+            setAto(y >= faq - h * 0.4 ? 3 : y >= res - h * 0.4 ? 2 : y >= sol - h * 0.4 ? 1 : 0);
+        };
+        const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+        update();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => { window.removeEventListener('scroll', onScroll); if (raf) cancelAnimationFrame(raf); };
+    }, []);
+
+    // Rastreio: quem chegou, até onde leu e em qual CTA clicou
+    useEffect(() => {
+        registrar('landing_view');
+        return observarProfundidade();
+    }, []);
+
+    // Hover numa operação real manda um pulso pro campo de partículas
+    const pulso = () => window.dispatchEvent(new CustomEvent('node-pulse'));
+
     return (
         <div className="nlp">
             <style>{`
-        .nlp{--bg:#050505;--fg:#ffffff;--muted:#ababab;--dim:#c9c9c9;--line:rgba(255,255,255,.09);--dur:.7s;--ease:cubic-bezier(.22,1,.36,1);
+        /* Tokens — ver DESIGN.md §2. Base azulada (nunca preto puro), texto GELO
+           (nunca #fff), e um acento único violeta que também manda na interface:
+           é o matiz presente nos 3 atos da arte, o que faz página e canvas virarem uma peça só. */
+        .nlp{--bg:#08090C;--bg-elev:#0E1017;--fg:#EEF1F7;--muted:#8A90A2;--dim:#B9C0D0;
+          --line:rgba(190,200,225,.11);--line-hi:rgba(190,200,225,.20);
+          --accent:#8B6FE0;--accent-hi:#A48CEE;--accent-dim:rgba(139,111,224,.14);
+          --dur:.7s;--ease:cubic-bezier(.22,1,.36,1);
           background-color:var(--bg);
-          color:var(--fg);font-family:'Inter Tight',sans-serif;min-height:100vh;overflow-x:hidden}
+          color:var(--fg);font-family:'Outfit','Inter Tight',sans-serif;min-height:100vh;overflow-x:hidden}
         .nlp *{box-sizing:border-box}
-        .nlp ::selection{background:#fff;color:#050505}
+        .nlp ::selection{background:var(--accent);color:var(--fg)}
+        .nlp :focus-visible{outline:2px solid var(--accent-hi);outline-offset:3px;border-radius:4px}
         .nlp-mono{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
         .nlp-wrap{max-width:1280px;margin-inline:auto;padding-inline:28px}
         .nlp section{padding-block:clamp(84px,10vw,150px);position:relative;z-index:1}
@@ -126,31 +306,43 @@ export default function HomeNode() {
         .nlp-reveal.nlp-in{opacity:1;transform:none}
         .nlp-d1{transition-delay:.08s}.nlp-d2{transition-delay:.16s}.nlp-d3{transition-delay:.24s}
         /* nav */
-        .nlp-nav{position:fixed;inset-inline:0;top:0;z-index:50;background:rgba(5,5,5,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+        .nlp-nav{position:fixed;inset-inline:0;top:0;z-index:50;background:rgba(8,9,12,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
         .nlp-nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
         .nlp-nav .nlp-wrap{max-width:none;padding-inline:clamp(24px,3vw,48px)}
         .nlp-links{display:flex;gap:28px}
         .nlp-links a{font-size:.86rem;color:var(--muted);transition:color var(--dur) var(--ease)}
+        .nlp-links a{position:relative}
+        .nlp-links a::after{content:'';position:absolute;left:0;right:100%;bottom:-6px;height:1px;background:var(--accent);
+          transition:right var(--dur) var(--ease)}
         .nlp-links a:hover{color:var(--fg)}
+        .nlp-links a:hover::after{right:0}
         @media(max-width:760px){.nlp-links{display:none}}
         /* botões */
         .nlp-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 30px;border-radius:999px;font-weight:500;font-size:.94rem;border:1px solid transparent;
           transition:transform var(--dur) var(--ease),background var(--dur) var(--ease),border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease);cursor:pointer}
         .nlp-btn:hover{transform:translateY(-2px)}
         .nlp-btn:active{transform:translateY(0) scale(.97)}
-        .nlp .nlp-btn-solid{background:var(--fg);color:#0a0a0a;box-shadow:0 0 24px rgba(255,255,255,.18),inset 0 -2px 6px rgba(0,0,0,.12)}
-        .nlp .nlp-btn-solid:hover{background:#fff;color:#0a0a0a;box-shadow:0 0 44px rgba(255,255,255,.32),inset 0 -2px 6px rgba(0,0,0,.12)}
-        .nlp .nlp-btn-ghost{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.05);color:var(--fg);backdrop-filter:blur(8px)}
-        .nlp .nlp-btn-ghost:hover{border-color:rgba(255,255,255,.45);background:rgba(255,255,255,.10);box-shadow:0 0 24px rgba(255,255,255,.07)}
+        .nlp .nlp-btn-solid{background:var(--fg);color:var(--bg);box-shadow:0 0 26px var(--accent-dim),inset 0 -2px 6px rgba(0,0,0,.12)}
+        .nlp .nlp-btn-solid:hover{background:#F9FBFF;color:var(--bg);box-shadow:0 0 48px rgba(139,111,224,.42),inset 0 -2px 6px rgba(0,0,0,.12)}
+        .nlp .nlp-btn-ghost{border-color:var(--line-hi);background:rgba(190,200,225,.05);color:var(--fg);backdrop-filter:blur(8px)}
+        .nlp .nlp-btn-ghost:hover{border-color:var(--accent);background:var(--accent-dim);box-shadow:0 0 28px rgba(139,111,224,.20)}
         .nlp-btn-sm{padding:9px 20px;font-size:.85rem}
         /* hero — texto à esquerda, cérebro respira à direita (fixo atrás) */
         .nlp-hero{position:relative;padding-top:190px!important;padding-bottom:110px!important;min-height:92vh;display:flex;align-items:center}
         .nlp-hero .nlp-wrap{max-width:none;margin:0;padding-left:clamp(24px,5.5vw,96px);padding-right:24px}
         .nlp-hero .nlp-wrap{max-width:1380px}
         .nlp-hero-in{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:28px;z-index:1;max-width:640px}
-        .nlp-hero p{font-size:clamp(1.02rem,1.4vw,1.16rem);max-width:44ch;color:var(--dim);text-shadow:0 0 18px rgba(5,5,5,.9)}
-        .nlp-hero h1{text-shadow:0 0 28px rgba(5,5,5,.85)}
+        .nlp-hero p{font-size:clamp(1.02rem,1.4vw,1.16rem);max-width:44ch;color:var(--dim);text-shadow:0 0 18px rgba(8,9,12,.9)}
+        .nlp-hero h1{text-shadow:0 0 28px rgba(8,9,12,.85)}
         .nlp-ctas{display:flex;gap:26px;flex-wrap:wrap;align-items:center}
+        /* mobile: menos ar e menos passo entre seções — a página encolhe sem perder respiro */
+        @media(max-width:760px){
+          .nlp-hero{padding-top:132px!important;padding-bottom:72px!important;min-height:auto}
+          .nlp-hero-in{gap:22px}
+          .nlp section{padding-block:72px}
+          .nlp-head{margin-bottom:44px}
+          .nlp-ops{margin-top:52px}
+        }
         .nlp-link-arrow{display:inline-flex;align-items:center;gap:8px;color:var(--dim);font-weight:400;font-size:.98rem;
           transition:color var(--dur) var(--ease),gap var(--dur) var(--ease)}
         .nlp-link-arrow span{transition:transform var(--dur) var(--ease)}
@@ -174,26 +366,126 @@ export default function HomeNode() {
         /* soluções — colunas flutuando no void, sem caixa */
         .nlp-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:64px}
         @media(max-width:860px){.nlp-grid3{grid-template-columns:1fr;gap:48px}}
-        .nlp-card{display:flex;flex-direction:column;gap:16px;padding-top:26px;border-top:1px solid var(--line);
-          transition:transform var(--dur) var(--ease)}
-        .nlp-card:hover{transform:translateY(-6px)}
+        /* MATÉRIA + VAZAMENTO DE LUZ (DESIGN.md §5): o card deixa de ser buraco preto com
+           borda de 1px. Superfície translúcida que capta luz, e a borda de cima acende
+           num gradiente que vem da ESQUERDA — o lado onde o cérebro está neste ato. */
+        .nlp-card{position:relative;display:flex;flex-direction:column;gap:16px;padding:26px 22px 22px;
+          border-radius:14px;border:1px solid transparent;
+          background:
+            linear-gradient(170deg,rgba(23,26,37,.92),rgba(13,15,22,.92)) padding-box,
+            linear-gradient(100deg,rgba(139,111,224,.62),var(--line) 44%,rgba(190,200,225,.05)) border-box;
+          backdrop-filter:blur(14px);
+          transition:transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
+        .nlp-card::before{content:'';position:absolute;inset:0;border-radius:14px;pointer-events:none;
+          background:radial-gradient(120% 90% at 0% 0%,var(--accent-dim),transparent 58%);opacity:.9}
+        .nlp-card>*{position:relative}
+        .nlp-card:hover{transform:translateY(-6px);box-shadow:0 18px 50px -24px rgba(139,111,224,.55)}
         .nlp-card h3{margin:0;font-size:1.35rem;font-weight:500;letter-spacing:-.02em}
         .nlp-card .nlp-mono{margin-top:auto;padding-top:16px}
-        /* resultados — números gigantes flutuando */
-        .nlp-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:64px}
-        @media(max-width:960px){.nlp-grid4{grid-template-columns:repeat(2,1fr);gap:48px}}
-        @media(max-width:520px){.nlp-grid4{grid-template-columns:1fr}}
-        .nlp-res{padding-top:26px;border-top:1px solid var(--line);transition:transform var(--dur) var(--ease)}
-        .nlp-res:hover{transform:translateY(-6px)}
-        .nlp-res b{display:block;font-size:clamp(2.8rem,5vw,4.4rem);font-weight:400;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
-        .nlp-res small{color:var(--muted);font-size:.92rem;font-weight:300}
-        /* processo */
-        .nlp-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:64px}
-        @media(max-width:960px){.nlp-steps{grid-template-columns:repeat(2,1fr);gap:48px}}
+        /* resultados — ato 3: o neurônio ocupa a DIREITA, o título ancora na esquerda */
+        #resultados .nlp-wrap{max-width:none;padding-inline:clamp(24px,5.5vw,96px)}
+        #resultados .nlp-head{max-width:620px}
+        /* ── OFERTAS: as três frentes de venda ──
+           Painéis opacos o bastante pra ler por cima do campo de partículas, com a
+           mesma matéria dos cards e a borda acendendo no topo (luz vem de cima). */
+        #ofertas .nlp-wrap{max-width:none;padding-inline:clamp(24px,5.5vw,96px)}
+        .nlp-ofertas{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+        @media(max-width:1020px){.nlp-ofertas{grid-template-columns:1fr;gap:20px;max-width:640px}}
+        /* MOBILE: empilhadas, as três frentes viravam uma coluna quilométrica.
+           Vira carrossel com encaixe — o vizinho aparece pela borda, então dá pra ver
+           que tem mais, e a página encurta em ~2 telas. */
+        @media(max-width:760px){
+          .nlp-ofertas{display:flex;max-width:none;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;
+            padding-inline:24px;margin-inline:-24px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+          .nlp-ofertas::-webkit-scrollbar{display:none}
+          .nlp-oferta{flex:0 0 87%;scroll-snap-align:center;padding:28px 24px 24px}
+          .nlp-oferta h3{font-size:1.28rem}
+          .nlp-oferta li{font-size:.88rem}
+        }
+        .nlp-oferta{position:relative;display:flex;flex-direction:column;gap:14px;padding:34px 30px 30px;
+          border-radius:18px;border:1px solid transparent;
+          background:
+            linear-gradient(180deg,rgba(16,18,26,.94),rgba(11,13,19,.94)) padding-box,
+            linear-gradient(160deg,rgba(139,111,224,.60),var(--line) 46%,rgba(190,200,225,.05)) border-box;
+          backdrop-filter:blur(16px);
+          transition:transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
+        .nlp-oferta::before{content:'';position:absolute;inset:0;border-radius:18px;pointer-events:none;
+          background:radial-gradient(110% 70% at 18% 0%,var(--accent-dim),transparent 60%)}
+        .nlp-oferta>*{position:relative}
+        .nlp-oferta:hover{transform:translateY(-6px);box-shadow:0 26px 60px -28px rgba(139,111,224,.6)}
+        .nlp-oferta-num{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.18em;color:var(--accent)}
+        .nlp-oferta h3{margin:0;font-size:1.42rem;font-weight:500;letter-spacing:-.025em}
+        .nlp-oferta p{font-size:.96rem;color:var(--muted);max-width:none}
+        /* grupos de detalhe: "o que entra" e "como funciona" — é o que separa
+           esta seção do resumo em Soluções (lá é por alto, aqui é o detalhe) */
+        .nlp-oferta-grupo{display:flex;flex-direction:column;gap:12px;padding-top:18px;border-top:1px solid var(--line)}
+        .nlp-oferta-grupo .nlp-mono{font-size:.63rem;color:var(--accent);opacity:.9}
+        .nlp-oferta ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+        .nlp-oferta li{position:relative;padding-left:20px;font-size:.9rem;color:var(--dim);line-height:1.5}
+        .nlp-oferta li::before{content:'';position:absolute;left:0;top:.5em;width:7px;height:7px;
+          border:1px solid var(--accent);border-radius:2px;transform:rotate(45deg)}
+        /* CTA de verdade em cada frente — botão, não link solto */
+        .nlp-oferta-cta{margin-top:auto;padding-top:0;align-self:flex-start;padding:12px 24px;font-size:.9rem;
+          border-color:var(--line-hi);background:rgba(190,200,225,.05);color:var(--fg);backdrop-filter:blur(8px)}
+        .nlp-oferta-cta span{transition:transform var(--dur) var(--ease)}
+        .nlp-oferta:hover .nlp-oferta-cta{border-color:var(--accent);background:var(--accent-dim)}
+        .nlp-oferta-cta:hover{box-shadow:0 0 28px rgba(139,111,224,.24)}
+        .nlp-oferta-cta:hover span{transform:translateX(4px)}
+        /* operações no ar — banners enfileirados na coluna ESQUERDA (o neurônio ocupa a direita) */
+        .nlp-ops{margin-top:clamp(64px,7vw,104px);max-width:520px;display:flex;flex-direction:column;gap:18px}
+        .nlp-op{display:flex;gap:18px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:14px;
+          background:rgba(190,200,225,.035);backdrop-filter:blur(14px);text-decoration:none;color:inherit;
+          transition:transform var(--dur) var(--ease),border-color var(--dur) var(--ease),background var(--dur) var(--ease)}
+        .nlp-op:hover{transform:translateY(-4px);border-color:rgba(139,111,224,.55);background:rgba(139,111,224,.07)}
+        .nlp-op-shot{flex:0 0 148px;aspect-ratio:16/9;border-radius:9px;overflow:hidden;border:1px solid var(--line);background:#0E1017}
+        /* a miniatura ROLA dentro do quadro no hover — a loja "ganha vida" em vez de ser print */
+        .nlp-op-shot img{width:100%;height:auto;aspect-ratio:760/404;object-fit:cover;object-position:top center;display:block;
+          filter:saturate(.88) brightness(.92);
+          transition:filter var(--dur) var(--ease),transform 2.4s cubic-bezier(.4,0,.2,1)}
+        .nlp-op:hover .nlp-op-shot img{filter:saturate(1) brightness(1);transform:translateY(-24%)}
+        .nlp-op-info{display:flex;flex-direction:column;gap:5px;min-width:0}
+        .nlp-op-info strong{font-size:1.06rem;font-weight:500;letter-spacing:-.02em}
+        .nlp-op-info em{font-style:normal;font-size:.9rem;color:var(--muted);line-height:1.45}
+        .nlp-op-info .nlp-mono{font-size:.66rem;color:#8B6FE0;opacity:.85}
+        @media(max-width:960px){.nlp-ops{max-width:100%}}
+        @media(max-width:520px){.nlp-op-shot{flex-basis:104px}.nlp-op-info strong{font-size:.98rem}}
+        /* (bloco de métricas removido — a prova da seção agora são as operações no ar) */
+        /* ══ PROCESSO — REGISTRO INVERTIDO (DESIGN.md §6) ══
+           A quebra de ritmo da página: superfície clara, texto escuro. É a única seção
+           opaca — ela TAMPA a arte de propósito, e é isso que faz o olho descansar
+           antes do finale. Prova também que o acento funciona nos dois modos. */
+        /* Era uma FAIXA branca cortando a página de ponta a ponta — lia como recorte de
+           outro site colado aqui. Virou um PAINEL: recuado das bordas, cantos redondos,
+           tom frio da paleta (não branco puro) e um halo violeta que dissolve a borda
+           no escuro. Assim a inversão continua sendo a quebra de ritmo, mas pertence. */
+        #processo{position:relative;z-index:2;padding-block:0!important;background:transparent;
+          margin-block:clamp(90px,10vw,150px)}
+        #processo .nlp-wrap{position:relative;max-width:1240px;
+          --fg:#171A22;--muted:#5C6272;--dim:#3C4252;--line:rgba(23,26,34,.13);--line-hi:rgba(23,26,34,.24);
+          --accent:#6A4FCB;--accent-dim:rgba(106,79,203,.10);
+          color:var(--fg);
+          background:linear-gradient(165deg,#E7EAF3 0%,#DDE1EE 54%,#CFD4E6 100%);
+          border:1px solid rgba(190,200,225,.22);border-radius:30px;
+          padding:clamp(52px,6vw,86px) clamp(28px,4vw,64px);
+          box-shadow:0 0 0 1px rgba(8,9,12,.5),0 40px 120px -40px rgba(139,111,224,.55),
+                     0 0 160px -30px rgba(139,111,224,.28)}
+        /* halo: o painel VAZA luz violeta pro escuro em vez de encostar num corte seco */
+        #processo .nlp-wrap::before{content:'';position:absolute;inset:-110px;border-radius:90px;pointer-events:none;
+          background:radial-gradient(58% 54% at 50% 50%,rgba(139,111,224,.26),rgba(139,111,224,.10) 62%,transparent 76%);z-index:-1}
+        @media(max-width:760px){#processo .nlp-wrap{border-radius:22px}}
+        #processo h2{color:var(--fg)}
+        #processo p{color:var(--muted)}
+        #processo .nlp-mono{color:var(--accent);opacity:.85}
+        .nlp-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:52px}
+        @media(max-width:960px){.nlp-steps{grid-template-columns:repeat(2,1fr);gap:44px}}
         @media(max-width:520px){.nlp-steps{grid-template-columns:1fr}}
-        .nlp-step{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direction:column;gap:12px}
-        .nlp-step h3{margin:0;font-size:1.08rem;font-weight:500}
+        .nlp-step{position:relative;border-top:1px solid var(--line-hi);padding-top:22px;display:flex;flex-direction:column;gap:12px}
+        .nlp-step h3{margin:0;font-size:1.08rem;font-weight:500;position:relative}
         .nlp-step p{font-size:.94rem}
+        /* momento editorial: o índice gigante vazado atrás do passo */
+        .nlp-step-idx{position:absolute;top:8px;right:-6px;font-size:clamp(3.6rem,6vw,5.4rem);font-weight:600;
+          line-height:1;letter-spacing:-.05em;color:var(--accent);opacity:.10;pointer-events:none;user-select:none;
+          font-variant-numeric:tabular-nums}
         /* marquee */
         .nlp-marquee{overflow:hidden;border-block:1px solid var(--line);padding-block:22px;position:relative;
           mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
@@ -202,10 +494,32 @@ export default function HomeNode() {
         @keyframes nlp-scroll{to{transform:translateX(-50%)}}
         .nlp-track span{font-family:'JetBrains Mono',monospace;font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
         .nlp-marquee{position:relative;z-index:1;background:var(--bg)}
-        /* manifesto */
-        .nlp-manif{display:grid;grid-template-columns:1.2fr 1fr;gap:56px;align-items:center}
-        @media(max-width:860px){.nlp-manif{grid-template-columns:1fr}}
+        /* MANIFESTO — registro próprio: bloco recuado com barra de acento à esquerda,
+           tipografia maior e ar de página editorial. Era a última seção na receita padrão. */
+        .nlp-manifesto{position:relative}
+        .nlp-manifesto::before{content:'';position:absolute;inset:auto 0 0 0;top:0;width:2px;
+          left:clamp(24px,5.5vw,96px);
+          background:linear-gradient(180deg,transparent,var(--accent) 22%,var(--accent) 78%,transparent)}
+        .nlp-manifesto .nlp-wrap{max-width:none;padding-inline:clamp(58px,7.5vw,140px)}
+        /* coluna única à esquerda: em duas colunas o texto de apoio caía em cima do
+           neurônio (ato 3 ocupa a direita) e ficava ilegível */
+        .nlp-manif{display:flex;flex-direction:column;gap:clamp(28px,3vw,44px);max-width:660px}
+        .nlp-manifesto h2{font-size:clamp(2.1rem,4.4vw,3.6rem);line-height:1.06}
+        .nlp-manifesto p{font-size:1.04rem}
+        /* marquee — deixa de ser barra chapada: some nas pontas e ganha respiro */
+        .nlp-marquee{border-block:none!important;background:transparent!important;padding-block:34px!important}
+        .nlp-marquee::before{content:'';position:absolute;inset-inline:0;top:0;height:1px;
+          background:linear-gradient(90deg,transparent,var(--line-hi) 30%,var(--line-hi) 70%,transparent)}
+        .nlp-marquee::after{content:'';position:absolute;inset-inline:0;bottom:0;height:1px;
+          background:linear-gradient(90deg,transparent,var(--line-hi) 30%,var(--line-hi) 70%,transparent)}
         /* faq — sem caixa, só divisórias no void */
+        /* o ato 4 explode cubos POR CIMA da coluna do FAQ; um véu suave (sem caixa,
+           sem borda) devolve o contraste do texto sem quebrar o "sem caixa" da seção */
+        #faq .nlp-wrap{position:relative}
+        #faq .nlp-wrap::before{content:'';position:absolute;inset:-40px -56px;pointer-events:none;
+          background:radial-gradient(72% 60% at 50% 46%,rgba(8,9,12,.82),rgba(8,9,12,.45) 62%,transparent);
+          border-radius:28px}
+        #faq .nlp-wrap>*{position:relative}
         .nlp-faq{border-top:1px solid var(--line)}
         .nlp-qa{border-bottom:1px solid var(--line)}
         .nlp-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:26px 4px;background:none;border:none;color:var(--fg);
@@ -216,7 +530,12 @@ export default function HomeNode() {
         .nlp-a{max-height:0;overflow:hidden;transition:max-height var(--dur) var(--ease)}
         .nlp-qa.nlp-open .nlp-a{max-height:220px}
         .nlp-a p{padding:0 4px 26px;font-size:.98rem}
-        /* cta final + footer */
+        /* cta final — registro próprio: halo de acento subindo do chão, fechando a narrativa */
+        .nlp-cta-final{position:relative;overflow:hidden}
+        .nlp-cta-final::before{content:'';position:absolute;inset-inline:-10%;bottom:-58%;height:120%;pointer-events:none;
+          background:radial-gradient(50% 50% at 50% 50%,rgba(139,111,224,.20),transparent 68%)}
+        .nlp-cta-final .nlp-wrap{position:relative}
+        .nlp-cta-final h2{font-size:clamp(2.3rem,5vw,4rem)}
         .nlp-final{text-align:center;display:flex;flex-direction:column;align-items:center;gap:26px}
         .nlp-footer{border-top:1px solid var(--line);padding-top:72px;position:relative;z-index:1;background:var(--bg)}
         .nlp-footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:44px;padding-bottom:52px}
@@ -225,14 +544,63 @@ export default function HomeNode() {
         .nlp-footer-col p{font-size:.92rem;max-width:34ch}
         .nlp-footer-title{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
         .nlp-footer-col a{color:var(--muted);font-size:.98rem;width:fit-content;transition:color var(--dur) var(--ease),transform var(--dur) var(--ease)}
-        .nlp-footer-col a:hover{color:var(--fg);transform:translateX(3px)}
+        .nlp-footer-col a:hover{color:var(--accent-hi);transform:translateX(3px)}
         .nlp-footer-bottom{border-top:1px solid var(--line);padding-block:22px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
         .nlp-footer-bottom .nlp-mono{font-size:.64rem}
+        /* abertura: a página ABRE em vez de aparecer. Sai com um leve zoom, deixando
+           o hero entrar por baixo — o gesto é de cortina, não de spinner. */
+        .nlp-abertura{position:fixed;inset:0;z-index:100;background:var(--bg);
+          display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+          transition:opacity .62s var(--ease),transform .62s var(--ease),visibility 0s .62s}
+        .nlp-abertura img{height:26px;width:auto;opacity:.94;animation:nlp-enter .7s var(--ease) both}
+        .nlp-abertura-linha{display:block;width:132px;height:1px;background:var(--line-hi);position:relative;overflow:hidden}
+        .nlp-abertura-linha::after{content:'';position:absolute;inset:0;background:var(--accent);
+          transform:translateX(-100%);animation:nlp-carga 1.25s var(--ease) forwards}
+        @keyframes nlp-carga{to{transform:translateX(0)}}
+        .nlp-abertura.nlp-fora{opacity:0;transform:scale(1.04);visibility:hidden;pointer-events:none}
+        /* trilho dos 4 atos — mapa da narrativa */
+        .nlp-rail{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:40;
+          display:flex;flex-direction:column;gap:14px;pointer-events:none}
+        .nlp-rail i{width:7px;height:7px;border-radius:50%;border:1px solid var(--line-hi);background:transparent;
+          transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease),transform var(--dur) var(--ease)}
+        .nlp-rail i.on{background:var(--accent);border-color:var(--accent);transform:scale(1.45);
+          box-shadow:0 0 12px rgba(139,111,224,.7)}
+        @media(max-width:960px){.nlp-rail{display:none}}
+        /* momento editorial: palavra-tese do hero */
+        .nlp-tese{background:linear-gradient(96deg,var(--fg) 28%,var(--accent-hi));
+          -webkit-background-clip:text;background-clip:text;color:transparent}
+        /* Numeral fantasma REMOVIDO de Resultados: a seção já carrega o neurônio à direita,
+           4 numerais grandes e 3 banners. O fantasma caía em cima do próprio título e lia
+           como sujeira, não como momento editorial. A variedade dessa seção vem dos
+           banners de operação — registro que nenhuma outra seção tem. (DESIGN.md §7) */
+        /* coreografia de entrada do hero */
+        @keyframes nlp-enter{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+        .nlp-hero-in>*{animation:nlp-enter .9s var(--ease) both}
+        .nlp-hero-in>*:nth-child(1){animation-delay:.05s}
+        .nlp-hero-in>*:nth-child(2){animation-delay:.13s}
+        .nlp-hero-in>*:nth-child(3){animation-delay:.21s}
+        .nlp-hero-in>*:nth-child(4){animation-delay:.29s}
+        .nlp-hero-in>*:nth-child(5){animation-delay:.37s}
+        .nlp-hero-in>*:nth-child(6){animation-delay:.45s}
         @media(prefers-reduced-motion:reduce){
           .nlp *,.nlp *::before,.nlp *::after{animation:none!important;transition:none!important}
           .nlp-reveal{opacity:1;transform:none}
+          .nlp-hero-in>*{opacity:1;transform:none}
+          .nlp-par{transform:none!important}
+          .nlp-abertura{display:none}
         }
       `}</style>
+
+            {/* abertura */}
+            <div className={`nlp-abertura${abrindo ? '' : ' nlp-fora'}`} aria-hidden="true">
+                <img src={nodeLogo} alt="" />
+                <span className="nlp-abertura-linha" />
+            </div>
+
+            {/* trilho dos atos */}
+            <div className="nlp-rail" aria-hidden="true">
+                {[0, 1, 2, 3].map(i => <i key={i} className={i === ato ? 'on' : ''} />)}
+            </div>
 
             {/* NAV */}
             <nav className="nlp-nav">
@@ -240,7 +608,8 @@ export default function HomeNode() {
                     <a href="#top" aria-label="NODE"><img src={nodeLogo} alt="NODE" style={{ height: 18, width: 'auto', display: 'block' }} /></a>
                     <div className="nlp-links">
                         <a href="#solucoes">Soluções</a>
-                        <a href="#resultados">Resultados</a>
+                        <a href="#resultados">Clientes</a>
+                        <a href="#ofertas">O que fazemos</a>
                         <a href="#processo">Processo</a>
                         <a href="#faq">FAQ</a>
                     </div>
@@ -254,18 +623,20 @@ export default function HomeNode() {
             {/* HERO */}
             <section className="nlp-hero" id="top">
                 <div className="nlp-wrap nlp-hero-in">
-                    <span className="nlp-chip nlp-reveal"><i />operando agora</span>
-                    <span className="nlp-mono nlp-reveal">{'// sistemas · e-commerce · ia aplicada'}</span>
-                    <h1 className="nlp-reveal nlp-d1">Tecnologia que<br />transforma marcas em<br />máquinas de venda.</h1>
-                    <p className="nlp-reveal nlp-d2">Sistemas, lojas e aplicações de IA sob medida, entregues em dias e gerando resultado desde o primeiro dia.</p>
-                    <div className="nlp-ctas nlp-reveal nlp-d3">
-                        <a href={WHATS} target="_blank" rel="noopener" className="nlp-btn nlp-btn-solid">Falar com a NODE</a>
-                        <Link to="/login" className="nlp-link-arrow">Acessar o sistema<span>→</span></Link>
+                    <span className="nlp-chip"><i />operando agora</span>
+                    <span className="nlp-mono">{'// sistemas · e-commerce · ia aplicada'}</span>
+                    <h1>Tecnologia que<br />transforma marcas em<br /><span className="nlp-tese">máquinas de venda.</span></h1>
+                    <p>Sistemas, lojas e aplicações de IA sob medida, entregues em dias e gerando resultado desde o primeiro dia.</p>
+                    <div className="nlp-ctas">
+                        <a href={WHATS} target="_blank" rel="noopener" className="nlp-btn nlp-btn-solid"
+                            onClick={() => registrar('cta_whatsapp', 'hero')}>Falar com a NODE</a>
+                        <Link to="/login" className="nlp-link-arrow"
+                            onClick={() => registrar('cta_login', 'hero')}>Acessar o sistema<span>→</span></Link>
                     </div>
-                    <div className="nlp-stats nlp-reveal">
+                    <div className="nlp-stats">
                         {STATS.map(s => (
                             <div className="nlp-stat" key={s.label}>
-                                <b><Counter value={s.value} prefix={s.prefix} suffix={s.suffix} /></b>
+                                <b>{s.texto ?? <Counter value={s.value!} prefix={s.prefix} suffix={s.suffix} />}</b>
                                 <span className="nlp-mono">{s.label}</span>
                             </div>
                         ))}
@@ -291,6 +662,10 @@ export default function HomeNode() {
                                 </div>
                             ))}
                         </div>
+                        {/* deixa explícito que aqui é o resumo — o detalhe vive em #ofertas */}
+                        <a href="#ofertas" className="nlp-link-arrow nlp-reveal" style={{ marginTop: 40 }}>
+                            Ver cada frente em detalhe<span>↓</span>
+                        </a>
                     </div>
                 </div>
             </section>
@@ -299,16 +674,67 @@ export default function HomeNode() {
             <section id="resultados">
                 <div className="nlp-wrap">
                     <div className="nlp-head nlp-reveal">
-                        <span className="nlp-mono">{'// resultados reais'}</span>
-                        <h2>Números de quem opera<br />com a NODE</h2>
+                        <span className="nlp-mono">{'// operações reais'}</span>
+                        <h2>Quem opera<br />com a NODE</h2>
                     </div>
-                    <div className="nlp-grid4">
-                        {RESULTS.map((r, i) => (
-                            <div className={`nlp-res nlp-reveal nlp-d${(i % 3) + 1}`} key={r.brand}>
-                                <b><Counter value={r.value} prefix={r.prefix} suffix={r.suffix} /></b>
-                                <small>{r.metric}</small>
-                                <div className="nlp-mono" style={{ marginTop: 18 }}>{r.brand}</div>
-                            </div>
+                    {/* Prova de entrega: operações no ar, enfileiradas na coluna esquerda */}
+                    <div className="nlp-ops">
+                        <span className="nlp-mono nlp-reveal">{'// no ar agora'}</span>
+                        {OPERACOES.map((o, i) => (
+                            <a
+                                className={`nlp-op nlp-reveal nlp-d${(i % 3) + 1}`}
+                                key={o.nome}
+                                href={o.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onMouseEnter={pulso}
+                                onClick={() => registrar('clique_operacao', o.nome)}
+                            >
+                                <span className="nlp-op-shot">
+                                    <img className="nlp-par" data-par="1.5" src={o.img} alt={`Home da loja ${o.nome}`} loading="lazy" width={760} height={404} />
+                                </span>
+                                <span className="nlp-op-info">
+                                    <strong>{o.nome}</strong>
+                                    <em>{o.entrega}</em>
+                                    <span className="nlp-mono">{new URL(o.url).hostname.replace('www.', '')} ↗</span>
+                                </span>
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* O QUE VENDEMOS — três frentes, cada uma com o COMO na prática */}
+            <section id="ofertas">
+                <div className="nlp-wrap">
+                    <div className="nlp-head nlp-reveal" style={{ maxWidth: 640 }}>
+                        <span className="nlp-mono">{'// três frentes'}</span>
+                        <h2>O que a NODE constrói<br />com você</h2>
+                        <p style={{ marginTop: 8 }}>
+                            Tudo sob medida e tudo na prática. Nada aqui sai de template, e nada é ensinado
+                            no quadro branco: é IA aplicada em projeto que vai pro ar.
+                        </p>
+                    </div>
+                    <div className="nlp-ofertas">
+                        {OFERTAS.map((o, i) => (
+                            <article className={`nlp-oferta nlp-reveal nlp-d${i + 1}`} key={o.num}>
+                                <span className="nlp-oferta-num" aria-hidden="true">{o.num}</span>
+                                <h3>{o.titulo}</h3>
+                                <p>{o.linha}</p>
+                                {o.grupos.map(g => (
+                                    <div className="nlp-oferta-grupo" key={g.label}>
+                                        <span className="nlp-mono">{`// ${g.label}`}</span>
+                                        <ul>
+                                            {g.itens.map(t => <li key={t}>{t}</li>)}
+                                        </ul>
+                                    </div>
+                                ))}
+                                <a href={waLink(o.wa)} target="_blank" rel="noopener noreferrer"
+                                    className="nlp-btn nlp-oferta-cta" onMouseEnter={pulso}
+                                    onClick={() => registrar('cta_whatsapp', `oferta_${o.num}_${o.titulo}`)}>
+                                    {o.cta}<span>→</span>
+                                </a>
+                            </article>
                         ))}
                     </div>
                 </div>
@@ -324,6 +750,7 @@ export default function HomeNode() {
                     <div className="nlp-steps">
                         {STEPS.map((s, i) => (
                             <div className={`nlp-step nlp-reveal nlp-d${(i % 3) + 1}`} key={s.num}>
+                                <span className="nlp-step-idx nlp-par" data-par=".7" aria-hidden="true">{s.num}</span>
                                 <span className="nlp-mono">{s.num}</span>
                                 <h3>{s.title}</h3>
                                 <p>{s.desc}</p>
@@ -341,9 +768,9 @@ export default function HomeNode() {
             </div>
 
             {/* MANIFESTO */}
-            <section>
+            <section className="nlp-manifesto">
                 <div className="nlp-wrap nlp-manif">
-                    <h2 className="nlp-reveal">Não construímos vitrines.<br />Construímos tecnologia<br />que vende.</h2>
+                    <h2 className="nlp-reveal">Não construímos vitrines.<br />Construímos <span className="nlp-tese">tecnologia que vende</span>.</h2>
                     <div className="nlp-reveal nlp-d1" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
                         <p>A NODE nasceu dentro da operação de e-commerce, não numa agência de design. Tudo que entregamos carrega o que aprendemos gerando mais de R$170 milhões pros nossos clientes.</p>
                         <p>IA aqui não é discurso de palco. É o motor que deixa a gente construir em dias o que o mercado entrega em meses, com acabamento de produto de verdade.</p>
@@ -373,13 +800,15 @@ export default function HomeNode() {
             </section>
 
             {/* CTA FINAL */}
-            <section>
+            <section className="nlp-cta-final">
                 <div className="nlp-wrap nlp-final">
                     <span className="nlp-mono nlp-reveal">{'// pronto pra começar?'}</span>
-                    <h2 className="nlp-reveal nlp-d1">Seu próximo sistema<br />começa numa conversa</h2>
+                    <h2 className="nlp-reveal nlp-d1">Seu próximo sistema<br /><span className="nlp-tese">começa numa conversa</span></h2>
                     <div className="nlp-ctas nlp-reveal nlp-d2">
-                        <a href={WHATS} target="_blank" rel="noopener" className="nlp-btn nlp-btn-solid">Falar com a NODE</a>
-                        <Link to="/login" className="nlp-btn nlp-btn-ghost">Já sou cliente</Link>
+                        <a href={WHATS} target="_blank" rel="noopener" className="nlp-btn nlp-btn-solid"
+                            onClick={() => registrar('cta_whatsapp', 'cta_final')}>Falar com a NODE</a>
+                        <Link to="/login" className="nlp-btn nlp-btn-ghost"
+                            onClick={() => registrar('cta_login', 'cta_final')}>Já sou cliente</Link>
                     </div>
                 </div>
             </section>

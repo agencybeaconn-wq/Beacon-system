@@ -4,92 +4,16 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { App as CapacitorApp } from "@capacitor/app";
 import { supabase } from "@/integrations/supabase/client";
-import { DashboardLayout } from "./components/DashboardLayout";
-import { PortalLayout } from "./components/portal/PortalLayout";
-import Overview from "./pages/Overview";
-import OverviewClone from "./pages/OverviewClone";
-import AdminDashboard from "./dashboard/pages/AdminDashboard";
-import AgencyDashboardKpi from "./dashboard/pages/AgencyDashboardKpi";
-import PortalDashboardKpi from "./dashboard/pages/PortalDashboardKpi";
-import Connections from "./pages/Connections";
-import AnalyticsPage from "./pages/AnalyticsPage";
-import SettingsPage from "./pages/SettingsPage";
-import Financeiro from "./pages/Financeiro";
-import FinanceiroAcademy from "./pages/FinanceiroAcademy";
-import Comercial from "./pages/Comercial";
-import RankingClientes from "./pages/RankingClientes";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
-import Clients from "./pages/Clients";
-import ClientDetails from "./pages/ClientDetails";
-import TasksPage from "./pages/TasksPage";
-import Solicitacoes from "./pages/Solicitacoes";
-import Assets from "./pages/Assets";
-import Products from "./pages/Products";
-import AccountGroups from "./pages/AccountGroups";
-import TeamConnections from "./pages/TeamConnections";
-import OnboardingWizard from "./pages/OnboardingWizard";
-import WhatsApp from "./pages/WhatsApp";
-import TrackingDashboard from "./pages/TrackingDashboard";
-import PortalVisaoGeral from "./pages/portal/PortalVisaoGeral";
-import PortalDashboard from "./pages/portal/PortalDashboard";
-import PortalNewDemand from "./pages/portal/PortalNewDemand";
-import PortalTasks from "./pages/portal/PortalTasks";
-import PortalGeneralBoard from "./pages/portal/PortalGeneralBoard";
-import PortalClients from "./pages/portal/PortalClients";
-import PortalClientTasks from "./pages/portal/PortalClientTasks";
-import PortalMyTasks from "./pages/portal/PortalMyTasks";
-import PortalResources from "./pages/portal/PortalResources";
-import PortalBiblioteca from "./pages/portal/PortalBiblioteca";
-import AcademyAuth from "./pages/academy/AcademyAuth";
-import AulaVibeCodingShopify from "./pages/landing/aula-vibe-coding-shopify/page";
-import AcademyHome from "./pages/academy/AcademyHome";
-import AcademyModulePage from "./pages/academy/AcademyModule";
-import AcademyLessonPage from "./pages/academy/AcademyLesson";
-import AcademyAdmin from "./pages/academy/AcademyAdmin";
-import AcademyAdminLesson from "./pages/academy/AcademyAdminLesson";
-import AcademyPreviewLesson from "./pages/academy/AcademyPreviewLesson";
-import AcademyForgotPassword from "./pages/academy/AcademyForgotPassword";
-import AcademyResetPassword from "./pages/academy/AcademyResetPassword";
-import AcademyInviteRedeem from "./pages/academy/AcademyInviteRedeem";
-import AcademyPrivateLesson from "./pages/academy/AcademyPrivateLesson";
 import { AcademyProvider } from "./contexts/AcademyContext";
-import ClientPortal from "./pages/ClientPortal";
-import MetaCallback from "./pages/MetaCallback";
 import AcceptInvite from "./pages/AcceptInvite";
-import Home from "./pages/Home";
 import { LandingRedirect } from "./components/LandingRedirect";
 import HomeNode from "./pages/landing/home-node/page";
-import FinancialDashboard from "./pages/financial/Dashboard";
-import FinancialCosts from "./pages/financial/Costs";
-import SmartDataViz from "./pages/SmartDataViz";
-import TimelinePage from "./pages/TimelinePage";
-import ProjetosAtivos from "./pages/ProjetosAtivos";
-import ClientConnectionsPage from "./pages/ClientConnectionsPage";
-import ClientTimelinePage from "./pages/ClientTimelinePage";
-import ClientOnboardingPage from "./pages/ClientOnboardingPage";
-import ClientBriefingPage from "./pages/ClientBriefingPage";
-import PedidosPage from "./pages/PedidosPage";
-import DocumentosPage from "./pages/DocumentosPage";
-import ClientConfigPage from "./pages/ClientConfigPage";
-import ClientPricingPage from "./pages/ClientPricingPage";
-import ShopifyManagerPage from "./pages/ShopifyManagerPage";
-import StoreDeploymentPage from "./pages/StoreDeploymentPage";
-import EstudioIAPage from "./pages/EstudioIAPage";
-import SkillsPage from "./pages/SkillsPage";
-import GeneralBoard from "./pages/GeneralBoard";
-import Paineis from "./pages/Paineis";
-import BulkEditorPage from "./pages/BulkEditorPage";
-import GoogleCalendarPage from "./pages/GoogleCalendarPage";
-import SystemLogs from "./pages/SystemLogs";
-import GoogleDrivePage from "./pages/GoogleDrivePage";
-import TrainingLibrary from "./pages/TrainingLibrary";
 import TrainingLibraryManager from "./components/training/TrainingLibraryManager";
-import BriefingForm from "./pages/BriefingForm";
-import BriefingArchive from "./pages/BriefingArchive";
 import { DashboardProvider } from "./contexts/DashboardContext";
 import { ChatProvider } from "./contexts/ChatContext";
 import { AccountTypeProvider } from "./contexts/AccountTypeContext";
@@ -103,12 +27,97 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { AbacRoute } from "./components/AbacRoute";
 import { PostHogProvider } from "./contexts/PostHogProvider";
-import { AgencyLayout } from "./components/agency/AgencyLayout";
-import AgencyDashboard from "./pages/agency/AgencyDashboard";
-import AgencyGeneralBoard from "./pages/agency/AgencyGeneralBoard";
-import AgencyClients from "./pages/agency/AgencyClients";
-import AgencyNewDemand from "./pages/agency/AgencyNewDemand";
-import AgencySmartData from "./pages/agency/AgencySmartData";
+
+// ── Carregamento sob demanda ──────────────────────────────────────────────
+// A landing e o login ficam no pacote inicial (a home precisa pintar na hora e o
+// clique em "Entrar" precisa ser instantâneo). Todo o resto do sistema só é
+// baixado quando a rota é aberta — quem só visita a home nunca baixa o admin.
+const DashboardLayout = lazy(() => import("./components/DashboardLayout").then(m => ({ default: m.DashboardLayout })));
+const PortalLayout = lazy(() => import("./components/portal/PortalLayout").then(m => ({ default: m.PortalLayout })));
+const Overview = lazy(() => import("./pages/Overview"));
+const OverviewClone = lazy(() => import("./pages/OverviewClone"));
+const AdminDashboard = lazy(() => import("./dashboard/pages/AdminDashboard"));
+const AgencyDashboardKpi = lazy(() => import("./dashboard/pages/AgencyDashboardKpi"));
+const PortalDashboardKpi = lazy(() => import("./dashboard/pages/PortalDashboardKpi"));
+const Connections = lazy(() => import("./pages/Connections"));
+const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
+const SettingsPage = lazy(() => import("./pages/SettingsPage"));
+const Financeiro = lazy(() => import("./pages/Financeiro"));
+const FinanceiroAcademy = lazy(() => import("./pages/FinanceiroAcademy"));
+const Comercial = lazy(() => import("./pages/Comercial"));
+const RankingClientes = lazy(() => import("./pages/RankingClientes"));
+const Clients = lazy(() => import("./pages/Clients"));
+const ClientDetails = lazy(() => import("./pages/ClientDetails"));
+const TasksPage = lazy(() => import("./pages/TasksPage"));
+const Solicitacoes = lazy(() => import("./pages/Solicitacoes"));
+const Assets = lazy(() => import("./pages/Assets"));
+const Products = lazy(() => import("./pages/Products"));
+const AccountGroups = lazy(() => import("./pages/AccountGroups"));
+const TeamConnections = lazy(() => import("./pages/TeamConnections"));
+const OnboardingWizard = lazy(() => import("./pages/OnboardingWizard"));
+const WhatsApp = lazy(() => import("./pages/WhatsApp"));
+const TrackingDashboard = lazy(() => import("./pages/TrackingDashboard"));
+const PortalVisaoGeral = lazy(() => import("./pages/portal/PortalVisaoGeral"));
+const PortalDashboard = lazy(() => import("./pages/portal/PortalDashboard"));
+const PortalNewDemand = lazy(() => import("./pages/portal/PortalNewDemand"));
+const PortalTasks = lazy(() => import("./pages/portal/PortalTasks"));
+const PortalGeneralBoard = lazy(() => import("./pages/portal/PortalGeneralBoard"));
+const PortalClients = lazy(() => import("./pages/portal/PortalClients"));
+const PortalClientTasks = lazy(() => import("./pages/portal/PortalClientTasks"));
+const PortalMyTasks = lazy(() => import("./pages/portal/PortalMyTasks"));
+const PortalResources = lazy(() => import("./pages/portal/PortalResources"));
+const PortalBiblioteca = lazy(() => import("./pages/portal/PortalBiblioteca"));
+const AcademyAuth = lazy(() => import("./pages/academy/AcademyAuth"));
+const AulaVibeCodingShopify = lazy(() => import("./pages/landing/aula-vibe-coding-shopify/page"));
+const AcademyHome = lazy(() => import("./pages/academy/AcademyHome"));
+const AcademyModulePage = lazy(() => import("./pages/academy/AcademyModule"));
+const AcademyLessonPage = lazy(() => import("./pages/academy/AcademyLesson"));
+const AcademyAdmin = lazy(() => import("./pages/academy/AcademyAdmin"));
+const AcademyAdminLesson = lazy(() => import("./pages/academy/AcademyAdminLesson"));
+const AcademyPreviewLesson = lazy(() => import("./pages/academy/AcademyPreviewLesson"));
+const AcademyForgotPassword = lazy(() => import("./pages/academy/AcademyForgotPassword"));
+const AcademyResetPassword = lazy(() => import("./pages/academy/AcademyResetPassword"));
+const AcademyInviteRedeem = lazy(() => import("./pages/academy/AcademyInviteRedeem"));
+const AcademyPrivateLesson = lazy(() => import("./pages/academy/AcademyPrivateLesson"));
+const ClientPortal = lazy(() => import("./pages/ClientPortal"));
+const MetaCallback = lazy(() => import("./pages/MetaCallback"));
+const Home = lazy(() => import("./pages/Home"));
+const FinancialDashboard = lazy(() => import("./pages/financial/Dashboard"));
+const FinancialCosts = lazy(() => import("./pages/financial/Costs"));
+const SmartDataViz = lazy(() => import("./pages/SmartDataViz"));
+const TimelinePage = lazy(() => import("./pages/TimelinePage"));
+const ProjetosAtivos = lazy(() => import("./pages/ProjetosAtivos"));
+const ClientConnectionsPage = lazy(() => import("./pages/ClientConnectionsPage"));
+const ClientTimelinePage = lazy(() => import("./pages/ClientTimelinePage"));
+const ClientOnboardingPage = lazy(() => import("./pages/ClientOnboardingPage"));
+const ClientBriefingPage = lazy(() => import("./pages/ClientBriefingPage"));
+const PedidosPage = lazy(() => import("./pages/PedidosPage"));
+const DocumentosPage = lazy(() => import("./pages/DocumentosPage"));
+const ClientConfigPage = lazy(() => import("./pages/ClientConfigPage"));
+const ClientPricingPage = lazy(() => import("./pages/ClientPricingPage"));
+const ShopifyManagerPage = lazy(() => import("./pages/ShopifyManagerPage"));
+const StoreDeploymentPage = lazy(() => import("./pages/StoreDeploymentPage"));
+const EstudioIAPage = lazy(() => import("./pages/EstudioIAPage"));
+const SkillsPage = lazy(() => import("./pages/SkillsPage"));
+const GeneralBoard = lazy(() => import("./pages/GeneralBoard"));
+const Paineis = lazy(() => import("./pages/Paineis"));
+const BulkEditorPage = lazy(() => import("./pages/BulkEditorPage"));
+const GoogleCalendarPage = lazy(() => import("./pages/GoogleCalendarPage"));
+const SystemLogs = lazy(() => import("./pages/SystemLogs"));
+const GoogleDrivePage = lazy(() => import("./pages/GoogleDrivePage"));
+const TrainingLibrary = lazy(() => import("./pages/TrainingLibrary"));
+const BriefingForm = lazy(() => import("./pages/BriefingForm"));
+const BriefingArchive = lazy(() => import("./pages/BriefingArchive"));
+const AgencyLayout = lazy(() => import("./components/agency/AgencyLayout").then(m => ({ default: m.AgencyLayout })));
+const AgencyDashboard = lazy(() => import("./pages/agency/AgencyDashboard"));
+const AgencyGeneralBoard = lazy(() => import("./pages/agency/AgencyGeneralBoard"));
+const AgencyClients = lazy(() => import("./pages/agency/AgencyClients"));
+const AgencyNewDemand = lazy(() => import("./pages/agency/AgencyNewDemand"));
+const AgencySmartData = lazy(() => import("./pages/agency/AgencySmartData"));
+
+const RouteFallback = () => (
+  <div style={{ minHeight: "100vh", background: "#08090C" }} aria-busy="true" />
+);
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -201,6 +210,7 @@ const App = () => (
                       <BrowserRouter>
                         <PostHogProvider>
                           <ErrorBoundary>
+                            <Suspense fallback={<RouteFallback />}>
                             <Routes>
                               {/* AULA VIBE CODING — standalone, sem auth (apresentação ao vivo) */}
                               <Route path="/aula/vibe-coding-shopify" element={<AulaVibeCodingShopify />} />
@@ -847,6 +857,7 @@ const App = () => (
                               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                               <Route path="*" element={<NotFound />} />
                             </Routes>
+                            </Suspense>
                           </ErrorBoundary>
                         </PostHogProvider>
                       </BrowserRouter>

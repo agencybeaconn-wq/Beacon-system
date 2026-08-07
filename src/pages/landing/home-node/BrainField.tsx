@@ -56,7 +56,8 @@ const vertexBrain = `
 attribute vec3 position;
 attribute vec3 aNormal;
 attribute vec3 aDir;
-attribute vec2 aWeb;
+attribute vec4 aWeb; // x, y (unid. isotrópicas), arco01 (dist. do soma), brilho
+attribute vec4 aBurst; // x, y (tela cheia), mult. de tamanho, acento dourado
 attribute float aKind;
 attribute float aRand;
 attribute float aShape;
@@ -75,6 +76,10 @@ uniform float uPx;
 uniform float uOffX;
 uniform float uOffY;
 uniform float uScaleMul;
+uniform vec2 uWebC;     // centro do neurônio (clip)
+uniform float uWebS;    // escala do neurônio
+uniform float uBurst;   // ato 4: explosão pela tela toda
+uniform float uPulse;   // impulso do hover nas operações reais (0..1, decai)
 
 varying float vHue;
 varying float vTier;
@@ -85,6 +90,10 @@ varying float vRand;
 varying float vFres;    // contorno (fresnel) — fecha a silhueta
 varying float vDepth;   // 0 = perto, 1 = longe (névoa atmosférica)
 varying float vFade;    // desconstrução / rede neural
+varying float vArc;     // neurônio: 0 = soma, 1 = ponta do dendrito
+varying float vNB;      // neurônio: brilho (clumps + pulso viajante)
+varying float vBurst;   // ato 4: quanto o cubo já explodiu
+varying float vWarm;    // ato 4: acento dourado
 
 void main() {
   vec3 p = position;
@@ -130,11 +139,29 @@ void main() {
   // micro-parallax: profundidade responde ao tilt do mouse (frente move mais)
   clip += vec2(uTilt.x, -uTilt.y) * (-p.z) * 0.055;
 
-  vec2 webPos = aWeb;
-  webPos.x += 0.012 * sin(uTime * 0.4 + aRand * 70.0);
-  webPos.y += 0.012 * cos(uTime * 0.35 + aRand * 90.0);
+  // ATO 3: alvo = NEURÔNIO (soma + dendritos); flutuantes ficam em coord de tela crua
+  vec2 webPos = aKind > 0.5
+    ? uWebC + vec2(aWeb.x / uAspect, aWeb.y) * uWebS
+    : aWeb.xy;
+  webPos.x += 0.010 * sin(uTime * 0.4 + aRand * 70.0);
+  webPos.y += 0.010 * cos(uTime * 0.35 + aRand * 90.0);
   float webE = smoothstep(0.0, 1.0, uWeb);
   clip = mix(clip, webPos, webE);
+
+  // pulso "pensante": ondas correm do soma pras pontas + batida do núcleo
+  float wave = pow(0.5 + 0.5 * sin(aWeb.z * 9.0 - uTime * 2.1 + aRand * 0.5), 3.0);
+  float throb = 1.0 + 0.55 * exp(-aWeb.z * 5.5) * (0.5 + 0.5 * sin(uTime * 1.7));
+  vNB = aWeb.w * throb * (0.72 + 0.85 * wave);
+  vArc = aWeb.z;
+
+  // ATO 4: o neurônio explode — cubos à deriva pela tela INTEIRA (finale da ref)
+  float burstE = smoothstep(0.0, 1.0, uBurst);
+  vec2 burstPos = aBurst.xy;
+  burstPos.x += 0.035 * sin(uTime * 0.16 + aRand * 40.0);
+  burstPos.y += 0.030 * cos(uTime * 0.13 + aRand * 55.0);
+  clip = mix(clip, burstPos, burstE);
+  vBurst = burstE;
+  vWarm = aBurst.w;
 
   vec2 d = vec2((clip.x - uMouse.x) * uAspect, clip.y - uMouse.y);
   float dist = length(d);
@@ -149,18 +176,34 @@ void main() {
   float keepP = 0.52 + 0.48 * pow(fres, 1.15);
   float dropped = step(keepP, fract(aRand * 7.13)) * aTier; // dobras nunca somem
   float sz = (0.97 + 0.06 * aRand) * mix(1.0, 0.66, aTier) * (1.0 - dropped);
-  float webSize = mix(1.0, aKind > 0.5 ? 1.05 : 0.6, webE);
-  gl_PointSize = uPx * sz * persp * webSize;
+  // neurônio: cubo maior perto do soma, menor na ponta; a onda "incha" de leve
+  float webSize = mix(1.0, aKind > 0.5 ? (0.62 + 0.42 * (1.0 - aWeb.z) + wave * 0.22) : 0.6, webE);
+  webSize = mix(webSize, 1.0, burstE);              // explosão zera a hierarquia do neurônio
+  float burstSize = mix(1.0, aBurst.z, burstE);     // tamanhos variados, alguns gigantes
+  // pulso: onda que atravessa o campo quando o usuário toca uma operação real
+  float pulseW = uPulse * exp(-abs(fract(aRand * 3.1) - uPulse) * 5.0);
+  gl_PointSize = uPx * sz * persp * webSize * burstSize * (1.0 + pulseW * 0.55);
 
   vCav = aBright;
   vHue = aHue;
   vTier = aTier;
   vDepth = clamp(0.5 - p.z * 0.55, 0.0, 1.0);
-  vRot = atan(n.y, n.x) + (aRand - 0.5) * 0.30; // glifo segue o fluxo da superfície
+  vRot = atan(n.y, n.x) + (aRand - 0.5) * 0.30      // glifo segue o fluxo da superfície
+       + burstE * uTime * (aRand - 0.5) * 0.55;     // à deriva: giro lento próprio
   vRand = aRand;
-  float tw = 0.75 + 0.25 * sin(uTime * (0.6 + aRand * 1.5) + aRand * 30.0);
-  vFade = mix(1.0 - scatter * 0.55, (aKind > 0.5 ? 0.9 * tw : 0.10), webE);
+  // o miolo (arco ~0) tem MUITO cubo por pixel — abafa ele pro texto passar por cima
+  float coreDamp = mix(0.34, 1.0, smoothstep(0.0, 0.12, aWeb.z));
+  float fadeAct = mix(1.0 - scatter * 0.55, (aKind > 0.5 ? clamp(vNB * 0.72, 0.06, 0.80) * coreDamp : 0.09), webE);
+  // finale: só ~1/3 dos cubos fica visível — o resto some pro texto respirar (como na ref)
+  // finale: rala o campo, mas os HERÓIS (aBurst.z alto) nunca somem — é deles a composição
+  float heroi = step(1.8, aBurst.z);
+  float keepB = max(heroi, step(fract(aRand * 13.7), 0.34));
+  float tw2 = 0.55 + 0.45 * sin(uTime * (0.6 + aRand * 1.4) + aRand * 33.0);
+  // grandes mais presentes, poeira mais apagada — profundidade por opacidade
+  float pesoB = mix(0.55, 1.25, clamp(aBurst.z * 0.42, 0.0, 1.0));
+  vFade = mix(fadeAct, (0.16 + 0.40 * tw2) * pesoB * keepB, burstE);
   vLight *= 0.96 + 0.08 * sin(uTime * (0.7 + aRand * 0.9) + aRand * 44.0); // twinkle 8%
+  vLight *= 1.0 + pulseW * 0.85;                                            // o pulso acende a onda
 }
 `;
 
@@ -169,6 +212,8 @@ void main() {
 // alpha-discard, que é o que permite o depth buffer ocluir a traseira.
 const fragBrain = `
 precision highp float;
+
+uniform float uWeb;
 
 varying float vHue;
 varying float vTier;
@@ -179,6 +224,20 @@ varying float vRand;
 varying float vFres;
 varying float vDepth;
 varying float vFade;
+varying float vArc;
+varying float vNB;
+varying float vBurst;
+varying float vWarm;
+
+// paleta do neurônio (ref): núcleo dourado -> laranja -> rosa -> violeta -> azul
+vec3 npal(float a) {
+  vec3 c = mix(vec3(1.05, 0.92, 0.62), vec3(1.08, 0.58, 0.40), smoothstep(0.0, 0.045, a));
+  c = mix(c, vec3(1.00, 0.40, 0.80), smoothstep(0.045, 0.13, a));
+  c = mix(c, vec3(0.66, 0.42, 1.10), smoothstep(0.13, 0.28, a));
+  c = mix(c, vec3(0.34, 0.50, 1.14), smoothstep(0.28, 0.52, a));
+  c = mix(c, vec3(0.26, 0.52, 1.05), smoothstep(0.52, 1.0, a));
+  return c;
+}
 
 float segd(vec2 p, vec2 a, vec2 b) {
   vec2 pa = p - a, ba = b - a;
@@ -247,6 +306,25 @@ void main() {
   col += vec3(0.34, 0.30, 0.55) * edge * 0.30 * (0.4 + 0.6 * c);  // aresta com toque violeta
   col = mix(col, vec3(0.045, 0.055, 0.085), vDepth * 0.55);        // névoa: fundo recua
   if (vRand > 0.975) col += vec3(0.10, 0.13, 0.20);                 // faíscas raras
+
+  // ── ATO 3: neurônio — cor pela distância do soma, aceso pelo pulso ──
+  float webE = smoothstep(0.0, 1.0, uWeb) * (1.0 - vBurst); // a explosão devolve a paleta das regiões
+  if (webE > 0.001) {
+    // ganho contido: no aditivo os cubos sobrepostos somam e o núcleo estoura em branco
+    vec3 ncol = npal(vArc) * (0.38 + 0.78 * clamp(vNB, 0.0, 1.6)) * face;
+    ncol += vec3(1.0, 0.72, 0.42) * exp(-vArc * 9.0) * 0.22;  // halo quente do núcleo
+    col = mix(col, ncol, webE);
+  }
+
+  // ── ATO 4: campo multicolorido com acentos dourados (finale da ref) ──
+  // usa o matiz da REGIÃO em saturação cheia — o col acumulado vem lavado
+  // pela dessaturação de interior, pelo tier cinza e pela névoa de profundidade.
+  if (vBurst > 0.001) {
+    vec3 bcol = hueCol * (0.60 + 0.70 * fract(vRand * 5.3));
+    vec3 gold = vec3(1.06, 0.78, 0.38) * (0.75 + 0.55 * fract(vRand * 3.3));
+    bcol = mix(bcol, gold, vWarm);
+    col = mix(col, bcol * face * mix(0.85, 1.45, edge), vBurst);
+  }
 
   float aGlyph = max(0.16, edge);
   col *= mix(0.72, 1.35, edge); // aresta acesa, face fantasma
@@ -413,27 +491,6 @@ void main() {
 }
 `;
 
-const vertexLines = `
-attribute vec3 position;
-attribute float aSeed;
-
-uniform float uTime;
-uniform float uWeb;
-
-varying float vA;
-varying float vSeed;
-
-void main() {
-  vec2 p = position.xy;
-  p.x += 0.012 * sin(uTime * 0.4 + aSeed * 70.0);
-  p.y += 0.012 * cos(uTime * 0.35 + aSeed * 90.0);
-  gl_Position = vec4(p, 0.0, 1.0);
-  float pulse = 0.65 + 0.35 * sin(uTime * 1.1 + aSeed * 12.0);
-  vA = smoothstep(0.0, 1.0, uWeb) * 0.75 * pulse;
-  vSeed = aSeed;
-}
-`;
-
 const fragLines = `
 precision highp float;
 varying float vA;
@@ -444,37 +501,86 @@ void main() {
 }
 `;
 
-function buildWebGraph() {
-    const hubs: { x: number; y: number; w: number; seed: number }[] = [];
-    const K = 24;
-    let guard = 0;
-    while (hubs.length < K && guard < 4000) {
-        guard++;
-        const x = (Math.random() * 2 - 1) * 0.92;
-        const y = (Math.random() * 2 - 1) * 0.46 + Math.sin(x * 2.3) * 0.12;
-        const w = 0.35 + Math.random() * Math.random() * 2.2;
-        const minD = 0.13 + w * 0.03;
-        if (hubs.every(h => (h.x - x) ** 2 + (h.y - y) ** 2 > minD * minD)) {
-            hubs.push({ x, y, w, seed: Math.random() });
+// ── NEURÔNIO do ato 3: soma + dendritos radiais serpenteantes (validado offline) ──
+// Unidades isotrópicas; o shader posiciona via uWebC + (x/aspect, y) * uWebS.
+function buildNeuron(budget: number) {
+    const SEED = 7;
+    let sA = SEED;
+    const rng = () => {
+        sA |= 0; sA = (sA + 0x6D2B79F5) | 0;
+        let t = Math.imul(sA ^ (sA >>> 15), 1 | sA);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+    const g2 = () => (rng() + rng() + rng()) / 1.5 - 1;
+    const noise1 = (x: number) => {
+        const i = Math.floor(x), f = x - i;
+        const h = (t: number) => { const s = Math.sin(t * 127.1 + SEED * 3.7) * 43758.5453; return s - Math.floor(s); };
+        const u = f * f * (3 - 2 * f);
+        return h(i) * (1 - u) + h(i + 1) * u;
+    };
+
+    let maxArc = 0.001;
+    const branches: number[][][] = [];
+    function grow(x0: number, y0: number, ang0: number, w0: number, len: number, arc0: number, depth: number) {
+        const path: number[][] = [];
+        let x = x0, y = y0, ang = ang0, s = 0, arc = arc0;
+        const curve = g2() * 0.055;   // arco próprio: dendrito curva, não é raio reto
+        const ds = 0.011;
+        const children: [number, number, number, number, number, number, number][] = [];
+        while (s < len) {
+            ang += g2() * 0.045 + curve;
+            if (rng() < 0.030) ang += g2() * 0.35;
+            // viés radial: dendrito IRRADIA do soma, nunca volta pra dentro
+            let dA = Math.atan2(y, x) - ang;
+            dA = Math.atan2(Math.sin(dA), Math.cos(dA));
+            ang += dA * 0.020;   // viés radial fraco: irradia sem virar estrela de raios
+            x += Math.cos(ang) * ds;
+            y += Math.sin(ang) * ds;
+            s += ds; arc += ds;
+            const w = Math.max(w0 * Math.pow(Math.max(1 - s / len, 0), 0.60), 0.0042);
+            path.push([x, y, arc, w]);
+            if (depth < 2 && s > len * 0.28 && s < len * 0.82 && rng() < 0.045) {
+                children.push([x, y, ang + (rng() < 0.5 ? 1 : -1) * (0.55 + rng() * 0.65), w * 0.62, len * (0.42 + rng() * 0.33), arc, depth + 1]);
+            }
+            if (arc > maxArc) maxArc = arc;
         }
+        branches.push(path);
+        for (const c of children) grow(...c);
     }
-    const edges: [number, number][] = [];
-    for (let i = 1; i < hubs.length; i++) {
-        let best = 0, bd = Infinity;
-        for (let j = 0; j < i; j++) {
-            const d = (hubs[i].x - hubs[j].x) ** 2 + (hubs[i].y - hubs[j].y) ** 2;
-            if (d < bd) { bd = d; best = j; }
-        }
-        edges.push([i, best]);
+
+    const NP = 10, SOMA_RX = 0.105, SOMA_RY = 0.090;
+    for (let i = 0; i < NP; i++) {
+        const a = (i / NP) * Math.PI * 2 + g2() * 0.22;
+        grow(Math.cos(a) * SOMA_RX * 0.92, Math.sin(a) * SOMA_RY * 0.92, a, 0.042 + rng() * 0.020, (0.60 + rng() * 0.45) * 1.35, 0.06, 0);
     }
-    for (let i = 0; i < hubs.length; i++) {
-        if (Math.random() < 0.5) {
-            const j = Math.floor(Math.random() * hubs.length);
-            const d = (hubs[i].x - hubs[j].x) ** 2 + (hubs[i].y - hubs[j].y) ** 2;
-            if (j !== i && d < 0.55) edges.push([i, j]);
-        }
+
+    const pts: { x: number; y: number; arc01: number; b: number }[] = [];
+    // núcleo enxuto: denso mas LEGÍVEL como cubos, nunca um disco branco estourado
+    const NSOMA = Math.round(budget * 0.055);
+    for (let i = 0; i < NSOMA; i++) {
+        const r = Math.pow(rng(), 0.62), th = rng() * Math.PI * 2;
+        pts.push({ x: Math.cos(th) * r * SOMA_RX, y: Math.sin(th) * r * SOMA_RY, arc01: r * 0.03, b: 0.62 + g2() * 0.10 });
     }
-    return { hubs, edges };
+    let totalW = 0;
+    const segs: number[][] = [];
+    // peso sqrt: espalha pontos pras pontas (a ref é MUITO mais azul do que quente)
+    for (const path of branches) for (const seg of path) { segs.push(seg); totalW += Math.sqrt(seg[3]); }
+    for (let i = 0; i < budget - NSOMA; i++) {
+        let t = rng() * totalW, k = 0;
+        while (k < segs.length - 1 && t > Math.sqrt(segs[k][3])) { t -= Math.sqrt(segs[k][3]); k++; }
+        const [sx, sy, sarc, sw] = segs[k];
+        const a01 = Math.min(sarc / maxArc, 1);
+        let b = Math.pow(1 - a01, 0.85) * 0.52 + 0.24;   // queda suave: as pontas não apagam
+        b *= 0.62 + 0.76 * noise1(sarc * 9.0 + sx * 3.0); // clumps de brilho no ramo
+        pts.push({ x: sx + g2() * sw, y: sy + g2() * sw, arc01: a01, b: Math.max(0.06, Math.min(1.35, b + g2() * 0.10)) });
+    }
+    // embaralha: o morph cérebro→neurônio vem de todas as regiões ao mesmo tempo
+    for (let i = pts.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [pts[i], pts[j]] = [pts[j], pts[i]];
+    }
+    return pts;
 }
 
 interface BrainFieldProps {
@@ -501,12 +607,14 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
 
         let raf = 0;
         let disposed = false;
-        let brainMesh: any = null, ambientMesh: any = null, linesMesh: any = null, plexusMesh: any = null;
-        let brainProgram: any = null, ambientProgram: any = null, linesProgram: any = null, plexusProgram: any = null;
+        let brainMesh: any = null, ambientMesh: any = null, plexusMesh: any = null;
+        let brainProgram: any = null, ambientProgram: any = null, plexusProgram: any = null;
 
         const state = {
             flip: 0, flipTarget: 0,
             web: 0, webTarget: 0,
+            burst: 0, burstTarget: 0,
+            pulse: 0,
             mouse: [10, 10] as [number, number],
             mouseActive: 0, mouseActiveTarget: 0,
             tilt: [0, 0] as [number, number],
@@ -522,6 +630,10 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
                 offX: narrow ? 0.30 : 0.60,
                 offY: narrow ? 0.34 : -0.02,
                 scaleMul: narrow ? 0.60 : 1.0,
+                // soma: direita no desktop; no estreito sobe pro topo (vira a arte do
+                // cabeçalho) e encolhe, pra não atropelar os números embaixo
+                webC: narrow ? [0.34, 0.62] : [0.50, 0.12],  // soma fora da coluna de texto e acima da linha dos números
+                webS: narrow ? 0.50 : 1.05,
             };
         }
 
@@ -533,18 +645,10 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
 
         {
             const cloud = buildBrainCloud();
-            const { hubs, edges } = buildWebGraph();
-            const totalW = hubs.reduce((s, h) => s + h.w, 0);
-            const cum: number[] = [];
-            let acc = 0;
-            for (const h of hubs) { acc += h.w / totalW; cum.push(acc); }
-            const pickHub = () => {
-                const r = Math.random();
-                for (let i = 0; i < cum.length; i++) if (r <= cum[i]) return hubs[i];
-                return hubs[hubs.length - 1];
-            };
+            const neuronPts = buildNeuron(Math.round(cloud.length * 0.88));
+            let nUsed = 0;
 
-            const pos: number[] = [], nor: number[] = [], dir: number[] = [], web: number[] = [], kind: number[] = [];
+            const pos: number[] = [], nor: number[] = [], dir: number[] = [], web: number[] = [], kind: number[] = [], burst: number[] = [];
             const rand: number[] = [], shape: number[] = [], bright: number[] = [], hueA: number[] = [], tierA: number[] = [];
             const anchors: { x: number; y: number; z: number; seed: number }[] = [];
 
@@ -560,16 +664,30 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
                     (Math.random() * 2 - 1) * 0.5
                 );
 
-                if (Math.random() < 0.80) {
-                    const h2 = pickHub();
-                    const ang = Math.random() * Math.PI * 2;
-                    const rad = Math.abs((Math.random() + Math.random()) / 2 - 0.5) * (0.045 + h2.w * 0.035);
-                    web.push(h2.x + Math.cos(ang) * rad, h2.y + Math.sin(ang) * rad * 0.85);
+                if (nUsed < neuronPts.length && Math.random() < 0.90) {
+                    const np = neuronPts[nUsed++];
+                    web.push(np.x, np.y, np.arc01, np.b);
                     kind.push(1);
                 } else {
-                    web.push((Math.random() * 2 - 1) * 1.02, (Math.random() * 2 - 1) * 0.55);
+                    // flutuantes esparsos ao redor (a ref tem glifos soltos apagados)
+                    web.push((Math.random() * 2 - 1) * 1.02, (Math.random() * 2 - 1) * 0.55, 0.72, 0.4);
                     kind.push(0);
                 }
+
+                // ATO 4 — três castas de tamanho, não uma nuvem uniforme.
+                // Sem hierarquia clara o campo lê como confete; a referência tem poucos
+                // cubos grandes dominando a composição e uma poeira fina ao fundo.
+                const r4 = Math.random();
+                let escala: number;
+                if (r4 < 0.045) escala = 2.4 + Math.random() * 1.5;      // heróis: poucos e grandes
+                else if (r4 < 0.30) escala = 0.85 + Math.random() * 0.55; // corpo médio
+                else escala = 0.26 + Math.random() * 0.32;               // poeira de fundo
+                burst.push(
+                    (Math.random() * 2 - 1) * 1.04,
+                    (Math.random() * 2 - 1) * 1.04,
+                    escala,
+                    Math.random() < 0.14 ? 1 : 0
+                );
 
                 rand.push(pt.seed);
                 shape.push(Math.random() < 0.12 ? 1 : 0);
@@ -586,7 +704,8 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
                 position: { size: 3, data: new Float32Array(pos) },
                 aNormal: { size: 3, data: new Float32Array(nor) },
                 aDir: { size: 3, data: new Float32Array(dir) },
-                aWeb: { size: 2, data: new Float32Array(web) },
+                aWeb: { size: 4, data: new Float32Array(web) },
+                aBurst: { size: 4, data: new Float32Array(burst) },
                 aKind: { size: 1, data: new Float32Array(kind) },
                 aRand: { size: 1, data: new Float32Array(rand) },
                 aShape: { size: 1, data: new Float32Array(shape) },
@@ -611,6 +730,10 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
                     uOffX: { value: lay.offX },
                     uOffY: { value: lay.offY },
                     uScaleMul: { value: lay.scaleMul },
+                    uWebC: { value: lay.webC },
+                    uWebS: { value: lay.webS },
+                    uBurst: { value: 0 },
+                    uPulse: { value: 0 },
                 },
                 transparent: true,
                 depthTest: true,
@@ -665,25 +788,6 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
             });
             plexusMesh = new Mesh(gl, { geometry: pgeo, program: plexusProgram, mode: gl.LINES });
 
-            const lpos: number[] = [], lseed: number[] = [];
-            for (const [ia, ib] of edges) {
-                const A2 = hubs[ia], B2 = hubs[ib];
-                lpos.push(A2.x, A2.y, 0, B2.x, B2.y, 0);
-                lseed.push(A2.seed, B2.seed);
-            }
-            const lgeo = new Geometry(gl, {
-                position: { size: 3, data: new Float32Array(lpos) },
-                aSeed: { size: 1, data: new Float32Array(lseed) },
-            });
-            linesProgram = new Program(gl, {
-                vertex: vertexLines,
-                fragment: fragLines,
-                uniforms: { uTime: { value: 0 }, uWeb: { value: 0 } },
-                transparent: true,
-                depthTest: false,
-            });
-            linesMesh = new Mesh(gl, { geometry: lgeo, program: linesProgram, mode: gl.LINES });
-
             const N_AMB = 460;
             const apos: number[] = [], arand: number[] = [], ashape: number[] = [], abright: number[] = [];
             for (let i = 0; i < N_AMB; i++) {
@@ -716,7 +820,9 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
 
         function syncUniforms(t: number) {
             const lay = layout();
-            const px = container.clientHeight * 0.0170 * renderer.dpr;
+            // tamanho do cubo pela MENOR dimensão: no celular a altura é a dimensão grande,
+            // e escalar por ela deixa os cubos enormes e o campo estoura em branco
+            const px = Math.min(container.clientWidth * 0.026, container.clientHeight * 0.0170) * renderer.dpr;
             if (brainProgram) {
                 const u = brainProgram.uniforms;
                 u.uTime.value = t;
@@ -730,6 +836,10 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
                 u.uOffX.value = lay.offX;
                 u.uOffY.value = lay.offY;
                 u.uScaleMul.value = lay.scaleMul;
+                u.uWebC.value = lay.webC;
+                u.uWebS.value = lay.webS;
+                u.uBurst.value = state.burst;
+                u.uPulse.value = state.pulse;
             }
             if (plexusProgram) {
                 const u = plexusProgram.uniforms;
@@ -741,10 +851,6 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
                 u.uOffX.value = lay.offX;
                 u.uOffY.value = lay.offY;
                 u.uScaleMul.value = lay.scaleMul;
-            }
-            if (linesProgram) {
-                linesProgram.uniforms.uTime.value = t;
-                linesProgram.uniforms.uWeb.value = state.web;
             }
             if (ambientProgram) {
                 ambientProgram.uniforms.uTime.value = t;
@@ -758,17 +864,35 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
             const g = glowRef.current;
             if (!g) return;
             const xPct = 50 + (0.5 - state.flip) * 2 * 24;
-            const xFinal = xPct + (50 - xPct) * state.web;
-            const yPct = 40 + state.web * 8;
-            const int = 0.105 * (1 - state.web * 0.45);
+            // ato 3 puxa a luz pro soma (direita); ato 4 espalha e centraliza
+            const xNeuron = 50 + (layout().webC[0] * 50);
+            const xFinal = (xPct + (xNeuron - xPct) * state.web) * (1 - state.burst) + 50 * state.burst;
+            const yPct = 40 + state.web * 6;
+            // o núcleo pulsa: a luz de fundo bate junto
+            const pulse = 1 + 0.30 * state.web * (1 - state.burst) * Math.sin(performance.now() * 0.0017);
+            const int = 0.105 * (1 + state.web * 0.55) * pulse * (1 - state.burst * 0.35);
+            const size = 52 + state.web * 6 + state.burst * 46;
             g.style.background =
-                `radial-gradient(52% 68% at ${xFinal.toFixed(1)}% ${yPct.toFixed(1)}%, rgba(214,222,240,${int.toFixed(3)}), transparent 70%)`;
+                `radial-gradient(${size.toFixed(0)}% ${(size * 1.3).toFixed(0)}% at ${xFinal.toFixed(1)}% ${yPct.toFixed(1)}%, rgba(214,222,240,${int.toFixed(3)}), transparent 70%)`;
+        }
+
+        // Atos 1-2 são FORMA 3D: precisam do depth buffer (é ele que esconde a traseira)
+        // e de blend opaco. Atos 3-4 são campo luminoso 2D: o depth cortaria os cubos
+        // sobrepostos e o blend opaco mataria o brilho — vira aditivo, sem depth.
+        let flatMode = false;
+        function setBlendMode(flat: boolean) {
+            if (flat === flatMode || !brainProgram) return;
+            flatMode = flat;
+            brainProgram.depthTest = !flat;
+            brainProgram.depthWrite = !flat;
+            if (flat) brainProgram.setBlendFunc(gl.SRC_ALPHA, gl.ONE);
+            else brainProgram.setBlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
         }
 
         function renderAll() {
+            setBlendMode(state.web > 0.35 || state.burst > 0.35);
             if (ambientMesh) renderer.render({ scene: ambientMesh });
-            if (plexusMesh && state.web < 0.95) renderer.render({ scene: plexusMesh, clear: false });
-            if (linesMesh && state.web > 0.02) renderer.render({ scene: linesMesh, clear: false });
+            if (plexusMesh && state.web < 0.85) renderer.render({ scene: plexusMesh, clear: false });
             if (brainMesh) renderer.render({ scene: brainMesh, clear: false });
         }
 
@@ -776,13 +900,35 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
         const io = new IntersectionObserver(es => { visible = es[0].isIntersecting; }, { threshold: 0 });
         io.observe(container);
 
+        // PLANO B pra aparelho fraco: o custo dominante aqui é preenchimento de pixel
+        // (blend aditivo em tela cheia). Se os primeiros 90 quadros vierem abaixo de
+        // ~40fps, derruba a resolução do canvas — a arte continua, o site para de travar.
+        let quadros = 0, marco = 0, aliviado = false;
+        function medirDesempenho(now: number) {
+            if (aliviado) return;
+            quadros++;
+            if (quadros === 1) { marco = now; return; }
+            if (quadros < 90) return;
+            const fps = (quadros - 1) * 1000 / Math.max(1, now - marco);
+            if (fps < 40) {
+                renderer.dpr = Math.max(0.75, renderer.dpr * 0.62);
+                resize();
+                console.info(`[BrainField] ${fps.toFixed(0)}fps — resolução reduzida pra manter fluidez`);
+            }
+            aliviado = true;
+        }
+
         function loop(now: number) {
             raf = requestAnimationFrame(loop);
             if (disposed || !visible || document.hidden) return;
+            medirDesempenho(now);
             const t = now * 0.001;
 
             state.flip += (state.flipTarget - state.flip) * 0.05;
             state.web += (state.webTarget - state.web) * 0.05;
+            state.burst += (state.burstTarget - state.burst) * 0.045;
+            // o pulso ATRAVESSA o campo (0→1) e some; não é um fade de brilho
+            if (state.pulse > 0) state.pulse = state.pulse < 1 ? state.pulse + 0.028 : 0;
             state.mouseActive += (state.mouseActiveTarget - state.mouseActive) * 0.06;
             state.tilt[0] += (state.tiltTarget[0] - state.tilt[0]) * 0.04;
             state.tilt[1] += (state.tiltTarget[1] - state.tilt[1]) * 0.04;
@@ -792,12 +938,52 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
             renderAll();
         }
 
-        function onScroll() {
-            const h = window.innerHeight;
-            state.scrollY = window.scrollY;
-            state.flipTarget = Math.max(0, Math.min(1, window.scrollY / (h * 1.3)));
-            state.webTarget = Math.max(0, Math.min(1, (window.scrollY - h * 1.9) / (h * 1.1)));
+        // 4 ATOS, ancorados nas SEÇÕES (não em % de scroll — a página muda de altura
+        // com as revelações, e % de scroll dessincroniza a arte do texto):
+        //   1 cérebro à direita  → hero (texto à esquerda)
+        //   2 cérebro à esquerda → #solucoes (texto à direita)
+        //   3 neurônio à direita → #resultados (texto à esquerda)
+        //   4 explosão na tela   → #faq em diante
+        // smootherstep: dá antecipação e assentamento à troca de ato. Rampa linear
+        // lê como "deslocante"; com a curva, o ato parece PENSAR antes de virar.
+        const ramp = (v: number, a: number, b: number) => {
+            const t = Math.max(0, Math.min(1, (v - a) / (b - a)));
+            return t * t * t * (t * (t * 6 - 15) + 10);
+        };
+        const anchors = { sol: 0, res: 0, faq: 0 };
+        function measure() {
+            const top = (id: string) => {
+                const el = document.getElementById(id);
+                return el ? el.getBoundingClientRect().top + window.scrollY : 0;
+            };
+            anchors.sol = top('solucoes');
+            anchors.res = top('resultados');
+            anchors.faq = top('faq');
         }
+        function onScroll() {
+            const y = window.scrollY;
+            const h = window.innerHeight;
+            state.scrollY = y;
+            if (!anchors.sol) measure();
+            if (anchors.sol && anchors.res && anchors.faq) {
+                // cada ato COMPLETA pouco antes da sua seção encostar no topo da tela
+                state.flipTarget = ramp(y, anchors.sol - h * 0.95, anchors.sol - h * 0.30);
+                state.webTarget = ramp(y, anchors.res - h * 0.85, anchors.res - h * 0.20);
+                state.burstTarget = ramp(y, anchors.faq - h * 0.75, anchors.faq - h * 0.10);
+            } else {
+                const max = Math.max(1, document.documentElement.scrollHeight - h);
+                const p = Math.max(0, Math.min(1, y / max));
+                state.flipTarget = ramp(p, 0.16, 0.38);
+                state.webTarget = ramp(p, 0.52, 0.70);
+                state.burstTarget = ramp(p, 0.82, 0.97);
+            }
+        }
+        measure();
+        // as seções crescem com as animações de revelação → remedir quando assentar
+        const remeasure = () => { measure(); onScroll(); };
+        window.addEventListener('load', remeasure);
+        window.addEventListener('resize', remeasure);
+        setTimeout(remeasure, 1200);
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
 
@@ -814,6 +1000,10 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
         window.addEventListener('mousemove', onMouseMove);
         document.documentElement.addEventListener('mouseleave', onMouseLeave);
 
+        // a página conversa com o campo: hover numa operação real dispara a onda
+        const onPulse = () => { if (state.pulse === 0) state.pulse = 0.001; };
+        window.addEventListener('node-pulse', onPulse);
+
         if (reduced) { syncUniforms(0.001); syncGlow(); renderAll(); }
         else raf = requestAnimationFrame(loop);
 
@@ -822,8 +1012,11 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
             if (raf) cancelAnimationFrame(raf);
             io.disconnect();
             window.removeEventListener('resize', resize);
+            window.removeEventListener('resize', remeasure);
+            window.removeEventListener('load', remeasure);
             window.removeEventListener('scroll', onScroll);
             window.removeEventListener('mousemove', onMouseMove);
+            window.removeEventListener('node-pulse', onPulse);
             document.documentElement.removeEventListener('mouseleave', onMouseLeave);
             if (container.contains(gl.canvas)) container.removeChild(gl.canvas);
             gl.getExtension('WEBGL_lose_context')?.loseContext();
@@ -831,14 +1024,16 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
     }, []);
 
     return (
+        // aria-hidden: é arte decorativa. Leitor de tela deve pular direto pro conteúdo.
         <>
-            <div ref={glowRef} style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }} />
+            <div ref={glowRef} aria-hidden="true" style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }} />
             <div
                 ref={containerRef}
                 className={className}
+                aria-hidden="true"
                 style={{ position: 'fixed', inset: 0, pointerEvents: 'none', overflow: 'hidden', zIndex: 0 }}
             />
-            <div style={{
+            <div aria-hidden="true" style={{
                 position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0,
                 background: 'radial-gradient(115% 115% at 50% 42%, transparent 58%, rgba(0,0,0,.55) 100%)',
             }} />
