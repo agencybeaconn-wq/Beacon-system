@@ -650,7 +650,8 @@ export default function HomeNode() {
                     <div className="nlp-offset-r">
                         <div className="nlp-head nlp-reveal">
                             <span className="nlp-mono">{'// o que construímos'}</span>
-                            <h2>Engenharia completa,<br />da ideia à operação</h2>
+                            {/* H2 carrega os termos de busca sem virar título feio de SEO */}
+                            <h2>Criação de sites, lojas<br />e sistemas sob medida</h2>
                         </div>
                         <div className="nlp-grid3">
                             {SOLUTIONS.map((s, i) => (
@@ -691,7 +692,9 @@ export default function HomeNode() {
                                 onClick={() => registrar('clique_operacao', o.nome)}
                             >
                                 <span className="nlp-op-shot">
-                                    <img className="nlp-par" data-par="1.5" src={o.img} alt={`Home da loja ${o.nome}`} loading="lazy" width={760} height={404} />
+                                    <img className="nlp-par" data-par="1.5" src={o.img}
+                                        alt={`Página inicial da loja ${o.nome}, desenvolvida pela NODE: ${o.entrega.toLowerCase()}`}
+                                        loading="lazy" width={760} height={404} />
                                 </span>
                                 <span className="nlp-op-info">
                                     <strong>{o.nome}</strong>

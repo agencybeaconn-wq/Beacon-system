@@ -36,6 +36,8 @@ scripts/*deploy-edgefns*.bak*
 
 # One-time scripts (use .claude/skills/ instead)
 scripts/*.mjs
+# EXCECAO: este roda dentro do `npm run build`. Se nao for versionado, o deploy quebra.
+!scripts/seo-prerender.mjs
 tmp_*
 .tmp_*
 
