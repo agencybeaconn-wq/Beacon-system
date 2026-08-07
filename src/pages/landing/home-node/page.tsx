@@ -6,7 +6,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import nodeLogo from '@/assets/node-logo.png';
-import Threads from './Threads';
+import BrainField from './BrainField';
 
 const WHATS = 'https://wa.me/5531984083376?text=Ol%C3%A1%2C%20quero%20falar%20com%20a%20NODE%20sobre%20um%20projeto.';
 const INSTA = 'https://www.instagram.com/noode.dev/';
@@ -104,25 +104,22 @@ export default function HomeNode() {
     return (
         <div className="nlp">
             <style>{`
-        .nlp{--bg:#050505;--elev:#0e0e10;--fg:#fafafa;--muted:#a1a1aa;--line:rgba(255,255,255,.08);--dur:.7s;--ease:cubic-bezier(.22,1,.36,1);
+        .nlp{--bg:#050505;--fg:#ffffff;--muted:#ababab;--dim:#c9c9c9;--line:rgba(255,255,255,.09);--dur:.7s;--ease:cubic-bezier(.22,1,.36,1);
           background-color:var(--bg);
-          background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
-          background-size:72px 72px;
           color:var(--fg);font-family:'Inter Tight',sans-serif;min-height:100vh;overflow-x:hidden}
         .nlp *{box-sizing:border-box}
-        .nlp ::selection{background:#fafafa;color:#050505}
+        .nlp ::selection{background:#fff;color:#050505}
         .nlp-mono{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-        .nlp-wrap{max-width:1140px;margin-inline:auto;padding-inline:24px}
-        .nlp section{padding-block:clamp(72px,9vw,130px)}
-        .nlp h1,.nlp h2,.nlp h3{font-family:'Space Grotesk','Inter Tight',sans-serif}
-        .nlp h1,.nlp h2{letter-spacing:-.03em;line-height:1.06;font-weight:700;margin:0}
+        .nlp-wrap{max-width:1280px;margin-inline:auto;padding-inline:28px}
+        .nlp section{padding-block:clamp(84px,10vw,150px);position:relative;z-index:1}
+        .nlp h1,.nlp h2{letter-spacing:-.045em;line-height:1.02;font-weight:500;margin:0}
         .nlp-chip{display:inline-flex;align-items:center;gap:9px;padding:7px 16px;border:1px solid var(--line);border-radius:999px;
           font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
         .nlp-chip i{width:6px;height:6px;border-radius:50%;background:var(--fg);animation:nlp-pulse 2.2s var(--ease) infinite}
         @keyframes nlp-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.8)}}
-        .nlp h1{font-size:clamp(2.6rem,6.5vw,4.9rem)}
-        .nlp h2{font-size:clamp(1.9rem,3.6vw,2.9rem)}
-        .nlp p{color:var(--muted);line-height:1.65;max-width:62ch;margin:0}
+        .nlp h1{font-size:clamp(2.6rem,4.9vw,4.5rem)}
+        .nlp h2{font-size:clamp(2rem,4.2vw,3.4rem)}
+        .nlp p{color:var(--muted);font-weight:300;line-height:1.7;max-width:60ch;margin:0;font-size:1.05rem}
         .nlp a{color:inherit;text-decoration:none}
         /* reveal */
         .nlp-reveal{opacity:0;transform:translateY(36px);transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease)}
@@ -131,12 +128,13 @@ export default function HomeNode() {
         /* nav */
         .nlp-nav{position:fixed;inset-inline:0;top:0;z-index:50;background:rgba(5,5,5,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
         .nlp-nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+        .nlp-nav .nlp-wrap{max-width:none;padding-inline:clamp(24px,3vw,48px)}
         .nlp-links{display:flex;gap:28px}
         .nlp-links a{font-size:.86rem;color:var(--muted);transition:color var(--dur) var(--ease)}
         .nlp-links a:hover{color:var(--fg)}
         @media(max-width:760px){.nlp-links{display:none}}
         /* botões */
-        .nlp-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:999px;font-weight:600;font-size:.94rem;border:1px solid transparent;
+        .nlp-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 30px;border-radius:999px;font-weight:500;font-size:.94rem;border:1px solid transparent;
           transition:transform var(--dur) var(--ease),background var(--dur) var(--ease),border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease);cursor:pointer}
         .nlp-btn:hover{transform:translateY(-2px)}
         .nlp-btn:active{transform:translateY(0) scale(.97)}
@@ -145,72 +143,82 @@ export default function HomeNode() {
         .nlp .nlp-btn-ghost{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.05);color:var(--fg);backdrop-filter:blur(8px)}
         .nlp .nlp-btn-ghost:hover{border-color:rgba(255,255,255,.45);background:rgba(255,255,255,.10);box-shadow:0 0 24px rgba(255,255,255,.07)}
         .nlp-btn-sm{padding:9px 20px;font-size:.85rem}
-        /* hero */
-        .nlp-hero{position:relative;padding-top:170px!important;padding-bottom:90px!important}
-        .nlp-threads{opacity:.55;mask-image:linear-gradient(180deg,#000 65%,transparent 98%)}
-        .nlp-hero-in{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:26px;z-index:1}
-        .nlp-hero p{font-size:clamp(1rem,1.4vw,1.18rem)}
-        .nlp-ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
-        .nlp-stats{display:flex;justify-content:center;flex-wrap:wrap;margin-top:70px;width:100%}
-        .nlp-stat{padding:6px 44px;text-align:center;border-left:1px solid var(--line)}
-        .nlp-stat:first-child{border-left:none}
-        .nlp-stat b{display:block;font-family:'Space Grotesk',sans-serif;font-size:clamp(1.5rem,2.6vw,2.2rem);font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-bottom:6px}
-        .nlp-stat span.nlp-mono{font-size:.62rem}
-        @media(max-width:760px){.nlp-stat{flex:1 1 40%;border-left:none;padding:14px 10px}}
+        /* hero — texto à esquerda, cérebro respira à direita (fixo atrás) */
+        .nlp-hero{position:relative;padding-top:190px!important;padding-bottom:110px!important;min-height:92vh;display:flex;align-items:center}
+        .nlp-hero .nlp-wrap{max-width:none;margin:0;padding-left:clamp(24px,5.5vw,96px);padding-right:24px}
+        .nlp-hero .nlp-wrap{max-width:1380px}
+        .nlp-hero-in{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:28px;z-index:1;max-width:640px}
+        .nlp-hero p{font-size:clamp(1.02rem,1.4vw,1.16rem);max-width:44ch;color:var(--dim);text-shadow:0 0 18px rgba(5,5,5,.9)}
+        .nlp-hero h1{text-shadow:0 0 28px rgba(5,5,5,.85)}
+        .nlp-ctas{display:flex;gap:26px;flex-wrap:wrap;align-items:center}
+        .nlp-link-arrow{display:inline-flex;align-items:center;gap:8px;color:var(--dim);font-weight:400;font-size:.98rem;
+          transition:color var(--dur) var(--ease),gap var(--dur) var(--ease)}
+        .nlp-link-arrow span{transition:transform var(--dur) var(--ease)}
+        .nlp-link-arrow:hover{color:var(--fg)}
+        .nlp-link-arrow:hover span{transform:translateX(4px)}
+        .nlp-link-arrow:active{opacity:.7}
+        .nlp-stats{display:flex;flex-wrap:wrap;margin-top:58px;gap:0}
+        .nlp-stat{padding:4px 38px;text-align:left;border-left:1px solid var(--line)}
+        .nlp-stat:first-child{border-left:none;padding-left:0}
+        .nlp-stat b{display:block;font-size:clamp(1.4rem,2.4vw,2rem);font-weight:500;letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-bottom:6px}
+        .nlp-stat span.nlp-mono{font-size:.6rem}
+        @media(max-width:760px){.nlp-stat{flex:1 1 40%;border-left:none;padding:12px 10px 12px 0}}
         /* section head */
-        .nlp-head{display:flex;flex-direction:column;gap:14px;margin-bottom:52px}
-        /* bento soluções */
-        .nlp-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-        @media(max-width:860px){.nlp-grid3{grid-template-columns:1fr}}
-        .nlp-card{background:var(--elev);border:1px solid var(--line);border-radius:10px;padding:30px;display:flex;flex-direction:column;gap:14px;position:relative;
-          transition:transform var(--dur) var(--ease),border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
-        .nlp-card::before,.nlp-card::after,.nlp-res::before,.nlp-res::after{content:'';position:absolute;width:14px;height:14px;opacity:.3;transition:opacity var(--dur) var(--ease)}
-        .nlp-card::before,.nlp-res::before{top:-1px;left:-1px;border-top:1px solid var(--fg);border-left:1px solid var(--fg)}
-        .nlp-card::after,.nlp-res::after{bottom:-1px;right:-1px;border-bottom:1px solid var(--fg);border-right:1px solid var(--fg)}
-        .nlp-card:hover::before,.nlp-card:hover::after,.nlp-res:hover::before,.nlp-res:hover::after{opacity:.85}
-        .nlp-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.22);box-shadow:0 0 32px rgba(255,255,255,.05)}
-        .nlp-card h3{margin:0;font-size:1.22rem;font-weight:700;letter-spacing:-.01em}
-        .nlp-card .nlp-mono{margin-top:auto;padding-top:14px;border-top:1px solid var(--line)}
-        /* resultados */
-        .nlp-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-        @media(max-width:960px){.nlp-grid4{grid-template-columns:repeat(2,1fr)}}
+        .nlp-head{display:flex;flex-direction:column;gap:16px;margin-bottom:72px}
+        /* bloco deslocado — cérebro ocupa a esquerda, conteúdo respira à direita */
+        #solucoes .nlp-wrap{max-width:none;padding-inline:clamp(24px,5.5vw,96px)}
+        .nlp-offset-r{max-width:600px;margin-left:auto}
+        .nlp-offset-r .nlp-head{margin-bottom:56px}
+        @media(max-width:960px){.nlp-offset-r{max-width:100%;margin-left:0}}
+        .nlp-offset-r .nlp-grid3{grid-template-columns:1fr;gap:52px}
+        /* soluções — colunas flutuando no void, sem caixa */
+        .nlp-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:64px}
+        @media(max-width:860px){.nlp-grid3{grid-template-columns:1fr;gap:48px}}
+        .nlp-card{display:flex;flex-direction:column;gap:16px;padding-top:26px;border-top:1px solid var(--line);
+          transition:transform var(--dur) var(--ease)}
+        .nlp-card:hover{transform:translateY(-6px)}
+        .nlp-card h3{margin:0;font-size:1.35rem;font-weight:500;letter-spacing:-.02em}
+        .nlp-card .nlp-mono{margin-top:auto;padding-top:16px}
+        /* resultados — números gigantes flutuando */
+        .nlp-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:64px}
+        @media(max-width:960px){.nlp-grid4{grid-template-columns:repeat(2,1fr);gap:48px}}
         @media(max-width:520px){.nlp-grid4{grid-template-columns:1fr}}
-        .nlp-res{background:var(--elev);border:1px solid var(--line);border-radius:10px;padding:28px;position:relative;
-          transition:transform var(--dur) var(--ease),border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
-        .nlp-res:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.22);box-shadow:0 0 32px rgba(255,255,255,.05)}
-        .nlp-res b{display:block;font-family:'Space Grotesk',sans-serif;font-size:clamp(2.2rem,4vw,3.2rem);font-weight:700;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
-        .nlp-res small{color:var(--muted);font-size:.9rem}
+        .nlp-res{padding-top:26px;border-top:1px solid var(--line);transition:transform var(--dur) var(--ease)}
+        .nlp-res:hover{transform:translateY(-6px)}
+        .nlp-res b{display:block;font-size:clamp(2.8rem,5vw,4.4rem);font-weight:400;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+        .nlp-res small{color:var(--muted);font-size:.92rem;font-weight:300}
         /* processo */
-        .nlp-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-        @media(max-width:960px){.nlp-steps{grid-template-columns:repeat(2,1fr)}}
+        .nlp-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:64px}
+        @media(max-width:960px){.nlp-steps{grid-template-columns:repeat(2,1fr);gap:48px}}
         @media(max-width:520px){.nlp-steps{grid-template-columns:1fr}}
-        .nlp-step{border-top:1px solid var(--line);padding-top:20px;display:flex;flex-direction:column;gap:10px}
-        .nlp-step h3{margin:0;font-size:1.05rem;font-weight:700}
-        .nlp-step p{font-size:.9rem}
+        .nlp-step{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direction:column;gap:12px}
+        .nlp-step h3{margin:0;font-size:1.08rem;font-weight:500}
+        .nlp-step p{font-size:.94rem}
         /* marquee */
         .nlp-marquee{overflow:hidden;border-block:1px solid var(--line);padding-block:22px;position:relative;
           mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
         .nlp-track{display:flex;gap:56px;width:max-content;animation:nlp-scroll 36s linear infinite}
         .nlp-marquee:hover .nlp-track{animation-play-state:paused}
         @keyframes nlp-scroll{to{transform:translateX(-50%)}}
-        .nlp-track span{font-family:'Geist Mono',monospace;font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+        .nlp-track span{font-family:'JetBrains Mono',monospace;font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+        .nlp-marquee{position:relative;z-index:1;background:var(--bg)}
         /* manifesto */
         .nlp-manif{display:grid;grid-template-columns:1.2fr 1fr;gap:56px;align-items:center}
         @media(max-width:860px){.nlp-manif{grid-template-columns:1fr}}
-        /* faq */
-        .nlp-faq{border:1px solid var(--line);border-radius:16px;overflow:hidden}
-        .nlp-qa+.nlp-qa{border-top:1px solid var(--line)}
-        .nlp-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 24px;background:none;border:none;color:var(--fg);
-          font:inherit;font-weight:600;font-size:1rem;text-align:left;cursor:pointer;transition:background var(--dur) var(--ease)}
-        .nlp-q:hover{background:rgba(255,255,255,.03)}
+        /* faq — sem caixa, só divisórias no void */
+        .nlp-faq{border-top:1px solid var(--line)}
+        .nlp-qa{border-bottom:1px solid var(--line)}
+        .nlp-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:26px 4px;background:none;border:none;color:var(--fg);
+          font:inherit;font-weight:400;font-size:1.12rem;letter-spacing:-.01em;text-align:left;cursor:pointer;transition:color var(--dur) var(--ease),padding-left var(--dur) var(--ease)}
+        .nlp-q:hover{color:var(--dim);padding-left:12px}
         .nlp-q svg{flex-shrink:0;transition:transform var(--dur) var(--ease)}
         .nlp-qa.nlp-open .nlp-q svg{transform:rotate(45deg)}
         .nlp-a{max-height:0;overflow:hidden;transition:max-height var(--dur) var(--ease)}
         .nlp-qa.nlp-open .nlp-a{max-height:220px}
-        .nlp-a p{padding:0 24px 22px;font-size:.94rem}
+        .nlp-a p{padding:0 4px 26px;font-size:.98rem}
         /* cta final + footer */
         .nlp-final{text-align:center;display:flex;flex-direction:column;align-items:center;gap:26px}
-        .nlp-footer{border-top:1px solid var(--line);padding-top:64px}
+        .nlp-footer{border-top:1px solid var(--line);padding-top:72px;position:relative;z-index:1;background:var(--bg)}
         .nlp-footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:44px;padding-bottom:52px}
         @media(max-width:760px){.nlp-footer-grid{grid-template-columns:1fr;gap:36px}}
         .nlp-footer-col{display:flex;flex-direction:column;gap:14px}
@@ -240,23 +248,19 @@ export default function HomeNode() {
                 </div>
             </nav>
 
+            {/* CÉREBRO DE PARTÍCULAS — fixo atrás do site inteiro */}
+            <BrainField />
+
             {/* HERO */}
             <section className="nlp-hero" id="top">
-                <Threads
-                    color={[1, 1, 1]}
-                    amplitude={2.2}
-                    distance={0.25}
-                    enableMouseInteraction
-                    className="nlp-threads"
-                />
                 <div className="nlp-wrap nlp-hero-in">
                     <span className="nlp-chip nlp-reveal"><i />operando agora</span>
                     <span className="nlp-mono nlp-reveal">{'// sistemas · e-commerce · ia aplicada'}</span>
-                    <h1 className="nlp-reveal nlp-d1">Tecnologia que transforma<br />marcas em máquinas de venda</h1>
+                    <h1 className="nlp-reveal nlp-d1">Tecnologia que<br />transforma marcas em<br />máquinas de venda.</h1>
                     <p className="nlp-reveal nlp-d2">Sistemas, lojas e aplicações de IA sob medida, entregues em dias e gerando resultado desde o primeiro dia.</p>
                     <div className="nlp-ctas nlp-reveal nlp-d3">
                         <a href={WHATS} target="_blank" rel="noopener" className="nlp-btn nlp-btn-solid">Falar com a NODE</a>
-                        <Link to="/login" className="nlp-btn nlp-btn-ghost">Acessar o sistema</Link>
+                        <Link to="/login" className="nlp-link-arrow">Acessar o sistema<span>→</span></Link>
                     </div>
                     <div className="nlp-stats nlp-reveal">
                         {STATS.map(s => (
@@ -269,22 +273,24 @@ export default function HomeNode() {
                 </div>
             </section>
 
-            {/* SOLUÇÕES */}
+            {/* SOLUÇÕES — cérebro remontado à esquerda, conteúdo à direita */}
             <section id="solucoes">
                 <div className="nlp-wrap">
-                    <div className="nlp-head nlp-reveal">
-                        <span className="nlp-mono">{'// o que construímos'}</span>
-                        <h2>Engenharia completa,<br />da ideia à operação</h2>
-                    </div>
-                    <div className="nlp-grid3">
-                        {SOLUTIONS.map((s, i) => (
-                            <div className={`nlp-card nlp-reveal nlp-d${i + 1}`} key={s.num}>
-                                <span className="nlp-mono">{s.num}</span>
-                                <h3>{s.title}</h3>
-                                <p style={{ fontSize: '.94rem' }}>{s.desc}</p>
-                                <span className="nlp-mono">{s.tags}</span>
-                            </div>
-                        ))}
+                    <div className="nlp-offset-r">
+                        <div className="nlp-head nlp-reveal">
+                            <span className="nlp-mono">{'// o que construímos'}</span>
+                            <h2>Engenharia completa,<br />da ideia à operação</h2>
+                        </div>
+                        <div className="nlp-grid3">
+                            {SOLUTIONS.map((s, i) => (
+                                <div className={`nlp-card nlp-reveal nlp-d${i + 1}`} key={s.num}>
+                                    <span className="nlp-mono">{s.num}</span>
+                                    <h3>{s.title}</h3>
+                                    <p style={{ fontSize: '.96rem' }}>{s.desc}</p>
+                                    <span className="nlp-mono">{s.tags}</span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>
