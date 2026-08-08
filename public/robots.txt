@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://nodedev.com.br/sitemap.xml
+Sitemap: https://agencynode.site/sitemap.xml

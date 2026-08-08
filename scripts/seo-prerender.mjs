@@ -17,8 +17,9 @@
 import fs from 'fs';
 import path from 'path';
 
-// ATENÇÃO: confirmar o domínio de produção. Usado no sitemap e nos dados estruturados.
-const DOMINIO = process.env.SITE_URL || 'https://nodedev.com.br';
+// Domínio de produção (confirmado pelo Search Console). Usado em canonical, og:url,
+// og:image, sitemap e dados estruturados. Sobrescrevível por SITE_URL.
+const DOMINIO = process.env.SITE_URL || 'https://agencynode.site';
 
 const DIST = path.resolve('dist', 'index.html');
 if (!fs.existsSync(DIST)) {
