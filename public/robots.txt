@@ -1,4 +1,4 @@
-User-agent: Googlebot
+﻿User-agent: Googlebot
 Allow: /
 
 User-agent: Bingbot
@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://agencynode.site/sitemap.xml
+Sitemap: https://www.agencynode.site/sitemap.xml

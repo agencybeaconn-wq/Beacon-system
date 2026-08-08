@@ -17,9 +17,10 @@
 import fs from 'fs';
 import path from 'path';
 
-// Domínio de produção (confirmado pelo Search Console). Usado em canonical, og:url,
-// og:image, sitemap e dados estruturados. Sobrescrevível por SITE_URL.
-const DOMINIO = process.env.SITE_URL || 'https://agencynode.site';
+// Domínio de produção. Precisa ser a URL FINAL: o apex (sem www) responde 308 e
+// redireciona pro www, e canonical apontando pra endereço que redireciona é sinal
+// contraditório pro Google. Sobrescrevível por SITE_URL.
+const DOMINIO = process.env.SITE_URL || 'https://www.agencynode.site';
 
 const DIST = path.resolve('dist', 'index.html');
 if (!fs.existsSync(DIST)) {
