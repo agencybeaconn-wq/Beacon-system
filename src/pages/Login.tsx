@@ -6,14 +6,12 @@ import { Mail, Lock, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { sendVerificationEmail } from "@/lib/mailService";
 import leverLogo from "@/assets/lever-logo.png";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -30,41 +28,14 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      if (isSignUp) {
-        // Sign Up
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/`
-          }
-        });
-        if (error) throw error;
-
-        // Send verification email via Loops.so
-        try {
-          const emailSent = await sendVerificationEmail(email);
-          if (!emailSent) {
-            console.warn('[Login] Loops.so verification email failed, but Supabase email should still work.');
-          }
-        } catch (emailError) {
-          console.error('[Login] Error sending Loops.so verification email:', emailError);
-        }
-
-        toast({
-          title: "Conta criada!",
-          description: "Verifique seu email para confirmar o cadastro."
-        });
-      } else {
-        // Sign In
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password
-        });
-        if (error) throw error;
-        toast({ title: "Login realizado!" });
-        navigate("/app");
-      }
+      // Acesso é só por convite: quem entra aqui já tem conta criada pela agência.
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+      if (error) throw error;
+      toast({ title: "Login realizado!" });
+      navigate("/app");
     } catch (error: any) {
       toast({
         title: "Erro",
@@ -91,10 +62,10 @@ const Login = () => {
           <div className="space-y-6">
             <div className="space-y-2 text-left">
               <h2 className="text-2xl font-bold text-foreground">
-                {isSignUp ? "Criar conta" : "Bem-vindo"}
+                Bem-vindo
               </h2>
               <p className="text-muted-foreground font-light">
-                {isSignUp ? "Preencha os dados para criar sua conta" : "Entre para acessar o sistema"}
+                Entre para acessar o sistema
               </p>
             </div>
 
@@ -148,23 +119,11 @@ const Login = () => {
                 {isLoading ? (
                   <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Aguarde...</>
                 ) : (
-                  isSignUp ? "Criar conta" : "Entrar"
+                  "Entrar"
                 )}
               </Button>
             </form>
 
-            <div className="mt-6 text-center">
-              <p className="text-sm text-muted-foreground font-light">
-                {isSignUp ? "Já tem conta?" : "Não tem conta?"}{" "}
-                <button
-                  type="button"
-                  onClick={() => setIsSignUp(!isSignUp)}
-                  className="text-primary font-medium hover:underline"
-                >
-                  {isSignUp ? "Fazer login" : "Crie agora"}
-                </button>
-              </p>
-            </div>
           </div>
         </div>
       </div>
