@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { useEffect, lazy, Suspense } from "react";
 import { App as CapacitorApp } from "@capacitor/app";
@@ -116,6 +116,29 @@ const AgencyClients = lazy(() => import("./pages/agency/AgencyClients"));
 const AgencyNewDemand = lazy(() => import("./pages/agency/AgencyNewDemand"));
 const AgencySmartData = lazy(() => import("./pages/agency/AgencySmartData"));
 
+/**
+ * Ao trocar de rota, o React mantém a rolagem onde estava: quem clicava num link no
+ * meio da home caía no meio da página nova. Isto zera a rolagem.
+ *
+ * Escopo de propósito nas páginas PÚBLICAS: o sistema interno tem telas com scroll
+ * próprio e não deve mudar de comportamento por causa disso.
+ *
+ * Em POP (botão voltar/avançar) não faz nada, para o navegador restaurar a posição
+ * anterior, que é o que a pessoa espera ao voltar.
+ */
+const PAGINAS_PUBLICAS = ['/', '/criacao-de-sites', '/sistemas-e-ia', '/mentoria-de-ia'];
+
+function RolarParaTopo() {
+  const { pathname } = useLocation();
+  const tipoNavegacao = useNavigationType();
+  useEffect(() => {
+    if (tipoNavegacao === 'POP') return;
+    if (!PAGINAS_PUBLICAS.includes(pathname)) return;
+    window.scrollTo(0, 0);
+  }, [pathname, tipoNavegacao]);
+  return null;
+}
+
 const RouteFallback = () => (
   <div style={{ minHeight: "100vh", background: "#08090C" }} aria-busy="true" />
 );
@@ -211,6 +234,7 @@ const App = () => (
                       <BrowserRouter>
                         <PostHogProvider>
                           <ErrorBoundary>
+                            <RolarParaTopo />
                             <Suspense fallback={<RouteFallback />}>
                             <Routes>
                               {/* AULA VIBE CODING — standalone, sem auth (apresentação ao vivo) */}
