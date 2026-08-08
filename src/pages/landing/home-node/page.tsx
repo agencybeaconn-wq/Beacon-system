@@ -563,15 +563,18 @@ export default function HomeNode() {
         .nlp-garantia p{font-size:.88rem;color:var(--muted);line-height:1.55;max-width:none}
 
         /* ══ Faixa de venda cruzada da loja Shopify ══ */
-        .nlp-faixa-shopify{margin-top:26px;display:flex;align-items:center;gap:clamp(20px,3vw,44px);
-          padding:26px clamp(24px,3vw,38px);border-radius:16px;text-decoration:none;color:inherit;
+        .nlp-faixa-shopify{margin-top:26px;display:flex;align-items:center;justify-content:space-between;
+          gap:clamp(24px,4vw,56px);
+          padding:30px clamp(26px,3vw,40px);border-radius:16px;text-decoration:none;color:inherit;
           border:1px solid rgba(139,111,224,.32);background:linear-gradient(100deg,rgba(139,111,224,.12),rgba(16,18,26,.9) 62%);
           backdrop-filter:blur(14px);
           transition:border-color var(--dur) var(--ease),transform var(--dur) var(--ease)}
         .nlp-faixa-shopify:hover{border-color:var(--accent);transform:translateY(-3px)}
-        .nlp-faixa-tag{flex:0 0 auto;align-self:flex-start;padding:5px 12px;border-radius:999px;background:var(--accent);
-          font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:#0C0A16}
-        .nlp-faixa-shopify strong{display:block;font-size:1.24rem;font-weight:500;letter-spacing:-.025em;margin-bottom:7px}
+        /* a etiqueta usa o MESMO padrão de todas as seções (// texto em mono, acento),
+           dentro da coluna de texto. Como pílula preenchida ela lia como botão solto. */
+        .nlp-faixa-txt{display:flex;flex-direction:column;gap:9px}
+        .nlp-faixa-txt .nlp-mono{color:var(--accent);font-size:.63rem}
+        .nlp-faixa-shopify strong{display:block;font-size:1.34rem;font-weight:500;letter-spacing:-.025em}
         .nlp-faixa-shopify p{font-size:.9rem;color:var(--muted);line-height:1.55;max-width:64ch}
         .nlp-faixa-link{flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;font-size:.9rem;color:var(--accent-hi);white-space:nowrap}
         .nlp-faixa-link span{transition:transform var(--dur) var(--ease)}
@@ -916,8 +919,8 @@ export default function HomeNode() {
                         target="_blank" rel="noopener noreferrer"
                         onMouseEnter={pulso}
                         onClick={() => registrar('cta_whatsapp', 'faixa_shopify')}>
-                        <span className="nlp-faixa-tag">também construímos</span>
-                        <div>
+                        <div className="nlp-faixa-txt">
+                            <span className="nlp-mono">{'// também construímos'}</span>
                             <strong>Precisa de uma loja Shopify?</strong>
                             <p>Lojas com o tema NODE proprietário, licença por loja e atualização inclusa enquanto você for cliente ativo. Construídas pela mesma equipe.</p>
                         </div>
