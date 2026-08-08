@@ -1030,6 +1030,9 @@ export default function HomeNode() {
                     </div>
                     <div className="nlp-footer-bottom">
                         <span className="nlp-mono">© 2026 NODE. Todos os direitos reservados.</span>
+                        {/* cidade: sinal de negócio local, bate com o Perfil da Empresa.
+                            Só cidade e estado, sem endereço de rua. */}
+                        <span className="nlp-mono">Sete Lagoas · MG · atendemos todo o Brasil</span>
                         <span className="nlp-mono">Feito pela própria NODE</span>
                     </div>
                 </div>
