@@ -133,6 +133,7 @@ const OFERTAS = [
             },
         ],
         cta: 'Fazer meu orçamento',
+        pagina: 'criacao-de-sites',
         wa: 'Olá! Quero entender mais sobre o desenvolvimento de site / landing page com a NODE.',
     },
     {
@@ -161,6 +162,7 @@ const OFERTAS = [
             },
         ],
         cta: 'Fazer meu orçamento',
+        pagina: 'sistemas-e-ia',
         wa: 'Olá! Quero entender mais sobre sistemas e IA aplicada na minha operação com a NODE.',
     },
     {
@@ -189,6 +191,7 @@ const OFERTAS = [
             },
         ],
         cta: 'Quero saber da mentoria',
+        pagina: 'mentoria-de-ia',
         wa: 'Olá! Quero entender mais sobre as mentorias da NODE.',
     },
 ];
@@ -515,6 +518,14 @@ export default function HomeNode() {
         .nlp-oferta:hover .nlp-oferta-cta{border-color:var(--accent);background:var(--accent-dim)}
         .nlp-oferta-cta:hover{box-shadow:0 0 28px rgba(139,111,224,.24)}
         .nlp-oferta-cta:hover span{transform:translateX(4px)}
+        .nlp-oferta-acoes{margin-top:auto;padding-top:22px;display:flex;flex-direction:column;
+          align-items:flex-start;gap:14px}
+        .nlp-oferta-acoes .nlp-oferta-cta{margin-top:0}
+        .nlp-oferta-saiba{display:inline-flex;align-items:center;gap:7px;font-size:.86rem;color:var(--muted);
+          transition:color var(--dur) var(--ease)}
+        .nlp-oferta-saiba span{transition:transform var(--dur) var(--ease)}
+        .nlp-oferta-saiba:hover{color:var(--accent-hi)}
+        .nlp-oferta-saiba:hover span{transform:translateX(4px)}
         /* ══ PORTFÓLIO: cada operação no ar vira um caso ══
            Painel opaco (lê por cima do neurônio), categoria em acento, print grande,
            linha Cliente/Projeto e botão. */
@@ -888,11 +899,19 @@ export default function HomeNode() {
                                         </details>
                                     )
                                 ))}
-                                <a href={waLink(o.wa)} target="_blank" rel="noopener noreferrer"
-                                    className="nlp-btn nlp-oferta-cta" onMouseEnter={pulso}
-                                    onClick={() => registrar('cta_whatsapp', `oferta_${o.num}_${o.titulo}`)}>
-                                    {o.cta}<span>→</span>
-                                </a>
+                                <div className="nlp-oferta-acoes">
+                                    <a href={waLink(o.wa)} target="_blank" rel="noopener noreferrer"
+                                        className="nlp-btn nlp-oferta-cta" onMouseEnter={pulso}
+                                        onClick={() => registrar('cta_whatsapp', `oferta_${o.num}_${o.titulo}`)}>
+                                        {o.cta}<span>→</span>
+                                    </a>
+                                    {/* link interno pra página da frente: é ele que dá força
+                                        de busca pra ela e deixa quem quer ler mais se aprofundar */}
+                                    <Link to={`/${o.pagina}`} className="nlp-oferta-saiba"
+                                        onClick={() => registrar('abre_servico', o.pagina)}>
+                                        Ver a página completa<span>→</span>
+                                    </Link>
+                                </div>
                             </article>
                         ))}
                     </div>

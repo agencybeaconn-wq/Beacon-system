@@ -9,6 +9,18 @@
             "destination": "https://gbmbrjvkayzwhdwnqjpi.supabase.co/functions/v1/shopify-auth-start"
         },
         {
+            "source": "/criacao-de-sites",
+            "destination": "/criacao-de-sites/index.html"
+        },
+        {
+            "source": "/sistemas-e-ia",
+            "destination": "/sistemas-e-ia/index.html"
+        },
+        {
+            "source": "/mentoria-de-ia",
+            "destination": "/mentoria-de-ia/index.html"
+        },
+        {
             "source": "/(.*)",
             "destination": "/index.html"
         }

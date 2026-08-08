@@ -13,6 +13,7 @@ import { AcademyProvider } from "./contexts/AcademyContext";
 import AcceptInvite from "./pages/AcceptInvite";
 import { LandingRedirect } from "./components/LandingRedirect";
 import HomeNode from "./pages/landing/home-node/page";
+import ServicoPage from "./pages/landing/servicos/ServicoPage";
 import TrainingLibraryManager from "./components/training/TrainingLibraryManager";
 import { DashboardProvider } from "./contexts/DashboardContext";
 import { ChatProvider } from "./contexts/ChatContext";
@@ -267,6 +268,11 @@ const App = () => (
                               />
                               {/* Home pública — landing NODE (botão Entrar leva ao /login) */}
                               <Route path="/" element={<HomeNode />} />
+                              {/* Páginas públicas por serviço: existem por SEO, uma para cada
+                                  frente. O HTML delas é pré-renderizado no build. */}
+                              <Route path="/criacao-de-sites" element={<ServicoPage />} />
+                              <Route path="/sistemas-e-ia" element={<ServicoPage />} />
+                              <Route path="/mentoria-de-ia" element={<ServicoPage />} />
                               <Route
                                 path="/app"
                                 element={
