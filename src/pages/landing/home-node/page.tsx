@@ -11,6 +11,24 @@ import lojaThimports from '@/assets/loja-thimports.jpg';
 import lojaMundotimao from '@/assets/loja-mundotimao.jpg';
 import BrainField from './BrainField';
 import { registrar, observarProfundidade } from './rastreio';
+import mShopify from '@/assets/marcas/shopify.svg';
+import mSupabase from '@/assets/marcas/supabase.svg';
+import mVercel from '@/assets/marcas/vercel.svg';
+import mStripe from '@/assets/marcas/stripe.svg';
+import mClaude from '@/assets/marcas/claude.svg';
+import mAnthropic from '@/assets/marcas/anthropic.svg';
+import mMeta from '@/assets/marcas/meta.svg';
+import mReact from '@/assets/marcas/react.svg';
+import mTypescript from '@/assets/marcas/typescript.svg';
+import mNode from '@/assets/marcas/nodedotjs.svg';
+import mNext from '@/assets/marcas/nextdotjs.svg';
+import mVite from '@/assets/marcas/vite.svg';
+import mTailwind from '@/assets/marcas/tailwindcss.svg';
+import mWoo from '@/assets/marcas/woocommerce.svg';
+import mVtex from '@/assets/marcas/vtex.svg';
+import mPython from '@/assets/marcas/python.svg';
+import mGithub from '@/assets/marcas/github.svg';
+import mAnalytics from '@/assets/marcas/googleanalytics.svg';
 
 const WHATS = 'https://wa.me/5531984083376?text=Ol%C3%A1%2C%20quero%20falar%20com%20a%20NODE%20sobre%20um%20projeto.';
 const INSTA = 'https://www.instagram.com/noode.dev/';
@@ -19,18 +37,53 @@ const INSTA = 'https://www.instagram.com/noode.dev/';
 // afirmava um volume que a página não prova, e prometer o que não se mostra derruba
 // a confiança justamente na seção que existe pra construí-la.
 const STATS = [
-    { value: 168, prefix: 'R$', suffix: 'M+', label: 'faturamento gerado' },
-    { value: 1732, prefix: '', suffix: '', label: 'projetos entregues' },
-    { value: 742, prefix: '', suffix: '', label: 'clientes atendidos' },
-    { texto: '9h–23h', label: 'suporte todo dia' },
+    { value: 732, prefix: '', suffix: '', label: 'projetos entregues' },
+    { value: 485, prefix: '', suffix: '', label: 'clientes atendidos' },
+    { texto: '100%', label: 'únicos e independentes' },
+    { texto: '9h às 23h', label: 'suporte todo dia' },
 ];
 
-// Operações reais no ar — prova de entrega, não peça de conversão:
-// sem preço, sem CTA de compra. A loja, o que foi entregue, e o link.
+// Operações reais no ar. Formato de portfólio: categoria, cliente, projeto e o que
+// foi feito. Prova de entrega, não peça de conversão (sem preço, sem "compre").
 const OPERACOES = [
-    { nome: 'Pace Run', url: 'https://lojapacerun.com.br/', img: lojaPacerun, entrega: 'Loja completa e checkout transparente' },
-    { nome: 'TH Imports', url: 'https://thimportsloja.com.br/', img: lojaThimports, entrega: 'Tema próprio, catálogo e operação' },
-    { nome: 'Mundo Timão', url: 'https://mundotimao.com.br/', img: lojaMundotimao, entrega: 'Identidade de clube e vitrine sazonal' },
+    {
+        nome: 'Pace Run', url: 'https://lojapacerun.com.br/', img: lojaPacerun,
+        categoria: 'E-commerce / Performance',
+        projeto: 'Loja completa + checkout',
+        desc: 'Loja de corrida montada do catálogo ao checkout transparente, com frete e pagamento configurados pra converter desde o primeiro dia.',
+    },
+    {
+        nome: 'TH Imports', url: 'https://thimportsloja.com.br/', img: lojaThimports,
+        categoria: 'E-commerce / Tema próprio',
+        projeto: 'Tema autoral + operação',
+        desc: 'Tema construído sob medida pra marca, com catálogo estruturado e a operação rodando junto com o time do cliente.',
+    },
+    {
+        nome: 'Mundo Timão', url: 'https://mundotimao.com.br/', img: lojaMundotimao,
+        categoria: 'E-commerce / Identidade',
+        projeto: 'Identidade de clube',
+        desc: 'Loja com a cara da torcida: identidade do clube aplicada na vitrine, com campanhas sazonais e catálogo grande organizado.',
+    },
+];
+
+// Garantias de contrato. Tudo aqui é verificável no que a NODE já pratica.
+const GARANTIAS = [
+    {
+        icone: 'chave', titulo: 'Código e acessos são seus',
+        desc: 'Você recebe o repositório e todos os acessos no fim do projeto. Sem dependência eterna, sem refém de fornecedor.',
+    },
+    {
+        icone: 'suporte', titulo: 'Suporte todo dia',
+        desc: 'WhatsApp e e-mail das 9h às 23h, todos os dias, enquanto você for cliente ativo. Sem fila e sem robô.',
+    },
+    {
+        icone: 'codigo', titulo: 'Stack moderna',
+        desc: 'Shopify, Supabase, Vercel, React e TypeScript, com IA no dia a dia da engenharia. Nada de tecnologia legada.',
+    },
+    {
+        icone: 'raio', titulo: 'Entrega em dias',
+        desc: 'Lojas e sites completos costumam sair em dias, não em meses. O prazo fechado você recebe já no alinhamento.',
+    },
 ];
 
 const SOLUTIONS = [
@@ -61,12 +114,12 @@ const OFERTAS = [
             {
                 label: 'o que entra',
                 itens: [
-                    'E-commerce completo — Shopify, WooCommerce, VTEX ou NuvemShop',
+                    'E-commerce completo em Shopify, WooCommerce, VTEX ou NuvemShop',
                     'Landing page de campanha, desenhada pra uma ação só',
                     'Site institucional e portfólio com identidade autoral',
                     'Catálogo, variações, frete e checkout configurados',
                     'Checkout transparente (Yampi, Appmax) quando faz sentido',
-                    'Design do zero — nenhum tema reaproveitado de terceiro',
+                    'Design do zero, sem nenhum tema reaproveitado de terceiro',
                 ],
             },
             {
@@ -117,7 +170,7 @@ const OFERTAS = [
             {
                 label: 'o que você aprende',
                 itens: [
-                    'IA aplicada de verdade — onde ela entra e onde não entra',
+                    'IA aplicada de verdade: onde ela entra e onde não entra',
                     'Desenvolvimento de sites e LPs, do zero ao deploy',
                     'Construção de sistemas: banco, login, painel e automação',
                     'Geração de imagem e criativo com IA, do prompt ao entregável',
@@ -150,7 +203,19 @@ const STEPS = [
     { num: '04', title: 'Lançamento & operação', desc: 'Projeto no ar com tracking e suporte. Depois do lançamento, a gente continua junto na operação.' },
 ];
 
-const STACK = ['Shopify', 'Supabase', 'Vercel', 'Stripe', 'Meta Ads', 'Klaviyo', 'WooCommerce', 'VTEX', 'NuvemShop', 'Yampi', 'OpenAI', 'Claude'];
+// Faixa da stack com logo de verdade. Os SVGs ficam no repositório (nada de
+// hotlink de terceiro): se o CDN de origem cair, a faixa continua no ar.
+const STACK = [
+    { nome: 'Shopify', logo: mShopify }, { nome: 'Supabase', logo: mSupabase },
+    { nome: 'Vercel', logo: mVercel }, { nome: 'Stripe', logo: mStripe },
+    { nome: 'Claude', logo: mClaude }, { nome: 'Anthropic', logo: mAnthropic },
+    { nome: 'Meta', logo: mMeta }, { nome: 'React', logo: mReact },
+    { nome: 'TypeScript', logo: mTypescript }, { nome: 'Node.js', logo: mNode },
+    { nome: 'Next.js', logo: mNext }, { nome: 'Vite', logo: mVite },
+    { nome: 'Tailwind', logo: mTailwind }, { nome: 'WooCommerce', logo: mWoo },
+    { nome: 'VTEX', logo: mVtex }, { nome: 'Python', logo: mPython },
+    { nome: 'GitHub', logo: mGithub }, { nome: 'Analytics', logo: mAnalytics },
+];
 
 const FAQS = [
     { q: 'Como começa um projeto com a NODE?', a: 'Você chama no WhatsApp e a gente marca um papo rápido de alinhamento. Dali sai escopo, prazo e investimento. Aprovou, entramos em produção no mesmo dia.' },
@@ -159,6 +224,15 @@ const FAQS = [
     { q: 'O tema NODE para Shopify tem licença?', a: 'Sim. Cada licença vale pra uma loja, com atualizações inclusas enquanto você for cliente ativo. Pra uma segunda loja, basta uma licença adicional.' },
     { q: 'Quais tecnologias vocês dominam?', a: 'Shopify, WooCommerce, VTEX, NuvemShop e Yampi no e-commerce. Supabase, Vercel e Stripe em sistemas. OpenAI e Claude na parte de IA.' },
 ];
+
+// Ícones das garantias: traço simples, herdam a cor do acento
+function Icone({ nome }: { nome: string }) {
+    const comum = { width: 20, height: 20, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
+    if (nome === 'chave') return <svg {...comum}><circle cx="8" cy="15" r="4" /><path d="M10.8 12.2 20 3m-3 3 2 2m-4 0 2 2" /></svg>;
+    if (nome === 'suporte') return <svg {...comum}><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="3.2" /><path d="m5.7 5.7 3.9 3.9m4.8 4.8 3.9 3.9m0-12.6-3.9 3.9m-4.8 4.8-3.9 3.9" /></svg>;
+    if (nome === 'codigo') return <svg {...comum}><path d="m8 6-6 6 6 6m8-12 6 6-6 6" /></svg>;
+    return <svg {...comum}><path d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12l1-8.5Z" /></svg>;
+}
 
 // ─── Contador animado no reveal ─────────────────────────────────────────────
 function Counter({ value, prefix = '', suffix = '' }: { value: number; prefix?: string; suffix?: string }) {
@@ -420,6 +494,16 @@ export default function HomeNode() {
            esta seção do resumo em Soluções (lá é por alto, aqui é o detalhe) */
         .nlp-oferta-grupo{display:flex;flex-direction:column;gap:12px;padding-top:18px;border-top:1px solid var(--line)}
         .nlp-oferta-grupo .nlp-mono{font-size:.63rem;color:var(--accent);opacity:.9}
+        /* "como funciona" recolhido: o card ficava alto demais com os dois blocos abertos */
+        .nlp-oferta-drop{display:block}
+        .nlp-oferta-drop summary{display:flex;align-items:center;justify-content:space-between;gap:12px;
+          cursor:pointer;list-style:none;padding:2px 0;color:var(--accent);
+          transition:opacity var(--dur) var(--ease)}
+        .nlp-oferta-drop summary::-webkit-details-marker{display:none}
+        .nlp-oferta-drop summary:hover{opacity:.75}
+        .nlp-oferta-drop summary svg{flex:0 0 auto;transition:transform var(--dur) var(--ease)}
+        .nlp-oferta-drop[open] summary svg{transform:rotate(45deg)}
+        .nlp-oferta-drop ul{margin-top:14px}
         .nlp-oferta ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
         .nlp-oferta li{position:relative;padding-left:20px;font-size:.9rem;color:var(--dim);line-height:1.5}
         .nlp-oferta li::before{content:'';position:absolute;left:0;top:.5em;width:7px;height:7px;
@@ -431,24 +515,70 @@ export default function HomeNode() {
         .nlp-oferta:hover .nlp-oferta-cta{border-color:var(--accent);background:var(--accent-dim)}
         .nlp-oferta-cta:hover{box-shadow:0 0 28px rgba(139,111,224,.24)}
         .nlp-oferta-cta:hover span{transform:translateX(4px)}
-        /* operações no ar — banners enfileirados na coluna ESQUERDA (o neurônio ocupa a direita) */
-        .nlp-ops{margin-top:clamp(64px,7vw,104px);max-width:520px;display:flex;flex-direction:column;gap:18px}
-        .nlp-op{display:flex;gap:18px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:14px;
-          background:rgba(190,200,225,.035);backdrop-filter:blur(14px);text-decoration:none;color:inherit;
-          transition:transform var(--dur) var(--ease),border-color var(--dur) var(--ease),background var(--dur) var(--ease)}
-        .nlp-op:hover{transform:translateY(-4px);border-color:rgba(139,111,224,.55);background:rgba(139,111,224,.07)}
-        .nlp-op-shot{flex:0 0 148px;aspect-ratio:16/9;border-radius:9px;overflow:hidden;border:1px solid var(--line);background:#0E1017}
-        /* a miniatura ROLA dentro do quadro no hover — a loja "ganha vida" em vez de ser print */
-        .nlp-op-shot img{width:100%;height:auto;aspect-ratio:760/404;object-fit:cover;object-position:top center;display:block;
-          filter:saturate(.88) brightness(.92);
-          transition:filter var(--dur) var(--ease),transform 2.4s cubic-bezier(.4,0,.2,1)}
-        .nlp-op:hover .nlp-op-shot img{filter:saturate(1) brightness(1);transform:translateY(-24%)}
-        .nlp-op-info{display:flex;flex-direction:column;gap:5px;min-width:0}
-        .nlp-op-info strong{font-size:1.06rem;font-weight:500;letter-spacing:-.02em}
-        .nlp-op-info em{font-style:normal;font-size:.9rem;color:var(--muted);line-height:1.45}
-        .nlp-op-info .nlp-mono{font-size:.66rem;color:#8B6FE0;opacity:.85}
-        @media(max-width:960px){.nlp-ops{max-width:100%}}
-        @media(max-width:520px){.nlp-op-shot{flex-basis:104px}.nlp-op-info strong{font-size:.98rem}}
+        /* ══ PORTFÓLIO: cada operação no ar vira um caso ══
+           Painel opaco (lê por cima do neurônio), categoria em acento, print grande,
+           linha Cliente/Projeto e botão. */
+        .nlp-ops{margin-top:clamp(56px,6vw,84px);display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+        @media(max-width:1020px){.nlp-ops{grid-template-columns:1fr;max-width:620px}}
+        .nlp-caso{position:relative;display:flex;flex-direction:column;border-radius:18px;overflow:hidden;
+          border:1px solid transparent;
+          background:
+            linear-gradient(180deg,rgba(18,20,29,.95),rgba(11,13,19,.95)) padding-box,
+            linear-gradient(165deg,rgba(139,111,224,.55),var(--line) 45%,rgba(190,200,225,.05)) border-box;
+          backdrop-filter:blur(16px);
+          transition:transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
+        .nlp-caso:hover{transform:translateY(-6px);box-shadow:0 26px 60px -28px rgba(139,111,224,.6)}
+        .nlp-caso header{padding:24px 24px 18px;display:flex;flex-direction:column;gap:6px}
+        .nlp-caso-cat{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.16em;
+          text-transform:uppercase;color:var(--accent)}
+        .nlp-caso h3{margin:0;font-size:1.5rem;font-weight:500;letter-spacing:-.03em}
+        .nlp-caso-shot{position:relative;overflow:hidden;border-block:1px solid var(--line);background:#0E1017}
+        /* o print ROLA dentro do quadro no hover: a loja ganha vida em vez de ser foto parada */
+        .nlp-caso-shot img{width:100%;height:auto;display:block;
+          filter:saturate(.9) brightness(.9);
+          transition:filter var(--dur) var(--ease),transform 2.6s cubic-bezier(.4,0,.2,1)}
+        .nlp-caso:hover .nlp-caso-shot img{filter:saturate(1) brightness(1);transform:translateY(-18%)}
+        .nlp-caso-meta{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:20px 24px 0}
+        .nlp-caso-meta span{display:block;font-family:'JetBrains Mono',monospace;font-size:.6rem;
+          letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:5px}
+        .nlp-caso-meta strong{font-size:.95rem;font-weight:500}
+        .nlp-caso p{padding:16px 24px 0;font-size:.9rem;color:var(--muted);line-height:1.55;max-width:none}
+        .nlp-caso-cta{margin:22px 24px 24px;align-self:flex-start;padding:11px 22px;font-size:.88rem;
+          border-color:var(--line-hi);background:rgba(190,200,225,.05);color:var(--fg)}
+        .nlp-caso-cta span{transition:transform var(--dur) var(--ease)}
+        .nlp-caso:hover .nlp-caso-cta{border-color:var(--accent);background:var(--accent-dim)}
+        .nlp-caso-cta:hover span{transform:translateX(4px)}
+
+        /* ══ GARANTIAS: o que o cliente leva pra casa ══ */
+        .nlp-garantias{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+        @media(max-width:1020px){.nlp-garantias{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:600px){.nlp-garantias{grid-template-columns:1fr}}
+        .nlp-garantia{padding:28px 24px;border-radius:16px;border:1px solid var(--line);
+          background:rgba(16,18,26,.85);backdrop-filter:blur(14px);
+          transition:transform var(--dur) var(--ease),border-color var(--dur) var(--ease)}
+        .nlp-garantia:hover{transform:translateY(-4px);border-color:rgba(139,111,224,.45)}
+        .nlp-garantia-icone{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;
+          border-radius:11px;background:var(--accent-dim);color:var(--accent);margin-bottom:18px}
+        .nlp-garantia h3{margin:0 0 8px;font-size:1.02rem;font-weight:500;letter-spacing:-.01em}
+        .nlp-garantia p{font-size:.88rem;color:var(--muted);line-height:1.55;max-width:none}
+
+        /* ══ Faixa de venda cruzada da loja Shopify ══ */
+        .nlp-faixa-shopify{margin-top:26px;display:flex;align-items:center;gap:clamp(20px,3vw,44px);
+          padding:26px clamp(24px,3vw,38px);border-radius:16px;text-decoration:none;color:inherit;
+          border:1px solid rgba(139,111,224,.32);background:linear-gradient(100deg,rgba(139,111,224,.12),rgba(16,18,26,.9) 62%);
+          backdrop-filter:blur(14px);
+          transition:border-color var(--dur) var(--ease),transform var(--dur) var(--ease)}
+        .nlp-faixa-shopify:hover{border-color:var(--accent);transform:translateY(-3px)}
+        .nlp-faixa-tag{flex:0 0 auto;align-self:flex-start;padding:5px 12px;border-radius:999px;background:var(--accent);
+          font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:#0C0A16}
+        .nlp-faixa-shopify strong{display:block;font-size:1.24rem;font-weight:500;letter-spacing:-.025em;margin-bottom:7px}
+        .nlp-faixa-shopify p{font-size:.9rem;color:var(--muted);line-height:1.55;max-width:64ch}
+        .nlp-faixa-link{flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;font-size:.9rem;color:var(--accent-hi);white-space:nowrap}
+        .nlp-faixa-link span{transition:transform var(--dur) var(--ease)}
+        .nlp-faixa-shopify:hover .nlp-faixa-link span{transform:translateX(4px)}
+        @media(max-width:860px){
+          .nlp-faixa-shopify{flex-direction:column;align-items:flex-start;gap:16px}
+        }
         /* (bloco de métricas removido — a prova da seção agora são as operações no ar) */
         /* ══ PROCESSO — REGISTRO INVERTIDO (DESIGN.md §6) ══
            A quebra de ritmo da página: superfície clara, texto escuro. É a única seção
@@ -485,14 +615,24 @@ export default function HomeNode() {
         /* momento editorial: o índice gigante vazado atrás do passo */
         .nlp-step-idx{position:absolute;top:8px;right:-6px;font-size:clamp(3.6rem,6vw,5.4rem);font-weight:600;
           line-height:1;letter-spacing:-.05em;color:var(--accent);opacity:.10;pointer-events:none;user-select:none;
-          font-variant-numeric:tabular-nums}
+          font-variant-numeric:tabular-nums;
+          transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease)}
+        /* o número acende em roxo quando o passo recebe o mouse */
+        .nlp-step:hover .nlp-step-idx{opacity:.42;transform:translateY(-4px) scale(1.04)}
+        .nlp-step{transition:transform var(--dur) var(--ease)}
+        .nlp-step:hover{transform:translateY(-3px)}
         /* marquee */
         .nlp-marquee{overflow:hidden;border-block:1px solid var(--line);padding-block:22px;position:relative;
           mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
         .nlp-track{display:flex;gap:56px;width:max-content;animation:nlp-scroll 36s linear infinite}
         .nlp-marquee:hover .nlp-track{animation-play-state:paused}
         @keyframes nlp-scroll{to{transform:translateX(-50%)}}
-        .nlp-track span{font-family:'JetBrains Mono',monospace;font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+        .nlp-track span{display:inline-flex;align-items:center;gap:11px;font-family:'JetBrains Mono',monospace;
+          font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+        /* logos locais em branco; ficam discretos e acendem junto com o texto no hover */
+        .nlp-track img{width:18px;height:18px;opacity:.55;flex:0 0 auto;
+          transition:opacity var(--dur) var(--ease)}
+        .nlp-marquee:hover .nlp-track img{opacity:.9}
         .nlp-marquee{position:relative;z-index:1;background:var(--bg)}
         /* MANIFESTO — registro próprio: bloco recuado com barra de acento à esquerda,
            tipografia maior e ar de página editorial. Era a última seção na receita padrão. */
@@ -506,8 +646,10 @@ export default function HomeNode() {
         .nlp-manif{display:flex;flex-direction:column;gap:clamp(28px,3vw,44px);max-width:660px}
         .nlp-manifesto h2{font-size:clamp(2.1rem,4.4vw,3.6rem);line-height:1.06}
         .nlp-manifesto p{font-size:1.04rem}
-        /* marquee — deixa de ser barra chapada: some nas pontas e ganha respiro */
-        .nlp-marquee{border-block:none!important;background:transparent!important;padding-block:34px!important}
+        /* marquee: deixa de ser barra chapada, mas precisa de um véu pra ler por cima
+           das partículas. O véu some nas pontas, então não vira barra de novo. */
+        .nlp-marquee{border-block:none!important;padding-block:34px!important;
+          background:linear-gradient(90deg,transparent,rgba(8,9,12,.88) 10%,rgba(8,9,12,.88) 90%,transparent)!important}
         .nlp-marquee::before{content:'';position:absolute;inset-inline:0;top:0;height:1px;
           background:linear-gradient(90deg,transparent,var(--line-hi) 30%,var(--line-hi) 70%,transparent)}
         .nlp-marquee::after{content:'';position:absolute;inset-inline:0;bottom:0;height:1px;
@@ -678,30 +820,29 @@ export default function HomeNode() {
                         <span className="nlp-mono">{'// operações reais'}</span>
                         <h2>Quem opera<br />com a NODE</h2>
                     </div>
-                    {/* Prova de entrega: operações no ar, enfileiradas na coluna esquerda */}
+                    {/* Portfólio: cada operação no ar como um caso, não como link solto */}
                     <div className="nlp-ops">
-                        <span className="nlp-mono nlp-reveal">{'// no ar agora'}</span>
                         {OPERACOES.map((o, i) => (
-                            <a
-                                className={`nlp-op nlp-reveal nlp-d${(i % 3) + 1}`}
-                                key={o.nome}
-                                href={o.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onMouseEnter={pulso}
-                                onClick={() => registrar('clique_operacao', o.nome)}
-                            >
-                                <span className="nlp-op-shot">
-                                    <img className="nlp-par" data-par="1.5" src={o.img}
-                                        alt={`Página inicial da loja ${o.nome}, desenvolvida pela NODE: ${o.entrega.toLowerCase()}`}
-                                        loading="lazy" width={760} height={404} />
-                                </span>
-                                <span className="nlp-op-info">
-                                    <strong>{o.nome}</strong>
-                                    <em>{o.entrega}</em>
-                                    <span className="nlp-mono">{new URL(o.url).hostname.replace('www.', '')} ↗</span>
-                                </span>
-                            </a>
+                            <article className={`nlp-caso nlp-reveal nlp-d${i + 1}`} key={o.nome}>
+                                <header>
+                                    <span className="nlp-caso-cat">{o.categoria}</span>
+                                    <h3>{o.nome}</h3>
+                                </header>
+                                <div className="nlp-caso-shot">
+                                    <img src={o.img} loading="lazy" width={760} height={404}
+                                        alt={`Página inicial da loja ${o.nome}, desenvolvida pela NODE: ${o.projeto.toLowerCase()}`} />
+                                </div>
+                                <div className="nlp-caso-meta">
+                                    <div><span>Cliente</span><strong>{o.nome}</strong></div>
+                                    <div><span>Projeto</span><strong>{o.projeto}</strong></div>
+                                </div>
+                                <p>{o.desc}</p>
+                                <a href={o.url} target="_blank" rel="noopener noreferrer"
+                                    className="nlp-btn nlp-caso-cta" onMouseEnter={pulso}
+                                    onClick={() => registrar('clique_operacao', o.nome)}>
+                                    Conheça<span>→</span>
+                                </a>
+                            </article>
                         ))}
                     </div>
                 </div>
@@ -724,13 +865,25 @@ export default function HomeNode() {
                                 <span className="nlp-oferta-num" aria-hidden="true">{o.num}</span>
                                 <h3>{o.titulo}</h3>
                                 <p>{o.linha}</p>
-                                {o.grupos.map(g => (
-                                    <div className="nlp-oferta-grupo" key={g.label}>
-                                        <span className="nlp-mono">{`// ${g.label}`}</span>
-                                        <ul>
-                                            {g.itens.map(t => <li key={t}>{t}</li>)}
-                                        </ul>
-                                    </div>
+                                {o.grupos.map((g, gi) => (
+                                    gi === 0 ? (
+                                        // o primeiro bloco fica sempre aberto: é o que vende
+                                        <div className="nlp-oferta-grupo" key={g.label}>
+                                            <span className="nlp-mono">{`// ${g.label}`}</span>
+                                            <ul>{g.itens.map(t => <li key={t}>{t}</li>)}</ul>
+                                        </div>
+                                    ) : (
+                                        // o "como funciona" recolhe: o card estava alto demais
+                                        <details className="nlp-oferta-grupo nlp-oferta-drop" key={g.label}>
+                                            <summary>
+                                                <span className="nlp-mono">{`// ${g.label}`}</span>
+                                                <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                                                    <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.6" />
+                                                </svg>
+                                            </summary>
+                                            <ul>{g.itens.map(t => <li key={t}>{t}</li>)}</ul>
+                                        </details>
+                                    )
                                 ))}
                                 <a href={waLink(o.wa)} target="_blank" rel="noopener noreferrer"
                                     className="nlp-btn nlp-oferta-cta" onMouseEnter={pulso}
@@ -740,6 +893,36 @@ export default function HomeNode() {
                             </article>
                         ))}
                     </div>
+                </div>
+            </section>
+
+            {/* GARANTIAS + faixa de loja Shopify */}
+            <section id="garantias">
+                <div className="nlp-wrap">
+                    <div className="nlp-garantias">
+                        {GARANTIAS.map((g, i) => (
+                            <div className={`nlp-garantia nlp-reveal nlp-d${(i % 3) + 1}`} key={g.titulo}>
+                                <span className="nlp-garantia-icone" aria-hidden="true">
+                                    <Icone nome={g.icone} />
+                                </span>
+                                <h3>{g.titulo}</h3>
+                                <p>{g.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    <a className="nlp-faixa-shopify nlp-reveal"
+                        href={waLink('Olá! Quero uma loja Shopify com o tema próprio da NODE.')}
+                        target="_blank" rel="noopener noreferrer"
+                        onMouseEnter={pulso}
+                        onClick={() => registrar('cta_whatsapp', 'faixa_shopify')}>
+                        <span className="nlp-faixa-tag">também construímos</span>
+                        <div>
+                            <strong>Precisa de uma loja Shopify?</strong>
+                            <p>Lojas com o tema NODE proprietário, licença por loja e atualização inclusa enquanto você for cliente ativo. Construídas pela mesma equipe.</p>
+                        </div>
+                        <span className="nlp-faixa-link">Falar sobre a loja<span>→</span></span>
+                    </a>
                 </div>
             </section>
 
@@ -766,7 +949,9 @@ export default function HomeNode() {
             {/* STACK MARQUEE */}
             <div className="nlp-marquee" aria-hidden="true">
                 <div className="nlp-track">
-                    {[...STACK, ...STACK].map((t, i) => <span key={i}>{t}</span>)}
+                    {[...STACK, ...STACK].map((t, i) => (
+                        <span key={i}><img src={t.logo} alt="" width={18} height={18} loading="lazy" />{t.nome}</span>
+                    ))}
                 </div>
             </div>
 
@@ -775,7 +960,7 @@ export default function HomeNode() {
                 <div className="nlp-wrap nlp-manif">
                     <h2 className="nlp-reveal">Não construímos vitrines.<br />Construímos <span className="nlp-tese">tecnologia que vende</span>.</h2>
                     <div className="nlp-reveal nlp-d1" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-                        <p>A NODE nasceu dentro da operação de e-commerce, não numa agência de design. Tudo que entregamos carrega o que aprendemos gerando mais de R$170 milhões pros nossos clientes.</p>
+                        <p>A NODE nasceu dentro da operação de e-commerce, não numa agência de design. Geramos mais de R$25 milhões nas nossas próprias lojas antes de entregar isso pra cliente nenhum. Tudo que a gente faz hoje carrega o que aprendeu vendendo de verdade.</p>
                         <p>IA aqui não é discurso de palco. É o motor que deixa a gente construir em dias o que o mercado entrega em meses, com acabamento de produto de verdade.</p>
                     </div>
                 </div>
