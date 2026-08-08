@@ -51,7 +51,9 @@ export default function ServicoPage() {
         .nsv *{box-sizing:border-box}
         .nsv ::selection{background:var(--accent);color:var(--fg)}
         .nsv :focus-visible{outline:2px solid var(--accent-hi);outline-offset:3px;border-radius:4px}
-        .nsv a{color:inherit;text-decoration:none}
+        /* :where() zera o peso do seletor, então qualquer regra depois consegue
+           definir a cor do link sem precisar competir com esta */
+        .nsv :where(a){color:inherit;text-decoration:none}
         .nsv-wrap{max-width:900px;margin-inline:auto;padding-inline:clamp(24px,5vw,40px)}
         .nsv-mono{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.16em;
           text-transform:uppercase;color:var(--accent)}
@@ -78,8 +80,10 @@ export default function ServicoPage() {
         .nsv-btn:hover{transform:translateY(-2px)}
         .nsv-btn span{transition:transform var(--dur) var(--ease)}
         .nsv-btn:hover span{transform:translateX(4px)}
-        .nsv-btn-solid{background:var(--fg);color:var(--bg);box-shadow:0 0 26px var(--accent-dim)}
-        .nsv-btn-solid:hover{background:#F9FBFF;box-shadow:0 0 48px rgba(139,111,224,.42)}
+        /* o .nsv na frente é proposital: sem ele a regra geral de link tinha peso
+           maior, o texto herdava a cor clara e sumia no fundo branco do botão */
+        .nsv .nsv-btn-solid{background:var(--fg);color:var(--bg);box-shadow:0 0 26px var(--accent-dim)}
+        .nsv .nsv-btn-solid:hover{background:#F9FBFF;color:var(--bg);box-shadow:0 0 48px rgba(139,111,224,.42)}
         .nsv-ctas{margin-top:36px;display:flex;gap:18px;flex-wrap:wrap;align-items:center}
         /* seções */
         .nsv section{padding-block:clamp(44px,6vw,72px);border-top:1px solid var(--line)}
