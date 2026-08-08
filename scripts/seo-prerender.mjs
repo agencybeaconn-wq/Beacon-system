@@ -73,14 +73,18 @@ html = html.replace(/"image": "https:\/\/[^"]*og-node\.jpg"/, `"image": "${DOMIN
 
 fs.writeFileSync(DIST, html);
 
-// sitemap com o mesmo domínio
+// robots.txt e sitemap.xml não podem sair com BOM: os 3 bytes invisíveis do começo
+// atrapalham robôs que não os ignoram, e em XML são erro de verdade. Editores e
+// PowerShell inserem BOM sem avisar, então limpamos aqui em toda build.
+const semBom = (s) => s.replace(/^﻿/, '');
+
 const SITEMAP = path.resolve('dist', 'sitemap.xml');
 if (fs.existsSync(SITEMAP)) {
-    fs.writeFileSync(SITEMAP, fs.readFileSync(SITEMAP, 'utf8').replace(/<loc>[^<]*<\/loc>/, `<loc>${DOMINIO}/</loc>`));
+    fs.writeFileSync(SITEMAP, semBom(fs.readFileSync(SITEMAP, 'utf8')).replace(/<loc>[^<]*<\/loc>/, `<loc>${DOMINIO}/</loc>`));
 }
 const ROBOTS = path.resolve('dist', 'robots.txt');
 if (fs.existsSync(ROBOTS)) {
-    fs.writeFileSync(ROBOTS, fs.readFileSync(ROBOTS, 'utf8').replace(/Sitemap: .*/, `Sitemap: ${DOMINIO}/sitemap.xml`));
+    fs.writeFileSync(ROBOTS, semBom(fs.readFileSync(ROBOTS, 'utf8')).replace(/Sitemap: .*/, `Sitemap: ${DOMINIO}/sitemap.xml`));
 }
 
 const palavras = bloco.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
