@@ -1,39 +1,33 @@
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { useEffect, lazy, Suspense } from "react";
 import { App as CapacitorApp } from "@capacitor/app";
-import { supabase } from "@/integrations/supabase/client";
-import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
-import { AcademyProvider } from "./contexts/AcademyContext";
-import AcceptInvite from "./pages/AcceptInvite";
-import { LandingRedirect } from "./components/LandingRedirect";
 import HomeNode from "./pages/landing/home-node/page";
 import HomeNodeV2 from "./pages/landing/home-node/page-v2";
 import ServicoPage from "./pages/landing/servicos/ServicoPage";
-import TrainingLibraryManager from "./components/training/TrainingLibraryManager";
-import { DashboardProvider } from "./contexts/DashboardContext";
-import { ChatProvider } from "./contexts/ChatContext";
-import { AccountTypeProvider } from "./contexts/AccountTypeContext";
-import { AccountWizardContainer } from "./components/AccountWizardContainer";
 
-import { AuthProvider } from "./contexts/AuthContext";
-import { TasksProvider } from "./contexts/TasksContext";
-import { PermissionsProvider } from "./contexts/PermissionsContext";
 
-import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ErrorBoundary } from "./components/ErrorBoundary";
-import { AbacRoute } from "./components/AbacRoute";
 import { PostHogProvider } from "./contexts/PostHogProvider";
 
 // ── Carregamento sob demanda ──────────────────────────────────────────────
 // A landing e o login ficam no pacote inicial (a home precisa pintar na hora e o
 // clique em "Entrar" precisa ser instantâneo). Todo o resto do sistema só é
 // baixado quando a rota é aberta — quem só visita a home nunca baixa o admin.
+// Era import eager e só é usado em duas rotas protegidas — ia inteiro no pacote
+// inicial, que é o que a landing pública baixa antes de conseguir pintar.
+const TrainingLibraryManager = lazy(() => import("./components/training/TrainingLibraryManager"));
+const Login = lazy(() => import("./pages/Login"));
+const AcceptInvite = lazy(() => import("./pages/AcceptInvite"));
+const LandingRedirect = lazy(() => import("./components/LandingRedirect").then(m => ({ default: m.LandingRedirect })));
+const AcademyProvider = lazy(() => import("./contexts/AcademyContext").then(m => ({ default: m.AcademyProvider })));
+const ProtectedRoute = lazy(() => import("./components/ProtectedRoute").then(m => ({ default: m.ProtectedRoute })));
+const AbacRoute = lazy(() => import("./components/AbacRoute").then(m => ({ default: m.AbacRoute })));
+const AppShell = lazy(() => import("./AppShell"));
 const DashboardLayout = lazy(() => import("./components/DashboardLayout").then(m => ({ default: m.DashboardLayout })));
 const PortalLayout = lazy(() => import("./components/portal/PortalLayout").then(m => ({ default: m.PortalLayout })));
 const Overview = lazy(() => import("./pages/Overview"));
@@ -51,6 +45,7 @@ const RankingClientes = lazy(() => import("./pages/RankingClientes"));
 const Clients = lazy(() => import("./pages/Clients"));
 const ClientDetails = lazy(() => import("./pages/ClientDetails"));
 const TasksPage = lazy(() => import("./pages/TasksPage"));
+const PrioridadesPage = lazy(() => import("./pages/PrioridadesPage"));
 const Solicitacoes = lazy(() => import("./pages/Solicitacoes"));
 const Assets = lazy(() => import("./pages/Assets"));
 const Products = lazy(() => import("./pages/Products"));
@@ -63,6 +58,7 @@ const PortalVisaoGeral = lazy(() => import("./pages/portal/PortalVisaoGeral"));
 const PortalDashboard = lazy(() => import("./pages/portal/PortalDashboard"));
 const PortalNewDemand = lazy(() => import("./pages/portal/PortalNewDemand"));
 const PortalTasks = lazy(() => import("./pages/portal/PortalTasks"));
+const PortalEntregas = lazy(() => import("./pages/portal/PortalEntregas"));
 const PortalGeneralBoard = lazy(() => import("./pages/portal/PortalGeneralBoard"));
 const PortalClients = lazy(() => import("./pages/portal/PortalClients"));
 const PortalClientTasks = lazy(() => import("./pages/portal/PortalClientTasks"));
@@ -190,6 +186,9 @@ const DeepLinkHandler = ({ children }: { children: React.ReactNode }) => {
 
           if (access_token && refresh_token) {
             console.log('🔑 [DeepLink] Setting session with tokens...');
+            // carregado aqui e não no topo: o cliente Supabase pesa e só faz falta
+            // quando um deep link de sessão realmente chega.
+            const { supabase } = await import("@/integrations/supabase/client");
             const { error } = await supabase.auth.setSession({
               access_token,
               refresh_token
@@ -223,21 +222,26 @@ const App = () => (
     <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark">
       <DeepLinkHandler>
         <TooltipProvider>
-          <AccountTypeProvider>
-            <AuthProvider>
-              <DashboardProvider>
-                <PermissionsProvider>
-                  <TasksProvider>
-                    <ChatProvider>
-                      <Toaster />
-                      <Sonner />
-                      <AccountWizardContainer />
                       <BrowserRouter>
                         <PostHogProvider>
                           <ErrorBoundary>
                             <RolarParaTopo />
                             <Suspense fallback={<RouteFallback />}>
                             <Routes>
+                              {/* ── PÚBLICAS ─────────────────────────────────────────────
+                                  Ficam FORA da casca do app: não usam nenhum contexto dele
+                                  e não devem baixar o sistema inteiro só pra pintar uma
+                                  página de marketing. */}
+                              <Route path="/" element={<HomeNode />} />
+                              <Route path="/v2" element={<HomeNodeV2 />} />
+                              <Route path="/criacao-de-sites" element={<ServicoPage />} />
+                              <Route path="/sistemas-e-ia" element={<ServicoPage />} />
+                              <Route path="/mentoria-de-ia" element={<ServicoPage />} />
+
+                              {/* ── APP ──────────────────────────────────────────────────
+                                  Rota-camada SEM path: os filhos mantêm os caminhos
+                                  absolutos, e a casca (providers) chega sob demanda. */}
+                              <Route element={<AppShell />}>
                               {/* AULA VIBE CODING — standalone, sem auth (apresentação ao vivo) */}
                               <Route path="/aula/vibe-coding-shopify" element={<AulaVibeCodingShopify />} />
 
@@ -267,6 +271,7 @@ const App = () => (
                               <Route path="/portal/briefing" element={<ProtectedRoute><PortalLayout><BriefingForm /></PortalLayout></ProtectedRoute>} />
                               <Route path="/portal/new-demand" element={<ProtectedRoute><PortalLayout><PortalNewDemand /></PortalLayout></ProtectedRoute>} />
                               <Route path="/portal/tasks" element={<ProtectedRoute><PortalLayout><PortalTasks /></PortalLayout></ProtectedRoute>} />
+                              <Route path="/portal/entregas" element={<ProtectedRoute><PortalLayout><PortalEntregas /></PortalLayout></ProtectedRoute>} />
                               {/* Rotas legadas mantidas para não quebrar links existentes */}
                               <Route path="/portal/visao-geral" element={<Navigate to="/portal/briefing" replace />} />
                               <Route path="/portal/general-board" element={<Navigate to="/portal/tasks" replace />} />
@@ -292,15 +297,10 @@ const App = () => (
                                 }
                               />
                               {/* Home pública — landing NODE (botão Entrar leva ao /login) */}
-                              <Route path="/" element={<HomeNode />} />
-                              {/* PROTOTIPO v2 — "Rede viva + HUD". Rota paralela para avaliacao;
-                                  nao substitui a home ate aprovacao. */}
-                              <Route path="/v2" element={<HomeNodeV2 />} />
+                              {/* PROTÓTIPO v2 — "Rede viva + HUD". Rota paralela para avaliação;
+                                  não substitui a home até aprovação. */}
                               {/* Páginas públicas por serviço: existem por SEO, uma para cada
                                   frente. O HTML delas é pré-renderizado no build. */}
-                              <Route path="/criacao-de-sites" element={<ServicoPage />} />
-                              <Route path="/sistemas-e-ia" element={<ServicoPage />} />
-                              <Route path="/mentoria-de-ia" element={<ServicoPage />} />
                               <Route
                                 path="/app"
                                 element={
@@ -370,6 +370,18 @@ const App = () => (
                                 }
                               />
                               <Route
+                                path="/prioridades"
+                                element={
+                                  <ProtectedRoute requiredFeature="demands">
+                                    <DashboardLayout>
+                                      <div className="px-4 md:px-8 py-6 md:py-8 w-full">
+                                        <PrioridadesPage />
+                                      </div>
+                                    </DashboardLayout>
+                                  </ProtectedRoute>
+                                }
+                              />
+                              <Route
                                 path="/general-board"
                                 element={
                                   <ProtectedRoute requiredFeature="demands">
@@ -411,6 +423,11 @@ const App = () => (
                                 <Route path="general-board" element={
                                   <AbacRoute resource="quadro_geral" action="read">
                                     <AgencyLayout><AgencyGeneralBoard /></AgencyLayout>
+                                  </AbacRoute>
+                                } />
+                                <Route path="prioridades" element={
+                                  <AbacRoute resource="quadro_geral" action="read">
+                                    <AgencyLayout><PrioridadesPage /></AgencyLayout>
                                   </AbacRoute>
                                 } />
                                 <Route path="solicitacoes" element={
@@ -890,17 +907,12 @@ const App = () => (
                               />
                               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                               <Route path="*" element={<NotFound />} />
+                            </Route>
                             </Routes>
                             </Suspense>
                           </ErrorBoundary>
                         </PostHogProvider>
                       </BrowserRouter>
-                    </ChatProvider>
-                  </TasksProvider>
-                </PermissionsProvider>
-              </DashboardProvider>
-            </AuthProvider>
-          </AccountTypeProvider>
         </TooltipProvider>
       </DeepLinkHandler>
     </ThemeProvider>

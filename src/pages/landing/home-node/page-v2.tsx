@@ -1239,6 +1239,21 @@ export default function HomeNodeV2() {
            linha seguinte. Por isso a medida do apoio fica travada em 54ch. */
         .v2 .v2-centro h2{max-width:none;text-wrap:balance}
         .v2 .v2-centro p{margin-inline:auto;max-width:54ch}
+
+        /* VÉU DE LEGIBILIDADE
+           O texto centralizado cruza as partículas claras e perde contraste em
+           trechos — o teste de contraste passava porque media contra o fundo liso,
+           não contra a arte. O véu é radial e mascarado: escurece onde o texto
+           está e dissolve antes da borda, então não vira uma caixa colada por cima
+           da cena. z-index -1 fica dentro do contexto da seção: acima do canvas,
+           abaixo do texto. */
+        .v2 .v2-centro{position:relative;isolation:auto}
+        .v2 .v2-centro::before{content:'';position:absolute;inset:-38px -72px;z-index:-1;
+          pointer-events:none;
+          background:radial-gradient(58% 58% at 50% 50%,rgba(8,9,12,.90),rgba(8,9,12,.62) 52%,transparent 80%);
+          mask-image:radial-gradient(62% 60% at 50% 50%,#000 50%,transparent 86%)}
+        /* reforço barato no corpo: sombra da cor do fundo separa a letra do brilho */
+        .v2 .v2-centro h2,.v2 .v2-centro p{text-shadow:0 0 22px rgba(8,9,12,.92)}
         /* o marcador do rótulo é absoluto: sem isso ele descola do texto centralizado */
         .v2 .v2-centro .nlp-mono{align-self:center}
 
