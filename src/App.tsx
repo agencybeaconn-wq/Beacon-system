@@ -13,6 +13,7 @@ import { AcademyProvider } from "./contexts/AcademyContext";
 import AcceptInvite from "./pages/AcceptInvite";
 import { LandingRedirect } from "./components/LandingRedirect";
 import HomeNode from "./pages/landing/home-node/page";
+import HomeNodeV2 from "./pages/landing/home-node/page-v2";
 import ServicoPage from "./pages/landing/servicos/ServicoPage";
 import TrainingLibraryManager from "./components/training/TrainingLibraryManager";
 import { DashboardProvider } from "./contexts/DashboardContext";
@@ -292,6 +293,9 @@ const App = () => (
                               />
                               {/* Home pública — landing NODE (botão Entrar leva ao /login) */}
                               <Route path="/" element={<HomeNode />} />
+                              {/* PROTOTIPO v2 — "Rede viva + HUD". Rota paralela para avaliacao;
+                                  nao substitui a home ate aprovacao. */}
+                              <Route path="/v2" element={<HomeNodeV2 />} />
                               {/* Páginas públicas por serviço: existem por SEO, uma para cada
                                   frente. O HTML delas é pré-renderizado no build. */}
                               <Route path="/criacao-de-sites" element={<ServicoPage />} />

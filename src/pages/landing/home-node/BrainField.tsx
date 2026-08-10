@@ -613,7 +613,7 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
         const state = {
             flip: 0, flipTarget: 0,
             web: 0, webTarget: 0,
-            burst: 0, burstTarget: 0,
+            burst: 0, burstTarget: 0, surto: 0,
             pulse: 0,
             mouse: [10, 10] as [number, number],
             mouseActive: 0, mouseActiveTarget: 0,
@@ -926,7 +926,19 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
 
             state.flip += (state.flipTarget - state.flip) * 0.05;
             state.web += (state.webTarget - state.web) * 0.05;
-            state.burst += (state.burstTarget - state.burst) * 0.045;
+            // SURTO: espalhamento transitório, disparado por 'node-absorve' quando o
+            // campo engole alguma coisa (as letras do herói). Soma ao burst do scroll
+            // e decai sozinho — por isso o cérebro se espalha e REMONTA sem ninguém
+            // mandar remontar. Decai a 0.986/quadro ≈ 2,5s de volta ao normal.
+            // Ciclo do surto ≈ 1,8s: estoura em ~0,3s e remonta logo. Já testei mais
+            // lento (decay .993) e fica arrastado — o gesto perde o susto e vira
+            // transição. Explodir é evento; evento é rápido.
+            if (state.surto > 0.001) state.surto *= 0.976; else state.surto = 0;
+            const alvoBurst = Math.min(1, state.burstTarget + state.surto);
+            // Sobe mais rápido do que desce, senão o surto decai antes do burst
+            // alcançá-lo: os dois se cruzavam em ~0.35 e o campo mal se mexia.
+            const subindo = alvoBurst > state.burst && state.surto > 0.02;
+            state.burst += (alvoBurst - state.burst) * (subindo ? 0.13 : 0.075);
             // o pulso ATRAVESSA o campo (0→1) e some; não é um fade de brilho
             if (state.pulse > 0) state.pulse = state.pulse < 1 ? state.pulse + 0.028 : 0;
             state.mouseActive += (state.mouseActiveTarget - state.mouseActive) * 0.06;
@@ -1004,6 +1016,15 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
         const onPulse = () => { if (state.pulse === 0) state.pulse = 0.001; };
         window.addEventListener('node-pulse', onPulse);
 
+        // ENGOLIR: a onda atravessa (pulso) e o campo se desfaz e volta (surto).
+        // Só a /v2 dispara isso hoje; a home antiga nunca chama, então nada muda lá.
+        const onAbsorve = (e: Event) => {
+            const forca = (e as CustomEvent).detail?.forca ?? 0.85;
+            state.pulse = 0.001;
+            state.surto = Math.max(state.surto, Math.min(1, forca));
+        };
+        window.addEventListener('node-absorve', onAbsorve);
+
         if (reduced) { syncUniforms(0.001); syncGlow(); renderAll(); }
         else raf = requestAnimationFrame(loop);
 
@@ -1017,6 +1038,7 @@ export default function BrainField({ className = '' }: BrainFieldProps) {
             window.removeEventListener('scroll', onScroll);
             window.removeEventListener('mousemove', onMouseMove);
             window.removeEventListener('node-pulse', onPulse);
+            window.removeEventListener('node-absorve', onAbsorve);
             document.documentElement.removeEventListener('mouseleave', onMouseLeave);
             if (container.contains(gl.canvas)) container.removeChild(gl.canvas);
             gl.getExtension('WEBGL_lose_context')?.loseContext();

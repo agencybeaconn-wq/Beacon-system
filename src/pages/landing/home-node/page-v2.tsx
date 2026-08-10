@@ -41,7 +41,8 @@ const STATS = [
     { value: 732, prefix: '', suffix: '', label: 'projetos entregues' },
     { value: 485, prefix: '', suffix: '', label: 'clientes atendidos' },
     { texto: '100%', label: 'únicos e independentes' },
-    { texto: '9h às 23h', label: 'suporte todo dia' },
+    // "9h às 23h" saiu daqui: horário de atendimento não é prova de porte, e a
+    // informação já vive no rodapé e no FAQ. Três números respiram melhor que quatro.
 ];
 
 // Operações reais no ar. Formato de portfólio: categoria, cliente, projeto e o que
@@ -266,7 +267,243 @@ function Counter({ value, prefix = '', suffix = '' }: { value: number; prefix?: 
     return <span ref={ref}>{prefix}0{suffix}</span>;
 }
 
-export default function HomeNode() {
+/* ═══════════════════════════════════════════════════════════════════════════
+   CAMADA v2 — "REDE VIVA + HUD"
+
+   Tese: o site para de ser uma página com uma arte no fundo e passa a ser um
+   SISTEMA SENDO OBSERVADO. A moldura é de instrumento, a telemetria é real
+   (rolagem, ato, hora, coordenada da operação), e o grafo à esquerda liga as
+   seções — a página inteira é um node graph, que é literalmente o nome da marca.
+
+   Regra que segurou a mão: o cérebro continua sendo a estrela. Tudo aqui é
+   1px, mono e discreto. HUD que compete com a arte vira poluição.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+const ATOS_V2 = ['ABERTURA', 'SOLUÇÕES', 'OPERAÇÕES', 'CONTATO'];
+const SECOES_V2 = [
+    { id: 'top', rot: 'ABERTURA' },
+    { id: 'solucoes', rot: 'SOLUÇÕES' },
+    { id: 'resultados', rot: 'CLIENTES' },
+    { id: 'ofertas', rot: 'FRENTES' },
+    { id: 'processo', rot: 'PROCESSO' },
+    { id: 'faq', rot: 'DÚVIDAS' },
+];
+
+/** Dispara a onda que atravessa o cérebro. A interface CONVERSA com a arte. */
+const pulsar = () => window.dispatchEvent(new Event('node-pulse'));
+
+/** Moldura de instrumento + telemetria ao vivo. */
+function HudV2({ ato }: { ato: number }) {
+    const [pct, setPct] = useState(0);
+    const [hora, setHora] = useState('--:--:--');
+    const [ativa, setAtiva] = useState(0);
+
+    useEffect(() => {
+        const onScroll = () => {
+            const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+            setPct(Math.round(Math.min(1, scrollY / max) * 100));
+            // qual seção está ocupando o meio da tela
+            let idx = 0;
+            SECOES_V2.forEach((s, i) => {
+                const el = document.getElementById(s.id);
+                if (el && el.getBoundingClientRect().top <= innerHeight * 0.45) idx = i;
+            });
+            setAtiva(idx);
+        };
+        const t = setInterval(() => setHora(new Date().toLocaleTimeString('pt-BR', { hour12: false })), 1000);
+        addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+        return () => { removeEventListener('scroll', onScroll); clearInterval(t); };
+    }, []);
+
+    const barra = '█'.repeat(Math.round(pct / 10)) + '░'.repeat(10 - Math.round(pct / 10));
+
+    return (
+        <div className="v2-hud" aria-hidden="true">
+            <span className="v2-canto v2-canto-tl" /><span className="v2-canto v2-canto-tr" />
+            <span className="v2-canto v2-canto-bl" /><span className="v2-canto v2-canto-br" />
+
+            {/* espinha de nós: a página É um grafo */}
+            <div className="v2-espinha">
+                {SECOES_V2.map((s, i) => (
+                    <a key={s.id} href={`#${s.id}`} className={`v2-no${i === ativa ? ' on' : ''}`}
+                        onClick={pulsar} style={{ pointerEvents: 'auto' }}>
+                        {/* rótulo → número → PONTO. O ponto é o último de propósito:
+                            com justify-content:flex-end ele fica ancorado na direita e a
+                            coluna de pontos sai reta. Com o ponto em primeiro, a largura
+                            variável de cada rótulo empurrava cada ponto pra um x diferente. */}
+                        <b>{s.rot}</b><em>{String(i + 1).padStart(2, '0')}</em><i />
+                    </a>
+                ))}
+            </div>
+
+            {/* telemetria inferior */}
+            <div className="v2-tele">
+                <span>NODE//SYS</span>
+                <span className="v2-tele-sep">·</span>
+                <span className="v2-tele-ok"><i />NEURAL_LINK ATIVO</span>
+                <span className="v2-tele-sep">·</span>
+                <span>ATO {ato + 1}/4 {ATOS_V2[Math.min(ato, 3)]}</span>
+                <span className="v2-tele-flex" />
+                <span className="v2-tele-barra">{barra} {String(pct).padStart(3, '0')}%</span>
+                <span className="v2-tele-sep">·</span>
+                <span>-19.92 / -43.94</span>
+                <span className="v2-tele-sep">·</span>
+                <span className="v2-tele-hora">{hora}</span>
+            </div>
+        </div>
+    );
+}
+
+/** Quebra o texto em glifos individuais para o ATO 1 (desmonte no scroll).
+ *  Cada glifo é inline-block porque só assim aceita transform. O espaço vira
+ *  NBSP: espaço normal colapsa e a frase perde o ritmo ao ser fatiada. */
+function Glifos({ texto }: { texto: string }) {
+    return (
+        <>
+            {texto.split('').map((c, i) => (
+                <span className="v2-glifo" key={`${c}-${i}`} aria-hidden="true">
+                    {c === ' ' ? ' ' : c}
+                </span>
+            ))}
+            <span className="v2-leitor">{texto}</span>
+        </>
+    );
+}
+
+/** Texto que se RESOLVE: entra embaralhado e assenta caractere a caractere,
+ *  da esquerda pra direita, como um sistema terminando de processar.
+ *  Acessibilidade: o texto real vive num <span> lido por leitor de tela; o
+ *  embaralhado é aria-hidden. Em reduced-motion nasce pronto. */
+function Decodifica({ texto, atraso = 900 }: { texto: string; atraso?: number }) {
+    const ALFA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&/\\{}[]<>*+=';
+    const [saida, setSaida] = useState(() =>
+        matchMedia('(prefers-reduced-motion:reduce)').matches ? texto : texto.replace(/\S/g, ' '));
+
+    useEffect(() => {
+        if (matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+        let raf = 0, t0 = 0, timer = 0;
+        const DUR = 1100;
+        const passo = (t: number) => {
+            if (!t0) t0 = t;
+            const p = Math.min(1, (t - t0) / DUR);
+            // a frente de resolução varre o texto; atrás dela é letra final, na frente é ruído
+            const frente = p * (texto.length + 6);
+            setSaida(texto.split('').map((c, i) => {
+                if (c === ' ') return ' ';
+                if (i < frente - 6) return c;
+                if (i < frente) return ALFA[Math.floor(Math.random() * ALFA.length)];
+                return ' ';
+            }).join(''));
+            if (p < 1) raf = requestAnimationFrame(passo); else setSaida(texto);
+        };
+        timer = window.setTimeout(() => { raf = requestAnimationFrame(passo); }, atraso);
+        return () => { clearTimeout(timer); cancelAnimationFrame(raf); };
+    }, [texto, atraso]);
+
+    return (
+        <>
+            <span className="v2-decod" aria-hidden="true">{saida}</span>
+            <span className="v2-leitor">{texto}</span>
+        </>
+    );
+}
+
+/** TRILHO — o circuito que prova que a página é um grafo.
+ *  Uma linha desce pela margem esquerda e SE DESENHA conforme você rola; cada
+ *  seção tem um nó nela, que acende quando a seção entra e estende um ramo até
+ *  o conteúdo. Fica na margem, não sobre a arte: o cérebro continua sendo a
+ *  estrela e o trilho é a fiação. */
+function TrilhoV2() {
+    const [nos, setNos] = useState<{ y: number; rot: string }[]>([]);
+    const [ativa, setAtiva] = useState(-1);
+    const trilhoRef = useRef<HTMLDivElement>(null);
+    // espelho em ref: o laço de rolagem lê daqui, não do estado do React
+    const nosRef = useRef<{ y: number; rot: string }[]>([]);
+    nosRef.current = nos;
+
+    useEffect(() => {
+        let raf = 0;
+        const medir = () => {
+            const ys: { y: number; rot: string }[] = [];
+            SECOES_V2.forEach(s => {
+                const el = document.getElementById(s.id);
+                if (!el) return;
+                // ancora no cabeçalho, não no topo da seção: é onde o olho está
+                const alvo = el.querySelector('.nlp-head') ?? el;
+                ys.push({ y: Math.round(alvo.getBoundingClientRect().top + scrollY + 18), rot: s.rot });
+            });
+            setNos(ys);
+        };
+        const pintar = () => {
+            raf = 0;
+            const doc = document.documentElement;
+            const frente = scrollY + innerHeight * 0.55;
+            const total = Math.max(1, doc.scrollHeight);
+            trilhoRef.current?.style.setProperty('--desenho', Math.min(1, frente / total).toFixed(4));
+            let idx = -1;
+            nosRef.current.forEach((n, i) => { if (frente >= n.y) idx = i; });
+            setAtiva(idx);
+        };
+        const aoRolar = () => { if (!raf) raf = requestAnimationFrame(pintar); };
+        const remedir = () => { medir(); pintar(); };
+
+        const t1 = setTimeout(remedir, 1600);
+        const t2 = setTimeout(remedir, 3400); // depois das revelações mudarem a altura
+        addEventListener('scroll', aoRolar, { passive: true });
+        addEventListener('resize', remedir);
+        return () => {
+            clearTimeout(t1); clearTimeout(t2);
+            removeEventListener('scroll', aoRolar); removeEventListener('resize', remedir);
+            if (raf) cancelAnimationFrame(raf);
+        };
+    }, []);
+
+    return (
+        <div className="v2-trilho" ref={trilhoRef} aria-hidden="true">
+            <span className="v2-trilho-base" />
+            <span className="v2-trilho-luz" />
+            {nos.map((n, i) => (
+                <span key={n.rot} className={`v2-no-sec${i <= ativa ? ' on' : ''}`} style={{ top: n.y }}>
+                    <b>{n.rot}</b>
+                </span>
+            ))}
+        </div>
+    );
+}
+
+/** Retículo que segue o ponteiro. Só em mouse — no toque não existe cursor. */
+function CursorV2() {
+    const ref = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (!matchMedia('(pointer:fine)').matches) return;
+        if (matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+        const el = ref.current!;
+        el.style.display = 'block';
+        let x = innerWidth / 2, y = innerHeight / 2, cx = x, cy = y, raf = 0;
+        const mover = (e: MouseEvent) => { x = e.clientX; y = e.clientY; };
+        const sobre = (e: MouseEvent) => {
+            const alvo = (e.target as HTMLElement)?.closest('a,button,summary,[role=button]');
+            el.classList.toggle('mira', !!alvo);
+        };
+        const loop = () => {
+            cx += (x - cx) * 0.18; cy += (y - cy) * 0.18;
+            el.style.transform = `translate3d(${cx}px,${cy}px,0)`;
+            raf = requestAnimationFrame(loop);
+        };
+        addEventListener('mousemove', mover, { passive: true });
+        addEventListener('mouseover', sobre, { passive: true });
+        raf = requestAnimationFrame(loop);
+        return () => { removeEventListener('mousemove', mover); removeEventListener('mouseover', sobre); cancelAnimationFrame(raf); };
+    }, []);
+    return (
+        <div className="v2-cursor" ref={ref} aria-hidden="true">
+            <span className="v2-cursor-anel" /><span className="v2-cursor-h" /><span className="v2-cursor-v" />
+        </div>
+    );
+}
+
+export default function HomeNodeV2() {
     const [faqOpen, setFaqOpen] = useState<number | null>(0);
     const [ato, setAto] = useState(0);
     const [abrindo, setAbrindo] = useState(true);
@@ -352,8 +589,110 @@ export default function HomeNode() {
     // Hover numa operação real manda um pulso pro campo de partículas
     const pulso = () => window.dispatchEvent(new CustomEvent('node-pulse'));
 
+    /* ═══════════════ ATO 1 — O DESMONTE ═══════════════
+       Nos primeiros ~85vh de rolagem o herói fica PRESO e a frase se desfaz:
+       cada glifo voa na direção do núcleo do cérebro e some. A tese resiste
+       mais que o resto e é a última a partir.
+
+       Por que assim e não um fade: a promessa da marca é "tecnologia que
+       transforma marcas". Então o texto não sai de cena — ele VIRA a rede.
+       O gesto é a tese, não enfeite.
+
+       Custo: os vetores de voo são calculados uma vez (e no resize/troca de
+       fonte). Por quadro escreve-se só uma custom property por glifo — nada
+       de leitura de layout, só compositing. */
+    useEffect(() => {
+        if (matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+        const palco = document.querySelector<HTMLElement>('.v2 .nlp-hero');
+        if (!palco) return;
+
+        const MAX_ATRASO = 0.34;
+        type Glifo = { el: HTMLElement; dx: number; dy: number; px: number; py: number; rot: number; atraso: number };
+        let glifos: Glifo[] = [];
+        let raf = 0, ultimo = -1;
+        let pulsouA = false, pulsouB = false, engoliu = false;
+
+        const medir = () => {
+            const els = [...document.querySelectorAll<HTMLElement>('.v2-glifo')];
+            // zera antes de medir: com os glifos já deslocados, o rect seria o de chegada
+            els.forEach(el => { el.style.transform = ''; el.style.opacity = ''; });
+            const alvoX = innerWidth * 0.72, alvoY = innerHeight * 0.46;
+            glifos = els.map((el, i) => {
+                const r = el.getBoundingClientRect();
+                const dx = alvoX - (r.left + r.width / 2);
+                const dy = alvoY - (r.top + r.height / 2);
+                // desvio PERPENDICULAR ao voo: dá curva à trajetória sem impedir a
+                // chegada. Feixe reto lê como artificial; desvio no destino lê como
+                // "passou perto", que era o problema — elas não eram engolidas.
+                const dist = Math.hypot(dx, dy) || 1;
+                const esp = ((i * 37) % 100) / 100 - 0.5;
+                return {
+                    el, dx, dy,
+                    px: (-dy / dist) * esp * 190,
+                    py: (dx / dist) * esp * 190,
+                    rot: esp * 200,
+                    atraso: (i / Math.max(1, els.length - 1)) * MAX_ATRASO,
+                };
+            });
+        };
+
+        // a pista precisa casar com o padding-bottom do palco no CSS (85vh / 62vh)
+        const pista = () => innerHeight * (innerWidth <= 860 ? 0.62 : 0.85);
+
+        const desenhar = () => {
+            raf = 0;
+            const corrida = pista();
+            const p = Math.max(0, Math.min(1, scrollY / corrida));
+            // prende o conteúdo: sobe junto com a rolagem até a pista acabar
+            palco.style.setProperty('--pin', `${Math.round(Math.min(scrollY, corrida))}px`);
+            if (Math.abs(p - ultimo) < 0.002) return;
+            ultimo = p;
+            const vao = 1 - MAX_ATRASO;
+            for (const g of glifos) {
+                const pp = Math.max(0, Math.min(1, (p - g.atraso) / vao));
+                if (pp <= 0) { g.el.style.transform = ''; g.el.style.opacity = ''; continue; }
+                // acelera no fim: a letra é PUXADA pro núcleo, não flutua até lá
+                const e = pp * pp * (3 - 2 * pp);
+                const curva = Math.sin(pp * Math.PI);      // some nas duas pontas → converge
+                const x = g.dx * e + g.px * curva;
+                const y = g.dy * e + g.py * curva;
+                const s = 1 - 0.94 * e;                     // fecha num ponto
+                // segura a opacidade quase até o fim: sumir cedo lê como fade, não como engolir
+                const o = pp < 0.8 ? 1 : Math.max(0, 1 - (pp - 0.8) / 0.2);
+                g.el.style.transform =
+                    `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) rotate(${(g.rot * e).toFixed(1)}deg) scale(${s.toFixed(3)})`;
+                g.el.style.opacity = o.toFixed(3);
+            }
+            palco.style.setProperty('--ato', p.toFixed(3));
+            // ondas enquanto o campo se alimenta...
+            if (p > 0.34 && !pulsouA) { pulsouA = true; pulsar(); }
+            if (p > 0.68 && !pulsouB) { pulsouB = true; pulsar(); }
+            // ...e a ENGOLIDA quando a última letra chega: o campo se desfaz e remonta
+            if (p > 0.95 && !engoliu) {
+                engoliu = true;
+                window.dispatchEvent(new CustomEvent('node-absorve', { detail: { forca: 1 } }));
+            }
+            if (p < 0.15) { pulsouA = false; pulsouB = false; engoliu = false; }
+        };
+
+        const aoRolar = () => { if (!raf) raf = requestAnimationFrame(desenhar); };
+        const remedir = () => { medir(); ultimo = -1; desenhar(); };
+
+        // a fonte de display muda a largura dos glifos: medir só depois que assentar
+        const t = setTimeout(remedir, 1500);
+        document.fonts?.ready.then(remedir).catch(() => { });
+        addEventListener('scroll', aoRolar, { passive: true });
+        addEventListener('resize', remedir);
+        return () => {
+            clearTimeout(t);
+            removeEventListener('scroll', aoRolar);
+            removeEventListener('resize', remedir);
+            if (raf) cancelAnimationFrame(raf);
+        };
+    }, []);
+
     return (
-        <div className="nlp">
+        <div className="nlp v2">
             <style>{`
         /* Tokens — ver DESIGN.md §2. Base azulada (nunca preto puro), texto GELO
            (nunca #fff), e um acento único violeta que também manda na interface:
@@ -749,7 +1088,274 @@ export default function HomeNode() {
           .nlp-btn-sm{padding-block:12px;min-height:44px}
           .nlp-nav-in>a{min-height:44px;display:inline-flex;align-items:center}
         }
+        /* ╔══════════════════════════════════════════════════════════════════╗
+           ║  v2 — REDE VIVA + HUD                                            ║
+           ║  Tudo abaixo é 1px, mono e discreto de propósito: a estrela      ║
+           ║  continua sendo o cérebro. HUD que compete com a arte polui.     ║
+           ╚══════════════════════════════════════════════════════════════════╝ */
+        /* overflow-x:hidden no ancestral transforma ele em container de rolagem e
+           MATA o position:sticky do palco do Ato 1. "clip" recorta igual, mas não
+           cria container — é a única troca que faz o herói grudar de verdade. */
+        .v2{--hud:rgba(190,200,225,.28);--hud-on:var(--accent-hi);cursor:none;
+          overflow-x:clip!important}
+        .v2 a,.v2 button,.v2 summary{cursor:none}
+        @media(pointer:coarse){.v2,.v2 a,.v2 button,.v2 summary{cursor:auto}}
+
+        /* textura de instrumento: grade fina + varredura. Quase invisível — some
+           no print e aparece no olho, que é exatamente o ponto. */
+        .v2::before{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;
+          background-image:linear-gradient(rgba(190,200,225,.028) 1px,transparent 1px),
+                           linear-gradient(90deg,rgba(190,200,225,.028) 1px,transparent 1px);
+          background-size:64px 64px;
+          mask-image:radial-gradient(120% 90% at 50% 40%,#000 30%,transparent 78%)}
+        .v2::after{content:'';position:fixed;inset-inline:0;height:140px;z-index:4;pointer-events:none;
+          background:linear-gradient(180deg,transparent,rgba(139,111,224,.055),transparent);
+          animation:v2-varre 7s linear infinite}
+        @keyframes v2-varre{0%{top:-140px}100%{top:100%}}
+
+        /* ── moldura ── */
+        .v2-hud{position:fixed;inset:0;z-index:45;pointer-events:none;font-family:'JetBrains Mono',monospace}
+        /* cantoneiras: é o que transforma a janela em VISOR. Precisam ser vistas —
+           na primeira tentativa ficaram tão discretas que sumiam, e aí não comunicam nada. */
+        .v2-canto{position:absolute;width:34px;height:34px;border:1px solid var(--accent);opacity:.55}
+        .v2-canto::after{content:'';position:absolute;width:4px;height:4px;background:var(--accent);
+          box-shadow:0 0 8px var(--accent)}
+        .v2-canto-tl{top:12px;left:12px;border-right:0;border-bottom:0}
+        .v2-canto-tl::after{top:-2px;left:-2px}
+        .v2-canto-tr{top:12px;right:12px;border-left:0;border-bottom:0}
+        .v2-canto-tr::after{top:-2px;right:-2px}
+        .v2-canto-bl{bottom:46px;left:12px;border-right:0;border-top:0}
+        .v2-canto-bl::after{bottom:-2px;left:-2px}
+        .v2-canto-br{bottom:46px;right:12px;border-left:0;border-top:0}
+        .v2-canto-br::after{bottom:-2px;right:-2px}
+
+        /* ── espinha de nós: a página é um grafo, e você está num nó dele ── */
+        .v2-espinha{position:absolute;right:30px;top:50%;transform:translateY(-50%);
+          display:flex;flex-direction:column;gap:2px}
+        .v2-no{display:flex;align-items:center;justify-content:flex-end;gap:10px;height:26px;
+          text-decoration:none;position:relative}
+        /* o fio que liga um nó ao outro — o grafo desenhado.
+           right:3px alinha no centro do ponto de 7px ancorado na direita. */
+        .v2-no:not(:last-child)::after{content:'';position:absolute;right:3px;top:17px;width:1px;height:21px;
+          background:linear-gradient(180deg,var(--hud),rgba(190,200,225,.10));opacity:.6}
+        .v2-no b{font-size:.56rem;letter-spacing:.18em;color:var(--muted);opacity:0;transform:translateX(8px);
+          transition:opacity var(--micro) var(--ease),transform var(--micro) var(--ease);white-space:nowrap}
+        .v2-no em{font-size:.54rem;letter-spacing:.1em;color:var(--muted);opacity:.5;font-style:normal;
+          transition:opacity var(--micro) var(--ease)}
+        .v2-no i{width:7px;height:7px;border-radius:50%;border:1px solid var(--hud);flex:0 0 auto;
+          transition:background var(--micro) var(--ease),border-color var(--micro) var(--ease),
+                     transform var(--micro) var(--ease),box-shadow var(--micro) var(--ease)}
+        .v2-no:hover b,.v2-no.on b{opacity:1;transform:none}
+        .v2-no:hover em,.v2-no.on em{opacity:.9}
+        .v2-no.on i{background:var(--accent);border-color:var(--accent);transform:scale(1.5);
+          box-shadow:0 0 14px rgba(139,111,224,.85)}
+        .v2-no:hover i{border-color:var(--accent-hi);transform:scale(1.35)}
+        @media(max-width:1100px){.v2-espinha{display:none}}
+
+        /* ── telemetria ── */
+        .v2-tele{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;gap:10px;
+          padding:9px clamp(44px,5vw,62px);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;
+          color:var(--muted);border-top:1px solid rgba(190,200,225,.10);
+          background:linear-gradient(0deg,rgba(8,9,12,.92),rgba(8,9,12,.55))}
+        .v2-tele-flex{flex:1}
+        .v2-tele-sep{opacity:.35}
+        .v2-tele-ok{display:inline-flex;align-items:center;gap:6px;color:var(--accent-hi)}
+        .v2-tele-ok i{width:5px;height:5px;border-radius:50%;background:var(--accent);
+          animation:nlp-pulse 2.2s var(--ease) infinite}
+        .v2-tele-barra{letter-spacing:.02em;color:var(--dim)}
+        .v2-tele-hora{color:var(--dim);font-variant-numeric:tabular-nums}
+        /* No mobile a faixa quebrava em 2 linhas (43px) e virava tarja. Fica em UMA
+           linha: só o essencial, sem quebra, com reticências se ainda assim faltar. */
+        @media(max-width:860px){
+          .v2-tele{font-size:.5rem;gap:6px;padding:7px 18px;flex-wrap:nowrap;white-space:nowrap;overflow:hidden}
+          .v2-tele-barra,.v2-tele-hora{display:none}
+          .v2-tele>span:nth-last-child(-n+3){display:none}  /* coordenada e separador */
+        }
+        /* a página precisa de chão pra faixa não cobrir o rodapé */
+        .v2 .nlp-footer-bottom{padding-bottom:52px}
+
+        /* ── retículo ── */
+        .v2-cursor{display:none;position:fixed;left:0;top:0;z-index:120;pointer-events:none;
+          width:0;height:0;will-change:transform}
+        .v2-cursor-anel{position:absolute;left:-13px;top:-13px;width:26px;height:26px;border-radius:50%;
+          border:1px solid var(--accent-hi);opacity:.55;
+          transition:width var(--micro) var(--ease),height var(--micro) var(--ease),
+                     left var(--micro) var(--ease),top var(--micro) var(--ease),opacity var(--micro) var(--ease)}
+        .v2-cursor-h,.v2-cursor-v{position:absolute;background:var(--accent-hi);opacity:.85}
+        .v2-cursor-h{left:-1px;top:-1px;width:2px;height:2px;border-radius:50%}
+        .v2-cursor-v{display:none}
+        .v2-cursor.mira .v2-cursor-anel{left:-21px;top:-21px;width:42px;height:42px;opacity:.9}
+        /* vira mira quando encosta em algo clicável */
+        .v2-cursor.mira .v2-cursor-v{display:block;left:-1px;top:-30px;width:1px;height:12px}
+        .v2-cursor.mira .v2-cursor-h{left:-1px;top:18px;width:1px;height:12px;border-radius:0}
+
+        /* ── TRILHO: a fiação da página ──
+           Vive na margem esquerda, fora do caminho do cérebro. A linha base é
+           sempre visível (o circuito existe); a linha de luz cresce por scaleY
+           conforme você desce (o circuito é percorrido). */
+        .v2{position:relative}
+        .v2-trilho{position:absolute;left:clamp(14px,2.6vw,46px);top:0;bottom:0;width:1px;
+          z-index:2;pointer-events:none}
+        .v2-trilho-base{position:absolute;inset:0;background:rgba(190,200,225,.085)}
+        .v2-trilho-luz{position:absolute;left:0;top:0;width:1px;height:100%;transform-origin:top;
+          transform:scaleY(var(--desenho,0));
+          background:linear-gradient(180deg,var(--accent),rgba(139,111,224,.22));
+          box-shadow:0 0 10px rgba(139,111,224,.45)}
+        /* nó de seção: apagado até a seção chegar, depois acende e estende o ramo */
+        .v2-no-sec{position:absolute;left:-3.5px;width:8px;height:8px;border-radius:50%;
+          border:1px solid rgba(190,200,225,.30);background:var(--bg);
+          transition:background var(--micro) var(--ease),border-color var(--micro) var(--ease),
+                     box-shadow var(--micro) var(--ease),transform var(--micro) var(--ease)}
+        .v2-no-sec::before{content:'';position:absolute;left:7px;top:50%;height:1px;width:0;
+          background:linear-gradient(90deg,var(--accent),transparent);
+          transition:width .5s var(--ease)}
+        /* Rótulo DEITADO ao longo do trilho. Na horizontal ele invadia a coluna de
+           texto — "FRENTES" caía por cima do título da seção. Vertical, ele mora
+           dentro da própria margem e nunca encosta no conteúdo. */
+        .v2-no-sec>b{position:absolute;left:50%;top:15px;transform:translateX(-50%);
+          writing-mode:vertical-rl;
+          font-family:'JetBrains Mono',monospace;font-size:.46rem;letter-spacing:.22em;
+          text-transform:uppercase;color:var(--muted);white-space:nowrap;
+          opacity:0;transition:opacity .5s var(--ease)}
+        .v2-no-sec.on{background:var(--accent);border-color:var(--accent);transform:scale(1.15);
+          box-shadow:0 0 12px rgba(139,111,224,.7)}
+        .v2-no-sec.on::before{width:26px}
+        .v2-no-sec.on>b{opacity:.62}
+        /* abaixo de 1100px não há margem sobrando — o trilho sai de cena */
+        @media(max-width:1100px){.v2-trilho{display:none}}
         @media(prefers-reduced-motion:reduce){
+          .v2-trilho-luz{transform:scaleY(1)}
+        }
+
+        /* ── cabeçalho centralizado (seções 03, 04 e 05) ──
+           Alinhado à esquerda, o título competia com a arte que ocupa um dos lados.
+           Centralizado, ele ancora a seção e o cérebro passa a emoldurar em vez de
+           disputar. A medida do parágrafo cai pra 54ch: texto centralizado com linha
+           longa é cansativo de ler — o olho perde o começo da linha seguinte. */
+        .v2 .v2-centro{align-items:center;text-align:center;margin-inline:auto;
+          max-width:1000px!important}
+        /* o título pode ocupar a largura toda pra caber em UMA linha; o parágrafo
+           não — texto centralizado com linha longa cansa, o olho perde o começo da
+           linha seguinte. Por isso a medida do apoio fica travada em 54ch. */
+        .v2 .v2-centro h2{max-width:none;text-wrap:balance}
+        .v2 .v2-centro p{margin-inline:auto;max-width:54ch}
+        /* o marcador do rótulo é absoluto: sem isso ele descola do texto centralizado */
+        .v2 .v2-centro .nlp-mono{align-self:center}
+
+        /* ── seções viram registros de sistema ── */
+        .v2 .nlp-head .nlp-mono{display:inline-flex;align-items:center;gap:10px;position:relative;padding-left:26px}
+        .v2 .nlp-head .nlp-mono::before{content:'';position:absolute;left:0;top:50%;width:16px;height:1px;
+          background:var(--accent);opacity:.75}
+        .v2 .nlp-head .nlp-mono::after{content:'';position:absolute;left:0;top:calc(50% - 2.5px);
+          width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+
+        /* cantoneiras nos painéis: cada card lê como módulo instrumentado */
+        .v2 .nlp-oferta,.v2 .nlp-caso,.v2 .nlp-garantia{position:relative}
+        .v2 .nlp-oferta::after,.v2 .nlp-caso::after,.v2 .nlp-garantia::after{
+          content:'';position:absolute;left:10px;top:10px;width:12px;height:12px;pointer-events:none;
+          border-left:1px solid var(--accent);border-top:1px solid var(--accent);opacity:.32;
+          transition:opacity var(--micro) var(--ease),width var(--micro) var(--ease),height var(--micro) var(--ease)}
+        .v2 .nlp-oferta:hover::after,.v2 .nlp-caso:hover::after,.v2 .nlp-garantia:hover::after{
+          opacity:.95;width:20px;height:20px}
+
+        /* números com hairline embaixo: leitura de painel, não de banner */
+        .v2 .nlp-stat b{position:relative;padding-bottom:8px}
+        .v2 .nlp-stat b::after{content:'';position:absolute;left:0;bottom:0;width:22px;height:1px;
+          background:var(--accent);opacity:.65}
+
+        /* ── herói: cada linha sobe de dentro de uma máscara ── */
+        .v2-h1{display:flex;flex-direction:column}
+        .v2-linha{display:block;overflow:hidden;padding-bottom:.06em}
+        .v2-linha>span{display:block;transform:translateY(105%);
+          animation:v2-sobe .95s var(--ease) both;
+          animation-delay:calc(.34s + var(--i) * .11s)}
+        @keyframes v2-sobe{to{transform:none}}
+        /* a coreografia antiga do hero brigava com a máscara — aqui a linha manda */
+        .v2 .nlp-hero-in>h1{animation:none;opacity:1;transform:none}
+        /* o texto embaralhado não pode empurrar layout: largura reservada pelo real */
+        .v2-decod{white-space:pre}
+        .v2-leitor{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+        /* moldura do herói: colchete fino que abre à esquerda do bloco de texto */
+        .v2 .nlp-hero-in::before{content:'';position:absolute;left:-26px;top:4px;bottom:4px;width:1px;
+          background:linear-gradient(180deg,transparent,var(--accent) 16%,var(--accent) 84%,transparent);
+          opacity:.5}
+        @media(max-width:900px){.v2 .nlp-hero-in::before{display:none}}
+        /* A faixa de telemetria comia os números do herói. A causa não era o padding:
+           era o min-height:92vh, que espalhava o conteúdo até o pé da tela. Sem ele,
+           o bloco fecha na altura do próprio conteúdo e sobra chão pra faixa. */
+        /* ── PALCO DO ATO 1 ──
+           O herói deixa de ser flex-centrado e vira bloco com PISTA: o conteúdo
+           gruda (sticky) e a pista de 85vh é o tempo do desmonte. Sem a pista o
+           texto sairia de cena rolando, e o gesto não teria onde acontecer.
+           A pista casa com o innerHeight*0.85 usado no cálculo do progresso. */
+        .v2 .nlp-hero{min-height:auto!important;display:block!important;
+          padding-top:96px!important;padding-bottom:calc(76px + 85vh)!important}
+        /* O pino NÃO é position:sticky. Um div do layout do app tem overflow-y:auto,
+           o que o elege container de rolagem — mas quem rola é a janela, então o
+           sticky nunca engata. Prender por transform não depende de ancestral algum
+           e ainda é composição pura. --pin vem do mesmo laço que move os glifos. */
+        .v2 .nlp-hero>.nlp-hero-in{gap:21px;will-change:transform;
+          transform:translate3d(0,var(--pin,0px),0)}
+        @media(max-width:860px){
+          .v2 .nlp-hero{padding-top:104px!important;padding-bottom:calc(68px + 62vh)!important}
+        }
+
+        /* ── os glifos ──
+           inline-block porque só assim aceitam transform. Voam para o vetor
+           medido em JS, giram e encolhem. Só transform e opacity: compositing puro. */
+        /* transform e opacity são escritos pelo laço de rolagem (JS): a trajetória é
+           curva e converge, coisa que calc() em CSS não expressa (precisa de sin()).
+           Aqui fica só a base — sem transição, senão o JS briga com a interpolação. */
+        .v2-glifo{display:inline-block;white-space:pre;will-change:transform,opacity;
+          transition:none!important}
+
+        /* a TESE resiste: parte por último, e inteira — não se estilhaça.
+           .nlp-tese não carrega a animação de entrada (ela está no ancestral),
+           então o transform aqui é livre de conflito. */
+        .v2 .nlp-tese{display:inline-block;will-change:transform,opacity;
+          transform:translate3d(calc(var(--ato,0) * 54px),calc(var(--ato,0) * -16px),0)
+                    scale(calc(1 - var(--ato,0) * .14));
+          opacity:calc(1 - var(--ato,0) * 1.04)}
+
+        /* Apoio, CTAs e números saem antes, pra frase ficar sozinha no fim.
+           ARMADILHA: esses elementos já têm "animation ... both", que TRAVA
+           transform e opacity no valor final — sobrescrever ali não pega.
+           A propriedade "filter" não é tocada pelas keyframes, então é a saída.
+           (E atenção: nada de crase neste bloco — o CSS mora dentro de um
+            template literal, e uma crase solta fecha a string.) */
+        .v2 .nlp-hero-in>p,.v2 .nlp-hero-in>.nlp-ctas,.v2 .nlp-hero-in>.nlp-stats,
+        .v2 .nlp-hero-in>.nlp-chip,.v2 .nlp-hero-in>.nlp-mono{
+          filter:opacity(calc(1 - var(--ato,0) * 1.25))}
+        .v2 .nlp-hero-in>.nlp-ctas{pointer-events:auto}
+        /* os números do herói viram leitura de painel, e sobem ~5% da tela:
+           com o herói preso, eles ficavam baixos demais e a informação sumia
+           no desmonte antes de ser lida. */
+        .v2 .nlp-stats{border-top:1px solid rgba(190,200,225,.10);padding-top:16px;margin-top:14px}
+
+        /* e SEGURAM a leitura: só começam a apagar depois de 28% da pista, em vez
+           de desbotar desde o primeiro pixel de rolagem junto com o resto. */
+        .v2 .nlp-hero-in>.nlp-stats{
+          filter:opacity(calc(1 - max(0, var(--ato,0) - .28) * 1.7))}
+        /* Véu atrás da espinha. O teste de contraste passava medindo contra o fundo
+           liso — mas o rótulo cai POR CIMA do cérebro, e ali a leitura morre. O véu
+           precisa ser opaco de verdade no eixo dos nós e dissolver pras bordas, senão
+           vira uma caixa colada em cima da arte. */
+        .v2-espinha::before{content:'';position:absolute;inset:-22px -20px -22px -14px;
+          border-radius:var(--r-pill);z-index:-1;backdrop-filter:blur(7px);
+          background:radial-gradient(72% 56% at 78% 50%,rgba(8,9,12,.90),rgba(8,9,12,.55) 58%,transparent 82%);
+          mask-image:radial-gradient(78% 60% at 78% 50%,#000 55%,transparent 88%)}
+
+        /* CTA com halo respirando: o botão parece energizado, não pintado */
+        .v2 .nlp-btn-solid{position:relative;overflow:hidden}
+        .v2 .nlp-btn-solid::after{content:'';position:absolute;inset:0;pointer-events:none;
+          background:linear-gradient(100deg,transparent 20%,rgba(255,255,255,.55),transparent 80%);
+          transform:translateX(-120%)}
+        .v2 .nlp-btn-solid:hover::after{transform:translateX(120%);transition:transform .7s var(--ease)}
+
+        @media(prefers-reduced-motion:reduce){
+          .v2::after{animation:none;display:none}
+          .v2-cursor{display:none!important}
           .nlp *,.nlp *::before,.nlp *::after{animation:none!important;transition:none!important}
           .nlp-reveal{opacity:1;transform:none}
           .nlp-hero-in>*{opacity:1;transform:none}
@@ -764,10 +1370,10 @@ export default function HomeNode() {
                 <span className="nlp-abertura-linha" />
             </div>
 
-            {/* trilho dos atos */}
-            <div className="nlp-rail" aria-hidden="true">
-                {[0, 1, 2, 3].map(i => <i key={i} className={i === ato ? 'on' : ''} />)}
-            </div>
+            {/* v2: o trilho de bolinhas virou a espinha de nós dentro do HUD */}
+            <HudV2 ato={ato} />
+            <TrilhoV2 />
+            <CursorV2 />
 
             {/* NAV */}
             <nav className="nlp-nav">
@@ -792,10 +1398,20 @@ export default function HomeNode() {
                 <div className="nlp-wrap nlp-hero-in">
                     <span className="nlp-chip"><i />operando agora</span>
                     <span className="nlp-mono">{'// sistemas · e-commerce · ia aplicada'}</span>
-                    <h1>Tecnologia que<br />transforma marcas em<br /><span className="nlp-tese">máquinas de venda.</span></h1>
+                    {/* v2: cada linha sobe de dentro de uma máscara, escalonada.
+                        A última palavra DECODIFICA — o texto se resolve de caractere
+                        embaralhado para a palavra, como um sistema terminando de processar. */}
+                    <h1 className="v2-h1">
+                        <span className="v2-linha"><span style={{ ['--i' as string]: 0 }}><Glifos texto="Tecnologia que" /></span></span>
+                        <span className="v2-linha"><span style={{ ['--i' as string]: 1 }}><Glifos texto="transforma marcas em" /></span></span>
+                        <span className="v2-linha"><span style={{ ['--i' as string]: 2 }}>
+                            <span className="nlp-tese"><Decodifica texto="máquinas de venda." /></span>
+                        </span></span>
+                    </h1>
                     <p>Sistemas, lojas e aplicações de IA sob medida, entregues em dias e gerando resultado desde o primeiro dia.</p>
                     <div className="nlp-ctas">
                         <a href={WHATS} target="_blank" rel="noopener" className="nlp-btn nlp-btn-solid"
+                            onMouseEnter={pulsar}
                             onClick={() => registrar('cta_whatsapp', 'hero')}>Falar com a NODE</a>
                         <Link to="/login" className="nlp-link-arrow"
                             onClick={() => registrar('cta_login', 'hero')}>Acessar o sistema<span>→</span></Link>
@@ -841,9 +1457,13 @@ export default function HomeNode() {
             {/* RESULTADOS */}
             <section id="resultados">
                 <div className="nlp-wrap">
-                    <div className="nlp-head nlp-reveal">
+                    <div className="nlp-head nlp-reveal v2-centro">
                         <span className="nlp-mono">{'// operações reais'}</span>
-                        <h2>Quem opera<br />com a NODE</h2>
+                        <h2>Quem opera com a NODE</h2>
+                        <p style={{ marginTop: 8 }}>
+                            Não é vitrine de portfólio: são lojas e sistemas no ar agora, vendendo
+                            todo dia. Abra qualquer uma e confira você mesmo.
+                        </p>
                     </div>
                     {/* Portfólio: cada operação no ar como um caso, não como link solto */}
                     <div className="nlp-ops">
@@ -876,12 +1496,12 @@ export default function HomeNode() {
             {/* O QUE VENDEMOS — três frentes, cada uma com o COMO na prática */}
             <section id="ofertas">
                 <div className="nlp-wrap">
-                    <div className="nlp-head nlp-reveal" style={{ maxWidth: 640 }}>
+                    <div className="nlp-head nlp-reveal v2-centro">
                         <span className="nlp-mono">{'// três frentes'}</span>
-                        <h2>O que a NODE constrói<br />com você</h2>
+                        <h2>O que a NODE constrói com você</h2>
                         <p style={{ marginTop: 8 }}>
-                            Tudo sob medida e tudo na prática. Nada aqui sai de template, e nada é ensinado
-                            no quadro branco: é IA aplicada em projeto que vai pro ar.
+                            Três frentes, um jeito só de trabalhar: nada sai de template e nada para
+                            no slide. O que a gente entrega entra em operação e é medido pelo que vende.
                         </p>
                     </div>
                     <div className="nlp-ofertas">
@@ -962,9 +1582,13 @@ export default function HomeNode() {
             {/* PROCESSO */}
             <section id="processo">
                 <div className="nlp-wrap">
-                    <div className="nlp-head nlp-reveal">
+                    <div className="nlp-head nlp-reveal v2-centro">
                         <span className="nlp-mono">{'// como funciona'}</span>
-                        <h2>Do alinhamento ao ar<br />em quatro movimentos</h2>
+                        <h2>Do alinhamento ao ar em quatro movimentos</h2>
+                        <p style={{ marginTop: 8 }}>
+                            Sem reunião que não muda nada e sem entrega surpresa. Você sabe o que
+                            está sendo feito, em que ordem, e o que precisa de você em cada etapa.
+                        </p>
                     </div>
                     <div className="nlp-steps">
                         {STEPS.map((s, i) => (
@@ -1002,7 +1626,7 @@ export default function HomeNode() {
             {/* FAQ */}
             <section id="faq">
                 <div className="nlp-wrap" style={{ maxWidth: 780 }}>
-                    <div className="nlp-head nlp-reveal">
+                    <div className="nlp-head nlp-reveal v2-centro">
                         <span className="nlp-mono">{'// perguntas frequentes'}</span>
                         <h2>Tire suas dúvidas</h2>
                     </div>
