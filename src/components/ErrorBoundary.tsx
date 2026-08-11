@@ -10,30 +10,75 @@ interface Props {
 interface State {
     hasError: boolean;
     error: Error | null;
+    recarregando: boolean;
+}
+
+/**
+ * Assinatura de "chunk velho": depois de um deploy, os arquivos JS ganham novo
+ * hash no nome. Uma aba que ficou aberta durante o deploy pede um arquivo que já
+ * não existe, e o import dinâmico da rota (lazy) falha. NÃO é bug do sistema — é
+ * cache desalinhado, e um reload buscando o HTML novo resolve.
+ */
+const ERRO_DE_CHUNK = /Failed to fetch dynamically imported module|Loading chunk [\w-]+ failed|error loading dynamically imported module|Importing a module script failed|ChunkLoadError/i;
+
+function ehErroDeChunk(err?: unknown): boolean {
+    if (!err) return false;
+    const e = err as { name?: string; message?: string };
+    return e.name === "ChunkLoadError" || ERRO_DE_CHUNK.test(e.message || "");
 }
 
 export class ErrorBoundary extends Component<Props, State> {
     public state: State = {
         hasError: false,
         error: null,
+        recarregando: false,
     };
 
     public static getDerivedStateFromError(error: Error): State {
-        // Update state so the next render will show the fallback UI.
-        return { hasError: true, error };
+        // Erro de chunk velho não é falha do sistema: mostra "atualizando" em vez
+        // da tela vermelha, porque o reload já vai acontecer no componentDidCatch.
+        return { hasError: true, error, recarregando: ehErroDeChunk(error) };
     }
 
     public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         console.error("[ErrorBoundary] Uncaught error:", error, errorInfo);
+
+        // Chunk velho pós-deploy: recarrega UMA vez (janela de 15s) pra pegar o HTML
+        // novo. Bug real persiste após o reload e cai na tela de erro normal — o
+        // guarda por tempo impede loop de recarregamento.
+        if (ehErroDeChunk(error)) {
+            try {
+                const CHAVE = "__reloadChunkEm";
+                const ultimo = Number(sessionStorage.getItem(CHAVE) || 0);
+                if (Date.now() - ultimo > 15000) {
+                    sessionStorage.setItem(CHAVE, String(Date.now()));
+                    window.location.reload();
+                }
+            } catch {
+                // sessionStorage bloqueado (aba privada/embed): recarrega mesmo assim
+                window.location.reload();
+            }
+        }
     }
 
     private handleReset = () => {
-        this.setState({ hasError: false, error: null });
+        this.setState({ hasError: false, error: null, recarregando: false });
         window.location.href = "/";
     };
 
     public render() {
         if (this.state.hasError) {
+            // chunk velho: o reload já está a caminho — mostra algo neutro, não a
+            // tela de erro. Se por algum motivo o reload não vier, o botão resolve.
+            if (this.state.recarregando) {
+                return (
+                    <div className="min-h-[400px] flex flex-col items-center justify-center p-6 text-center space-y-4">
+                        <RefreshCw className="w-8 h-8 animate-spin text-muted-foreground" />
+                        <p className="text-muted-foreground">Atualizando o sistema…</p>
+                    </div>
+                );
+            }
+
             if (this.props.fallback) {
                 return this.props.fallback;
             }

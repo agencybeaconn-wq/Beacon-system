@@ -20,6 +20,8 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 // Era import eager e só é usado em duas rotas protegidas — ia inteiro no pacote
 // inicial, que é o que a landing pública baixa antes de conseguir pintar.
 const TrainingLibraryManager = lazy(() => import("./components/training/TrainingLibraryManager"));
+// Login continua lazy pra não pesar a home. O chunk velho pós-deploy é resolvido
+// pela autocura (ErrorBoundary + vite:preloadError), não por carregar tudo eager.
 const Login = lazy(() => import("./pages/Login"));
 const AcceptInvite = lazy(() => import("./pages/AcceptInvite"));
 const LandingRedirect = lazy(() => import("./components/LandingRedirect").then(m => ({ default: m.LandingRedirect })));
