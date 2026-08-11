@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { format, differenceInCalendarDays, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
-    CalendarClock, CheckCircle2, ChevronDown, ChevronUp, Loader2, Plus, Trash2, Flag,
+    CheckCircle2, Loader2, Pencil, Plus, Trash2, Flag,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -70,12 +70,13 @@ export function ProjectPriorities() {
         setLoading(true);
         try {
             const [{ data: rows, error }, { data: cls, error: clsErr }] = await Promise.all([
+                // Auto-organizada por prazo: quem vence primeiro é a prioridade 1.
                 (supabase as any)
                     .from("project_priorities")
                     .select("*, agency_clients:client_id(name)")
                     .eq("workspace_id", workspaceId)
                     .eq("status", "active")
-                    .order("priority_order", { ascending: true }),
+                    .order("due_date", { ascending: true }),
                 (supabase as any)
                     .from("agency_clients")
                     .select("id, name")
@@ -129,25 +130,41 @@ export function ProjectPriorities() {
         }
     };
 
-    /** Troca a posição com o vizinho (persiste os dois). */
-    const move = async (index: number, dir: -1 | 1) => {
-        const target = index + dir;
-        if (target < 0 || target >= projects.length) return;
-        const a = projects[index];
-        const b = projects[target];
-        // Otimista: troca local primeiro, banco depois
-        const next = [...projects];
-        next[index] = b;
-        next[target] = a;
-        setProjects(next);
-        const [{ error: e1 }, { error: e2 }] = await Promise.all([
-            (supabase as any).from("project_priorities").update({ priority_order: b.priority_order }).eq("id", a.id),
-            (supabase as any).from("project_priorities").update({ priority_order: a.priority_order }).eq("id", b.id),
-        ]);
-        if (e1 || e2) {
-            console.error("[ProjectPriorities] reorder:", e1 || e2);
-            toast.error("Erro ao reordenar — recarregando.");
-            await load();
+    // ---- Edição de um projeto da fila ----
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [editClientId, setEditClientId] = useState<string>("");
+    const [editTitle, setEditTitle] = useState("");
+    const [editDue, setEditDue] = useState<Date | undefined>(undefined);
+    const [savingEdit, setSavingEdit] = useState(false);
+
+    const openEdit = (p: PriorityProject) => {
+        setEditingId(p.id);
+        setEditClientId(p.client_id ?? "");
+        setEditTitle(p.title);
+        setEditDue(parseISO(p.due_date));
+    };
+
+    const handleEditSave = async () => {
+        if (!editingId || !editDue || !editTitle.trim()) return;
+        setSavingEdit(true);
+        try {
+            const { error } = await (supabase as any)
+                .from("project_priorities")
+                .update({
+                    title: editTitle.trim(),
+                    client_id: editClientId || null,
+                    due_date: format(editDue, "yyyy-MM-dd"),
+                })
+                .eq("id", editingId);
+            if (error) throw error;
+            toast.success("Projeto atualizado.");
+            setEditingId(null);
+            await load(); // a fila se reordena sozinha pelo novo prazo
+        } catch (err: any) {
+            console.error("[ProjectPriorities] edit:", err);
+            toast.error("Erro ao salvar: " + (err.message || err));
+        } finally {
+            setSavingEdit(false);
         }
     };
 
@@ -172,10 +189,8 @@ export function ProjectPriorities() {
         await load();
     };
 
-    const nextDelivery = useMemo(() => {
-        if (!projects.length) return null;
-        return [...projects].sort((a, b) => a.due_date.localeCompare(b.due_date))[0];
-    }, [projects]);
+    // Lista já vem ordenada por prazo — a próxima entrega é a primeira.
+    const nextDelivery = projects[0] ?? null;
 
     if (loading) {
         return (
@@ -197,12 +212,13 @@ export function ProjectPriorities() {
                     {nextDelivery && (
                         <div>
                             <p className="text-xs text-muted-foreground">Próxima entrega</p>
-                            <p className="text-2xl font-semibold font-mono-numbers">
-                                {format(parseISO(nextDelivery.due_date), "dd MMM", { locale: ptBR })}
-                                <span className="text-sm text-muted-foreground ml-2 font-normal">
-                                    {daysLeft(nextDelivery.due_date) >= 0
-                                        ? `em ${daysLeft(nextDelivery.due_date)}d`
-                                        : `atrasado ${-daysLeft(nextDelivery.due_date)}d`}
+                            <p className="text-2xl font-semibold font-mono-numbers capitalize">
+                                {format(parseISO(nextDelivery.due_date), "EEE, dd MMM", { locale: ptBR }).replace(".", "")}
+                                <span className="text-sm text-muted-foreground ml-2 font-normal normal-case">
+                                    {daysLeft(nextDelivery.due_date) > 1 && `em ${daysLeft(nextDelivery.due_date)} dias`}
+                                    {daysLeft(nextDelivery.due_date) === 1 && "amanhã"}
+                                    {daysLeft(nextDelivery.due_date) === 0 && "HOJE"}
+                                    {daysLeft(nextDelivery.due_date) < 0 && `atrasado ${-daysLeft(nextDelivery.due_date)}d`}
                                 </span>
                             </p>
                         </div>
@@ -312,32 +328,92 @@ export function ProjectPriorities() {
                                     </div>
                                 </div>
 
-                                {/* Prazo */}
-                                <div className="text-right shrink-0 w-[110px]">
-                                    <p className={cn(
-                                        "text-sm font-semibold font-mono-numbers",
-                                        overdue ? "text-destructive" : urgent ? "text-warning" : "text-foreground",
-                                    )}>
-                                        {overdue ? `${-left}d atrasado` : left === 0 ? "hoje" : `${left}d restantes`}
-                                    </p>
-                                    <p className="text-[11px] text-muted-foreground flex items-center justify-end gap-1">
-                                        <CalendarClock className="h-3 w-3" />
-                                        {format(parseISO(p.due_date), "dd MMM yyyy", { locale: ptBR })}
-                                    </p>
+                                {/* Prazo: countdown + dia da semana + tile de calendário */}
+                                <div className="flex items-center gap-3 shrink-0">
+                                    <div className="text-right">
+                                        <p className={cn(
+                                            "text-sm font-semibold font-mono-numbers whitespace-nowrap",
+                                            overdue ? "text-destructive" : urgent ? "text-warning" : "text-foreground",
+                                        )}>
+                                            {overdue ? `${-left}d atrasado` : left === 0 ? "entrega HOJE" : left === 1 ? "amanhã" : `${left}d restantes`}
+                                        </p>
+                                        <p className="text-[11px] text-muted-foreground capitalize whitespace-nowrap">
+                                            {format(parseISO(p.due_date), "EEEE, dd 'de' MMMM", { locale: ptBR })}
+                                        </p>
+                                    </div>
+                                    {/* Tile estilo ícone de Calendário da Apple: mês na faixa, dia grande */}
+                                    <div className="w-12 rounded-[10px] overflow-hidden border border-border/50 shadow-elev-1 shrink-0 text-center bg-background/60 backdrop-blur-md">
+                                        <div className={cn(
+                                            "text-[9px] font-bold uppercase tracking-wide py-0.5 text-white",
+                                            overdue ? "bg-destructive" : urgent ? "bg-warning" : "bg-primary",
+                                        )}>
+                                            {format(parseISO(p.due_date), "MMM", { locale: ptBR }).replace(".", "")}
+                                        </div>
+                                        <div className="text-lg font-semibold font-mono-numbers leading-tight py-0.5">
+                                            {format(parseISO(p.due_date), "dd")}
+                                        </div>
+                                    </div>
                                 </div>
 
-                                {/* Reordenar */}
-                                <div className="flex flex-col shrink-0">
-                                    <Button variant="ghost" size="icon" className="h-6 w-6" disabled={i === 0} onClick={() => move(i, -1)} aria-label="Subir prioridade">
-                                        <ChevronUp className="h-4 w-4" />
-                                    </Button>
-                                    <Button variant="ghost" size="icon" className="h-6 w-6" disabled={i === projects.length - 1} onClick={() => move(i, 1)} aria-label="Descer prioridade">
-                                        <ChevronDown className="h-4 w-4" />
-                                    </Button>
-                                </div>
-
-                                {/* Ações */}
+                                {/* Ações: editar / entregar / remover */}
                                 <div className="flex items-center gap-1 shrink-0">
+                                    <Popover open={editingId === p.id} onOpenChange={(o) => { if (!o) setEditingId(null); }}>
+                                        <PopoverTrigger asChild>
+                                            <Button
+                                                variant="ghost" size="icon"
+                                                className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                                                title="Editar projeto"
+                                                onClick={() => openEdit(p)}
+                                            >
+                                                <Pencil className="h-4 w-4" />
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent
+                                            className="w-[320px] p-0 flex flex-col overflow-hidden"
+                                            align="end"
+                                            collisionPadding={12}
+                                            style={{ maxHeight: "min(var(--radix-popover-content-available-height), 640px)" }}
+                                        >
+                                            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                                                <p className="text-sm font-semibold">Editar projeto</p>
+                                                <Select value={editClientId} onValueChange={setEditClientId}>
+                                                    <SelectTrigger className="h-10">
+                                                        <SelectValue placeholder="Cliente (opcional)" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {clients.map(c => (
+                                                            <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                                <Input
+                                                    placeholder="Nome do projeto"
+                                                    value={editTitle}
+                                                    onChange={e => setEditTitle(e.target.value)}
+                                                />
+                                                <div>
+                                                    <p className="text-xs text-muted-foreground mb-1.5">Data de entrega</p>
+                                                    <Calendar
+                                                        mode="single"
+                                                        selected={editDue}
+                                                        onSelect={setEditDue}
+                                                        defaultMonth={editDue}
+                                                        locale={ptBR}
+                                                        className="p-0"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="p-3 border-t border-border/40 shrink-0">
+                                                <Button
+                                                    className="w-full h-10"
+                                                    disabled={savingEdit || !editDue || !editTitle.trim()}
+                                                    onClick={handleEditSave}
+                                                >
+                                                    {savingEdit ? <Loader2 className="h-4 w-4 animate-spin" /> : "Salvar alterações"}
+                                                </Button>
+                                            </div>
+                                        </PopoverContent>
+                                    </Popover>
                                     <Button
                                         variant="ghost" size="icon"
                                         className="h-8 w-8 text-muted-foreground hover:text-success"
