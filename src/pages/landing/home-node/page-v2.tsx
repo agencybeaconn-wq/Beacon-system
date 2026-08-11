@@ -479,22 +479,43 @@ function CursorV2() {
         if (!matchMedia('(pointer:fine)').matches) return;
         if (matchMedia('(prefers-reduced-motion:reduce)').matches) return;
         const el = ref.current!;
-        el.style.display = 'block';
-        let x = innerWidth / 2, y = innerHeight / 2, cx = x, cy = y, raf = 0;
-        const mover = (e: MouseEvent) => { x = e.clientX; y = e.clientY; };
+        let x = 0, y = 0, pendente = false;
+
+        /* SEM inércia. A primeira versão interpolava a posição (lerp .18) achando
+           que "peso" daria caráter — o efeito real foi um cursor que anda mais
+           devagar que a mão. Como o cursor nativo está escondido, não sobra nada
+           na posição verdadeira e o ponteiro parece quebrado. Retículo tem que ser
+           exato; o caráter vem da forma e do estado de mira, nunca do atraso.
+           O rAF aqui só AGRUPA escritas no quadro — a posição pintada é sempre a
+           última lida, não uma média. */
+        const pintar = () => {
+            pendente = false;
+            el.style.transform = `translate3d(${x}px,${y}px,0)`;
+        };
+        const mover = (e: MouseEvent) => {
+            x = e.clientX; y = e.clientY;
+            if (el.style.opacity !== '1') el.style.opacity = '1';
+            if (!pendente) { pendente = true; requestAnimationFrame(pintar); }
+        };
         const sobre = (e: MouseEvent) => {
             const alvo = (e.target as HTMLElement)?.closest('a,button,summary,[role=button]');
             el.classList.toggle('mira', !!alvo);
         };
-        const loop = () => {
-            cx += (x - cx) * 0.18; cy += (y - cy) * 0.18;
-            el.style.transform = `translate3d(${cx}px,${cy}px,0)`;
-            raf = requestAnimationFrame(loop);
-        };
+        // sem isto o retículo fica preso na última posição depois que o mouse sai
+        const sair = () => { el.style.opacity = '0'; };
+
+        el.style.display = 'block';
+        el.style.opacity = '0'; // só aparece no primeiro movimento real
         addEventListener('mousemove', mover, { passive: true });
         addEventListener('mouseover', sobre, { passive: true });
-        raf = requestAnimationFrame(loop);
-        return () => { removeEventListener('mousemove', mover); removeEventListener('mouseover', sobre); cancelAnimationFrame(raf); };
+        document.documentElement.addEventListener('mouseleave', sair);
+        addEventListener('blur', sair);
+        return () => {
+            removeEventListener('mousemove', mover);
+            removeEventListener('mouseover', sobre);
+            document.documentElement.removeEventListener('mouseleave', sair);
+            removeEventListener('blur', sair);
+        };
     }, []);
     return (
         <div className="v2-cursor" ref={ref} aria-hidden="true">
@@ -664,6 +685,8 @@ export default function HomeNodeV2() {
                 g.el.style.opacity = o.toFixed(3);
             }
             palco.style.setProperty('--ato', p.toFixed(3));
+            // camada de GPU só durante o ato
+            palco.classList.toggle('ativo', p > 0.002 && p < 0.998);
             // ondas enquanto o campo se alimenta...
             if (p > 0.34 && !pulsouA) { pulsouA = true; pulsar(); }
             if (p > 0.68 && !pulsouB) { pulsouB = true; pulsar(); }
@@ -1175,19 +1198,24 @@ export default function HomeNodeV2() {
         .v2 .nlp-footer-bottom{padding-bottom:52px}
 
         /* ── retículo ── */
+        /* O retículo é pintado exatamente sobre o ponteiro (sem inércia, ver o JS).
+           A troca de estado anima só transform/opacity — a primeira versão animava
+           width/height/left/top, que são layout e ainda por cima disputavam o
+           quadro com a posição. */
         .v2-cursor{display:none;position:fixed;left:0;top:0;z-index:120;pointer-events:none;
-          width:0;height:0;will-change:transform}
+          width:0;height:0;will-change:transform;transition:opacity .18s linear}
         .v2-cursor-anel{position:absolute;left:-13px;top:-13px;width:26px;height:26px;border-radius:50%;
           border:1px solid var(--accent-hi);opacity:.55;
-          transition:width var(--micro) var(--ease),height var(--micro) var(--ease),
-                     left var(--micro) var(--ease),top var(--micro) var(--ease),opacity var(--micro) var(--ease)}
-        .v2-cursor-h,.v2-cursor-v{position:absolute;background:var(--accent-hi);opacity:.85}
-        .v2-cursor-h{left:-1px;top:-1px;width:2px;height:2px;border-radius:50%}
-        .v2-cursor-v{display:none}
-        .v2-cursor.mira .v2-cursor-anel{left:-21px;top:-21px;width:42px;height:42px;opacity:.9}
-        /* vira mira quando encosta em algo clicável */
-        .v2-cursor.mira .v2-cursor-v{display:block;left:-1px;top:-30px;width:1px;height:12px}
-        .v2-cursor.mira .v2-cursor-h{left:-1px;top:18px;width:1px;height:12px;border-radius:0}
+          transition:transform var(--micro) var(--ease),opacity var(--micro) var(--ease)}
+        .v2-cursor-h,.v2-cursor-v{position:absolute;background:var(--accent-hi);opacity:.85;
+          transition:transform var(--micro) var(--ease),opacity var(--micro) var(--ease)}
+        /* ponto central: fica sempre no pixel do ponteiro */
+        .v2-cursor-h{left:-1.5px;top:-1.5px;width:3px;height:3px;border-radius:50%}
+        /* traços da mira: existem sempre, mas encolhidos a zero até precisar */
+        .v2-cursor-v{left:-.5px;top:-15px;width:1px;height:11px;transform:scaleY(0);transform-origin:bottom}
+        .v2-cursor.mira .v2-cursor-anel{transform:scale(1.62);opacity:.9}
+        .v2-cursor.mira .v2-cursor-v{transform:scaleY(1)}
+        .v2-cursor.mira .v2-cursor-h{transform:scale(.6);opacity:1}
 
         /* ── TRILHO: a fiação da página ──
            Vive na margem esquerda, fora do caminho do cérebro. A linha base é
@@ -1341,7 +1369,7 @@ export default function HomeNodeV2() {
            o que o elege container de rolagem — mas quem rola é a janela, então o
            sticky nunca engata. Prender por transform não depende de ancestral algum
            e ainda é composição pura. --pin vem do mesmo laço que move os glifos. */
-        .v2 .nlp-hero>.nlp-hero-in{gap:21px;will-change:transform;
+        .v2 .nlp-hero>.nlp-hero-in{gap:21px;
           transform:translate3d(0,var(--pin,0px),0)}
         @media(max-width:860px){
           .v2 .nlp-hero{padding-top:104px!important;padding-bottom:calc(68px + 62vh)!important}
@@ -1353,16 +1381,26 @@ export default function HomeNodeV2() {
         /* transform e opacity são escritos pelo laço de rolagem (JS): a trajetória é
            curva e converge, coisa que calc() em CSS não expressa (precisa de sin()).
            Aqui fica só a base — sem transição, senão o JS briga com a interpolação. */
-        .v2-glifo{display:inline-block;white-space:pre;will-change:transform,opacity;
-          transition:none!important}
+        /* will-change só ENQUANTO o ato roda. Deixá-lo fixo em 34 glifos + o palco
+           mantém uma camada de GPU por elemento viva a página toda, o que é o
+           oposto da otimização: a dica vira custo. A classe .ativo é ligada pelo
+           laço de rolagem e desligada nas duas pontas. */
+        .v2-glifo{display:inline-block;white-space:pre;transition:none!important}
+        .v2 .nlp-hero.ativo .v2-glifo{will-change:transform,opacity}
+        .v2 .nlp-hero.ativo>.nlp-hero-in{will-change:transform}
+        .v2 .nlp-hero.ativo .nlp-tese{will-change:transform,opacity}
 
         /* a TESE resiste: parte por último, e inteira — não se estilhaça.
            .nlp-tese não carrega a animação de entrada (ela está no ancestral),
            então o transform aqui é livre de conflito. */
-        .v2 .nlp-tese{display:inline-block;will-change:transform,opacity;
+        /* A tese é a ÚLTIMA a partir. A opacidade dela era linear desde o primeiro
+           pixel de rolagem, enquanto os glifos seguram opacidade cheia até 80% do
+           voo — na prática a promessa sumia antes da frase, o oposto da intenção.
+           Agora ela fica inteira até 72% da pista e só então se apaga. */
+        .v2 .nlp-tese{display:inline-block;
           transform:translate3d(calc(var(--ato,0) * 54px),calc(var(--ato,0) * -16px),0)
                     scale(calc(1 - var(--ato,0) * .14));
-          opacity:calc(1 - var(--ato,0) * 1.04)}
+          opacity:calc(1 - max(0, var(--ato,0) - .72) / .28)}
 
         /* Apoio, CTAs e números saem antes, pra frase ficar sozinha no fim.
            ARMADILHA: esses elementos já têm "animation ... both", que TRAVA
@@ -1391,6 +1429,26 @@ export default function HomeNodeV2() {
           border-radius:var(--r-pill);z-index:-1;backdrop-filter:blur(7px);
           background:radial-gradient(72% 56% at 78% 50%,rgba(8,9,12,.90),rgba(8,9,12,.55) 58%,transparent 82%);
           mask-image:radial-gradient(78% 60% at 78% 50%,#000 55%,transparent 88%)}
+
+        /* ── RODAPÉ COMO ATO ─────────────────────────────────────────────
+           Era três colunas e um copyright colado no fim. Ganha uma assinatura
+           vazada ocupando a largura inteira, que fecha a narrativa em vez de
+           só encerrar a página. Vazada (contorno) e não sólida: preenchida ela
+           competiria com o conteúdo em vez de emoldurá-lo. */
+        .v2 .nlp-footer{overflow:hidden;padding-top:96px}
+        .v2-assinatura{position:absolute;left:50%;bottom:-.16em;transform:translateX(-50%);
+          font-family:var(--font-display),sans-serif;font-weight:500;
+          font-size:clamp(6rem,19vw,17rem);line-height:.82;letter-spacing:-.05em;
+          white-space:nowrap;pointer-events:none;user-select:none;z-index:0;
+          color:transparent;-webkit-text-stroke:1px rgba(190,200,225,.13);
+          mask-image:linear-gradient(180deg,#000,transparent 88%)}
+        .v2 .nlp-footer .nlp-wrap{position:relative;z-index:1}
+        /* links do rodapé: sublinhado que se desenha, em vez de só mudar de cor */
+        .v2 .nlp-footer-col a{position:relative;padding-bottom:2px}
+        .v2 .nlp-footer-col a::after{content:'';position:absolute;left:0;right:100%;bottom:0;height:1px;
+          background:var(--accent-hi);transition:right var(--micro) var(--ease)}
+        .v2 .nlp-footer-col a:hover{transform:none}
+        .v2 .nlp-footer-col a:hover::after{right:0}
 
         /* CTA com halo respirando: o botão parece energizado, não pintado */
         .v2 .nlp-btn-solid{position:relative;overflow:hidden}
@@ -1706,6 +1764,9 @@ export default function HomeNodeV2() {
 
             {/* FOOTER */}
             <footer className="nlp-footer">
+                {/* v2: o rodapé deixa de ser sobra e vira o último ato — assinatura
+                    vazada ocupando a largura, sob a qual os links flutuam. */}
+                <span className="v2-assinatura" aria-hidden="true">NODE</span>
                 <div className="nlp-wrap">
                     <div className="nlp-footer-grid">
                         <div className="nlp-footer-col">
