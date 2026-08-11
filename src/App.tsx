@@ -5,10 +5,10 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType 
 import { ThemeProvider } from "next-themes";
 import { useEffect, lazy, Suspense } from "react";
 import { App as CapacitorApp } from "@capacitor/app";
-import NotFound from "./pages/NotFound";
-import HomeNode from "./pages/landing/home-node/page";
+// Só a HomeNodeV2 fica no pacote inicial: ela é a home e precisa pintar na hora.
+// A home antiga (rota /v1), as páginas de serviço e o 404 viram carregamento sob
+// demanda — não faz sentido todo visitante baixar rota de rollback.
 import HomeNodeV2 from "./pages/landing/home-node/page-v2";
-import ServicoPage from "./pages/landing/servicos/ServicoPage";
 
 
 import { ErrorBoundary } from "./components/ErrorBoundary";
@@ -26,6 +26,9 @@ const LandingRedirect = lazy(() => import("./components/LandingRedirect").then(m
 const AcademyProvider = lazy(() => import("./contexts/AcademyContext").then(m => ({ default: m.AcademyProvider })));
 const ProtectedRoute = lazy(() => import("./components/ProtectedRoute").then(m => ({ default: m.ProtectedRoute })));
 const AbacRoute = lazy(() => import("./components/AbacRoute").then(m => ({ default: m.AbacRoute })));
+const HomeNode = lazy(() => import("./pages/landing/home-node/page"));
+const ServicoPage = lazy(() => import("./pages/landing/servicos/ServicoPage"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 const AppShell = lazy(() => import("./AppShell"));
 const DashboardLayout = lazy(() => import("./components/DashboardLayout").then(m => ({ default: m.DashboardLayout })));
 const PortalLayout = lazy(() => import("./components/portal/PortalLayout").then(m => ({ default: m.PortalLayout })));

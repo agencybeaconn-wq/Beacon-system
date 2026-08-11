@@ -21,7 +21,7 @@ export const TOKENS = `
      Estavam colapsados numa duração só: cada botão levava 700ms pra reagir ao
      ponteiro, e o site inteiro lia como travado. Reveal lento é direção de arte;
      hover lento é bug de percepção. */
-  --dur:.7s;--micro:.18s;--ease:cubic-bezier(.22,1,.36,1);
+  --dur:.55s;--micro:.18s;--ease:cubic-bezier(.22,1,.36,1);
 
   /* RAIO — três degraus e a pílula. Antes eram 11/14/16/18/22/30px espalhados,
      que é ruído visível quando dois cards vizinhos têm cantos diferentes. */

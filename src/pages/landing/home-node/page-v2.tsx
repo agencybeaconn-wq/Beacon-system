@@ -535,7 +535,7 @@ export default function HomeNodeV2() {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setAbrindo(false); return; }
         let fechado = false;
         const fechar = () => { if (!fechado) { fechado = true; setAbrindo(false); } };
-        const teto = setTimeout(fechar, 1400);
+        const teto = setTimeout(fechar, 600);
         document.fonts?.ready.then(() => setTimeout(fechar, 240));
         return () => clearTimeout(teto);
     }, []);
@@ -658,7 +658,7 @@ export default function HomeNodeV2() {
         };
 
         // a pista precisa casar com o padding-bottom do palco no CSS (85vh / 62vh)
-        const pista = () => innerHeight * (innerWidth <= 860 ? 0.62 : 0.85);
+        const pista = () => innerHeight * (innerWidth <= 860 ? 0.45 : 0.55);
 
         const desenhar = () => {
             raf = 0;
@@ -1364,7 +1364,7 @@ export default function HomeNodeV2() {
            texto sairia de cena rolando, e o gesto não teria onde acontecer.
            A pista casa com o innerHeight*0.85 usado no cálculo do progresso. */
         .v2 .nlp-hero{min-height:auto!important;display:block!important;
-          padding-top:96px!important;padding-bottom:calc(76px + 85vh)!important}
+          padding-top:96px!important;padding-bottom:calc(76px + 55vh)!important}
         /* O pino NÃO é position:sticky. Um div do layout do app tem overflow-y:auto,
            o que o elege container de rolagem — mas quem rola é a janela, então o
            sticky nunca engata. Prender por transform não depende de ancestral algum
@@ -1372,7 +1372,7 @@ export default function HomeNodeV2() {
         .v2 .nlp-hero>.nlp-hero-in{gap:21px;
           transform:translate3d(0,var(--pin,0px),0)}
         @media(max-width:860px){
-          .v2 .nlp-hero{padding-top:104px!important;padding-bottom:calc(68px + 62vh)!important}
+          .v2 .nlp-hero{padding-top:104px!important;padding-bottom:calc(68px + 45vh)!important}
         }
 
         /* ── os glifos ──
