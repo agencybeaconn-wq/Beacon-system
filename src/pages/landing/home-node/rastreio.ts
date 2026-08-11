@@ -47,11 +47,17 @@ function carregar(): Promise<void> {
     carregando = (async () => {
         // os dois em paralelo; se um falhar, o outro ainda registra
         const [ph, sb] = await Promise.allSettled([
-            import('posthog-js'),
+            import('@/lib/posthog'),
             import('@/integrations/supabase/client'),
         ]);
-        const posthog = ph.status === 'fulfilled' ? ph.value.default : null;
+        // A landing inicializa o PostHog ela mesma: o provider do app não envolve
+        // mais as páginas públicas, então sem isto a medição da home morreria calada.
+        const posthog = ph.status === 'fulfilled' ? ph.value.garantirPostHog() : null;
         const supabase = sb.status === 'fulfilled' ? sb.value.supabase : null;
+
+        // o pageview era disparado pelo tracker do provider; nas públicas é aqui
+        try { posthog?.capture?.('$pageview', { $current_url: window.location.href }); }
+        catch { /* medição nunca atrapalha */ }
 
         // A tabela `landing_events` é nova e os tipos gerados do Supabase ainda não a
         // conhecem. Cast escopado só a esta chamada — o formato do payload continua

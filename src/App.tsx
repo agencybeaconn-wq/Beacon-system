@@ -12,7 +12,6 @@ import ServicoPage from "./pages/landing/servicos/ServicoPage";
 
 
 import { ErrorBoundary } from "./components/ErrorBoundary";
-import { PostHogProvider } from "./contexts/PostHogProvider";
 
 // ── Carregamento sob demanda ──────────────────────────────────────────────
 // A landing e o login ficam no pacote inicial (a home precisa pintar na hora e o
@@ -223,8 +222,7 @@ const App = () => (
       <DeepLinkHandler>
         <TooltipProvider>
                       <BrowserRouter>
-                        <PostHogProvider>
-                          <ErrorBoundary>
+                                                  <ErrorBoundary>
                             <RolarParaTopo />
                             <Suspense fallback={<RouteFallback />}>
                             <Routes>
@@ -911,7 +909,6 @@ const App = () => (
                             </Routes>
                             </Suspense>
                           </ErrorBoundary>
-                        </PostHogProvider>
                       </BrowserRouter>
         </TooltipProvider>
       </DeepLinkHandler>

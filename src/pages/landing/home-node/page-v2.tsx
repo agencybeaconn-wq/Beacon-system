@@ -1273,6 +1273,37 @@ export default function HomeNodeV2() {
         .v2 .nlp-oferta:hover::after,.v2 .nlp-caso:hover::after,.v2 .nlp-garantia:hover::after{
           opacity:.95;width:20px;height:20px}
 
+        /* ── CARDS COMO MÓDULOS ──────────────────────────────────────────
+           Eram retângulos com borda. Viram peças instrumentadas: barra de topo
+           com trilho de varredura, índice em mono virando identificador do
+           módulo, e uma malha fina que só aparece no hover — a camada de dado
+           que estava escondida. Tudo em pseudo-elemento: zero mudança de HTML. */
+        /* ATENÇÃO: ::before (brilho radial) e ::after (cantoneira) desses cards já
+           estão ocupados. Tudo aqui usa pseudo-elementos de FILHOS, que estão livres. */
+
+        /* cabeçalho de instrumento: hairline separando o identificador do corpo */
+        .v2 .nlp-oferta-num,.v2 .nlp-caso-cat{
+          display:flex;align-items:center;gap:9px;padding-bottom:12px;margin-bottom:2px;
+          border-bottom:1px solid rgba(190,200,225,.09)}
+        /* malha de dado sob o conteúdo, revelada quando o módulo acende */
+        .v2 .nlp-oferta>*,.v2 .nlp-caso>*{position:relative;z-index:1}
+        .v2 .nlp-oferta-grupo{position:relative}
+        .v2 .nlp-oferta-grupo::after{content:'';position:absolute;inset:-10px -12px;z-index:-1;
+          pointer-events:none;opacity:0;transition:opacity .45s var(--ease);
+          background-image:
+            linear-gradient(rgba(190,200,225,.055) 1px,transparent 1px),
+            linear-gradient(90deg,rgba(190,200,225,.055) 1px,transparent 1px);
+          background-size:20px 20px;
+          mask-image:radial-gradient(80% 70% at 50% 50%,#000,transparent 78%)}
+        .v2 .nlp-oferta:hover .nlp-oferta-grupo::after{opacity:1}
+        /* o índice ganha ponto de status que acende no hover */
+        .v2 .nlp-oferta-num::before,.v2 .nlp-caso-cat::before{
+          content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);
+          box-shadow:0 0 8px var(--accent);opacity:.55;
+          transition:opacity var(--micro) var(--ease),transform var(--micro) var(--ease)}
+        .v2 .nlp-oferta:hover .nlp-oferta-num::before,
+        .v2 .nlp-caso:hover .nlp-caso-cat::before{opacity:1;transform:scale(1.35)}
+
         /* números com hairline embaixo: leitura de painel, não de banner */
         .v2 .nlp-stat b{position:relative;padding-bottom:8px}
         .v2 .nlp-stat b::after{content:'';position:absolute;left:0;bottom:0;width:22px;height:1px;

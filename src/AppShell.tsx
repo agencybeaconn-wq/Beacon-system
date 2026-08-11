@@ -15,6 +15,7 @@
  * dependência entre eles (Permissões lê Auth, Tarefas lê Dashboard, etc.).
  */
 import { Outlet } from 'react-router-dom';
+import { PostHogProvider } from './contexts/PostHogProvider';
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { AccountTypeProvider } from './contexts/AccountTypeContext';
@@ -27,6 +28,7 @@ import { AccountWizardContainer } from './components/AccountWizardContainer';
 
 export default function AppShell() {
     return (
+        <PostHogProvider>
         <AccountTypeProvider>
             <AuthProvider>
                 <DashboardProvider>
@@ -43,5 +45,6 @@ export default function AppShell() {
                 </DashboardProvider>
             </AuthProvider>
         </AccountTypeProvider>
+        </PostHogProvider>
     );
 }
