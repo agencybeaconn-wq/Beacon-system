@@ -219,7 +219,7 @@ const InsightsPage = () => {
 
     if (!selectedAccountId) {
         return (
-            <div className="flex-1 flex items-center justify-center min-h-screen bg-background">
+            <div className="flex-1 flex items-center justify-center min-h-screen bg-transparent">
                 <div className="text-center">
                     <Sparkles className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
                     <h2 className="text-xl font-semibold mb-2">{t('insights.select_account', 'Select an Account')}</h2>
@@ -230,7 +230,7 @@ const InsightsPage = () => {
     }
 
     return (
-        <div className="flex-1 space-y-8 pt-2 px-4 md:pt-2 md:px-8 pb-8 min-h-screen bg-background">
+        <div className="flex-1 space-y-8 pt-2 px-4 md:pt-2 md:px-8 pb-8 min-h-screen bg-transparent">
 
             {/* HEADER SECTION */}
             {/* HEADER SECTION */}

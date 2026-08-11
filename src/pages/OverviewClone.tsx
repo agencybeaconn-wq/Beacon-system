@@ -417,7 +417,7 @@ const OverviewClone = ({ topKpiSlot, clientIdOverride }: OverviewCloneProps = {}
     }, [chartsData.financialEvolution, chartsData.hourlyEvolution, dateFilter, selectedClientId, combinedMetrics, orders, shopify.orders, shopifyConnected, profitSettings, totalSupplierPayments, dailyBreakdown, dateRange]);
 
     return (
-        <div className="flex flex-col gap-6 p-6 min-h-screen bg-background text-foreground overflow-x-hidden">
+        <div className="flex flex-col gap-6 p-6 min-h-screen bg-transparent text-foreground overflow-x-hidden">
             {/* HEADER + DATE FILTER */}
             <DateRangeFilter
                 value={dateFilter}

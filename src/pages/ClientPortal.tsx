@@ -80,7 +80,7 @@ export default function ClientPortal() {
     // Error state
     if (error) {
         return (
-            <div className="min-h-screen bg-background flex items-center justify-center p-4">
+            <div className="min-h-screen bg-transparent flex items-center justify-center p-4">
                 <Card className="max-w-md w-full">
                     <div className="pt-6 text-center p-6">
                         <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
@@ -99,7 +99,7 @@ export default function ClientPortal() {
     // Loading state - same style as Overview
     if (isLoading || !data) {
         return (
-            <div className="flex-1 space-y-6 pt-4 px-4 md:pt-6 md:px-8 pb-8 bg-background min-h-screen">
+            <div className="flex-1 space-y-6 pt-4 px-4 md:pt-6 md:px-8 pb-8 bg-transparent min-h-screen">
                 <div className="flex items-center justify-between">
                     <Skeleton className="h-10 w-48" />
                     <Skeleton className="h-10 w-32" />
@@ -138,7 +138,7 @@ export default function ClientPortal() {
     };
 
     return (
-        <div className="flex-1 space-y-6 pt-4 px-4 md:pt-6 md:px-8 pb-8 bg-background min-h-screen">
+        <div className="flex-1 space-y-6 pt-4 px-4 md:pt-6 md:px-8 pb-8 bg-transparent min-h-screen">
             {/* Header - Same style as Overview */}
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                 <div className="space-y-1">

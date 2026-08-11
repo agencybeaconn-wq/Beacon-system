@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { CalendarIcon } from "lucide-react"
-import { addDays, format, subDays } from "date-fns"
+import { format, subDays, subMonths, startOfMonth, endOfMonth } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import { DateRange } from "react-day-picker"
 
@@ -22,6 +22,16 @@ interface DateRangePickerProps extends React.HTMLAttributes<HTMLDivElement> {
     showPresets?: boolean
 }
 
+/**
+ * Seletor de período no comportamento nativo do react-day-picker:
+ * 1º clique marca o início, 2º clique fecha o intervalo (em qualquer ordem —
+ * clicar pra tras funciona), 3º clique começa intervalo novo. O popover NAO
+ * fecha sozinho: o usuário ajusta a vontade e commita no "Aplicar".
+ *
+ * A versão anterior tinha uma máquina de estados própria por cima do rdp que
+ * quebrava a seleção retroativa (colapsava pra dia único) e fechava o popover
+ * no segundo clique — impossível refinar o período.
+ */
 export function DateRangePicker({
     className,
     dateRange,
@@ -30,101 +40,37 @@ export function DateRangePicker({
     showPresets = true,
 }: DateRangePickerProps) {
     const [isOpen, setIsOpen] = React.useState(false)
-    // Track if we're in the process of selecting (first click made, waiting for second)
-    const [isSelecting, setIsSelecting] = React.useState(false)
-    // Temporary range for visual feedback during selection
-    const [tempRange, setTempRange] = React.useState<DateRange | undefined>(undefined)
+    // Rascunho local: o pai (que geralmente refaz fetch a cada mudança) só
+    // recebe o range no Aplicar/preset — nunca um intervalo meio-aberto.
+    const [draft, setDraft] = React.useState<DateRange | undefined>(dateRange)
 
-    const presets = [
-        {
-            label: "Hoje",
-            value: { from: new Date(), to: new Date() },
-        },
-        {
-            label: "Últimos 7 dias",
-            value: { from: subDays(new Date(), 6), to: new Date() },
-        },
-        {
-            label: "Últimos 30 dias",
-            value: { from: subDays(new Date(), 29), to: new Date() },
-        },
-        {
-            label: "Este mês",
-            value: {
-                from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-                to: new Date()
-            },
-        },
+    // Reabriu → rascunho parte do valor commitado atual
+    React.useEffect(() => {
+        if (isOpen) setDraft(dateRange)
+    }, [isOpen, dateRange])
+
+    const today = new Date()
+    const prevMonth = subMonths(today, 1)
+
+    const presets: Array<{ label: string; value: DateRange }> = [
+        { label: "Hoje", value: { from: today, to: today } },
+        { label: "Últimos 7 dias", value: { from: subDays(today, 6), to: today } },
+        { label: "Últimos 30 dias", value: { from: subDays(today, 29), to: today } },
+        { label: "Este mês", value: { from: startOfMonth(today), to: today } },
+        // Mês anterior COMPLETO — do dia 1 ao último dia
+        { label: "Mês anterior", value: { from: startOfMonth(prevMonth), to: endOfMonth(prevMonth) } },
     ]
 
-    const handlePresetClick = (preset: { from: Date; to: Date }) => {
-        onDateRangeChange(preset)
-        setTempRange(undefined)
-        setIsSelecting(false)
+    const commit = (range: DateRange | undefined) => {
+        onDateRangeChange(range)
         setIsOpen(false)
     }
 
-    // Handle the range selection with proper reset behavior
-    const handleSelect = (range: DateRange | undefined) => {
-        if (!range) {
-            setTempRange(undefined)
-            setIsSelecting(false)
-            return
-        }
-
-        // If we already have a complete range OR we're not in selecting mode,
-        // clicking a new date should start a fresh selection
-        if ((dateRange?.from && dateRange?.to && !isSelecting) || (!isSelecting && !tempRange)) {
-            // Start fresh with the clicked date as 'from'
-            setTempRange({ from: range.from, to: undefined })
-            setIsSelecting(true)
-            return
-        }
-
-        // If we're in selecting mode (have a 'from', waiting for 'to')
-        if (isSelecting && tempRange?.from) {
-            if (range.to) {
-                // Range is complete (from and to selected)
-                onDateRangeChange({ from: tempRange.from, to: range.to })
-                setTempRange(undefined)
-                setIsSelecting(false)
-                setIsOpen(false)
-            } else if (range.from && !range.to) {
-                // User clicked the same date or re-clicked - check if it's the same as tempRange.from
-                if (range.from.getTime() === tempRange.from.getTime()) {
-                    // Same date clicked twice = single day selection
-                    onDateRangeChange({ from: range.from, to: range.from })
-                    setTempRange(undefined)
-                    setIsSelecting(false)
-                    setIsOpen(false)
-                } else {
-                    // User moved to a different date, calculate range
-                    const isRangeForward = range.from >= tempRange.from
-                    onDateRangeChange({
-                        from: isRangeForward ? tempRange.from : range.from,
-                        to: isRangeForward ? range.from : tempRange.from
-                    })
-                    setTempRange(undefined)
-                    setIsSelecting(false)
-                    setIsOpen(false)
-                }
-            }
-        }
-    }
-
-    // Displayed range: during selection show temp, otherwise show final
-    const displayedRange = isSelecting && tempRange ? tempRange : dateRange
+    const applyDisabled = !draft?.from
 
     return (
         <div className={cn("grid gap-2", className)}>
-            <Popover open={isOpen} onOpenChange={(open) => {
-                setIsOpen(open)
-                // Reset temp state when closing
-                if (!open) {
-                    setTempRange(undefined)
-                    setIsSelecting(false)
-                }
-            }}>
+            <Popover open={isOpen} onOpenChange={setIsOpen}>
                 <PopoverTrigger asChild>
                     <Button
                         id="date"
@@ -152,15 +98,15 @@ export function DateRangePicker({
                 <PopoverContent className="w-auto p-0" align={align}>
                     <div className="flex">
                         {showPresets && (
-                            <div className="flex flex-col gap-1 p-3 border-r border-border">
-                                <p className="text-xs font-medium text-muted-foreground mb-2">Atalhos</p>
+                            <div className="flex flex-col gap-1 p-3 border-r border-border/40">
+                                <p className="text-xs font-medium text-muted-foreground mb-2 px-2">Atalhos</p>
                                 {presets.map((preset) => (
                                     <Button
                                         key={preset.label}
                                         variant="ghost"
                                         size="sm"
                                         className="justify-start text-xs h-8"
-                                        onClick={() => handlePresetClick(preset.value)}
+                                        onClick={() => commit(preset.value)}
                                     >
                                         {preset.label}
                                     </Button>
@@ -171,18 +117,43 @@ export function DateRangePicker({
                             <Calendar
                                 initialFocus
                                 mode="range"
-                                defaultMonth={displayedRange?.from || new Date()}
-                                selected={displayedRange}
-                                onSelect={handleSelect}
+                                defaultMonth={draft?.from || dateRange?.from || today}
+                                selected={draft}
+                                onSelect={setDraft}
                                 numberOfMonths={2}
                                 locale={ptBR}
-                                className="rounded-md"
                             />
-                            {isSelecting && tempRange?.from && (
-                                <p className="text-xs text-muted-foreground text-center mt-2">
-                                    Selecionado: {format(tempRange.from, "dd MMM", { locale: ptBR })} - Clique na data final
+                            <div className="flex items-center justify-between gap-2 mt-2 pt-2 border-t border-border/40">
+                                <p className="text-xs text-muted-foreground px-1">
+                                    {draft?.from && !draft?.to && "Clique na data final"}
+                                    {draft?.from && draft?.to &&
+                                        `${format(draft.from, "dd MMM", { locale: ptBR })} – ${format(draft.to, "dd MMM", { locale: ptBR })}`}
+                                    {!draft?.from && "Clique na data inicial"}
                                 </p>
-                            )}
+                                <div className="flex items-center gap-2">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="h-8 text-xs"
+                                        onClick={() => setDraft(undefined)}
+                                    >
+                                        Limpar
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        className="h-8 text-xs px-4"
+                                        disabled={applyDisabled}
+                                        onClick={() => {
+                                            // Range meio-aberto (1 clique só) = dia único
+                                            if (draft?.from) {
+                                                commit({ from: draft.from, to: draft.to ?? draft.from })
+                                            }
+                                        }}
+                                    >
+                                        Aplicar
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </PopoverContent>

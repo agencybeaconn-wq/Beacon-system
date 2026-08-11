@@ -1,4 +1,13 @@
-import { Home, Library, LayoutDashboard, BookOpen, Video, Users, MessageSquare } from 'lucide-react';
+// Heroicons: mesma família dos outros sidebars (desenho SF Symbols)
+import {
+  HomeIcon,
+  RectangleStackIcon,
+  Squares2X2Icon,
+  BookOpenIcon,
+  VideoCameraIcon,
+  UserGroupIcon,
+  ChatBubbleLeftRightIcon,
+} from '@heroicons/react/24/outline';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAcademyContext } from '@/contexts/AcademyContext';
@@ -12,20 +21,20 @@ export function AcademySidebar({ onNavigate }: { onNavigate?: () => void }) {
   const { isAdmin } = useAcademyContext();
 
   const items: MenuItem[] = [
-    { title: 'Início', icon: Home, path: '/academy' },
-    { title: 'Meus Cursos', icon: Library, path: '/academy/meus-cursos' },
+    { title: 'Início', icon: HomeIcon, path: '/academy' },
+    { title: 'Meus Cursos', icon: RectangleStackIcon, path: '/academy/meus-cursos' },
   ];
 
   const adminItems: MenuItem[] = [
-    { title: 'Visão Geral', icon: LayoutDashboard, path: '/academy/admin' },
-    { title: 'Módulos', icon: BookOpen, path: '/academy/admin/modulos' },
-    { title: 'Aulas', icon: Video, path: '/academy/admin/aulas' },
-    { title: 'Alunos', icon: Users, path: '/academy/admin/alunos' },
-    { title: 'Moderação', icon: MessageSquare, path: '/academy/admin/moderacao' },
+    { title: 'Visão Geral', icon: Squares2X2Icon, path: '/academy/admin' },
+    { title: 'Módulos', icon: BookOpenIcon, path: '/academy/admin/modulos' },
+    { title: 'Aulas', icon: VideoCameraIcon, path: '/academy/admin/aulas' },
+    { title: 'Alunos', icon: UserGroupIcon, path: '/academy/admin/alunos' },
+    { title: 'Moderação', icon: ChatBubbleLeftRightIcon, path: '/academy/admin/moderacao' },
   ];
 
   return (
-    <div className="w-full md:w-64 h-full border-r border-border/40 bg-card flex flex-col pt-6">
+    <div className="w-full md:w-64 h-full bg-transparent flex flex-col pt-6">
       <div className="px-6 mb-6">
         <AcademyLogo size="md" />
       </div>

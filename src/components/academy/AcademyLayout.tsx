@@ -43,12 +43,14 @@ export function AcademyLayout({ children, requireAdmin = false }: Props) {
   }
 
   return (
-    <div className="flex min-h-screen bg-background relative">
-      <div className="hidden md:block">
-        <AcademySidebar />
+    <div className="flex min-h-screen bg-transparent relative">
+      <div className="hidden md:block p-3 pr-0 h-screen sticky top-0">
+        <div className="mat-chrome-panel h-full overflow-hidden">
+          <AcademySidebar />
+        </div>
       </div>
       <div className="flex-1 flex flex-col min-w-0 h-screen">
-        <header className="md:hidden flex h-16 shrink-0 items-center justify-between border-b border-border/40 px-6 bg-background/95 backdrop-blur sticky top-0 z-50">
+        <header className="mat-chrome scroll-edge md:hidden flex h-16 shrink-0 items-center justify-between px-6 sticky top-0 z-50">
           <AcademyLogo size="sm" />
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
@@ -59,7 +61,7 @@ export function AcademyLayout({ children, requireAdmin = false }: Props) {
             </SheetContent>
           </Sheet>
         </header>
-        <main className="flex-1 overflow-y-auto bg-gradient-to-br from-background via-background to-primary/5">
+        <main className="flex-1 overflow-y-auto bg-transparent">
           <div className="px-4 md:px-6 lg:px-8 py-6 md:py-8 w-full">
             {children}
           </div>

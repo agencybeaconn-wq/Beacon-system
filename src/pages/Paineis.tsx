@@ -133,7 +133,7 @@ export default function Paineis() {
 
     if (analytics.isLoading) {
         return (
-            <div className="flex-1 min-h-screen w-full bg-background p-10 flex items-center justify-center">
+            <div className="flex-1 min-h-screen w-full bg-transparent p-10 flex items-center justify-center">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
         );
@@ -328,7 +328,7 @@ export default function Paineis() {
     const aiInsights = showAiAnalysis ? generateInsights() : [];
 
     return (
-        <div className="flex-1 min-h-screen w-full bg-background p-10 pt-10 space-y-8">
+        <div className="flex-1 min-h-screen w-full bg-transparent p-10 pt-10 space-y-8">
             {/* Header */}
             <div className="flex items-start justify-between">
                 <div>

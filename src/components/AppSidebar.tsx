@@ -77,7 +77,37 @@ import {
   Play,
   Settings2,
   Trophy,
+  Flag,
 } from "lucide-react";
+// Ícones do menu principal: Heroicons (desenho arredondado, espírito SF Symbols).
+// Lucide continua nos demais pontos do app.
+import {
+  ClipboardDocumentListIcon,
+  FlagIcon,
+  DocumentTextIcon,
+  UserGroupIcon,
+  TrophyIcon,
+  ClipboardDocumentCheckIcon,
+  FolderOpenIcon,
+  CurrencyDollarIcon,
+  LinkIcon as LinkIconHero,
+  AdjustmentsHorizontalIcon,
+  WalletIcon,
+  CubeIcon,
+  CalendarDaysIcon,
+  Cog6ToothIcon,
+} from "@heroicons/react/24/outline";
+// Variantes preenchidas pro item ATIVO (padrão iOS: outline em repouso, solid ativo)
+import {
+  ClipboardDocumentListIcon as ClipboardDocumentListSolid,
+  FlagIcon as FlagSolid,
+  DocumentTextIcon as DocumentTextSolid,
+  UserGroupIcon as UserGroupSolid,
+  WalletIcon as WalletSolid,
+  CubeIcon as CubeSolid,
+  CalendarDaysIcon as CalendarDaysSolid,
+  Cog6ToothIcon as Cog6ToothSolid,
+} from "@heroicons/react/24/solid";
 
 type IconComponent = LucideIcon | React.ComponentType<any>;
 
@@ -101,42 +131,43 @@ interface MenuItem {
 // O agrupamento visual é controlado pelo campo `section`, não por slice/index.
 const mainMenuItems: MenuItem[] = [
   // ─── Seção: Agência ───
-  { section: 'agency', title: "Demandas", transKey: "sidebar.tasks", url: "/tasks", icon: ClipboardList },
-  { section: 'agency', title: "Comercial", transKey: "sidebar.crm", url: "/comercial", icon: FileText },
+  { section: 'agency', title: "Demandas", transKey: "sidebar.tasks", url: "/tasks", icon: ClipboardDocumentListIcon },
+  { section: 'agency', title: "Prioridades", transKey: "sidebar.priorities", url: "/prioridades", icon: FlagIcon },
+  { section: 'agency', title: "Comercial", transKey: "sidebar.crm", url: "/comercial", icon: DocumentTextIcon },
   {
     section: 'agency',
     title: "Clientes",
     transKey: "sidebar.clients",
     url: "/clients",
-    icon: Users,
+    icon: UserGroupIcon,
     submenu: [
-      { title: "Ranking", transKey: "sidebar.clients_ranking", url: "/ranking-clientes", icon: Trophy },
-      { title: "Onboarding", transKey: "sidebar.onboarding", url: "/client-onboarding", icon: ClipboardCheck },
-      { title: "Briefing", transKey: "sidebar.client_briefing", url: "/client-briefing", icon: ClipboardList },
-      { title: "Documentos", transKey: "sidebar.files", url: "/documentos", icon: FolderOpen },
-      { title: "Preços", transKey: "sidebar.pricing", url: "/precos", icon: DollarSign },
-      { title: "Conexões", transKey: "sidebar.connections", url: "/client-connections", icon: Link },
-      { title: "Configurações", transKey: "sidebar.client_config", url: "/client-config", icon: Settings2 },
+      { title: "Ranking", transKey: "sidebar.clients_ranking", url: "/ranking-clientes", icon: TrophyIcon },
+      { title: "Onboarding", transKey: "sidebar.onboarding", url: "/client-onboarding", icon: ClipboardDocumentCheckIcon },
+      { title: "Briefing", transKey: "sidebar.client_briefing", url: "/client-briefing", icon: ClipboardDocumentListIcon },
+      { title: "Documentos", transKey: "sidebar.files", url: "/documentos", icon: FolderOpenIcon },
+      { title: "Preços", transKey: "sidebar.pricing", url: "/precos", icon: CurrencyDollarIcon },
+      { title: "Conexões", transKey: "sidebar.connections", url: "/client-connections", icon: LinkIconHero },
+      { title: "Configurações", transKey: "sidebar.client_config", url: "/client-config", icon: AdjustmentsHorizontalIcon },
     ]
   },
 
   // ─── Seção: Gestão e Ajustes ───
-  { section: 'management', title: "Financeiro Agência", transKey: "sidebar.financial_agency", url: "/financeiro", icon: Wallet },
-  { section: 'management', title: "Produtos", transKey: "sidebar.products", url: "/products", icon: Package },
+  { section: 'management', title: "Financeiro Agência", transKey: "sidebar.financial_agency", url: "/financeiro", icon: WalletIcon },
+  { section: 'management', title: "Produtos", transKey: "sidebar.products", url: "/products", icon: CubeIcon },
 
   {
     section: 'management',
     title: "Briefing",
     transKey: "sidebar.briefing",
-    icon: ClipboardList,
+    icon: ClipboardDocumentListIcon,
     submenu: [
-      { title: "Formulário", transKey: "sidebar.briefing_form", url: "/briefing/formulario", icon: FileText },
-      { title: "Arquivos", transKey: "sidebar.briefing_archive", url: "/briefing/arquivos", icon: FolderOpen },
+      { title: "Formulário", transKey: "sidebar.briefing_form", url: "/briefing/formulario", icon: DocumentTextIcon },
+      { title: "Arquivos", transKey: "sidebar.briefing_archive", url: "/briefing/arquivos", icon: FolderOpenIcon },
     ]
   },
 
-  { section: 'management', title: "Google Calendar", transKey: "sidebar.google_calendar", url: "/google-calendar", icon: Calendar },
-  { section: 'management', title: "Ajustes", transKey: "sidebar.settings", url: "/settings", icon: Settings },
+  { section: 'management', title: "Google Calendar", transKey: "sidebar.google_calendar", url: "/google-calendar", icon: CalendarDaysIcon },
+  { section: 'management', title: "Ajustes", transKey: "sidebar.settings", url: "/settings", icon: Cog6ToothIcon },
 ];
 
 export function AppSidebar() {
@@ -275,8 +306,21 @@ export function AppSidebar() {
     }
   };
 
-  const renderIcon = (Icon: IconComponent, className?: string) => {
-    return <Icon className={cn("h-[18px] w-[18px] shrink-0", className)} strokeWidth={1.5} />;
+  // Ativo = variante SOLID (preenchida), repouso = outline — padrão iOS.
+  const SOLID_MAP = new Map<IconComponent, IconComponent>([
+    [ClipboardDocumentListIcon, ClipboardDocumentListSolid],
+    [FlagIcon, FlagSolid],
+    [DocumentTextIcon, DocumentTextSolid],
+    [UserGroupIcon, UserGroupSolid],
+    [WalletIcon, WalletSolid],
+    [CubeIcon, CubeSolid],
+    [CalendarDaysIcon, CalendarDaysSolid],
+    [Cog6ToothIcon, Cog6ToothSolid],
+  ]);
+
+  const renderIcon = (Icon: IconComponent, className?: string, active = false) => {
+    const Resolved = active ? (SOLID_MAP.get(Icon) ?? Icon) : Icon;
+    return <Resolved className={cn("h-[18px] w-[18px] shrink-0", className)} strokeWidth={1.5} />;
   };
 
   const renderMenuItem = (item: MenuItem) => {
@@ -338,10 +382,8 @@ export function AppSidebar() {
                   }}
                   className="flex items-center gap-3 w-full"
                 >
-                  {isAnySubmenuActive && (
-                    <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-primary animate-in slide-in-from-left-1 duration-300" />
-                  )}
-                  {renderIcon(item.icon, isAnySubmenuActive ? "text-primary" : "text-muted-foreground group-hover/menu-item:text-primary")}
+                  {/* Ativo comunica por fill + icone solid — sem barrinha lateral (macOS) */}
+                  {renderIcon(item.icon, isAnySubmenuActive ? "text-primary" : "text-muted-foreground group-hover/menu-item:text-primary", isAnySubmenuActive)}
                   {!isCollapsed && (
                     <span className="text-left text-base font-medium tracking-tight truncate">{itemTitle}</span>
                   )}
@@ -400,9 +442,6 @@ export function AppSidebar() {
                                   : "text-muted-foreground hover:text-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                               )}
                             >
-                              {isSubActive && (
-                                <div className="absolute left-[-1px] top-0 bottom-0 w-[3px] bg-primary" />
-                              )}
                               {renderIcon(subItem.icon, cn("h-4 w-4 shrink-0 transition-colors", isSubActive ? "text-primary" : "text-muted-foreground group-hover/sub-item:text-primary"))}
                               <span className="tracking-tight">{subItem.transKey ? (t(subItem.transKey) === subItem.transKey ? subItem.title : t(subItem.transKey)) : subItem.title}</span>
                             </NavLink>
@@ -450,10 +489,7 @@ export function AppSidebar() {
                 onClick={handleNavClick}
                 className="flex items-center gap-3 w-full"
               >
-                {isActive && (
-                  <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-primary animate-in slide-in-from-left-1 duration-300" />
-                )}
-                {renderIcon(item.icon, isActive ? "text-primary" : "text-muted-foreground group-hover/menu-item:text-primary")}
+                {renderIcon(item.icon, isActive ? "text-primary" : "text-muted-foreground group-hover/menu-item:text-primary", isActive)}
                 {!isCollapsed && (
                   <span className="text-left text-base font-medium tracking-tight truncate">{itemTitle}</span>
                 )}
@@ -467,7 +503,7 @@ export function AppSidebar() {
 
   return (
     <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      <Sidebar collapsible="icon" className="border-r border-border bg-background">
+      <Sidebar collapsible="icon" variant="floating" className="border-0 bg-transparent">
         <div className={cn(
           "flex flex-col border-b border-border/40 transition-all duration-200 h-16 justify-center",
           isCollapsed ? "items-center px-0" : "px-5"

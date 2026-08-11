@@ -50,7 +50,7 @@ import {
 import { useDashboard } from "@/contexts/DashboardContext";
 import { useFinancials, ClientFinancialRow } from "@/hooks/useFinancials";
 import { supabase } from "@/integrations/supabase/client";
-import { format, parseISO } from "date-fns";
+import { format, parseISO, startOfMonth, endOfMonth, subMonths } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useOverviewMetrics } from "@/hooks/useOverviewMetrics";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -244,7 +244,7 @@ const SalesSummaryCards = ({
     return (
         <div className="grid gap-3 grid-cols-2 lg:grid-cols-7">
             {/* 1. MRR */}
-            <Card className="p-3 bg-background border border-border/50 hover:border-emerald-500/50 transition-colors">
+            <Card className="p-3 border border-border/50 hover:border-emerald-500/50 transition-colors">
                 <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-muted-foreground capitalize tracking-tight">MRR (Fixo)</span>
                     <TrendingUp className="h-3 w-3 text-emerald-500" />
@@ -255,7 +255,7 @@ const SalesSummaryCards = ({
             </Card>
 
             {/* 2. Total Faturado (Unificado) */}
-            <Card className="p-3 bg-background border border-border/50 hover:border-blue-500/50 transition-colors">
+            <Card className="p-3 border border-border/50 hover:border-blue-500/50 transition-colors">
                 <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-muted-foreground capitalize tracking-tight">Faturado Total</span>
                     <FileText className="h-3 w-3 text-blue-500" />
@@ -275,7 +275,7 @@ const SalesSummaryCards = ({
             </Card>
 
             {/* 3. Total Recebido (Unificado) */}
-            <Card className="p-3 bg-background border border-border/50 hover:border-emerald-500/50 transition-colors">
+            <Card className="p-3 border border-border/50 hover:border-emerald-500/50 transition-colors">
                 <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-muted-foreground capitalize tracking-tight">Recebido Total</span>
                     <Check className="h-3 w-3 text-emerald-500" />
@@ -288,7 +288,7 @@ const SalesSummaryCards = ({
             </Card>
 
             {/* 4. Total a Receber (Unificado) */}
-            <Card className="p-3 bg-background border border-border/50 hover:border-amber-500/50 transition-colors">
+            <Card className="p-3 border border-border/50 hover:border-amber-500/50 transition-colors">
                 <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-muted-foreground capitalize tracking-tight">A Receber</span>
                     <AlertTriangle className="h-3 w-3 text-amber-500" />
@@ -301,7 +301,7 @@ const SalesSummaryCards = ({
             </Card>
 
             {/* 5. Custos (Despesas + Colaboradores) */}
-            <Card className="p-3 bg-background border border-border/50 hover:border-destructive/50 transition-colors">
+            <Card className="p-3 border border-border/50 hover:border-destructive/50 transition-colors">
                 <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-muted-foreground capitalize tracking-tight">Custos Totais</span>
                     <Wallet className="h-3 w-3 text-destructive" />
@@ -312,7 +312,7 @@ const SalesSummaryCards = ({
             </Card>
 
             {/* 6. Comissões (pagas a indicadores no período) */}
-            <Card className="p-3 bg-background border border-border/50 hover:border-orange-500/50 transition-colors">
+            <Card className="p-3 border border-border/50 hover:border-orange-500/50 transition-colors">
                 <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-muted-foreground capitalize tracking-tight">Comissões</span>
                     <HandCoins className="h-3 w-3 text-orange-500" />
@@ -325,7 +325,7 @@ const SalesSummaryCards = ({
             </Card>
 
             {/* 7. Lucro Real */}
-            <Card className="p-3 bg-background border border-border/50 hover:border-purple-500/50 transition-colors">
+            <Card className="p-3 border border-border/50 hover:border-purple-500/50 transition-colors">
                 <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-muted-foreground capitalize tracking-tight">Lucro Real</span>
                     <BarChart3 className="h-3 w-3 text-purple-500" />
@@ -405,13 +405,21 @@ const Financeiro = () => {
     };
 
     const [calendarOpen, setCalendarOpen] = useState(false);
+    // Rascunho local: o filtro real só muda no Aplicar/preset — o popover não
+    // fecha sozinho no 2º clique, então dá pra ajustar o período à vontade.
+    const [draftRange, setDraftRange] = useState<DateRange | undefined>(undefined);
 
-    const handleCustomRange = (range: DateRange | undefined) => {
-        setDateRange(range as any);
-        if (range?.from && range?.to) {
-            setDateFilter("custom" as any);
-            setCalendarOpen(false); // Fecha só quando ambas datas selecionadas
-        }
+    const openCalendar = (open: boolean) => {
+        if (open) setDraftRange(dateRange as any);
+        setCalendarOpen(open);
+    };
+
+    const applyCustomRange = (range: DateRange | undefined) => {
+        if (!range?.from) return;
+        const complete = { from: range.from, to: range.to ?? range.from };
+        setDateRange(complete as any);
+        setDateFilter("custom" as any);
+        setCalendarOpen(false);
     };
 
     // Modal State
@@ -522,7 +530,7 @@ const Financeiro = () => {
 
     if (isLoading) {
         return (
-            <div className="flex-1 space-y-10 p-10 pt-10 min-h-screen w-full bg-background">
+            <div className="flex-1 space-y-10 p-10 pt-10 min-h-screen w-full bg-transparent">
                 <div className="flex items-start gap-4 mb-4">
                     <Skeleton className="p-3 w-14 h-14 rounded-xl shrink-0" />
                     <div className="space-y-2">
@@ -564,7 +572,7 @@ const Financeiro = () => {
     };
 
     return (
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 space-y-6 p-10 pt-10 min-h-screen w-full bg-background">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 space-y-6 p-10 pt-10 min-h-screen w-full bg-transparent">
             <div className="flex items-start justify-between mb-4">
                 <div>
                     <h1 className="text-3xl font-black tracking-tight text-foreground">Financeiro Agência</h1>
@@ -601,23 +609,68 @@ const Financeiro = () => {
                         >
                             {t('common.month', 'Month')}
                         </Button>
-                        <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                        <Popover open={calendarOpen} onOpenChange={openCalendar}>
                             <PopoverTrigger asChild>
                                 <Button
                                     variant={dateFilter === "custom" ? "default" : "ghost"}
                                     size="sm"
-                                    className={cn("rounded-sm h-7 px-2", dateFilter === "custom" && "font-semibold")}
+                                    className={cn("rounded-full h-7 px-2", dateFilter === "custom" && "font-semibold")}
                                 >
                                     <CalendarIcon className="h-3.5 w-3.5" />
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-auto p-0" align="end">
-                                <Calendar
-                                    mode="range"
-                                    selected={dateRange as any}
-                                    onSelect={handleCustomRange as any}
-                                    numberOfMonths={2}
-                                />
+                                <div className="p-3">
+                                    <Calendar
+                                        mode="range"
+                                        selected={draftRange as any}
+                                        onSelect={setDraftRange as any}
+                                        defaultMonth={(draftRange?.from as any) || (dateRange?.from as any) || new Date()}
+                                        numberOfMonths={2}
+                                        locale={ptBR}
+                                    />
+                                    <div className="flex items-center justify-between gap-2 mt-2 pt-2 border-t border-border/40">
+                                        <div className="flex items-center gap-1.5">
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-8 text-xs"
+                                                onClick={() => {
+                                                    const prev = subMonths(new Date(), 1);
+                                                    applyCustomRange({ from: startOfMonth(prev), to: endOfMonth(prev) });
+                                                }}
+                                            >
+                                                Mês anterior
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-8 text-xs"
+                                                onClick={() => applyCustomRange({ from: startOfMonth(new Date()), to: new Date() })}
+                                            >
+                                                Este mês
+                                            </Button>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-8 text-xs"
+                                                onClick={() => setDraftRange(undefined)}
+                                            >
+                                                Limpar
+                                            </Button>
+                                            <Button
+                                                size="sm"
+                                                className="h-8 text-xs px-4"
+                                                disabled={!draftRange?.from}
+                                                onClick={() => applyCustomRange(draftRange)}
+                                            >
+                                                Aplicar
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
                             </PopoverContent>
                         </Popover>
                     </div>

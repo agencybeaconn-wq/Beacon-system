@@ -17,7 +17,19 @@ const PopoverContent = React.forwardRef<
       align={align}
       sideOffset={sideOffset}
       className={cn(
-        "z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        // Material flutuante: mais leve e mais borrado que a chrome, porque
+        // puxa atencao pro elemento interativo (/apple-design §12).
+        "mat-float z-50 w-72 rounded-lg border border-border/50 p-4 text-popover-foreground outline-none",
+        // Ancoragem: a superficie cresce A PARTIR do trigger, nao do proprio
+        // centro. Sem isso a relacao espacial entre botao e conteudo some
+        // (§7). O Radix ja calcula a origem — bastava usar.
+        "origin-[var(--radix-popover-content-transform-origin)]",
+        // Entrada e saida pelo MESMO caminho, com as curvas espelhadas.
+        "data-[state=open]:animate-in data-[state=closed]:animate-out",
+        "data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0",
+        "data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95",
+        "data-[state=open]:ease-material-in data-[state=closed]:ease-material-out",
+        "data-[state=open]:duration-200 data-[state=closed]:duration-150",
         className,
       )}
       {...props}

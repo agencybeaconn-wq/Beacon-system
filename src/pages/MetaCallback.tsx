@@ -103,7 +103,7 @@ export default function MetaCallback() {
     }, [navigate, toast]);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-transparent">
             <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
             <h2 className="text-lg font-semibold text-foreground">{status}</h2>
         </div>

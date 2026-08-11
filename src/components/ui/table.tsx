@@ -12,7 +12,8 @@ const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableE
 Table.displayName = "Table";
 
 const TableHeader = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
-  ({ className, ...props }, ref) => <thead ref={ref} className={cn("[&_tr]:border-b border-border/40 bg-muted/20", className)} {...props} />,
+  // Grouped-list: header sem fundo proprio, so tipografia rebaixada.
+  ({ className, ...props }, ref) => <thead ref={ref} className={cn("[&_tr]:border-b [&_tr]:border-border/30", className)} {...props} />,
 );
 TableHeader.displayName = "TableHeader";
 
@@ -35,7 +36,8 @@ const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTML
     <tr
       ref={ref}
       className={cn(
-        "border-b border-border/40 transition-all duration-200 data-[state=selected]:bg-muted/50 hover:bg-white/[0.03] dark:hover:bg-white/[0.05]",
+        // Divisor sutil (grouped-list), hover como fill do iOS, sem borda dura.
+        "border-b border-border/25 transition-colors duration-150 data-[state=selected]:bg-muted/50 hover:bg-foreground/[0.035]",
         className
       )}
       {...props}
@@ -49,7 +51,8 @@ const TableHead = React.forwardRef<HTMLTableCellElement, React.ThHTMLAttributes<
     <th
       ref={ref}
       className={cn(
-        "h-10 px-4 text-left align-middle font-semibold text-muted-foreground uppercase tracking-widest text-[10px] [&:has([role=checkbox])]:pr-0",
+        // Header estilo iOS: footnote medium, sem CAPS gritado nem tracking largo.
+        "h-11 px-4 text-left align-middle text-[13px] font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
         className,
       )}
       {...props}

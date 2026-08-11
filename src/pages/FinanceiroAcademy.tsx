@@ -53,7 +53,7 @@ const FinanceiroAcademy = () => {
 
     if (academyData.isLoading) {
         return (
-            <div className="flex-1 space-y-10 p-10 pt-10 min-h-screen w-full bg-background">
+            <div className="flex-1 space-y-10 p-10 pt-10 min-h-screen w-full bg-transparent">
                 <div className="flex items-start gap-4 mb-4">
                     <Skeleton className="p-3 w-14 h-14 rounded-xl shrink-0" />
                     <div className="space-y-2">
@@ -77,7 +77,7 @@ const FinanceiroAcademy = () => {
     }
 
     return (
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 space-y-6 p-10 pt-10 min-h-screen w-full bg-background">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 space-y-6 p-10 pt-10 min-h-screen w-full bg-transparent">
             <div className="flex items-start justify-between mb-4">
                 <div>
                     <h1 className="text-3xl font-black tracking-tight text-foreground">Financeiro Academy</h1>

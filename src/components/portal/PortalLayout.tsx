@@ -35,7 +35,7 @@ export function PortalLayout({ children }: { children: React.ReactNode }) {
     // enquanto a identidade não resolve, spinner — não decide portal-sim/não com dado transitório).
     if (isLoading || isPendingIdentity) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-background">
+            <div className="min-h-screen flex items-center justify-center bg-transparent">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
         );
@@ -49,7 +49,7 @@ export function PortalLayout({ children }: { children: React.ReactNode }) {
 
     return (
         <PermissionGuard action="read" resource="solicitacoes">
-            <div className="flex min-h-screen bg-background relative">
+            <div className="flex min-h-screen bg-transparent relative">
                 {/* Desktop Sidebar */}
                 <div className="hidden md:block">
                     <PortalSidebar />
@@ -57,7 +57,7 @@ export function PortalLayout({ children }: { children: React.ReactNode }) {
 
                 {/* Mobile Header and Menu */}
                 <div className="flex-1 flex flex-col min-w-0 h-screen">
-                    <header className="md:hidden flex h-16 shrink-0 items-center justify-between border-b border-border/10 px-6 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+                    <header className="mat-chrome scroll-edge md:hidden flex h-16 shrink-0 items-center justify-between px-6 w-full sticky top-0 z-50">
                         <PortalLogo size="sm" />
 
                         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -72,7 +72,7 @@ export function PortalLayout({ children }: { children: React.ReactNode }) {
                         </Sheet>
                     </header>
 
-                    <main className="flex-1 overflow-y-auto bg-gradient-to-br from-background via-background to-primary/5">
+                    <main className="flex-1 overflow-y-auto bg-transparent">
                         {location.pathname === '/portal/biblioteca' ? (
                             /* Biblioteca: full edge-to-edge, sem padding */
                             <>{children}</>

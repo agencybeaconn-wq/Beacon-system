@@ -3,6 +3,8 @@ import { Task } from "@/types/lever-os";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, CalendarClock, Loader2, CheckCircle2, Pencil, Trash2, Search, Filter, X, ExternalLink, Clock, Plus, Archive } from "lucide-react";
+import { motion } from "framer-motion";
+import { spring } from "@/lib/springs";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { useAgencyTeam } from "@/hooks/useAgencyTeam";
@@ -108,8 +110,6 @@ export function TasksView({
     const [filterPriority, setFilterPriority] = useState<string>("all");
     const [filterCategory, setFilterCategory] = useState<string>("all");
     const [filterAssignee, setFilterAssignee] = useState<string>("all");
-    // Ciclo de vida das concluídas: 'quadro' = board (Concluído ≤7d) | 'finalizadas' = aba (7-14d)
-    const [boardView, setBoardView] = useState<'quadro' | 'finalizadas'>('quadro');
 
     const { canEdit, isAdmin } = usePermissions();
     const canEditDemands = canEdit('demands') && !readOnly;
@@ -231,25 +231,21 @@ export function TasksView({
         });
 
         // Ciclo de vida das CONCLUÍDAS (sem cron, por completed_at):
-        //   board "Concluído" = ≤7 dias · aba "Finalizadas" = 7-14 dias · >14 dias somem.
-        //   archived_at (manual) esconde de tudo.
+        //   board "Concluído" = ≤7 dias · depois some (arquiva/exclui manual continua valendo).
+        //   A antiga aba "Finalizadas" (7-14d) foi removida a pedido — sem estado intermediário.
         const nowMs = Date.now();
         const ageDays = (t: Task) => t.completedAt ? (nowMs - new Date(t.completedAt).getTime()) / 86400000 : Infinity;
         const byCompletedDesc = (a: Task, b: Task) =>
             new Date(b.completedAt || 0).getTime() - new Date(a.completedAt || 0).getTime();
         const concluidasVivas = (acc['concluido'] || []).filter(t => !t.archivedAt);
         acc['concluido'] = concluidasVivas.filter(t => ageDays(t) <= 7).sort(byCompletedDesc);
-        acc['finalizadas'] = concluidasVivas.filter(t => { const d = ageDays(t); return d > 7 && d <= 14; }).sort(byCompletedDesc);
 
         return acc;
     }, [localTasks, columns]);
 
-    // Colunas sintéticas pro ciclo de vida das concluídas (não dependem do flag hidden do DB).
+    // Coluna sintética pro ciclo de vida das concluídas (não depende do flag hidden do DB).
     const SYNTH_CONCLUIDO = { id: 'concluido', title: 'Concluído', position: 90, color: 'bg-emerald-500' } as TaskColumn;
-    const SYNTH_FINALIZADAS = { id: 'finalizadas', title: 'Finalizadas', position: 91, color: 'bg-teal-500' } as TaskColumn;
-    const renderColumns: TaskColumn[] = boardView === 'finalizadas'
-        ? [SYNTH_FINALIZADAS]
-        : [...columns, SYNTH_CONCLUIDO];
+    const renderColumns: TaskColumn[] = [...columns, SYNTH_CONCLUIDO];
 
     const [targetTask, setTargetTask] = useState<string | null>(null);
     const [dropSide, setDropSide] = useState<'top' | 'bottom' | null>(null);
@@ -319,8 +315,6 @@ export function TasksView({
     const handleDrop = async (e: React.DragEvent, targetStatus: string) => {
         e.preventDefault();
         if (!canEditDemands || !draggedTask) return;
-        // "finalizadas" é uma aba só-leitura (bucket por data), não um status real — não aceita drop.
-        if (targetStatus === 'finalizadas') return;
 
         // Decide new position
         let newPosition = 0;
@@ -616,27 +610,6 @@ export function TasksView({
                 )}
             </div>
 
-            <div className="flex items-center gap-1 mb-3">
-                <Button
-                    variant={boardView === 'quadro' ? 'secondary' : 'ghost'}
-                    size="sm"
-                    className="h-8 rounded-lg text-xs font-semibold"
-                    onClick={() => setBoardView('quadro')}
-                >
-                    Quadro
-                </Button>
-                <Button
-                    variant={boardView === 'finalizadas' ? 'secondary' : 'ghost'}
-                    size="sm"
-                    className="h-8 rounded-lg text-xs font-semibold"
-                    onClick={() => setBoardView('finalizadas')}
-                >
-                    Finalizadas
-                    <span className="ml-1.5 text-[10px] font-black text-muted-foreground bg-muted px-1.5 py-0.5 rounded-full">
-                        {(tasksByStatus['finalizadas'] || []).length}
-                    </span>
-                </Button>
-            </div>
 
             <div
                 ref={scrollContainerRef}
@@ -651,13 +624,13 @@ export function TasksView({
             >
                 {renderColumns.map((col, colIdx) => {
                     const colTasks = tasksByStatus[col.id] || [];
-                    const isSynthetic = col.id === 'concluido' || col.id === 'finalizadas';
+                    const isSynthetic = col.id === 'concluido';
 
                     return (
                         <div
                             key={col.id}
                             className={cn(
-                                "flex flex-col h-full min-w-[200px] flex-1 rounded-2xl bg-muted/20 border border-border/50 transition-all group/column shrink-0",
+                                "flex flex-col h-full min-w-[260px] flex-1 rounded-2xl bg-muted/20 border border-border/50 transition-all group/column shrink-0",
                                 "shadow-[0_2px_10px_-3px_rgba(0,0,0,0.07)] hover:shadow-[0_4px_20px_-5px_rgba(0,0,0,0.1)]",
                                 draggedTask && "border-dashed border-primary/50"
                             )}
@@ -733,6 +706,11 @@ export function TasksView({
                                                 <div className="h-16 border-2 border-dashed border-primary/30 rounded-2xl bg-primary/5 mx-0.5 shrink-0 pointer-events-none" />
                                             )}
 
+                                            {/* motion.div POR FORA do card: `layout` faz os vizinhos
+                                                reacomodarem com spring físico quando um card muda de
+                                                lugar. O drag HTML5 fica no div interno — motion.div
+                                                intercepta onDragStart, então não podem coexistir. */}
+                                            <motion.div layout transition={spring.move} className="shrink-0">
                                             <div
                                                 data-task-id={task.id}
                                                 draggable={canEditDemands}
@@ -820,8 +798,9 @@ export function TasksView({
                                                         )}
                                                     </div>
 
-                                                    {/* Footer Info */}
-                                                    <div className="flex items-center justify-between pt-2 border-t border-dashed border-border/40">
+                                                    {/* Footer Info — flex-wrap + nowrap nos itens: em coluna estreita
+                                                        a linha quebra INTEIRA pra baixo, nunca esmaga a data no meio. */}
+                                                    <div className="flex flex-wrap items-center justify-between gap-y-1.5 pt-2 border-t border-dashed border-border/40">
                                                         <div className="flex items-center gap-3 text-muted-foreground">
                                                             {/* Drive Link Shortcut */}
                                                             {task.drive_links && task.drive_links.length > 0 && (
@@ -846,7 +825,7 @@ export function TasksView({
                                                             )}
                                                         </div>
 
-                                                        <div className="flex items-center gap-2.5">
+                                                        <div className="flex items-center gap-2.5 whitespace-nowrap">
                                                             {/* Created Date */}
                                                             <div className="flex items-center gap-1 text-[10px] text-muted-foreground/60 font-medium">
                                                                 <Clock className="w-2.5 h-2.5" />
@@ -897,6 +876,7 @@ export function TasksView({
                                                     </div>
                                                 </div>
                                             </div>
+                                            </motion.div>
 
                                             {targetTask === task.id && dropSide === 'bottom' && (
                                                 <div className="h-16 border-2 border-dashed border-primary/30 rounded-2xl bg-primary/5 mx-0.5 shrink-0 pointer-events-none" />
@@ -924,7 +904,7 @@ export function TasksView({
                 {/* Add Column */}
                 {canEditDemands && (
                     <div
-                        className="flex flex-col h-full min-w-[200px] flex-1 rounded-2xl border-2 border-dashed border-border/20 hover:border-primary/30 hover:bg-primary/5 transition-all group/addcol shrink-0 cursor-pointer"
+                        className="flex flex-col h-full min-w-[260px] flex-1 rounded-2xl border-2 border-dashed border-border/20 hover:border-primary/30 hover:bg-primary/5 transition-all group/addcol shrink-0 cursor-pointer"
                         onClick={() => setIsAddColumnOpen(true)}
                     >
                         <div className="flex-1 flex flex-col items-center justify-center gap-3 min-h-[400px] max-h-[calc(100vh-320px)]">

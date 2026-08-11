@@ -1,9 +1,10 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
+import { spring } from "@/lib/springs";
 
 const Dialog = DialogPrimitive.Root;
 
@@ -20,7 +21,11 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      // Escurecer pra focar: tarefa MODAL bloqueia o fluxo, entao leva scrim.
+      // Painel paralelo nao-bloqueante nao leva — senao corta o fluxo (§12).
+      // `bg-black/80` era escuro demais: some com o contexto em vez de
+      // empurra-lo pra tras. O token fica em 0.28 no claro / 0.55 no escuro.
+      "mat-scrim fixed inset-0 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className,
     )}
     {...props}
@@ -40,12 +45,16 @@ const DialogContent = React.forwardRef<
       {...props}
     >
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, x: "-50%", y: "-50%" }}
+        initial={{ opacity: 0, scale: 0.96, x: "-50%", y: "-50%" }}
         animate={{ opacity: 1, scale: 1, x: "-50%", y: "-50%" }}
-        exit={{ opacity: 0, scale: 0.95, x: "-50%", y: "-50%" }}
-        transition={{ type: "spring", stiffness: 260, damping: 20 }}
+        exit={{ opacity: 0, scale: 0.96, x: "-50%", y: "-50%" }}
+        // `spring.panel` = damping 1.0 / response 0.42 — criticamente amortecido.
+        // O valor anterior (stiffness 260, damping 20) da razao ~0.62: o modal
+        // quicava ao abrir. Overshoot so quando o GESTO carregou momento; um
+        // modal que apenas apareceu nao carregou nada (/apple-design §4).
+        transition={spring.panel}
         className={cn(
-          "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg gap-4 border bg-background p-6 shadow-lg sm:rounded-lg",
+          "mat-sheet fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg gap-4 border border-border/50 p-6 sm:rounded-xl",
           className,
         )}
       >

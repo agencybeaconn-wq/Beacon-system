@@ -193,7 +193,7 @@ const AcceptInvite = () => {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen w-full flex items-center justify-center bg-background">
+            <div className="min-h-screen w-full flex items-center justify-center bg-transparent">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
         );
@@ -201,7 +201,7 @@ const AcceptInvite = () => {
 
     if (error) {
         return (
-            <div className="min-h-screen w-full flex items-center justify-center p-4 bg-background">
+            <div className="min-h-screen w-full flex items-center justify-center p-4 bg-transparent">
                 <div className="w-full max-w-md text-center space-y-6">
                     <div className="flex items-end justify-center gap-0">
                         <img src={leverLogo} alt="NODE" className="h-12 w-auto" />
@@ -218,7 +218,7 @@ const AcceptInvite = () => {
     }
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center p-4 bg-background">
+        <div className="min-h-screen w-full flex items-center justify-center p-4 bg-transparent">
             <div className="w-full max-w-md space-y-8">
                 {/* Logo */}
                 <div className="text-left space-y-4 mb-6">

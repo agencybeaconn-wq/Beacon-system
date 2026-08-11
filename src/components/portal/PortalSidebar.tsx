@@ -1,5 +1,12 @@
-import { PlusCircle, LayoutDashboard, FileText, LucideIcon } from "lucide-react";
+// Heroicons: desenho arredondado, espírito SF Symbols
+import {
+    PlusCircleIcon,
+    Squares2X2Icon,
+    DocumentTextIcon,
+    ArchiveBoxIcon,
+} from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
+import { type ElementType } from "react";
 import { cn } from "@/lib/utils";
 import { useDashboard } from "@/contexts/DashboardContext";
 import { usePermissions } from "@/contexts/PermissionsContext";
@@ -8,7 +15,7 @@ import { AccountDetailsPopover } from "@/components/sidebar/AccountDetailsPopove
 
 interface MenuItem {
     title: string;
-    icon: LucideIcon;
+    icon: ElementType;
     path: string;
     children?: MenuItem[];
 }
@@ -25,23 +32,28 @@ export function PortalSidebar({ onNavigate }: { onNavigate?: () => void }) {
     const clientMenuItems: MenuItem[] = [
         {
             title: "Briefing",
-            icon: FileText,
+            icon: DocumentTextIcon,
             path: "/portal/briefing",
         },
         {
             title: "Nova Solicitação",
-            icon: PlusCircle,
+            icon: PlusCircleIcon,
             path: "/portal/new-demand",
         },
         {
             title: "Quadro de Demandas",
-            icon: LayoutDashboard,
+            icon: Squares2X2Icon,
             path: "/portal/tasks",
+        },
+        {
+            title: "Entregas",
+            icon: ArchiveBoxIcon,
+            path: "/portal/entregas",
         },
     ];
 
     return (
-        <div className="w-full md:w-64 h-full border-r border-border bg-card flex flex-col pt-6 animate-in fade-in slide-in-from-left-4 duration-500">
+        <div className="mat-chrome-panel w-full md:w-64 h-full md:m-3 md:h-[calc(100%-24px)] overflow-hidden flex flex-col pt-6 animate-in fade-in duration-300 motion-reduce:animate-none">
             <div className="px-6 mb-5">
                 <PortalLogo size="md" />
             </div>

@@ -139,18 +139,22 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
         </div>
       )}
 
-      <header className="flex h-16 shrink-0 items-center justify-between border-b border-border/40 px-4 w-full bg-background/60 backdrop-blur-[30px] saturate-[200%] sticky top-0 z-50 transition-all duration-300 shadow-[0_1px_2px_rgba(0,0,0,0.05)] dark:shadow-none">
-        <div className="flex items-center gap-4 flex-1">
-          <SidebarTrigger className="shrink-0 md:hidden">
-            <Menu className="h-5 w-5" />
-          </SidebarTrigger>
+      {/* Topbar flutuante: pill de vidro inset sobre o campo ambiente —
+          o layout assinatura do Liquid Glass. */}
+      <header className="sticky top-0 z-50 shrink-0 px-3 pt-3">
+        <div className="mat-chrome-panel flex h-14 items-center justify-between px-4 w-full">
+          <div className="flex items-center gap-4 flex-1">
+            <SidebarTrigger className="shrink-0 md:hidden">
+              <Menu className="h-5 w-5" />
+            </SidebarTrigger>
 
-          <div className="w-full max-w-sm shrink-0">
-            <AdAccountSelector />
+            <div className="w-full max-w-sm shrink-0">
+              <AdAccountSelector />
+            </div>
           </div>
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <NotificationBell />
+          <div className="flex items-center gap-2 shrink-0">
+            <NotificationBell />
+          </div>
         </div>
       </header>
       <main className="w-full flex-1 overflow-x-hidden p-0 m-0 relative">

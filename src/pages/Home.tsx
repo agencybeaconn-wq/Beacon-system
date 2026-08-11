@@ -32,7 +32,7 @@ const Home = () => {
 
     if (isLoading) {
         return (
-            <div className="h-screen w-full flex flex-col items-center justify-center gap-4 bg-background">
+            <div className="h-screen w-full flex flex-col items-center justify-center gap-4 bg-transparent">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
                 <p className="text-muted-foreground animate-pulse">Identificando perfil...</p>
             </div>
@@ -42,7 +42,7 @@ const Home = () => {
     // If client detected but not redirected yet (should happen instantly via effect)
     if (abacRole === 'CLIENTE') {
         return (
-            <div className="h-screen w-full flex flex-col items-center justify-center gap-4 bg-background">
+            <div className="h-screen w-full flex flex-col items-center justify-center gap-4 bg-transparent">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
                 <p className="text-muted-foreground">Redirecionando para o Portal...</p>
             </div>
@@ -51,7 +51,7 @@ const Home = () => {
 
     // DIAGNOSTIC STATE: User is logged in but NOT identified as Client or Agency yet (or Ghost)
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-background p-4">
+        <div className="min-h-screen w-full flex items-center justify-center bg-transparent p-4">
             <Card className="max-w-md w-full border-destructive/20 shadow-2xl">
                 <CardContent className="p-8 flex flex-col items-center text-center space-y-6">
                     <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center">

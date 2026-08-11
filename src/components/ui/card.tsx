@@ -2,21 +2,37 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Card = vidro de conteudo (`mat-card`): o material mais opaco da escala,
+ * porque carrega tabela e formulario — legibilidade manda no alpha. O campo
+ * ambiente do body atravessa o blur e da o "liquid"; a aresta especular no
+ * topo e o que faz ler como vidro. Ver skill /apple-design §12.
+ */
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("rounded-[12px] border border-border/30 bg-card text-card-foreground shadow-none", className)} {...props} />
+  <div
+    ref={ref}
+    className={cn(
+      "mat-card rounded-lg text-card-foreground",
+      "transition-shadow duration-200 ease-material-in",
+      className,
+    )}
+    {...props}
+  />
 ));
 Card.displayName = "Card";
 
 const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex flex-col space-y-1 p-4", className)} {...props} />
+    <div ref={ref} className={cn("flex flex-col space-y-1 p-6", className)} {...props} />
   ),
 );
 CardHeader.displayName = "CardHeader";
 
 const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
   ({ className, ...props }, ref) => (
-    <h3 ref={ref} className={cn("text-2xl font-semibold leading-none tracking-tight", className)} {...props} />
+    // Sem `tracking-tight`/`leading-none` manuais: a escala do tailwind.config
+    // ja entrega o tracking e a entrelinha corretos pra cada tamanho.
+    <h3 ref={ref} className={cn("text-2xl font-semibold", className)} {...props} />
   ),
 );
 CardTitle.displayName = "CardTitle";
@@ -29,13 +45,13 @@ const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttribu
 CardDescription.displayName = "CardDescription";
 
 const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => <div ref={ref} className={cn("p-4 pt-0", className)} {...props} />,
+  ({ className, ...props }, ref) => <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />,
 );
 CardContent.displayName = "CardContent";
 
 const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex items-center p-4 pt-0", className)} {...props} />
+    <div ref={ref} className={cn("flex items-center p-6 pt-0", className)} {...props} />
   ),
 );
 CardFooter.displayName = "CardFooter";

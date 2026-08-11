@@ -551,7 +551,7 @@ export default function Reports({ isEmbedded }: { isEmbedded?: boolean }) {
 
   return (
     <div className={cn(
-      "flex-1 space-y-8 pb-8 bg-background min-h-screen",
+      "flex-1 space-y-8 pb-8 bg-transparent min-h-screen",
       !isEmbedded && "pt-8 px-2 md:px-4"
     )}>
 

@@ -688,7 +688,7 @@ export default function Solicitacoes() {
     }
 
     return (
-        <div className="flex-1 min-h-screen w-full bg-background p-10 flex flex-col">
+        <div className="flex-1 min-h-screen w-full bg-transparent p-10 flex flex-col">
             <Tabs defaultValue={currentTab} value={currentTab} onValueChange={handleTabChange} className="space-y-6 flex-1 flex flex-col">
                 <div className="flex items-start justify-between mb-4">
                     <div>

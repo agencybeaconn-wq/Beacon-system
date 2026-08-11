@@ -134,7 +134,7 @@ const Sidebar = React.forwardRef<
   if (collapsible === "none") {
     return (
       <div
-        className={cn("flex h-full w-[--sidebar-width] flex-col bg-sidebar/70 backdrop-blur-[30px] saturate-[180%] border-r border-border/20 text-sidebar-foreground", className)}
+        className={cn("flex h-full w-[--sidebar-width] flex-col mat-chrome border-r border-border/40 text-sidebar-foreground", className)}
         ref={ref}
         {...props}
       >
@@ -203,7 +203,9 @@ const Sidebar = React.forwardRef<
       >
         <div
           data-sidebar="sidebar"
-          className="flex h-full w-full flex-col bg-sidebar/70 backdrop-blur-[30px] saturate-[180%] border-r border-border/20 group-data-[variant=floating]:rounded-2xl group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)]"
+          // Variante flutuante = painel de vidro (mat-chrome-panel ja traz
+          // raio de janela, elevacao e aresta especular). Encostada = mat-chrome.
+          className="flex h-full w-full flex-col group-data-[variant=floating]:mat-chrome-panel group-data-[variant=floating]:overflow-hidden group-data-[variant=sidebar]:mat-chrome group-data-[variant=sidebar]:border-r group-data-[variant=sidebar]:border-border/40"
         >
           {children}
         </div>
