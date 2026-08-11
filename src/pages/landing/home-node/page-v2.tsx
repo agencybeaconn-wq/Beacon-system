@@ -526,7 +526,6 @@ function CursorV2() {
 
 export default function HomeNodeV2() {
     const [faqOpen, setFaqOpen] = useState<number | null>(0);
-    const [ato, setAto] = useState(0);
     const [abrindo, setAbrindo] = useState(true);
 
     // ABERTURA: segura a página o mínimo necessário pras fontes assentarem, pra ela
@@ -580,26 +579,7 @@ export default function HomeNodeV2() {
         };
     }, []);
 
-    // Indicador dos 4 atos — o mapa tem que bater com a ARTE, não com a contagem de
-    // seções. Os marcos são exatamente onde cada ato do cérebro assume.
-    useEffect(() => {
-        const marcos = () => ['solucoes', 'resultados', 'faq']
-            .map(id => document.getElementById(id))
-            .map(el => (el ? el.getBoundingClientRect().top + window.scrollY : Infinity));
-        let raf = 0;
-        const update = () => {
-            raf = 0;
-            const h = window.innerHeight;
-            const y = window.scrollY + h * 0.42;
-            const [sol, res, faq] = marcos();
-            // mesmos limiares das rampas do BrainField, pra ponto aceso == ato na tela
-            setAto(y >= faq - h * 0.4 ? 3 : y >= res - h * 0.4 ? 2 : y >= sol - h * 0.4 ? 1 : 0);
-        };
-        const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
-        update();
-        window.addEventListener('scroll', onScroll, { passive: true });
-        return () => { window.removeEventListener('scroll', onScroll); if (raf) cancelAnimationFrame(raf); };
-    }, []);
+    // (o indicador de ato saiu com o HUD — nada mais lê esse estado)
 
     // Rastreio: quem chegou, até onde leu e em qual CTA clicou
     useEffect(() => {
@@ -610,109 +590,10 @@ export default function HomeNodeV2() {
     // Hover numa operação real manda um pulso pro campo de partículas
     const pulso = () => window.dispatchEvent(new CustomEvent('node-pulse'));
 
-    /* ═══════════════ ATO 1 — O DESMONTE ═══════════════
-       Nos primeiros ~85vh de rolagem o herói fica PRESO e a frase se desfaz:
-       cada glifo voa na direção do núcleo do cérebro e some. A tese resiste
-       mais que o resto e é a última a partir.
-
-       Por que assim e não um fade: a promessa da marca é "tecnologia que
-       transforma marcas". Então o texto não sai de cena — ele VIRA a rede.
-       O gesto é a tese, não enfeite.
-
-       Custo: os vetores de voo são calculados uma vez (e no resize/troca de
-       fonte). Por quadro escreve-se só uma custom property por glifo — nada
-       de leitura de layout, só compositing. */
-    useEffect(() => {
-        if (matchMedia('(prefers-reduced-motion:reduce)').matches) return;
-        const palco = document.querySelector<HTMLElement>('.v2 .nlp-hero');
-        if (!palco) return;
-
-        const MAX_ATRASO = 0.34;
-        type Glifo = { el: HTMLElement; dx: number; dy: number; px: number; py: number; rot: number; atraso: number };
-        let glifos: Glifo[] = [];
-        let raf = 0, ultimo = -1;
-        let pulsouA = false, pulsouB = false, engoliu = false;
-
-        const medir = () => {
-            const els = [...document.querySelectorAll<HTMLElement>('.v2-glifo')];
-            // zera antes de medir: com os glifos já deslocados, o rect seria o de chegada
-            els.forEach(el => { el.style.transform = ''; el.style.opacity = ''; });
-            const alvoX = innerWidth * 0.72, alvoY = innerHeight * 0.46;
-            glifos = els.map((el, i) => {
-                const r = el.getBoundingClientRect();
-                const dx = alvoX - (r.left + r.width / 2);
-                const dy = alvoY - (r.top + r.height / 2);
-                // desvio PERPENDICULAR ao voo: dá curva à trajetória sem impedir a
-                // chegada. Feixe reto lê como artificial; desvio no destino lê como
-                // "passou perto", que era o problema — elas não eram engolidas.
-                const dist = Math.hypot(dx, dy) || 1;
-                const esp = ((i * 37) % 100) / 100 - 0.5;
-                return {
-                    el, dx, dy,
-                    px: (-dy / dist) * esp * 190,
-                    py: (dx / dist) * esp * 190,
-                    rot: esp * 200,
-                    atraso: (i / Math.max(1, els.length - 1)) * MAX_ATRASO,
-                };
-            });
-        };
-
-        // a pista precisa casar com o padding-bottom do palco no CSS (85vh / 62vh)
-        const pista = () => innerHeight * (innerWidth <= 860 ? 0.45 : 0.55);
-
-        const desenhar = () => {
-            raf = 0;
-            const corrida = pista();
-            const p = Math.max(0, Math.min(1, scrollY / corrida));
-            // prende o conteúdo: sobe junto com a rolagem até a pista acabar
-            palco.style.setProperty('--pin', `${Math.round(Math.min(scrollY, corrida))}px`);
-            if (Math.abs(p - ultimo) < 0.002) return;
-            ultimo = p;
-            const vao = 1 - MAX_ATRASO;
-            for (const g of glifos) {
-                const pp = Math.max(0, Math.min(1, (p - g.atraso) / vao));
-                if (pp <= 0) { g.el.style.transform = ''; g.el.style.opacity = ''; continue; }
-                // acelera no fim: a letra é PUXADA pro núcleo, não flutua até lá
-                const e = pp * pp * (3 - 2 * pp);
-                const curva = Math.sin(pp * Math.PI);      // some nas duas pontas → converge
-                const x = g.dx * e + g.px * curva;
-                const y = g.dy * e + g.py * curva;
-                const s = 1 - 0.94 * e;                     // fecha num ponto
-                // segura a opacidade quase até o fim: sumir cedo lê como fade, não como engolir
-                const o = pp < 0.8 ? 1 : Math.max(0, 1 - (pp - 0.8) / 0.2);
-                g.el.style.transform =
-                    `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) rotate(${(g.rot * e).toFixed(1)}deg) scale(${s.toFixed(3)})`;
-                g.el.style.opacity = o.toFixed(3);
-            }
-            palco.style.setProperty('--ato', p.toFixed(3));
-            // camada de GPU só durante o ato
-            palco.classList.toggle('ativo', p > 0.002 && p < 0.998);
-            // ondas enquanto o campo se alimenta...
-            if (p > 0.34 && !pulsouA) { pulsouA = true; pulsar(); }
-            if (p > 0.68 && !pulsouB) { pulsouB = true; pulsar(); }
-            // ...e a ENGOLIDA quando a última letra chega: o campo se desfaz e remonta
-            if (p > 0.95 && !engoliu) {
-                engoliu = true;
-                window.dispatchEvent(new CustomEvent('node-absorve', { detail: { forca: 1 } }));
-            }
-            if (p < 0.15) { pulsouA = false; pulsouB = false; engoliu = false; }
-        };
-
-        const aoRolar = () => { if (!raf) raf = requestAnimationFrame(desenhar); };
-        const remedir = () => { medir(); ultimo = -1; desenhar(); };
-
-        // a fonte de display muda a largura dos glifos: medir só depois que assentar
-        const t = setTimeout(remedir, 1500);
-        document.fonts?.ready.then(remedir).catch(() => { });
-        addEventListener('scroll', aoRolar, { passive: true });
-        addEventListener('resize', remedir);
-        return () => {
-            clearTimeout(t);
-            removeEventListener('scroll', aoRolar);
-            removeEventListener('resize', remedir);
-            if (raf) cancelAnimationFrame(raf);
-        };
-    }, []);
+    // ATO 1 (desmonte + pin do herói) removido a pedido: prendia a rolagem por
+    // ~meia tela e lia como "travada". O herói agora rola normalmente, com a
+    // entrada por máscara das linhas e a decodificação da tese (ambas puro CSS/JS
+    // local, sem prender scroll). O cérebro segue reagindo ao scroll por conta própria.
 
     return (
         <div className="nlp v2">
@@ -1119,22 +1000,11 @@ export default function HomeNodeV2() {
         /* overflow-x:hidden no ancestral transforma ele em container de rolagem e
            MATA o position:sticky do palco do Ato 1. "clip" recorta igual, mas não
            cria container — é a única troca que faz o herói grudar de verdade. */
-        .v2{--hud:rgba(190,200,225,.28);--hud-on:var(--accent-hi);cursor:none;
+        /* cursor nativo de volta — o retículo customizado foi removido a pedido */
+        .v2{--hud:rgba(190,200,225,.28);--hud-on:var(--accent-hi);
           overflow-x:clip!important}
-        .v2 a,.v2 button,.v2 summary{cursor:none}
-        @media(pointer:coarse){.v2,.v2 a,.v2 button,.v2 summary{cursor:auto}}
 
-        /* textura de instrumento: grade fina + varredura. Quase invisível — some
-           no print e aparece no olho, que é exatamente o ponto. */
-        .v2::before{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;
-          background-image:linear-gradient(rgba(190,200,225,.028) 1px,transparent 1px),
-                           linear-gradient(90deg,rgba(190,200,225,.028) 1px,transparent 1px);
-          background-size:64px 64px;
-          mask-image:radial-gradient(120% 90% at 50% 40%,#000 30%,transparent 78%)}
-        .v2::after{content:'';position:fixed;inset-inline:0;height:140px;z-index:4;pointer-events:none;
-          background:linear-gradient(180deg,transparent,rgba(139,111,224,.055),transparent);
-          animation:v2-varre 7s linear infinite}
-        @keyframes v2-varre{0%{top:-140px}100%{top:100%}}
+        /* (grade de instrumento + varredura removidas com os demais adornos) */
 
         /* ── moldura ── */
         .v2-hud{position:fixed;inset:0;z-index:45;pointer-events:none;font-family:'JetBrains Mono',monospace}
@@ -1358,21 +1228,14 @@ export default function HomeNodeV2() {
         /* A faixa de telemetria comia os números do herói. A causa não era o padding:
            era o min-height:92vh, que espalhava o conteúdo até o pé da tela. Sem ele,
            o bloco fecha na altura do próprio conteúdo e sobra chão pra faixa. */
-        /* ── PALCO DO ATO 1 ──
-           O herói deixa de ser flex-centrado e vira bloco com PISTA: o conteúdo
-           gruda (sticky) e a pista de 85vh é o tempo do desmonte. Sem a pista o
-           texto sairia de cena rolando, e o gesto não teria onde acontecer.
-           A pista casa com o innerHeight*0.85 usado no cálculo do progresso. */
-        .v2 .nlp-hero{min-height:auto!important;display:block!important;
-          padding-top:96px!important;padding-bottom:calc(76px + 55vh)!important}
-        /* O pino NÃO é position:sticky. Um div do layout do app tem overflow-y:auto,
-           o que o elege container de rolagem — mas quem rola é a janela, então o
-           sticky nunca engata. Prender por transform não depende de ancestral algum
-           e ainda é composição pura. --pin vem do mesmo laço que move os glifos. */
-        .v2 .nlp-hero>.nlp-hero-in{gap:21px;
-          transform:translate3d(0,var(--pin,0px),0)}
+        /* Herói normal — sem pista nem pino. Antes ele ficava preso por ~meia tela
+           de rolagem (o "travado" que o usuário reclamou). Agora rola como qualquer
+           seção; a entrada por máscara das linhas continua. */
+        .v2 .nlp-hero{min-height:auto!important;
+          padding-top:96px!important;padding-bottom:clamp(64px,9vw,120px)!important}
+        .v2 .nlp-hero>.nlp-hero-in{gap:21px}
         @media(max-width:860px){
-          .v2 .nlp-hero{padding-top:104px!important;padding-bottom:calc(68px + 45vh)!important}
+          .v2 .nlp-hero{padding-top:104px!important;padding-bottom:64px!important}
         }
 
         /* ── os glifos ──
@@ -1474,10 +1337,9 @@ export default function HomeNodeV2() {
                 <span className="nlp-abertura-linha" />
             </div>
 
-            {/* v2: o trilho de bolinhas virou a espinha de nós dentro do HUD */}
-            <HudV2 ato={ato} />
-            <TrilhoV2 />
-            <CursorV2 />
+            {/* Adornos de HUD (cantoneiras, telemetria, espinha de nós, trilho e o
+                cursor-retículo) removidos a pedido: emolduravam demais e pesavam.
+                Ficou o essencial — o cérebro e o conteúdo. */}
 
             {/* NAV */}
             <nav className="nlp-nav">
@@ -1502,12 +1364,13 @@ export default function HomeNodeV2() {
                 <div className="nlp-wrap nlp-hero-in">
                     <span className="nlp-chip"><i />operando agora</span>
                     <span className="nlp-mono">{'// sistemas · e-commerce · ia aplicada'}</span>
-                    {/* v2: cada linha sobe de dentro de uma máscara, escalonada.
-                        A última palavra DECODIFICA — o texto se resolve de caractere
-                        embaralhado para a palavra, como um sistema terminando de processar. */}
+                    {/* Cada linha sobe de dentro de uma máscara, escalonada. A última
+                        palavra DECODIFICA — o texto se resolve de caractere embaralhado
+                        pra palavra. (O desmonte em glifos que voavam pro cérebro foi
+                        removido: prendia a rolagem e lia como "travada".) */}
                     <h1 className="v2-h1">
-                        <span className="v2-linha"><span style={{ ['--i' as string]: 0 }}><Glifos texto="Tecnologia que" /></span></span>
-                        <span className="v2-linha"><span style={{ ['--i' as string]: 1 }}><Glifos texto="transforma marcas em" /></span></span>
+                        <span className="v2-linha"><span style={{ ['--i' as string]: 0 }}>Tecnologia que</span></span>
+                        <span className="v2-linha"><span style={{ ['--i' as string]: 1 }}>transforma marcas em</span></span>
                         <span className="v2-linha"><span style={{ ['--i' as string]: 2 }}>
                             <span className="nlp-tese"><Decodifica texto="máquinas de venda." /></span>
                         </span></span>
