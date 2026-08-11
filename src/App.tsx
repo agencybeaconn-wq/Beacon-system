@@ -230,8 +230,11 @@ const App = () => (
                                   Ficam FORA da casca do app: não usam nenhum contexto dele
                                   e não devem baixar o sistema inteiro só pra pintar uma
                                   página de marketing. */}
-                              <Route path="/" element={<HomeNode />} />
+                              <Route path="/" element={<HomeNodeV2 />} />
+                              {/* /v2 continua respondendo: link e print antigos não quebram */}
                               <Route path="/v2" element={<HomeNodeV2 />} />
+                              {/* home anterior preservada para comparação e rollback imediato */}
+                              <Route path="/v1" element={<HomeNode />} />
                               <Route path="/criacao-de-sites" element={<ServicoPage />} />
                               <Route path="/sistemas-e-ia" element={<ServicoPage />} />
                               <Route path="/mentoria-de-ia" element={<ServicoPage />} />
