@@ -578,7 +578,7 @@ export function ClientRankingView({ embedded = false, active = true }: ClientRan
                             { icon: BarChart3, color: "text-sky-400", label: "ROAS Meta 30d", value: isLoading ? "—" : (totals.avgMetaRoas > 0 ? `${totals.avgMetaRoas.toFixed(2)}x` : "—"), sub: "média ponderada", valueColor: "text-sky-400" },
                             { icon: Repeat, color: "text-emerald-500", label: "MRR Fees", value: isLoading ? "—" : formatCurrency(totals.totalFeeFixed), sub: "fixo mensal", valueColor: "text-emerald-500" },
                             { icon: DollarSign, color: "text-yellow-400", label: "Comissão 30d", value: isLoading ? "—" : formatCurrency(totals.totalCommission30d), sub: "variável estimada", valueColor: "text-yellow-400" },
-                            { icon: Crown, color: "text-amber-400", label: "Receita NODE 30d", value: isLoading ? "—" : formatCurrency(totals.totalBeaconRevenue30d), sub: "MRR + comissão", valueColor: "text-amber-400" },
+                            { icon: Crown, color: "text-amber-400", label: "Receita NODE 30d", value: isLoading ? "—" : formatCurrency(totals.totalLeverRevenue30d), sub: "MRR + comissão", valueColor: "text-amber-400" },
                         ].slice(0, showAllStats ? undefined : 5).map((card, i) => (
                             <Card key={i} className="p-2.5 bg-secondary/20 border-border/10 hover:bg-secondary/30 transition-colors shadow-none">
                                 <div className="flex items-center gap-1.5 mb-0.5">
