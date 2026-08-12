@@ -498,7 +498,7 @@ export function UnifiedCreativeSelector({
 
                                                     {/* Selection Indicator */}
                                                     {isSelected && (
-                                                        <div className="absolute top-2 right-2 h-6 w-6 rounded-full bg-primary text-white flex items-center justify-center shadow-sm animate-in zoom-in">
+                                                        <div className="absolute top-2 right-2 h-6 w-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-sm animate-in zoom-in">
                                                             <CheckCircle2 className="h-4 w-4" />
                                                         </div>
                                                     )}

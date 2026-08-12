@@ -511,10 +511,7 @@ export function AppSidebar() {
           {/* Logo apenas identitário — não é link/botão (não navega ao clicar). */}
           <div className="select-none">
             {!isCollapsed ? (
-              <div className="flex items-center gap-2">
-                <img src={leverLogo} alt="NODE" className="h-4 w-auto" />
-                <span className="font-semibold text-lg text-foreground tracking-tight">System</span>
-              </div>
+              <img src={leverLogo} alt="NODE" className="h-4 w-auto" />
             ) : (
               <img src={nodeTile} alt="NODE" className="h-6 w-6 object-contain rounded" />
             )}

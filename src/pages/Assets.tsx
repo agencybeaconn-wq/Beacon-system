@@ -530,7 +530,7 @@ const Assets = () => {
                                     onChange={handleFileUpload}
                                     disabled={uploadMutation.isPending || !selectedAccountId}
                                 />
-                                <Button disabled={uploadMutation.isPending || !selectedAccountId} className="w-full h-10 bg-primary hover:opacity-90 text-white text-xs sm:text-sm shadow-none rounded-none">
+                                <Button disabled={uploadMutation.isPending || !selectedAccountId} className="w-full h-10 bg-primary hover:opacity-90 text-primary-foreground text-xs sm:text-sm shadow-none rounded-none">
                                     {uploadMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Upload className="mr-2 h-4 w-4" />}
                                     {t('assets.upload_image', "Upload Image")}
                                 </Button>
@@ -656,7 +656,7 @@ const Assets = () => {
                                         size="sm"
                                         onClick={() => setSelectedTab('all')}
                                         className={`rounded-none text-xs h-7 px-3 flex-1 sm:flex-none ${selectedTab === 'all'
-                                            ? "bg-primary text-white font-medium"
+                                            ? "bg-primary text-primary-foreground font-medium"
                                             : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
                                     >
                                         {t('assets.tabs.all', 'All')}
@@ -666,7 +666,7 @@ const Assets = () => {
                                         size="sm"
                                         onClick={() => setSelectedTab('images')}
                                         className={`rounded-none text-xs h-7 px-3 flex-1 sm:flex-none ${selectedTab === 'images'
-                                            ? "bg-primary text-white font-medium"
+                                            ? "bg-primary text-primary-foreground font-medium"
                                             : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
                                     >
                                         {t('assets.tabs.images', 'Images')}
@@ -676,7 +676,7 @@ const Assets = () => {
                                         size="sm"
                                         onClick={() => setSelectedTab('videos')}
                                         className={`rounded-none text-xs h-7 px-3 flex-1 sm:flex-none ${selectedTab === 'videos'
-                                            ? "bg-primary text-white font-medium"
+                                            ? "bg-primary text-primary-foreground font-medium"
                                             : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
                                     >
                                         {t('assets.tabs.videos', 'Videos')}
@@ -695,7 +695,7 @@ const Assets = () => {
                                         size="sm"
                                         onClick={() => setUsageFilter('all')}
                                         className={`rounded-none text-xs h-7 px-3 flex-1 sm:flex-none ${usageFilter === 'all'
-                                            ? "bg-primary text-white font-medium"
+                                            ? "bg-primary text-primary-foreground font-medium"
                                             : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
                                     >
                                         {t('assets.tabs.all', 'All')}
@@ -705,7 +705,7 @@ const Assets = () => {
                                         size="sm"
                                         onClick={() => setUsageFilter('active')}
                                         className={`rounded-none text-xs h-7 px-3 flex-1 sm:flex-none ${usageFilter === 'active'
-                                            ? "bg-primary text-white font-medium"
+                                            ? "bg-primary text-primary-foreground font-medium"
                                             : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
                                     >
                                         {t('assets.folders.in_use', 'In Use')}
@@ -715,7 +715,7 @@ const Assets = () => {
                                         size="sm"
                                         onClick={() => setUsageFilter('inactive')}
                                         className={`rounded-none text-xs h-7 px-3 flex-1 sm:flex-none ${usageFilter === 'inactive'
-                                            ? "bg-primary text-white font-medium"
+                                            ? "bg-primary text-primary-foreground font-medium"
                                             : "text-muted-foreground hover:bg-background/50 hover:text-foreground"}`}
                                     >
                                         {t('assets.folders.unused', 'Unused')}
@@ -1031,7 +1031,7 @@ const AssetGrid = ({
                                                     </div>
                                                 )}
                                                 {asset.usageStatus === 'new' && (
-                                                    <div className="bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                                                    <div className="bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-full">
                                                         {t('common.new', 'New')}
                                                     </div>
                                                 )}

@@ -356,7 +356,7 @@ export function LeadModal({ open, onOpenChange, leadToEdit, columns, onSaved, on
                                 >
                                     <span className={cn(
                                         "h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-black shrink-0",
-                                        step === 2 ? "bg-primary text-white" : "bg-muted text-muted-foreground"
+                                        step === 2 ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
                                     )}>2</span>
                                     <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider truncate">Qualificação</span>
                                 </button>
@@ -686,7 +686,7 @@ export function LeadModal({ open, onOpenChange, leadToEdit, columns, onSaved, on
                                     <Button type="button" variant="ghost" onClick={() => onOpenChange(false)} className="h-12 flex-1 sm:flex-initial sm:px-8 font-bold uppercase tracking-widest text-[10px] sm:text-[11px]">
                                         Fechar
                                     </Button>
-                                    <Button type="button" onClick={() => setStep(2)} className="h-12 flex-1 sm:flex-initial sm:min-w-[200px] bg-primary hover:bg-primary/90 text-white font-bold uppercase tracking-widest text-[10px] sm:text-[11px] sm:px-10 rounded-xl active:scale-95 transition-all shadow-none gap-2">
+                                    <Button type="button" onClick={() => setStep(2)} className="h-12 flex-1 sm:flex-initial sm:min-w-[200px] bg-primary hover:bg-primary/90 text-primary-foreground font-bold uppercase tracking-widest text-[10px] sm:text-[11px] sm:px-10 rounded-xl active:scale-95 transition-all shadow-none gap-2">
                                         Próximo <ArrowRight className="h-4 w-4" />
                                     </Button>
                                 </>
@@ -702,7 +702,7 @@ export function LeadModal({ open, onOpenChange, leadToEdit, columns, onSaved, on
                                         type="button"
                                         disabled={isLoading}
                                         onClick={form.handleSubmit(onSubmit)}
-                                        className="h-12 flex-1 sm:flex-initial sm:min-w-[200px] bg-primary hover:bg-primary/90 text-white font-bold uppercase tracking-widest text-[10px] sm:text-[11px] sm:px-10 rounded-xl active:scale-95 transition-all shadow-none"
+                                        className="h-12 flex-1 sm:flex-initial sm:min-w-[200px] bg-primary hover:bg-primary/90 text-primary-foreground font-bold uppercase tracking-widest text-[10px] sm:text-[11px] sm:px-10 rounded-xl active:scale-95 transition-all shadow-none"
                                     >
                                         {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : (leadToEdit ? "Salvar Alterações" : "Cadastrar Lead")}
                                     </Button>

@@ -231,7 +231,7 @@ export function StoreDeployment() {
                     <div key={s} className="flex items-center gap-2">
                         <div className={cn(
                             "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors",
-                            currentStep === s ? "bg-primary text-white" :
+                            currentStep === s ? "bg-primary text-primary-foreground" :
                             (['config', 'preview', 'execute'].indexOf(currentStep) > i) ? "bg-primary/20 text-primary" :
                             "bg-muted text-muted-foreground"
                         )}>

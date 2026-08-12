@@ -40,6 +40,11 @@ function daysLeft(due: string): number {
 }
 
 /** % do prazo já consumido (start → due), clampado em 0..100. */
+/** "terça-feira, 11 de agosto" → "Terça-feira, 11 de agosto" (só a 1ª letra). */
+function sentenceCase(s: string): string {
+    return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 function elapsedPct(start: string, due: string): number {
     const total = differenceInCalendarDays(parseISO(due), parseISO(start));
     if (total <= 0) return 100;
@@ -201,7 +206,7 @@ export function ProjectPriorities() {
     }
 
     return (
-        <div className="space-y-4 max-w-3xl">
+        <div className="space-y-4 w-full max-w-5xl">
             {/* Resumo + adicionar */}
             <div className="flex items-center justify-between gap-3 flex-wrap">
                 <div className="flex items-center gap-5">
@@ -212,9 +217,9 @@ export function ProjectPriorities() {
                     {nextDelivery && (
                         <div>
                             <p className="text-xs text-muted-foreground">Próxima entrega</p>
-                            <p className="text-2xl font-semibold font-mono-numbers capitalize">
-                                {format(parseISO(nextDelivery.due_date), "EEE, dd MMM", { locale: ptBR }).replace(".", "")}
-                                <span className="text-sm text-muted-foreground ml-2 font-normal normal-case">
+                            <p className="text-2xl font-semibold font-mono-numbers">
+                                {sentenceCase(format(parseISO(nextDelivery.due_date), "EEE, dd MMM", { locale: ptBR }).replace(/\./g, ""))}
+                                <span className="text-sm text-muted-foreground ml-2 font-normal">
                                     {daysLeft(nextDelivery.due_date) > 1 && `em ${daysLeft(nextDelivery.due_date)} dias`}
                                     {daysLeft(nextDelivery.due_date) === 1 && "amanhã"}
                                     {daysLeft(nextDelivery.due_date) === 0 && "HOJE"}
@@ -337,15 +342,19 @@ export function ProjectPriorities() {
                                         )}>
                                             {overdue ? `${-left}d atrasado` : left === 0 ? "entrega HOJE" : left === 1 ? "amanhã" : `${left}d restantes`}
                                         </p>
-                                        <p className="text-[11px] text-muted-foreground capitalize whitespace-nowrap">
-                                            {format(parseISO(p.due_date), "EEEE, dd 'de' MMMM", { locale: ptBR })}
+                                        <p className="text-[11px] text-muted-foreground whitespace-nowrap">
+                                            {sentenceCase(format(parseISO(p.due_date), "EEEE, dd 'de' MMMM", { locale: ptBR }))}
                                         </p>
                                     </div>
-                                    {/* Tile estilo ícone de Calendário da Apple: mês na faixa, dia grande */}
+                                    {/* Tile estilo ícone de Calendário da Apple: mês na faixa, dia grande.
+                                        Cores com foreground CORRETO por urgência — nada de texto branco
+                                        sobre faixa clara (bg-primary no dark é branco). */}
                                     <div className="w-12 rounded-[10px] overflow-hidden border border-border/50 shadow-elev-1 shrink-0 text-center bg-background/60 backdrop-blur-md">
                                         <div className={cn(
-                                            "text-[9px] font-bold uppercase tracking-wide py-0.5 text-white",
-                                            overdue ? "bg-destructive" : urgent ? "bg-warning" : "bg-primary",
+                                            "text-[9px] font-bold uppercase tracking-wide py-0.5",
+                                            overdue ? "bg-destructive text-white"
+                                                : urgent ? "bg-warning text-black"
+                                                    : "bg-system-info text-white",
                                         )}>
                                             {format(parseISO(p.due_date), "MMM", { locale: ptBR }).replace(".", "")}
                                         </div>

@@ -147,37 +147,7 @@ export function ClientHeader({ client, clientId, onClientUpdate, activeTab, onTa
                     {pageDescription && <p className="text-muted-foreground text-sm">{pageDescription}</p>}
                 </div>
 
-                {/* Navigation Tabs Moved to Right Side */}
-                {onTabChange && (
-                    <div className="overflow-x-auto no-scrollbar">
-                        <TabsList className="h-10 w-max shrink-0">
-                            <TabsTrigger value="onboarding" className="gap-2">
-                                <ListChecks className="w-4 h-4" />
-                                <span className="font-semibold text-sm">Onboarding</span>
-                            </TabsTrigger>
-                            <TabsTrigger value="briefing" className="gap-2">
-                                <FileText className="w-4 h-4" />
-                                <span className="font-semibold text-sm">Briefing</span>
-                            </TabsTrigger>
-                            <TabsTrigger value="files" className="gap-2">
-                                <FolderOpen className="w-4 h-4" />
-                                <span className="font-semibold text-sm">Documentos</span>
-                            </TabsTrigger>
-                            <TabsTrigger value="pricing" className="gap-2">
-                                <DollarSign className="w-4 h-4" />
-                                <span className="font-semibold text-sm">Preços</span>
-                            </TabsTrigger>
-                            <TabsTrigger value="connections" className="gap-2">
-                                <Link2 className="w-4 h-4" />
-                                <span className="font-semibold text-sm">Conexões</span>
-                            </TabsTrigger>
-                            <TabsTrigger value="settings" className="gap-2">
-                                <Settings className="w-4 h-4" />
-                                <span className="font-semibold text-sm">Configurações</span>
-                            </TabsTrigger>
-                        </TabsList>
-                    </div>
-                )}
+                {/* Tabs removidas (2026-08): a página do cliente é única */}
             </div>
         </div>
     );

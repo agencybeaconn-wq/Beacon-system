@@ -271,7 +271,7 @@ export function AddOneOffReceivableModal({ isOpen, onOpenChange, onAdd, onUpdate
                     <Button
                         onClick={handleSubmit}
                         disabled={isSubmitting || !clientName || !service || !amount}
-                        className="bg-primary hover:bg-primary/90 text-white font-bold h-11 px-8 shadow-lg shadow-primary/20"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-11 px-8 shadow-lg shadow-primary/20"
                     >
                         {isSubmitting ? "Salvando..." : (initialData ? "Salvar Alterações" : "Registrar Recebível")}
                     </Button>

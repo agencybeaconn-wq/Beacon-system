@@ -411,7 +411,7 @@ export default function AulaVibeCodingShopify() {
             {/* Top bar Lever */}
             <header className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-3 bg-white/80 backdrop-blur-md border-b border-slate-200">
                 <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-bold shadow-sm">L</div>
+                    <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold shadow-sm">L</div>
                     <div>
                         <div className="text-sm font-bold leading-tight">NODE Academy</div>
                         <div className="text-xs text-slate-500 leading-tight">Vibe Coding com Shopify</div>
@@ -574,7 +574,7 @@ export default function AulaVibeCodingShopify() {
                 {/* Botão pedidos práticos */}
                 <button
                     onClick={() => setPanelOpen(!panelOpen)}
-                    className={`p-2.5 rounded-xl shadow-lg border transition-all ${panelOpen ? "bg-primary text-white border-primary" : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"}`}
+                    className={`p-2.5 rounded-xl shadow-lg border transition-all ${panelOpen ? "bg-primary text-primary-foreground border-primary" : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"}`}
                     title="Pedidos práticos pra demo"
                 >
                     <BookOpen className="w-4 h-4" />
@@ -583,7 +583,7 @@ export default function AulaVibeCodingShopify() {
                 {/* Botão conectar */}
                 <button
                     onClick={() => { setConnectMode(!connectMode); setPendingFrom(null); }}
-                    className={`p-2.5 rounded-xl shadow-lg border transition-all ${connectMode ? "bg-primary text-white border-primary" : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"}`}
+                    className={`p-2.5 rounded-xl shadow-lg border transition-all ${connectMode ? "bg-primary text-primary-foreground border-primary" : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"}`}
                     title={connectMode ? "Sair do modo conectar (ESC)" : "Conectar cards"}
                 >
                     <Link2 className="w-4 h-4" />

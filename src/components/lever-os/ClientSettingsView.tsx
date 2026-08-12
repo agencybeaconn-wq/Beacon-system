@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { ProductSelectorModal } from "@/components/clients/ProductSelector";
 import { InlineEditableValue, EditableAvatar } from "@/components/clients/InlineEditing";
-import { WhatsAppGroupPicker } from "@/components/clients/WhatsAppGroupPicker";
+import { ConnectionsHub } from "@/components/lever-os/ConnectionsHub";
 import { ImageIcon, Tag, Archive, Trash2, MoreVertical, Loader2, Pencil, Check, X, MessageCircle } from "lucide-react";
 import {
     PieChart,
@@ -176,64 +176,8 @@ export function ClientSettingsView({ client, clientId, onClientUpdate }: ClientS
     // Client type state
     const [clientType, setClientType] = useState<string>((client as any)?.client_type || 'avulso');
 
-    // Project deadline & name state
-    const [projectDeadline, setProjectDeadline] = useState<string>(() => {
-        const dl = (client as any)?.project_deadline;
-        if (!dl) return '';
-        try { return new Date(dl).toISOString().split('T')[0]; } catch { return ''; }
-    });
-    const [projectName, setProjectName] = useState<string>((client as any)?.project_name || '');
-
-    // Grupo WhatsApp do cliente (notificacoes de task concluida).
-    // Save acontece imediatamente quando o picker dispara onChange.
-    const [whatsappGroup, setWhatsappGroup] = useState<{ jid: string | null; name: string | null }>({
-        jid: (client as any)?.whatsapp_group_jid || null,
-        name: (client as any)?.whatsapp_group_name || null,
-    });
-    const [isSavingWhatsappGroup, setIsSavingWhatsappGroup] = useState(false);
-
-    useEffect(() => {
-        setWhatsappGroup({
-            jid: (client as any)?.whatsapp_group_jid || null,
-            name: (client as any)?.whatsapp_group_name || null,
-        });
-    }, [(client as any)?.whatsapp_group_jid, (client as any)?.whatsapp_group_name]);
-
-    const handleWhatsappGroupChange = async (group: { jid: string; name: string } | null) => {
-        const next = group ? { jid: group.jid, name: group.name } : { jid: null, name: null };
-        setWhatsappGroup(next);
-        setIsSavingWhatsappGroup(true);
-        try {
-            const { error } = await (supabase as any)
-                .from('agency_clients')
-                .update({
-                    whatsapp_group_jid: next.jid,
-                    whatsapp_group_name: next.name,
-                })
-                .eq('id', clientId);
-            if (error) throw error;
-            toast?.({
-                title: next.jid ? "Grupo vinculado!" : "Grupo removido",
-                description: next.jid ? `Tarefas concluidas serao notificadas em "${next.name}".` : 'Cliente nao recebera mais notificacoes em grupo.',
-            });
-            await refreshClientData();
-            onClientUpdate?.();
-        } catch (err: any) {
-            console.error("Erro ao salvar grupo WhatsApp:", err);
-            toast?.({
-                title: "Erro ao salvar grupo",
-                description: err.message || "Tente novamente.",
-                variant: "destructive",
-            });
-            // Rollback otimista
-            setWhatsappGroup({
-                jid: (client as any)?.whatsapp_group_jid || null,
-                name: (client as any)?.whatsapp_group_name || null,
-            });
-        } finally {
-            setIsSavingWhatsappGroup(false);
-        }
-    };
+    // Prazo do Projeto e WhatsApp removidos da pagina (2026-08) — estados e
+    // handlers deles sairam junto; as colunas continuam no banco, intactas.
 
     const handleClientTypeChange = async (newType: string) => {
         setClientType(newType);
@@ -254,41 +198,6 @@ export function ClientSettingsView({ client, clientId, onClientUpdate }: ClientS
         }
     };
 
-    const handleProjectNameSave = async () => {
-        try {
-            const { error } = await (supabase as any)
-                .from('agency_clients')
-                .update({ project_name: projectName || null })
-                .eq('id', clientId);
-            if (error) throw error;
-            toast?.({ title: "Nome do projeto atualizado!" });
-            await refreshClientData();
-            onClientUpdate?.();
-        } catch (error) {
-            console.error("Erro ao atualizar nome do projeto:", error);
-        }
-    };
-
-    const handleProjectDeadlineChange = async (dateStr: string) => {
-        setProjectDeadline(dateStr);
-        try {
-            const value = dateStr ? `${dateStr}T23:59:59.000Z` : null;
-            const { error } = await (supabase as any)
-                .from('agency_clients')
-                .update({ project_deadline: value })
-                .eq('id', clientId);
-            if (error) throw error;
-            toast?.({
-                title: "Prazo atualizado!",
-                description: dateStr ? `Prazo definido para ${new Date(dateStr).toLocaleDateString('pt-BR')}` : 'Prazo removido',
-            });
-            await refreshClientData();
-            onClientUpdate?.();
-        } catch (error) {
-            console.error("Erro ao atualizar prazo:", error);
-        }
-    };
-
     // Sync state with props when client data changes
     useEffect(() => {
         if (client?.payment_due_day !== undefined) {
@@ -296,15 +205,6 @@ export function ClientSettingsView({ client, clientId, onClientUpdate }: ClientS
         }
         if (client?.financials?.fixedFee !== undefined) {
             setLocalFixedFee(client.financials.fixedFee);
-        }
-        // Sincronizar projeto
-        const pn = (client as any)?.project_name;
-        setProjectName(pn || '');
-        const dl = (client as any)?.project_deadline;
-        try {
-            setProjectDeadline(dl ? new Date(dl).toISOString().split('T')[0] : '');
-        } catch {
-            setProjectDeadline('');
         }
     }, [client]);
 
@@ -899,49 +799,7 @@ export function ClientSettingsView({ client, clientId, onClientUpdate }: ClientS
                     </CardContent>
                 </Card>
 
-                {/* 1.5 Project Deadline Card */}
-                <Card className="overflow-hidden border-border/40 bg-card text-card-foreground shadow-none">
-                    <CardHeader className="border-b border-border/40 bg-muted/30 pb-6">
-                        <CardTitle className="text-xl flex items-center gap-2 font-bold">
-                            <Calendar className="w-5 h-5 text-orange-500" />
-                            Prazo do Projeto
-                        </CardTitle>
-                        <CardDescription>Defina o prazo de conclusão do projeto. Isso afeta a barra de progresso na cartela e nos projetos ativos.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-0">
-                        <div className="divide-y divide-border/40">
-                            <div className="p-6 flex items-center justify-between hover:bg-muted/10 transition-colors">
-                                <div className="space-y-1">
-                                    <Label className="text-base font-bold">Nome do Projeto</Label>
-                                    <p className="text-sm text-muted-foreground">Nome exibido nos projetos ativos.</p>
-                                </div>
-                                <Input
-                                    type="text"
-                                    value={projectName}
-                                    onChange={(e) => setProjectName(e.target.value)}
-                                    onBlur={handleProjectNameSave}
-                                    placeholder={`Projeto ${client.name}`}
-                                    className="w-56 text-right"
-                                />
-                            </div>
-                            <div className="p-6 flex items-center justify-between hover:bg-muted/10 transition-colors">
-                                <div className="space-y-1">
-                                    <Label className="text-base font-bold flex items-center gap-2">
-                                        <Calendar className="w-4 h-4 text-muted-foreground" />
-                                        Data de Conclusão
-                                    </Label>
-                                    <p className="text-sm text-muted-foreground">Quando o projeto deve ser entregue.</p>
-                                </div>
-                                <Input
-                                    type="date"
-                                    value={projectDeadline}
-                                    onChange={(e) => handleProjectDeadlineChange(e.target.value)}
-                                    className="w-48 text-right cursor-pointer"
-                                />
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
+                {/* Prazo do Projeto removido a pedido — prazos vivem na aba Prioridades */}
 
                 {/* 2. Portal Access Card */}
                 <Card className="overflow-hidden border-border/40 bg-card text-card-foreground shadow-none">
@@ -1087,34 +945,12 @@ export function ClientSettingsView({ client, clientId, onClientUpdate }: ClientS
                     </CardContent>
                 </Card>
 
-                {/* Comunicacao / WhatsApp */}
-                <Card className="overflow-hidden border-border/40 bg-card text-card-foreground shadow-none">
-                    <CardHeader className="border-b border-border/40 bg-muted/30 pb-6">
-                        <CardTitle className="text-xl flex items-center gap-2 font-bold">
-                            <MessageCircle className="w-5 h-5 text-emerald-500" />
-                            Comunicacao / WhatsApp
-                        </CardTitle>
-                        <CardDescription>Grupo do cliente que recebera as notificacoes automaticas de tarefas concluidas.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-6 space-y-3">
-                        <Label className="text-sm font-bold text-muted-foreground">Grupo do cliente</Label>
-                        <div className="flex items-center gap-2">
-                            <div className="flex-1">
-                                <WhatsAppGroupPicker
-                                    valueJid={whatsappGroup.jid}
-                                    valueName={whatsappGroup.name}
-                                    onChange={handleWhatsappGroupChange}
-                                    disabled={isSavingWhatsappGroup}
-                                />
-                            </div>
-                            {isSavingWhatsappGroup && <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />}
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                            Quando uma tarefa do cliente for marcada como concluida, uma mensagem e enviada neste grupo automaticamente.
-                            {!whatsappGroup.jid && " Selecione um grupo da sua instancia WhatsApp conectada."}
-                        </p>
-                    </CardContent>
-                </Card>
+                {/* Comunicacao/WhatsApp removido a pedido */}
+
+                {/* Conexao Shopify — unica integracao que vive na pagina do cliente */}
+                <div className="space-y-2">
+                    <ConnectionsHub onlyShopify />
+                </div>
             </div>
 
             {/* Modals */}

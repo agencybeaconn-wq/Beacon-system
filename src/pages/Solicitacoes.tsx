@@ -1022,7 +1022,7 @@ export default function Solicitacoes() {
                                 {/* Submit Button */}
                                 <Button
                                     type="submit"
-                                    className="w-full h-12 text-base font-semibold mt-4 bg-primary hover:bg-primary/90 text-white"
+                                    className="w-full h-12 text-base font-semibold mt-4 bg-primary hover:bg-primary/90 text-primary-foreground"
                                     disabled={isAssigning || !assignTitle.trim() || !assignClientId}
                                 >
                                     {isAssigning ? (
@@ -1199,7 +1199,7 @@ export default function Solicitacoes() {
                                         <Textarea placeholder="Breve descrição do recurso..." value={resDescription} onChange={(e) => setResDescription(e.target.value)} className="min-h-[120px] bg-card border-border/50 resize-y" />
                                     </div>
 
-                                    <Button type="submit" disabled={isSavingResource} className="w-full h-12 text-base font-semibold mt-4 bg-primary hover:bg-primary/90 text-white">
+                                    <Button type="submit" disabled={isSavingResource} className="w-full h-12 text-base font-semibold mt-4 bg-primary hover:bg-primary/90 text-primary-foreground">
                                         {isSavingResource ? (<><Loader2 className="h-5 w-5 mr-2 animate-spin" /> Salvando...</>) : (<>Adicionar Recurso</>)}
                                     </Button>
                                 </form>

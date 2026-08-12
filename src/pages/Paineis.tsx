@@ -353,7 +353,7 @@ export default function Paineis() {
                         className={cn(
                             "px-4 py-2 rounded-lg text-xs font-bold transition-all",
                             period === btn.value
-                                ? "bg-primary text-white shadow-lg shadow-primary/20"
+                                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                                 : "bg-muted/10 text-muted-foreground hover:bg-muted/20 border border-border/20"
                         )}
                     >
@@ -395,7 +395,7 @@ export default function Paineis() {
                         className={cn(
                             "flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all",
                             showAiAnalysis
-                                ? "bg-primary text-white shadow-lg shadow-primary/20"
+                                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                                 : "bg-primary/10 text-primary hover:bg-primary/20"
                         )}
                     >
@@ -767,7 +767,7 @@ export default function Paineis() {
                                                     <User className="h-9 w-9 text-primary" />
                                                 </div>
                                             )}
-                                            <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-primary rounded-full flex items-center justify-center text-white text-xs font-black shadow">1</div>
+                                            <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-xs font-black shadow">1</div>
                                         </div>
                                         <p className="text-lg font-black mt-3">{top.member.name}</p>
                                         <p className="text-3xl font-black text-primary mt-1">{top.done}</p>

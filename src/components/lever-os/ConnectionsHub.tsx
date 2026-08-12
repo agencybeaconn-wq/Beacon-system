@@ -44,9 +44,11 @@ interface ClarityConnection {
 
 interface ConnectionsHubProps {
     onConnectionChange?: (type: 'meta' | 'shopify' | 'kartpanda', connected: boolean, data?: any) => void;
+    /** Página do cliente: mostra só o card da Shopify (Meta/CartPanda/Clarity ocultos). */
+    onlyShopify?: boolean;
 }
 
-export function ConnectionsHub({ onConnectionChange }: ConnectionsHubProps) {
+export function ConnectionsHub({ onConnectionChange, onlyShopify = false }: ConnectionsHubProps) {
     const { toast } = useToast();
     const { selectedClientId, clientData, refreshClients, workspaceId } = useDashboard();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -662,9 +664,10 @@ export function ConnectionsHub({ onConnectionChange }: ConnectionsHubProps) {
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* Header Removed */}
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className={`grid grid-cols-1 ${onlyShopify ? "max-w-3xl" : "lg:grid-cols-2"} gap-8`}>
 
                 {/* Meta Ads Connection */}
+                {!onlyShopify && (
                 <Card className="group relative overflow-hidden border-border/40 transition-all duration-300">
 
                     <CardHeader className="pb-6">
@@ -873,6 +876,7 @@ export function ConnectionsHub({ onConnectionChange }: ConnectionsHubProps) {
                         )}
                     </CardContent>
                 </Card>
+                )}
 
                 {/* Shopify & CartPanda Integrated Card Stack */}
                 <div className="space-y-8">
@@ -1023,7 +1027,8 @@ export function ConnectionsHub({ onConnectionChange }: ConnectionsHubProps) {
                         </CardContent>
                     </Card>
 
-                    {/* CartPanda */}
+                    {/* CartPanda + Clarity — ocultos no modo onlyShopify */}
+                    {!onlyShopify && (<>
                     <Card className="group relative overflow-hidden border-border/40 transition-all duration-300">
                         <CardHeader className="pb-6">
                             <div className="flex items-center justify-between">
@@ -1222,6 +1227,7 @@ export function ConnectionsHub({ onConnectionChange }: ConnectionsHubProps) {
                             )}
                         </CardContent>
                     </Card>
+                    </>)}
                 </div>
             </div>
         </div>

@@ -1,18 +1,9 @@
-import { useParams, useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { useEffect, useState, useMemo } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useMemo } from "react";
 import { ClientHeader } from "@/components/lever-os/ClientHeader";
-import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { Loader2, AlertCircle, ArrowLeft, Package, Folder, LayoutGrid, Layers } from "lucide-react";
-import { ConnectionsHub } from "@/components/lever-os/ConnectionsHub";
-import { ClientBriefingTab } from "@/components/lever-os/ClientBriefingTab";
-import { OrdersTab } from "@/components/lever-os/OrdersTab";
-import { DocumentsView } from "@/components/lever-os/DocumentsView";
-import { ClientFormsView } from "@/components/lever-os/ClientFormsView";
+import { Loader2, AlertCircle, ArrowLeft } from "lucide-react";
 import { ClientSettingsView } from "@/components/lever-os/ClientSettingsView";
-import { SmartDataVizView } from "@/components/smart-data-viz/SmartDataVizView";
-import { ClientPricingView } from "@/components/lever-os/ClientPricingView";
-import { ClientOnboardingTab } from "@/components/lever-os/ClientOnboardingTab";
-import { useSelectedClient, useDashboard } from "@/contexts/DashboardContext";
+import { useSelectedClient } from "@/contexts/DashboardContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Client, OnboardingPhase, ClientStatus, ServiceType } from "@/types/lever-os";
@@ -30,27 +21,14 @@ export default function ClientDetails() {
     const navigate = useNavigate();
     const location = useLocation();
     const clientsListPath = location.pathname.startsWith('/agency') ? '/agency/clients' : '/clients';
-    const [searchParams, setSearchParams] = useSearchParams();
     const { setSelectedClient, clientData, isLoading, error, clients: allClients } = useSelectedClient();
-
-    // Estado para rastrear conexões feitas
-    const [connections, setConnections] = useState<{
-        meta: boolean;
-        shopify: boolean;
-        kartpanda: boolean;
-    }>({ meta: false, shopify: false, kartpanda: false });
 
     // Sincronizar o contexto global quando a página carregar com ID da URL
     useEffect(() => {
         if (id) {
-            console.log('[ClientDetails] Setting selected client from URL:', id);
             setSelectedClient(id);
         }
     }, [id, setSelectedClient]);
-
-    const handleConnectionChange = (type: 'meta' | 'shopify' | 'kartpanda', connected: boolean) => {
-        setConnections(prev => ({ ...prev, [type]: connected }));
-    };
 
     // Gerar fases baseadas nos produtos atribuídos (usando o novo hook)
     const productBasedPhases = useConvertProductsToPhases((clientData as any)?.assigned_products || []);
@@ -135,88 +113,30 @@ export default function ClientDetails() {
         );
     }
 
-    const assignedProductIds = (clientData as any)?.assigned_products || [];
-
-    // Tab state - using searchParams that was defined at the top (hooks must be called unconditionally)
-    const currentTab = searchParams.get("tab") || "onboarding";
-
-    const handleTabChange = (value: string) => {
-        setSearchParams({ tab: value });
-    };
-
-    const tabTitles: Record<string, { title: string, desc: string }> = {
-        onboarding: {
-            title: "Onboarding",
-            desc: "Acompanhe o checklist e progresso de onboarding deste cliente."
-        },
-        briefing: { title: "Briefing", desc: "Visualize o briefing e dados coletados deste cliente." },
-        connections: { title: "Conexões", desc: "Gerencie as integrações deste cliente." },
-        files: { title: "Documentos", desc: "Acesse os arquivos e pastas deste cliente." },
-        forms: { title: "Formulários", desc: "Gerencie os formulários recebidos." },
-        "data-viz": { title: "Smart Data Viz", desc: "Métricas globais do projeto." },
-        settings: { title: "Configurações", desc: "Gerencie os detalhes e o escopo deste cliente." }
-    };
-
-
+    // Página ÚNICA (2026-08): as abas Onboarding/Briefing/Documentos/Preços/
+    // Conexões sairam — briefing e preços vivem no Briefing geral; a conexão
+    // Shopify mora dentro do ClientSettingsView (ConnectionsHub onlyShopify).
     return (
-        <Tabs key={id} value={currentTab} onValueChange={handleTabChange} className="w-full">
-            {/* Sticky header — stays at top when scrolling */}
-            <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm">
-                <div className="w-full px-10 py-6">
-                    <ClientHeader
-                        client={adaptedClient}
-                        clientId={clientData!.id}
-                        onClientUpdate={() => setSelectedClient(id!)}
-                        activeTab={currentTab}
-                        onTabChange={handleTabChange}
-                        clientsList={(allClients || [])
-                            .filter((c: any) => !c.is_archived)
-                            .map((c: any) => ({ id: c.id, name: c.name }))
-                        }
-                        pageTitle={tabTitles[currentTab]?.title}
-                        pageDescription={tabTitles[currentTab]?.desc}
-                    />
-                </div>
+        <div key={id} className="w-full">
+            <div className="w-full px-10 py-6">
+                <ClientHeader
+                    client={adaptedClient}
+                    clientId={clientData!.id}
+                    onClientUpdate={() => setSelectedClient(id!)}
+                    clientsList={(allClients || [])
+                        .filter((c: any) => !c.is_archived)
+                        .map((c: any) => ({ id: c.id, name: c.name }))
+                    }
+                />
             </div>
 
-            <div className="w-full px-10">
-
-                <TabsContent value="onboarding" className="mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <ClientOnboardingTab clientId={clientData!.id} />
-                </TabsContent>
-
-                <TabsContent value="briefing" className="mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <ClientBriefingTab clientId={clientData!.id} clientName={clientData!.name} />
-                </TabsContent>
-
-                <TabsContent value="connections" className="mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <ConnectionsHub onConnectionChange={handleConnectionChange} />
-                </TabsContent>
-
-                <TabsContent value="files" className="mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <DocumentsView clientId={clientData!.id} />
-                </TabsContent>
-
-                <TabsContent value="pricing" className="mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <ClientPricingView clientId={clientData!.id} />
-                </TabsContent>
-
-                <TabsContent value="forms" className="mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <ClientFormsView />
-                </TabsContent>
-
-                <TabsContent value="data-viz" className="mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <SmartDataVizView />
-                </TabsContent>
-
-                <TabsContent value="settings" className="mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <ClientSettingsView
-                        client={adaptedClient}
-                        clientId={clientData!.id}
-                        onClientUpdate={() => setSelectedClient(id!)}
-                    />
-                </TabsContent>
+            <div className="w-full px-10 pb-10">
+                <ClientSettingsView
+                    client={adaptedClient}
+                    clientId={clientData!.id}
+                    onClientUpdate={() => setSelectedClient(id!)}
+                />
             </div>
-        </Tabs>
+        </div>
     );
 }

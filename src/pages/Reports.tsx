@@ -939,7 +939,7 @@ export default function Reports({ isEmbedded }: { isEmbedded?: boolean }) {
             <Button
               onClick={() => handleGenerate('email')}
               disabled={isGenerating}
-              className="bg-primary hover:bg-primary/90 text-white"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="mr-2 h-4 w-4" />}
               {t('reports.generate_dialog.send_email', 'Enviar por E-mail')}

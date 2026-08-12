@@ -476,7 +476,7 @@ export function CommentsSection({ adId, postId, insightType, initialComments }: 
                                         <div className="flex flex-col gap-3 relative z-10">
                                             <div className="flex gap-3">
                                                 {/* Your Avatar */}
-                                                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-xs flex-shrink-0 mt-1 ring-4 ring-background">
+                                                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold text-xs flex-shrink-0 mt-1 ring-4 ring-background">
                                                     Eu
                                                 </div>
 

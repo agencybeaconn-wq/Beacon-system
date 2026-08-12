@@ -157,7 +157,7 @@ const TrackingDashboard = () => {
                         variant="ghost"
                         className={cn(
                             "rounded-xl h-11 border-2 transition-all font-bold flex items-center gap-2 group",
-                            showShipments ? "border-primary bg-primary text-white" : "border-primary/20 bg-secondary/50 text-foreground/80 hover:bg-primary/10"
+                            showShipments ? "border-primary bg-primary text-primary-foreground" : "border-primary/20 bg-secondary/50 text-foreground/80 hover:bg-primary/10"
                         )}
                         onClick={() => {
                             const newState = !showShipments;
@@ -503,7 +503,7 @@ const StatusTabItem = ({ icon, label, count, color }: any) => (
             <div className={cn("p-2.5 rounded-xl bg-white/5 shadow-inner", color)}>{icon}</div>
             <span className="text-sm font-bold text-white/90 group-hover:text-white transition-colors uppercase tracking-tight">{label}</span>
         </div>
-        <div className="px-3 py-1.5 rounded-lg bg-white/10 text-[11px] font-black text-white group-hover:bg-primary transition-colors">
+        <div className="px-3 py-1.5 rounded-lg bg-white/10 text-[11px] font-black text-primary-foreground group-hover:bg-primary transition-colors">
             {count}
         </div>
     </div>
