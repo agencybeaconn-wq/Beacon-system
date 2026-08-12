@@ -115,10 +115,12 @@ function Section({ number, title, children, defaultOpen = true }: { number: stri
 
 // ─── Field ──────────────────────────────────────────────────────────────────────
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
     return (
         <div className="space-y-2">
             <Label className="text-sm font-medium text-foreground/80">{label}</Label>
+            {/* Texto de ajuda: deixa o briefing auto-explicável pro cliente leigo */}
+            {hint && <p className="text-xs text-muted-foreground -mt-1 leading-snug">{hint}</p>}
             {children}
         </div>
     );
@@ -162,6 +164,10 @@ export default function BriefingForm() {
     const [a, setA] = useState<Record<string, any>>({
         marca_nome: '', instagram: '', tempo_marca: '', problema_site: '', nicho: '', vende_onde: '',
         produtos: [] as string[], outros_produtos: '',
+        // Desnichamento: 'camisas' abre a grade de camisas de time; 'outro' abre
+        // o cadastro manual de produtos (nome + valor), persistido no briefing.
+        tipo_negocio: '',
+        produtos_manuais: [] as { nome: string; valor: string }[],
         preco_torcedor: '', preco_jogador: '', preco_retro: '', preco_infantil: '',
         preco_agasalho_viagem: '', preco_conjunto_treino: '', preco_jaqueta: '', preco_moletom: '', preco_short: '',
         preco_patchs: '', preco_patrocinios: '',
@@ -389,7 +395,19 @@ export default function BriefingForm() {
                     { section: 'info', key: 'parcelamento', label: 'Parcelamento sem juros', value: a.parcelamento || '', sort_order: 2 },
                     { section: 'info', key: 'parcelas_max', label: 'Máximo de parcelas', value: a.parcelas_max || '', sort_order: 3 },
                 ];
-                const pricingRows = allRows
+                // Produtos manuais (nicho fora de camisa): cada linha vira um
+                // produto no client_pricing, persistido com nome + valor.
+                const manualRows = (a.tipo_negocio === 'Outro tipo de produto' ? (a.produtos_manuais || []) : [])
+                    .filter((p: { nome: string; valor: string }) => p.nome?.trim() && p.valor?.trim())
+                    .map((p: { nome: string; valor: string }, i: number) => ({
+                        section: 'products',
+                        key: `manual_${i}_${p.nome.toLowerCase().replace(/[^a-z0-9]+/g, '_').slice(0, 30)}`,
+                        label: p.nome.trim(),
+                        value: p.valor.trim(),
+                        sort_order: i,
+                    }));
+
+                const pricingRows = [...allRows, ...manualRows]
                     .filter(r => r.value !== '' && r.value !== null && r.value !== undefined)
                     .map(r => ({ ...r, client_id: client.id }));
 
@@ -588,34 +606,92 @@ ${answersText}`,
             {formType === 'criacao_loja' && (
                 <>
                     <Section number="1" title="Informações Gerais da Marca">
-                        <Field label="Nome da marca"><Input value={a.marca_nome} onChange={e => set('marca_nome', e.target.value)} placeholder="Ex: Nike Store BR" /></Field>
-                        <Field label="Qual é o nicho principal da sua loja?"><Input value={a.nicho} onChange={e => set('nicho', e.target.value)} placeholder="Ex: Camisas de time" /></Field>
-                        <Field label="Mercado de atuação"><RadioGroup options={['Brasil (PT-BR)', 'Internacional (EN)']} value={a.vende_onde} onChange={v => set('vende_onde', v)} /></Field>
+                        <Field label="Nome da marca" hint="O nome que aparece pro cliente na loja e nas redes."><Input value={a.marca_nome} onChange={e => set('marca_nome', e.target.value)} placeholder="Ex: Minha Loja" /></Field>
+                        <Field label="Qual é o nicho principal da sua loja?" hint="O que a loja vende no geral. Ex: camisas de time, cosméticos, suplementos, moda feminina, eletrônicos..."><Input value={a.nicho} onChange={e => set('nicho', e.target.value)} placeholder="Ex: camisas de time, cosméticos, suplementos..." /></Field>
+                        <Field label="Mercado de atuação" hint="Em qual público a loja vende. Isso define o idioma e a moeda do site."><RadioGroup options={['Brasil (PT-BR)', 'Internacional (EN)']} value={a.vende_onde} onChange={v => set('vende_onde', v)} /></Field>
                     </Section>
 
                     <Section number="2" title="Estrutura de Produtos" defaultOpen={false}>
-                        <Field label="Vai utilizar nossos produtos?"><RadioGroup options={['Sim', 'Não']} value={a.usar_nossos_produtos} onChange={v => set('usar_nossos_produtos', v)} /></Field>
+                        <Field label="Que tipo de produto a loja vende?" hint="Isso muda os campos de preço abaixo. Se for camisa de time, usamos a nossa grade pronta. Qualquer outro produto, você cadastra os itens e valores na mão.">
+                            <RadioGroup options={['Camisas de time', 'Outro tipo de produto']} value={a.tipo_negocio} onChange={v => set('tipo_negocio', v)} />
+                        </Field>
 
-                        {a.usar_nossos_produtos === 'Sim' && (<>
-                            <Field label="Quais produtos a loja vende?">
-                                <CheckGroup options={['Camisas de time', 'Camisas retrô', 'Conjuntos infantil', 'Jaquetas', 'Produtos de treino', 'Acessórios']} selected={a.produtos} onChange={v => set('produtos', v)} />
-                            </Field>
-                            <Field label="Outros produtos"><Input value={a.outros_produtos} onChange={e => set('outros_produtos', e.target.value)} placeholder="Descreva..." /></Field>
+                        {/* CAMISAS DE TIME — fluxo original */}
+                        {a.tipo_negocio === 'Camisas de time' && (<>
+                            <Field label="Vai utilizar nossos produtos?" hint="Sim = usamos o catálogo pronto da NODE. Não = a loja já tem os produtos dela cadastrados."><RadioGroup options={['Sim', 'Não']} value={a.usar_nossos_produtos} onChange={v => set('usar_nossos_produtos', v)} /></Field>
+
+                            {a.usar_nossos_produtos === 'Sim' && (<>
+                                <Field label="Quais produtos a loja vende?">
+                                    <CheckGroup options={['Camisas de time', 'Camisas retrô', 'Conjuntos infantil', 'Jaquetas', 'Produtos de treino', 'Acessórios']} selected={a.produtos} onChange={v => set('produtos', v)} />
+                                </Field>
+                                <Field label="Outros produtos" hint="Algo que a loja vende e não está na lista acima."><Input value={a.outros_produtos} onChange={e => set('outros_produtos', e.target.value)} placeholder="Descreva..." /></Field>
+                            </>)}
+
+                            {a.usar_nossos_produtos === 'Não' && (
+                                <Field label="Vai manter os preços atuais?" hint="Sim = mantemos os preços que já estão na loja e pulamos a etapa de preços."><RadioGroup options={['Sim', 'Não']} value={a.manter_precos_atuais} onChange={v => set('manter_precos_atuais', v)} /></Field>
+                            )}
                         </>)}
 
-                        {a.usar_nossos_produtos === 'Não' && (
-                            <Field label="Vai manter os preços atuais?"><RadioGroup options={['Sim', 'Não']} value={a.manter_precos_atuais} onChange={v => set('manter_precos_atuais', v)} /></Field>
+                        {/* OUTRO NICHO — cadastro manual de produtos (nome + valor) */}
+                        {a.tipo_negocio === 'Outro tipo de produto' && (
+                            <div className="space-y-3">
+                                <Field label="Produtos e valores" hint="Liste os produtos que a loja vende com o preço de cada um. Adicione quantos precisar — é isso que a gente vai cadastrar na loja.">
+                                    <div className="space-y-2">
+                                        {(a.produtos_manuais || []).map((p: { nome: string; valor: string }, idx: number) => (
+                                            <div key={idx} className="flex items-center gap-2">
+                                                <Input
+                                                    className="flex-1"
+                                                    placeholder="Nome do produto (ex: Sérum Facial 30ml)"
+                                                    value={p.nome}
+                                                    onChange={e => {
+                                                        const next = [...a.produtos_manuais];
+                                                        next[idx] = { ...next[idx], nome: e.target.value };
+                                                        set('produtos_manuais', next);
+                                                    }}
+                                                />
+                                                <div className="relative w-32 shrink-0">
+                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">R$</span>
+                                                    <Input
+                                                        className="pl-9"
+                                                        placeholder="0,00"
+                                                        value={p.valor}
+                                                        onChange={e => {
+                                                            const next = [...a.produtos_manuais];
+                                                            next[idx] = { ...next[idx], valor: e.target.value };
+                                                            set('produtos_manuais', next);
+                                                        }}
+                                                    />
+                                                </div>
+                                                <Button
+                                                    type="button" variant="ghost" size="icon"
+                                                    className="shrink-0 text-muted-foreground hover:text-destructive"
+                                                    onClick={() => set('produtos_manuais', a.produtos_manuais.filter((_: any, i: number) => i !== idx))}
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </Button>
+                                            </div>
+                                        ))}
+                                        <Button
+                                            type="button" variant="outline" size="sm"
+                                            onClick={() => set('produtos_manuais', [...(a.produtos_manuais || []), { nome: '', valor: '' }])}
+                                        >
+                                            <Plus className="w-4 h-4 mr-1" /> Adicionar produto
+                                        </Button>
+                                    </div>
+                                </Field>
+                            </div>
                         )}
                     </Section>
 
+                    {/* Grade de preços de CAMISA só no fluxo de camisas de time.
+                        Outro nicho já lançou nome+valor na seção 2. */}
+                    {a.tipo_negocio === 'Camisas de time' && (
                     <Section number="3" title="Preços" defaultOpen={false}>
                         {precosBloqueados && (
                             <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-300">
                                 Você optou por <strong>manter os preços atuais</strong>. Esta etapa pode ser pulada — os preços já cadastrados no cliente serão preservados.
                             </div>
                         )}
-                        <Field label="Moeda utilizada"><RadioGroup disabled={precosBloqueados} options={['Real (BRL)', 'Dólar (USD)', 'Euro (EUR)', 'Libra (GBP)', 'Peso Argentino (ARS)']} value={a.moeda} onChange={v => set('moeda', v)} /></Field>
-
                         <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mt-4 mb-2">Preços Base dos Produtos</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <Field label="Camisa Torcedor"><Input disabled={precosBloqueados} value={a.preco_torcedor} onChange={e => set('preco_torcedor', e.target.value)} placeholder="0,00" /></Field>
@@ -639,10 +715,14 @@ ${answersText}`,
                             <Field label="Personalização (Nome e Número)"><Input disabled={precosBloqueados} value={a.preco_personalizacao} onChange={e => set('preco_personalizacao', e.target.value)} placeholder="0,00" /></Field>
                             <Field label="Manga Longa"><Input disabled={precosBloqueados} value={a.preco_manga_longa} onChange={e => set('preco_manga_longa', e.target.value)} placeholder="0,00" /></Field>
                         </div>
+                    </Section>
+                    )}
 
-                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mt-6 mb-2">Frete e Parcelamento (sempre editáveis)</p>
+                    {/* Frete, Moeda e Parcelamento — vale pra qualquer nicho */}
+                    <Section number={a.tipo_negocio === 'Camisas de time' ? '4' : '3'} title="Frete, Moeda e Parcelamento" defaultOpen={false}>
+                        <Field label="Moeda utilizada" hint="A moeda que aparece nos preços da loja."><RadioGroup options={['Real (BRL)', 'Dólar (USD)', 'Euro (EUR)', 'Libra (GBP)', 'Peso Argentino (ARS)']} value={a.moeda} onChange={v => set('moeda', v)} /></Field>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <Field label="Frete Grátis?"><RadioGroup options={['Sim', 'Não']} value={a.frete_gratis} onChange={v => set('frete_gratis', v)} /></Field>
+                            <Field label="Frete Grátis?" hint="A loja oferece frete grátis acima de um valor de compra?"><RadioGroup options={['Sim', 'Não']} value={a.frete_gratis} onChange={v => set('frete_gratis', v)} /></Field>
                             <Field label="Oferece parcelamento?"><RadioGroup options={['Sim', 'Não']} value={a.parcelamento} onChange={v => set('parcelamento', v)} /></Field>
                         </div>
                         {a.frete_gratis === 'Sim' && (
@@ -719,7 +799,7 @@ ${answersText}`,
                     </Section>
 
                     <Section number="7" title="Páginas e Políticas" defaultOpen={false}>
-                        <Field label="Páginas de políticas"><RadioGroup options={['Criar novas (padrão Lever)', 'Usar as atuais do cliente', 'Adaptar as atuais']} value={a.politicas_opcao} onChange={v => set('politicas_opcao', v)} /></Field>
+                        <Field label="Páginas de políticas" hint="Páginas obrigatórias de uma loja: Troca e Devolução, Privacidade, Termos de Uso. Podemos criar do zero no nosso padrão ou aproveitar as que a loja já tem."><RadioGroup options={['Criar novas (padrão NODE)', 'Usar as atuais do cliente', 'Adaptar as atuais']} value={a.politicas_opcao} onChange={v => set('politicas_opcao', v)} /></Field>
                         {a.politicas_opcao === 'Adaptar as atuais' && (
                             <Field label="O que precisa ser adaptado?"><Textarea value={a.politicas_adaptar} onChange={e => set('politicas_adaptar', e.target.value)} placeholder="Descreva o que precisa mudar nas políticas atuais..." rows={3} /></Field>
                         )}
@@ -731,7 +811,7 @@ ${answersText}`,
                             <>
                                 <Field label="Qual plataforma o cliente já usa?"><RadioGroup options={['Reportana', 'Klaviyo', 'Nenhuma (vamos configurar)']} value={a.plataforma_automacao} onChange={v => set('plataforma_automacao', v)} /></Field>
                                 <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 p-4 mt-2">
-                                    <p className="text-sm font-medium text-amber-700 dark:text-amber-300">O cliente precisa enviar acesso para: <strong>leverecomm@gmail.com</strong></p>
+                                    <p className="text-sm font-medium text-amber-700 dark:text-amber-300">O cliente precisa enviar acesso para: <strong>agencybeaconn@gmail.com</strong></p>
                                 </div>
                             </>
                         )}
