@@ -47,9 +47,9 @@ function isValidUrl(str: string): boolean {
 
 interface ClientOption { id: string; name: string; }
 
+// "Branding Assessoria" removido a pedido — só existe o fluxo de loja.
 const FORM_TYPES = [
     { id: 'criacao_loja', label: 'Criação / Reformulação de Loja' },
-    { id: 'branding_assessoria', label: 'Branding Assessoria' },
 ];
 
 // ─── Checkbox Group ─────────────────────────────────────────────────────────────
@@ -550,19 +550,22 @@ ${answersText}`,
                             <p className="text-muted-foreground text-sm">Preencha todas as informações do cliente.</p>
                         </div>
                     </div>
-                    {/* Form Type Selector */}
-                    <div className="flex items-center bg-muted/50 rounded-xl p-1 border border-border/50 shrink-0">
-                        {FORM_TYPES.map(ft => (
-                            <button key={ft.id} type="button" onClick={() => setFormType(ft.id)} className={cn(
-                                "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap",
-                                formType === ft.id
-                                    ? "bg-background text-foreground shadow-sm border border-border/50"
-                                    : "text-muted-foreground hover:text-foreground"
-                            )}>
-                                {ft.label}
-                            </button>
-                        ))}
-                    </div>
+                    {/* Seletor de tipo escondido: só existe um fluxo (loja).
+                        Reaparece automático se um segundo tipo for adicionado. */}
+                    {FORM_TYPES.length > 1 && (
+                        <div className="flex items-center bg-muted/50 rounded-xl p-1 border border-border/50 shrink-0">
+                            {FORM_TYPES.map(ft => (
+                                <button key={ft.id} type="button" onClick={() => setFormType(ft.id)} className={cn(
+                                    "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap",
+                                    formType === ft.id
+                                        ? "bg-background text-foreground shadow-sm border border-border/50"
+                                        : "text-muted-foreground hover:text-foreground"
+                                )}>
+                                    {ft.label}
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
             )}
 
@@ -805,19 +808,9 @@ ${answersText}`,
                         )}
                     </Section>
 
-                    <Section number="8" title="Automações" defaultOpen={false}>
-                        <Field label="Precisa de uma estrutura de automações? (confirmação de compra, carrinho abandonado, etc.)"><RadioGroup options={['Sim', 'Não']} value={a.usar_automacoes} onChange={v => set('usar_automacoes', v)} /></Field>
-                        {a.usar_automacoes === 'Sim' && (
-                            <>
-                                <Field label="Qual plataforma o cliente já usa?"><RadioGroup options={['Reportana', 'Klaviyo', 'Nenhuma (vamos configurar)']} value={a.plataforma_automacao} onChange={v => set('plataforma_automacao', v)} /></Field>
-                                <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 p-4 mt-2">
-                                    <p className="text-sm font-medium text-amber-700 dark:text-amber-300">O cliente precisa enviar acesso para: <strong>agencybeaconn@gmail.com</strong></p>
-                                </div>
-                            </>
-                        )}
-                    </Section>
+                    {/* Seção Automações removida a pedido (2026-08) */}
 
-                    <Section number="9" title="Dados para Implementação" defaultOpen={false}>
+                    <Section number="8" title="Dados para Implementação" defaultOpen={false}>
                         <p className="text-xs text-muted-foreground mb-2">Dados utilizados na implementação automática da loja (políticas, tema, contato).</p>
 
                         {/* Acesso à loja Shopify existente — o time conecta via solicitação de colaborador */}
@@ -910,17 +903,6 @@ ${answersText}`,
                         </Field>
                     </Section>
                 </>
-            )}
-
-            {/* ═══ SEÇÕES — Branding Assessoria (placeholder) ═══ */}
-            {formType === 'branding_assessoria' && (
-                <div className="text-center py-20">
-                    <div className="w-16 h-16 mx-auto rounded-2xl bg-muted/50 flex items-center justify-center mb-4">
-                        <Send className="w-8 h-8 text-muted-foreground/40" />
-                    </div>
-                    <h2 className="text-lg font-semibold text-muted-foreground">Branding Assessoria</h2>
-                    <p className="text-sm text-muted-foreground/60 mt-1">Em breve — este formulário está sendo desenvolvido.</p>
-                </div>
             )}
 
             {/* Submit */}
