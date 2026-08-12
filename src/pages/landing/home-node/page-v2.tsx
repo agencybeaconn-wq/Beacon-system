@@ -279,7 +279,6 @@ function Counter({ value, prefix = '', suffix = '' }: { value: number; prefix?: 
    1px, mono e discreto. HUD que compete com a arte vira poluição.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-const ATOS_V2 = ['ABERTURA', 'SOLUÇÕES', 'OPERAÇÕES', 'CONTATO'];
 const SECOES_V2 = [
     { id: 'top', rot: 'ABERTURA' },
     { id: 'solucoes', rot: 'SOLUÇÕES' },
@@ -291,69 +290,6 @@ const SECOES_V2 = [
 
 /** Dispara a onda que atravessa o cérebro. A interface CONVERSA com a arte. */
 const pulsar = () => window.dispatchEvent(new Event('node-pulse'));
-
-/** Moldura de instrumento + telemetria ao vivo. */
-function HudV2({ ato }: { ato: number }) {
-    const [pct, setPct] = useState(0);
-    const [hora, setHora] = useState('--:--:--');
-    const [ativa, setAtiva] = useState(0);
-
-    useEffect(() => {
-        const onScroll = () => {
-            const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
-            setPct(Math.round(Math.min(1, scrollY / max) * 100));
-            // qual seção está ocupando o meio da tela
-            let idx = 0;
-            SECOES_V2.forEach((s, i) => {
-                const el = document.getElementById(s.id);
-                if (el && el.getBoundingClientRect().top <= innerHeight * 0.45) idx = i;
-            });
-            setAtiva(idx);
-        };
-        const t = setInterval(() => setHora(new Date().toLocaleTimeString('pt-BR', { hour12: false })), 1000);
-        addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
-        return () => { removeEventListener('scroll', onScroll); clearInterval(t); };
-    }, []);
-
-    const barra = '█'.repeat(Math.round(pct / 10)) + '░'.repeat(10 - Math.round(pct / 10));
-
-    return (
-        <div className="v2-hud" aria-hidden="true">
-            <span className="v2-canto v2-canto-tl" /><span className="v2-canto v2-canto-tr" />
-            <span className="v2-canto v2-canto-bl" /><span className="v2-canto v2-canto-br" />
-
-            {/* espinha de nós: a página É um grafo */}
-            <div className="v2-espinha">
-                {SECOES_V2.map((s, i) => (
-                    <a key={s.id} href={`#${s.id}`} className={`v2-no${i === ativa ? ' on' : ''}`}
-                        onClick={pulsar} style={{ pointerEvents: 'auto' }}>
-                        {/* rótulo → número → PONTO. O ponto é o último de propósito:
-                            com justify-content:flex-end ele fica ancorado na direita e a
-                            coluna de pontos sai reta. Com o ponto em primeiro, a largura
-                            variável de cada rótulo empurrava cada ponto pra um x diferente. */}
-                        <b>{s.rot}</b><em>{String(i + 1).padStart(2, '0')}</em><i />
-                    </a>
-                ))}
-            </div>
-
-            {/* telemetria inferior */}
-            <div className="v2-tele">
-                <span>NODE//SYS</span>
-                <span className="v2-tele-sep">·</span>
-                <span className="v2-tele-ok"><i />NEURAL_LINK ATIVO</span>
-                <span className="v2-tele-sep">·</span>
-                <span>ATO {ato + 1}/4 {ATOS_V2[Math.min(ato, 3)]}</span>
-                <span className="v2-tele-flex" />
-                <span className="v2-tele-barra">{barra} {String(pct).padStart(3, '0')}%</span>
-                <span className="v2-tele-sep">·</span>
-                <span>-19.92 / -43.94</span>
-                <span className="v2-tele-sep">·</span>
-                <span className="v2-tele-hora">{hora}</span>
-            </div>
-        </div>
-    );
-}
 
 /** Quebra o texto em glifos individuais para o ATO 1 (desmonte no scroll).
  *  Cada glifo é inline-block porque só assim aceita transform. O espaço vira
@@ -368,6 +304,38 @@ function Glifos({ texto }: { texto: string }) {
             ))}
             <span className="v2-leitor">{texto}</span>
         </>
+    );
+}
+
+/** Espinha de nós SOZINHA (de volta a pedido, 2026-08-12): o menu lateral que
+ *  acende na seção atual. É só a espinha — cantoneiras, telemetria e retículo
+ *  do HUD antigo continuam fora. Reusa o CSS .v2-espinha/.v2-no existente. */
+function EspinhaV2() {
+    const [ativa, setAtiva] = useState(0);
+    useEffect(() => {
+        const onScroll = () => {
+            let idx = 0;
+            SECOES_V2.forEach((s, i) => {
+                const el = document.getElementById(s.id);
+                if (el && el.getBoundingClientRect().top <= innerHeight * 0.45) idx = i;
+            });
+            setAtiva(idx);
+        };
+        addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+        return () => removeEventListener('scroll', onScroll);
+    }, []);
+    return (
+        <div className="v2-hud" aria-hidden="true">
+            <div className="v2-espinha">
+                {SECOES_V2.map((s, i) => (
+                    <a key={s.id} href={`#${s.id}`} className={`v2-no${i === ativa ? ' on' : ''}`}
+                        onClick={pulsar} tabIndex={-1} style={{ pointerEvents: 'auto' }}>
+                        <b>{s.rot}</b><em>{String(i + 1).padStart(2, '0')}</em><i />
+                    </a>
+                ))}
+            </div>
+        </div>
     );
 }
 
@@ -406,121 +374,6 @@ function Decodifica({ texto, atraso = 900 }: { texto: string; atraso?: number })
             <span className="v2-decod" aria-hidden="true">{saida}</span>
             <span className="v2-leitor">{texto}</span>
         </>
-    );
-}
-
-/** TRILHO — o circuito que prova que a página é um grafo.
- *  Uma linha desce pela margem esquerda e SE DESENHA conforme você rola; cada
- *  seção tem um nó nela, que acende quando a seção entra e estende um ramo até
- *  o conteúdo. Fica na margem, não sobre a arte: o cérebro continua sendo a
- *  estrela e o trilho é a fiação. */
-function TrilhoV2() {
-    const [nos, setNos] = useState<{ y: number; rot: string }[]>([]);
-    const [ativa, setAtiva] = useState(-1);
-    const trilhoRef = useRef<HTMLDivElement>(null);
-    // espelho em ref: o laço de rolagem lê daqui, não do estado do React
-    const nosRef = useRef<{ y: number; rot: string }[]>([]);
-    nosRef.current = nos;
-
-    useEffect(() => {
-        let raf = 0;
-        const medir = () => {
-            const ys: { y: number; rot: string }[] = [];
-            SECOES_V2.forEach(s => {
-                const el = document.getElementById(s.id);
-                if (!el) return;
-                // ancora no cabeçalho, não no topo da seção: é onde o olho está
-                const alvo = el.querySelector('.nlp-head') ?? el;
-                ys.push({ y: Math.round(alvo.getBoundingClientRect().top + scrollY + 18), rot: s.rot });
-            });
-            setNos(ys);
-        };
-        const pintar = () => {
-            raf = 0;
-            const doc = document.documentElement;
-            const frente = scrollY + innerHeight * 0.55;
-            const total = Math.max(1, doc.scrollHeight);
-            trilhoRef.current?.style.setProperty('--desenho', Math.min(1, frente / total).toFixed(4));
-            let idx = -1;
-            nosRef.current.forEach((n, i) => { if (frente >= n.y) idx = i; });
-            setAtiva(idx);
-        };
-        const aoRolar = () => { if (!raf) raf = requestAnimationFrame(pintar); };
-        const remedir = () => { medir(); pintar(); };
-
-        const t1 = setTimeout(remedir, 1600);
-        const t2 = setTimeout(remedir, 3400); // depois das revelações mudarem a altura
-        addEventListener('scroll', aoRolar, { passive: true });
-        addEventListener('resize', remedir);
-        return () => {
-            clearTimeout(t1); clearTimeout(t2);
-            removeEventListener('scroll', aoRolar); removeEventListener('resize', remedir);
-            if (raf) cancelAnimationFrame(raf);
-        };
-    }, []);
-
-    return (
-        <div className="v2-trilho" ref={trilhoRef} aria-hidden="true">
-            <span className="v2-trilho-base" />
-            <span className="v2-trilho-luz" />
-            {nos.map((n, i) => (
-                <span key={n.rot} className={`v2-no-sec${i <= ativa ? ' on' : ''}`} style={{ top: n.y }}>
-                    <b>{n.rot}</b>
-                </span>
-            ))}
-        </div>
-    );
-}
-
-/** Retículo que segue o ponteiro. Só em mouse — no toque não existe cursor. */
-function CursorV2() {
-    const ref = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        if (!matchMedia('(pointer:fine)').matches) return;
-        if (matchMedia('(prefers-reduced-motion:reduce)').matches) return;
-        const el = ref.current!;
-        let x = 0, y = 0, pendente = false;
-
-        /* SEM inércia. A primeira versão interpolava a posição (lerp .18) achando
-           que "peso" daria caráter — o efeito real foi um cursor que anda mais
-           devagar que a mão. Como o cursor nativo está escondido, não sobra nada
-           na posição verdadeira e o ponteiro parece quebrado. Retículo tem que ser
-           exato; o caráter vem da forma e do estado de mira, nunca do atraso.
-           O rAF aqui só AGRUPA escritas no quadro — a posição pintada é sempre a
-           última lida, não uma média. */
-        const pintar = () => {
-            pendente = false;
-            el.style.transform = `translate3d(${x}px,${y}px,0)`;
-        };
-        const mover = (e: MouseEvent) => {
-            x = e.clientX; y = e.clientY;
-            if (el.style.opacity !== '1') el.style.opacity = '1';
-            if (!pendente) { pendente = true; requestAnimationFrame(pintar); }
-        };
-        const sobre = (e: MouseEvent) => {
-            const alvo = (e.target as HTMLElement)?.closest('a,button,summary,[role=button]');
-            el.classList.toggle('mira', !!alvo);
-        };
-        // sem isto o retículo fica preso na última posição depois que o mouse sai
-        const sair = () => { el.style.opacity = '0'; };
-
-        el.style.display = 'block';
-        el.style.opacity = '0'; // só aparece no primeiro movimento real
-        addEventListener('mousemove', mover, { passive: true });
-        addEventListener('mouseover', sobre, { passive: true });
-        document.documentElement.addEventListener('mouseleave', sair);
-        addEventListener('blur', sair);
-        return () => {
-            removeEventListener('mousemove', mover);
-            removeEventListener('mouseover', sobre);
-            document.documentElement.removeEventListener('mouseleave', sair);
-            removeEventListener('blur', sair);
-        };
-    }, []);
-    return (
-        <div className="v2-cursor" ref={ref} aria-hidden="true">
-            <span className="v2-cursor-anel" /><span className="v2-cursor-h" /><span className="v2-cursor-v" />
-        </div>
     );
 }
 
@@ -609,14 +462,23 @@ export default function HomeNodeV2() {
         .nlp :focus-visible{outline:2px solid var(--accent-hi);outline-offset:3px;border-radius:4px}
         .nlp-mono{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
         .nlp-wrap{max-width:1280px;margin-inline:auto;padding-inline:28px}
+        /* ATMOSFERA (DESIGN.md §5): vinheta + grão de filme sobre a página inteira.
+           É o que tira o "tema escuro" e põe cinema: borda escurece, superfície ganha
+           textura. Fixos, estáticos, pointer-events none, abaixo da nav (z50). */
+        .nlp::before{content:'';position:fixed;inset:0;z-index:40;pointer-events:none;
+          background:radial-gradient(130% 100% at 50% 38%,transparent 52%,rgba(5,6,9,.5) 100%)}
+        .nlp::after{content:'';position:fixed;inset:0;z-index:41;pointer-events:none;opacity:.05;
+          background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+          background-size:160px 160px;mix-blend-mode:overlay}
         .nlp section{padding-block:clamp(84px,10vw,150px);position:relative;z-index:1}
         .nlp h1,.nlp h2{letter-spacing:-.045em;line-height:1.02;font-weight:500;margin:0}
         .nlp-chip{display:inline-flex;align-items:center;gap:9px;padding:7px 16px;border:1px solid var(--line);border-radius:var(--r-pill);
           font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
         .nlp-chip i{width:6px;height:6px;border-radius:50%;background:var(--fg);animation:nlp-pulse 2.2s var(--ease) infinite}
         @keyframes nlp-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.8)}}
-        .nlp h1{font-size:clamp(2.6rem,4.9vw,4.5rem)}
-        .nlp h2{font-size:clamp(2rem,4.2vw,3.4rem)}
+        /* Contraste de escala (padrão dos premiados: display grande × label mono pequeno) */
+        .nlp h1{font-size:clamp(2.7rem,5.4vw,5.6rem)}
+        .nlp h2{font-size:clamp(2.1rem,4.5vw,3.75rem)}
         .nlp p{color:var(--muted);font-weight:300;line-height:1.7;max-width:60ch;margin:0;font-size:1.05rem}
         .nlp a{color:inherit;text-decoration:none}
         /* reveal */
@@ -657,6 +519,10 @@ export default function HomeNodeV2() {
         @media(max-width:760px){
           .nlp-hero{padding-top:132px!important;padding-bottom:72px!important;min-height:auto}
           .nlp-hero-in{gap:22px}
+          /* Legibilidade mobile: sem coluna livre pro cérebro, ele fica ATRÁS do texto —
+             então apaga (opacity) e o texto ganha sombra de proteção. Desktop intocado. */
+          .nlp-brainfield{opacity:.42}
+          .nlp-hero h1,.nlp-hero .nlp-mono{text-shadow:0 1px 22px rgba(8,9,12,.95),0 0 46px rgba(8,9,12,.8)}
           .nlp section{padding-block:72px}
           .nlp-head{margin-bottom:44px}
           .nlp-ops{margin-top:52px}
@@ -670,7 +536,7 @@ export default function HomeNodeV2() {
         .nlp-stats{display:flex;flex-wrap:wrap;margin-top:58px;gap:0}
         .nlp-stat{padding:4px 38px;text-align:left;border-left:1px solid var(--line)}
         .nlp-stat:first-child{border-left:none;padding-left:0}
-        .nlp-stat b{display:block;font-size:clamp(1.4rem,2.4vw,2rem);font-weight:500;letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-bottom:6px}
+        .nlp-stat b{display:block;font-size:clamp(1.55rem,2.8vw,2.5rem);font-weight:500;letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-bottom:6px}
         .nlp-stat span.nlp-mono{font-size:.6rem}
         @media(max-width:760px){.nlp-stat{flex:1 1 40%;border-left:none;padding:12px 10px 12px 0}}
         /* section head */
@@ -917,20 +783,33 @@ export default function HomeNodeV2() {
           background:radial-gradient(72% 60% at 50% 46%,rgba(8,9,12,.82),rgba(8,9,12,.45) 62%,transparent);
           border-radius:var(--r-lg)}
         #faq .nlp-wrap>*{position:relative}
-        .nlp-faq{border-top:1px solid var(--line)}
+        /* FAQ com a mesma matéria dos cards: vidro + borda gradiente. Era o único bloco
+           da página sem material — accordion pelado sobre o fundo lia como rascunho. */
+        .nlp-faq{border:1px solid transparent;border-radius:var(--r-md);padding:4px 28px;
+          background:linear-gradient(180deg,rgba(16,18,26,.94),rgba(11,13,19,.94)) padding-box,
+          linear-gradient(165deg,rgba(139,111,224,.45),var(--line) 46%,rgba(190,200,225,.05)) border-box}
         .nlp-qa{border-bottom:1px solid var(--line)}
-        .nlp-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:26px 4px;background:none;border:none;color:var(--fg);
+        .nlp-qa:last-child{border-bottom:none}
+        .nlp-q{width:100%;display:flex;align-items:center;gap:18px;padding:24px 2px;background:none;border:none;color:var(--fg);
           font:inherit;font-weight:400;font-size:1.12rem;letter-spacing:-.01em;text-align:left;cursor:pointer;transition:color var(--micro) var(--ease),padding-left var(--micro) var(--ease)}
-        .nlp-q:hover{color:var(--dim);padding-left:12px}
-        .nlp-q svg{flex-shrink:0;transition:transform var(--micro) var(--ease)}
-        .nlp-qa.nlp-open .nlp-q svg{transform:rotate(45deg)}
+        .nlp-q-num{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.14em;color:var(--muted);
+          flex-shrink:0;transition:color var(--micro) var(--ease)}
+        .nlp-q span.nlp-q-txt{flex:1}
+        .nlp-q:hover{color:var(--accent-hi);padding-left:8px}
+        .nlp-q:hover .nlp-q-num{color:var(--accent-hi)}
+        .nlp-q svg{flex-shrink:0;transition:transform var(--micro) var(--ease),color var(--micro) var(--ease)}
+        .nlp-qa.nlp-open .nlp-q svg{transform:rotate(45deg);color:var(--accent-hi)}
+        .nlp-qa.nlp-open .nlp-q .nlp-q-num{color:var(--accent-hi)}
         /* acordeão por grid (0fr→1fr) em vez de max-height com número mágico.
            O 220px fixo cortava resposta longa no mobile — a caixa parava de crescer e
            o texto sumia sem aviso. Com 1fr a altura é a do conteúdo, qualquer que seja. */
-        .nlp-a{display:grid;grid-template-rows:0fr;overflow:hidden;transition:grid-template-rows var(--dur) var(--ease)}
+        .nlp-a{display:grid;grid-template-rows:0fr;overflow:hidden;padding-bottom:0;
+          transition:grid-template-rows var(--dur) var(--ease),padding-bottom var(--dur) var(--ease)}
+        /* padding vertical NÃO pode morar no p: padding não colapsa com 0fr e o painel
+           "fechado" vazava a primeira linha (bug herdado, vazava 26px desde sempre). */
         .nlp-a>*{min-height:0}
-        .nlp-qa.nlp-open .nlp-a{grid-template-rows:1fr}
-        .nlp-a p{padding:0 4px 26px;font-size:.98rem}
+        .nlp-qa.nlp-open .nlp-a{grid-template-rows:1fr;padding-bottom:24px}
+        .nlp-a p{padding:0 34px 0 40px;font-size:.98rem}
         /* cta final — registro próprio: halo de acento subindo do chão, fechando a narrativa */
         .nlp-cta-final{position:relative;overflow:hidden}
         .nlp-cta-final::before{content:'';position:absolute;inset-inline:-10%;bottom:-58%;height:120%;pointer-events:none;
@@ -1008,20 +887,6 @@ export default function HomeNodeV2() {
 
         /* ── moldura ── */
         .v2-hud{position:fixed;inset:0;z-index:45;pointer-events:none;font-family:'JetBrains Mono',monospace}
-        /* cantoneiras: é o que transforma a janela em VISOR. Precisam ser vistas —
-           na primeira tentativa ficaram tão discretas que sumiam, e aí não comunicam nada. */
-        .v2-canto{position:absolute;width:34px;height:34px;border:1px solid var(--accent);opacity:.55}
-        .v2-canto::after{content:'';position:absolute;width:4px;height:4px;background:var(--accent);
-          box-shadow:0 0 8px var(--accent)}
-        .v2-canto-tl{top:12px;left:12px;border-right:0;border-bottom:0}
-        .v2-canto-tl::after{top:-2px;left:-2px}
-        .v2-canto-tr{top:12px;right:12px;border-left:0;border-bottom:0}
-        .v2-canto-tr::after{top:-2px;right:-2px}
-        .v2-canto-bl{bottom:46px;left:12px;border-right:0;border-top:0}
-        .v2-canto-bl::after{bottom:-2px;left:-2px}
-        .v2-canto-br{bottom:46px;right:12px;border-left:0;border-top:0}
-        .v2-canto-br::after{bottom:-2px;right:-2px}
-
         /* ── espinha de nós: a página é um grafo, e você está num nó dele ── */
         .v2-espinha{position:absolute;right:30px;top:50%;transform:translateY(-50%);
           display:flex;flex-direction:column;gap:2px}
@@ -1045,86 +910,7 @@ export default function HomeNodeV2() {
         .v2-no:hover i{border-color:var(--accent-hi);transform:scale(1.35)}
         @media(max-width:1100px){.v2-espinha{display:none}}
 
-        /* ── telemetria ── */
-        .v2-tele{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;gap:10px;
-          padding:9px clamp(44px,5vw,62px);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;
-          color:var(--muted);border-top:1px solid rgba(190,200,225,.10);
-          background:linear-gradient(0deg,rgba(8,9,12,.92),rgba(8,9,12,.55))}
-        .v2-tele-flex{flex:1}
-        .v2-tele-sep{opacity:.35}
-        .v2-tele-ok{display:inline-flex;align-items:center;gap:6px;color:var(--accent-hi)}
-        .v2-tele-ok i{width:5px;height:5px;border-radius:50%;background:var(--accent);
-          animation:nlp-pulse 2.2s var(--ease) infinite}
-        .v2-tele-barra{letter-spacing:.02em;color:var(--dim)}
-        .v2-tele-hora{color:var(--dim);font-variant-numeric:tabular-nums}
-        /* No mobile a faixa quebrava em 2 linhas (43px) e virava tarja. Fica em UMA
-           linha: só o essencial, sem quebra, com reticências se ainda assim faltar. */
-        @media(max-width:860px){
-          .v2-tele{font-size:.5rem;gap:6px;padding:7px 18px;flex-wrap:nowrap;white-space:nowrap;overflow:hidden}
-          .v2-tele-barra,.v2-tele-hora{display:none}
-          .v2-tele>span:nth-last-child(-n+3){display:none}  /* coordenada e separador */
-        }
-        /* a página precisa de chão pra faixa não cobrir o rodapé */
-        .v2 .nlp-footer-bottom{padding-bottom:52px}
-
-        /* ── retículo ── */
-        /* O retículo é pintado exatamente sobre o ponteiro (sem inércia, ver o JS).
-           A troca de estado anima só transform/opacity — a primeira versão animava
-           width/height/left/top, que são layout e ainda por cima disputavam o
-           quadro com a posição. */
-        .v2-cursor{display:none;position:fixed;left:0;top:0;z-index:120;pointer-events:none;
-          width:0;height:0;will-change:transform;transition:opacity .18s linear}
-        .v2-cursor-anel{position:absolute;left:-13px;top:-13px;width:26px;height:26px;border-radius:50%;
-          border:1px solid var(--accent-hi);opacity:.55;
-          transition:transform var(--micro) var(--ease),opacity var(--micro) var(--ease)}
-        .v2-cursor-h,.v2-cursor-v{position:absolute;background:var(--accent-hi);opacity:.85;
-          transition:transform var(--micro) var(--ease),opacity var(--micro) var(--ease)}
-        /* ponto central: fica sempre no pixel do ponteiro */
-        .v2-cursor-h{left:-1.5px;top:-1.5px;width:3px;height:3px;border-radius:50%}
-        /* traços da mira: existem sempre, mas encolhidos a zero até precisar */
-        .v2-cursor-v{left:-.5px;top:-15px;width:1px;height:11px;transform:scaleY(0);transform-origin:bottom}
-        .v2-cursor.mira .v2-cursor-anel{transform:scale(1.62);opacity:.9}
-        .v2-cursor.mira .v2-cursor-v{transform:scaleY(1)}
-        .v2-cursor.mira .v2-cursor-h{transform:scale(.6);opacity:1}
-
-        /* ── TRILHO: a fiação da página ──
-           Vive na margem esquerda, fora do caminho do cérebro. A linha base é
-           sempre visível (o circuito existe); a linha de luz cresce por scaleY
-           conforme você desce (o circuito é percorrido). */
         .v2{position:relative}
-        .v2-trilho{position:absolute;left:clamp(14px,2.6vw,46px);top:0;bottom:0;width:1px;
-          z-index:2;pointer-events:none}
-        .v2-trilho-base{position:absolute;inset:0;background:rgba(190,200,225,.085)}
-        .v2-trilho-luz{position:absolute;left:0;top:0;width:1px;height:100%;transform-origin:top;
-          transform:scaleY(var(--desenho,0));
-          background:linear-gradient(180deg,var(--accent),rgba(139,111,224,.22));
-          box-shadow:0 0 10px rgba(139,111,224,.45)}
-        /* nó de seção: apagado até a seção chegar, depois acende e estende o ramo */
-        .v2-no-sec{position:absolute;left:-3.5px;width:8px;height:8px;border-radius:50%;
-          border:1px solid rgba(190,200,225,.30);background:var(--bg);
-          transition:background var(--micro) var(--ease),border-color var(--micro) var(--ease),
-                     box-shadow var(--micro) var(--ease),transform var(--micro) var(--ease)}
-        .v2-no-sec::before{content:'';position:absolute;left:7px;top:50%;height:1px;width:0;
-          background:linear-gradient(90deg,var(--accent),transparent);
-          transition:width .5s var(--ease)}
-        /* Rótulo DEITADO ao longo do trilho. Na horizontal ele invadia a coluna de
-           texto — "FRENTES" caía por cima do título da seção. Vertical, ele mora
-           dentro da própria margem e nunca encosta no conteúdo. */
-        .v2-no-sec>b{position:absolute;left:50%;top:15px;transform:translateX(-50%);
-          writing-mode:vertical-rl;
-          font-family:'JetBrains Mono',monospace;font-size:.46rem;letter-spacing:.22em;
-          text-transform:uppercase;color:var(--muted);white-space:nowrap;
-          opacity:0;transition:opacity .5s var(--ease)}
-        .v2-no-sec.on{background:var(--accent);border-color:var(--accent);transform:scale(1.15);
-          box-shadow:0 0 12px rgba(139,111,224,.7)}
-        .v2-no-sec.on::before{width:26px}
-        .v2-no-sec.on>b{opacity:.62}
-        /* abaixo de 1100px não há margem sobrando — o trilho sai de cena */
-        @media(max-width:1100px){.v2-trilho{display:none}}
-        @media(prefers-reduced-motion:reduce){
-          .v2-trilho-luz{transform:scaleY(1)}
-        }
-
         /* ── cabeçalho centralizado (seções 03, 04 e 05) ──
            Alinhado à esquerda, o título competia com a arte que ocupa um dos lados.
            Centralizado, ele ancora a seção e o cérebro passa a emoldurar em vez de
@@ -1322,7 +1108,6 @@ export default function HomeNodeV2() {
 
         @media(prefers-reduced-motion:reduce){
           .v2::after{animation:none;display:none}
-          .v2-cursor{display:none!important}
           .nlp *,.nlp *::before,.nlp *::after{animation:none!important;transition:none!important}
           .nlp-reveal{opacity:1;transform:none}
           .nlp-hero-in>*{opacity:1;transform:none}
@@ -1356,13 +1141,14 @@ export default function HomeNodeV2() {
                 </div>
             </nav>
 
+            <EspinhaV2 />
+
             {/* CÉREBRO DE PARTÍCULAS — fixo atrás do site inteiro */}
-            <BrainField />
+            <BrainField className="nlp-brainfield" />
 
             {/* HERO */}
             <section className="nlp-hero" id="top">
                 <div className="nlp-wrap nlp-hero-in">
-                    <span className="nlp-chip"><i />operando agora</span>
                     <span className="nlp-mono">{'// sistemas · e-commerce · ia aplicada'}</span>
                     {/* Cada linha sobe de dentro de uma máscara, escalonada. A última
                         palavra DECODIFICA — o texto se resolve de caractere embaralhado
@@ -1383,7 +1169,7 @@ export default function HomeNodeV2() {
                         <Link to="/login" className="nlp-link-arrow"
                             onClick={() => registrar('cta_login', 'hero')}>Acessar o sistema<span>→</span></Link>
                     </div>
-                    <div className="nlp-stats">
+                    <div className="nlp-stats nlp-par" data-par=".5">
                         {STATS.map(s => (
                             <div className="nlp-stat" key={s.label}>
                                 <b>{s.texto ?? <Counter value={s.value!} prefix={s.prefix} suffix={s.suffix} />}</b>
@@ -1399,7 +1185,6 @@ export default function HomeNodeV2() {
                 <div className="nlp-wrap">
                     <div className="nlp-offset-r">
                         <div className="nlp-head nlp-reveal">
-                            <span className="nlp-mono">{'// o que construímos'}</span>
                             {/* H2 carrega os termos de busca sem virar título feio de SEO */}
                             <h2>Criação de sites, lojas<br />e sistemas sob medida</h2>
                         </div>
@@ -1425,7 +1210,6 @@ export default function HomeNodeV2() {
             <section id="resultados">
                 <div className="nlp-wrap">
                     <div className="nlp-head nlp-reveal v2-centro">
-                        <span className="nlp-mono">{'// operações reais'}</span>
                         <h2>Quem opera com a NODE</h2>
                         <p style={{ marginTop: 8 }}>
                             Não é vitrine de portfólio: são lojas e sistemas no ar agora, vendendo
@@ -1433,7 +1217,7 @@ export default function HomeNodeV2() {
                         </p>
                     </div>
                     {/* Portfólio: cada operação no ar como um caso, não como link solto */}
-                    <div className="nlp-ops">
+                    <div className="nlp-ops nlp-par" data-par=".8">
                         {OPERACOES.map((o, i) => (
                             <article className={`nlp-caso nlp-reveal nlp-d${i + 1}`} key={o.nome}>
                                 <header>
@@ -1464,14 +1248,13 @@ export default function HomeNodeV2() {
             <section id="ofertas">
                 <div className="nlp-wrap">
                     <div className="nlp-head nlp-reveal v2-centro">
-                        <span className="nlp-mono">{'// três frentes'}</span>
                         <h2>O que a NODE constrói com você</h2>
                         <p style={{ marginTop: 8 }}>
                             Três frentes, um jeito só de trabalhar: nada sai de template e nada para
                             no slide. O que a gente entrega entra em operação e é medido pelo que vende.
                         </p>
                     </div>
-                    <div className="nlp-ofertas">
+                    <div className="nlp-ofertas nlp-par" data-par=".65">
                         {OFERTAS.map((o, i) => (
                             <article className={`nlp-oferta nlp-reveal nlp-d${i + 1}`} key={o.num}>
                                 <span className="nlp-oferta-num" aria-hidden="true">{o.num}</span>
@@ -1519,7 +1302,7 @@ export default function HomeNodeV2() {
             {/* GARANTIAS + faixa de loja Shopify */}
             <section id="garantias">
                 <div className="nlp-wrap">
-                    <div className="nlp-garantias">
+                    <div className="nlp-garantias nlp-par" data-par=".7">
                         {GARANTIAS.map((g, i) => (
                             <div className={`nlp-garantia nlp-reveal nlp-d${(i % 3) + 1}`} key={g.titulo}>
                                 <span className="nlp-garantia-icone" aria-hidden="true">
@@ -1537,7 +1320,6 @@ export default function HomeNodeV2() {
                         onMouseEnter={pulso}
                         onClick={() => registrar('cta_whatsapp', 'faixa_shopify')}>
                         <div className="nlp-faixa-txt">
-                            <span className="nlp-mono">{'// também construímos'}</span>
                             <strong>Precisa de uma loja Shopify?</strong>
                             <p>Lojas com o tema NODE proprietário, licença por loja e atualização inclusa enquanto você for cliente ativo. Construídas pela mesma equipe.</p>
                         </div>
@@ -1550,7 +1332,6 @@ export default function HomeNodeV2() {
             <section id="processo">
                 <div className="nlp-wrap">
                     <div className="nlp-head nlp-reveal v2-centro">
-                        <span className="nlp-mono">{'// como funciona'}</span>
                         <h2>Do alinhamento ao ar em quatro movimentos</h2>
                         <p style={{ marginTop: 8 }}>
                             Sem reunião que não muda nada e sem entrega surpresa. Você sabe o que
@@ -1592,16 +1373,16 @@ export default function HomeNodeV2() {
 
             {/* FAQ */}
             <section id="faq">
-                <div className="nlp-wrap" style={{ maxWidth: 780 }}>
+                <div className="nlp-wrap nlp-par" data-par=".55" style={{ maxWidth: 780 }}>
                     <div className="nlp-head nlp-reveal v2-centro">
-                        <span className="nlp-mono">{'// perguntas frequentes'}</span>
                         <h2>Tire suas dúvidas</h2>
                     </div>
                     <div className="nlp-faq nlp-reveal">
                         {FAQS.map((f, i) => (
                             <div className={`nlp-qa${faqOpen === i ? ' nlp-open' : ''}`} key={f.q}>
                                 <button className="nlp-q" onClick={() => setFaqOpen(faqOpen === i ? null : i)} aria-expanded={faqOpen === i}>
-                                    {f.q}
+                                    <span className="nlp-q-num">{String(i + 1).padStart(2, '0')}</span>
+                                    <span className="nlp-q-txt">{f.q}</span>
                                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.6" /></svg>
                                 </button>
                                 <div className="nlp-a"><p>{f.a}</p></div>
@@ -1614,7 +1395,6 @@ export default function HomeNodeV2() {
             {/* CTA FINAL */}
             <section className="nlp-cta-final">
                 <div className="nlp-wrap nlp-final">
-                    <span className="nlp-mono nlp-reveal">{'// pronto pra começar?'}</span>
                     <h2 className="nlp-reveal nlp-d1">Seu próximo sistema<br /><span className="nlp-tese">começa numa conversa</span></h2>
                     <div className="nlp-ctas nlp-reveal nlp-d2">
                         <a href={WHATS} target="_blank" rel="noopener" className="nlp-btn nlp-btn-solid"
