@@ -112,6 +112,8 @@ export function ClientRankingView({ embedded = false, active = true }: ClientRan
         } catch { return new Set(); }
     });
     const [showHidden, setShowHidden] = useState(false);
+    // KPIs do topo: fechado = só a linha principal (a tabela precisa de espaço)
+    const [showAllStats, setShowAllStats] = useState(false);
 
     useEffect(() => { localStorage.setItem('ranking_scope', scope); }, [scope]);
     useEffect(() => { localStorage.setItem('ranking_hidden_ids', JSON.stringify(Array.from(hiddenIds))); }, [hiddenIds]);
@@ -557,8 +559,9 @@ export function ClientRankingView({ embedded = false, active = true }: ClientRan
                         </div>
                     </div>
 
-                    {/* Summary Cards - 15 cards (3 rows of 5) */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 mt-5">
+                    {/* KPIs compactos: 1 linha com os 5 principais; o resto atrás
+                        do toggle — a tabela de clientes é a protagonista da tela. */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 mt-4">
                         {[
                             { icon: Users, color: "text-blue-400", label: "Total Clientes", value: isLoading ? "—" : `${totals.totalClients}`, sub: `${totals.activeClients} ativos` },
                             { icon: ShoppingBag, color: "text-purple-400", label: "Vendas", value: isLoading ? "—" : `${totals.totalSalesCount}`, sub: "registradas" },
@@ -576,17 +579,24 @@ export function ClientRankingView({ embedded = false, active = true }: ClientRan
                             { icon: Repeat, color: "text-emerald-500", label: "MRR Fees", value: isLoading ? "—" : formatCurrency(totals.totalFeeFixed), sub: "fixo mensal", valueColor: "text-emerald-500" },
                             { icon: DollarSign, color: "text-yellow-400", label: "Comissão 30d", value: isLoading ? "—" : formatCurrency(totals.totalCommission30d), sub: "variável estimada", valueColor: "text-yellow-400" },
                             { icon: Crown, color: "text-amber-400", label: "Receita NODE 30d", value: isLoading ? "—" : formatCurrency(totals.totalBeaconRevenue30d), sub: "MRR + comissão", valueColor: "text-amber-400" },
-                        ].map((card, i) => (
-                            <Card key={i} className="p-3 bg-secondary/20 border-border/10 hover:bg-secondary/30 transition-colors shadow-none">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <card.icon className={cn("h-3.5 w-3.5", card.color)} />
-                                    <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">{card.label}</span>
+                        ].slice(0, showAllStats ? undefined : 5).map((card, i) => (
+                            <Card key={i} className="p-2.5 bg-secondary/20 border-border/10 hover:bg-secondary/30 transition-colors shadow-none">
+                                <div className="flex items-center gap-1.5 mb-0.5">
+                                    <card.icon className={cn("h-3 w-3", card.color)} />
+                                    <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-wider truncate">{card.label}</span>
                                 </div>
-                                <p className={cn("text-lg font-extrabold", (card as any).valueColor || "text-foreground")}>{card.value}</p>
-                                {card.sub && <p className="text-[10px] text-muted-foreground mt-0.5">{card.sub}</p>}
+                                <p className={cn("text-base font-bold font-mono-numbers leading-tight", (card as any).valueColor || "text-foreground")}>{card.value}</p>
+                                {card.sub && showAllStats && <p className="text-[10px] text-muted-foreground mt-0.5">{card.sub}</p>}
                             </Card>
                         ))}
                     </div>
+                    <button
+                        type="button"
+                        onClick={() => setShowAllStats(v => !v)}
+                        className="mt-2 text-[11px] font-medium text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                        {showAllStats ? "Mostrar menos indicadores" : "Ver todos os 16 indicadores"}
+                    </button>
 
                     {/* Search */}
                     <div className="mt-4 relative">

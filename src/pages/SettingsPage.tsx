@@ -16,12 +16,10 @@ import UsageProgressBar from "@/components/UsageProgressBar";
 import { usePlanUsage } from "@/hooks/usePlanUsage";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { NotificationSettingsForm } from "@/components/NotificationSettingsForm";
 import { useTranslation } from "react-i18next";
 
 import Profile from "./Profile";
 import TeamConnections from "./TeamConnections";
-import Connections from "./Connections";
 import { CleanupUtility } from "@/components/admin/CleanupUtility";
 import { useTasks } from "@/contexts/TasksContext";
 import { TaskDetailModal } from "@/components/lever-os/TaskDetailModal";
@@ -307,14 +305,6 @@ const SettingsPage = () => {
                 <Users className="h-4 w-4" />
                 <span className="hidden sm:inline">{t('settings.tabs.team')}</span>
               </TabsTrigger>
-              <TabsTrigger value="notifications" className="flex items-center gap-2">
-                <Bell className="h-4 w-4" />
-                <span className="hidden sm:inline">{t('settings.tabs.notifications')}</span>
-              </TabsTrigger>
-              <TabsTrigger value="connections" className="flex items-center gap-2">
-                <Link className="h-4 w-4" />
-                <span className="hidden sm:inline">{t('sidebar.connections')}</span>
-              </TabsTrigger>
               <TabsTrigger value="archived" className="flex items-center gap-2">
                 <Archive className="h-4 w-4" />
                 <span className="hidden sm:inline">Arquivados</span>
@@ -350,14 +340,6 @@ const SettingsPage = () => {
             <TabsTrigger value="team" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
               <span>{t('settings.tabs.team')}</span>
-            </TabsTrigger>
-            <TabsTrigger value="notifications" className="flex items-center gap-2">
-              <Bell className="h-4 w-4" />
-              <span>{t('settings.tabs.notifications')}</span>
-            </TabsTrigger>
-            <TabsTrigger value="connections" className="flex items-center gap-2">
-              <Link className="h-4 w-4" />
-              <span>{t('sidebar.connections')}</span>
             </TabsTrigger>
             <TabsTrigger value="archived" className="flex items-center gap-2">
               <Archive className="h-4 w-4" />
@@ -489,15 +471,7 @@ const SettingsPage = () => {
           <TeamConnections embedded={true} />
         </TabsContent>
 
-        {/* ABA NOTIFICAÇÕES */}
-        <TabsContent value="notifications" className="space-y-6">
-          <NotificationSettingsForm />
-        </TabsContent>
-
-        {/* ABA CONEXÕES */}
-        <TabsContent value="connections" className="space-y-6">
-          <Connections embedded={true} />
-        </TabsContent>
+        {/* Abas Notificações e Conexões removidas a pedido (2026-08) */}
 
         {/* ABA CLIENTES ARQUIVADOS */}
         <TabsContent value="archived" className="space-y-6">

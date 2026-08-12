@@ -221,9 +221,11 @@ export function useFinancials() {
                     .eq('workspace_id', workspaceId)
                     .eq('is_accounting_staff' as any, true);
 
-                if (result1.error) {
-                    // Column might not exist — fallback: fetch members that have financial data
-                    console.warn('[useFinancials] is_accounting_staff column may not exist, using fallback query');
+                if (result1.error || !result1.data || result1.data.length === 0) {
+                    // Coluna inexistente OU ninguem marcado como is_accounting_staff:
+                    // cai pro fallback por dados financeiros — senao um membro com
+                    // salario cadastrado (flag false) some do Custos Totais.
+                    console.warn('[useFinancials] is_accounting_staff vazio/ausente, usando fallback por salario/comissao');
                     const result2 = await supabase
                         .from('team_members')
                         .select('id, email, name, role, base_salary, commission_rate, pix_key')

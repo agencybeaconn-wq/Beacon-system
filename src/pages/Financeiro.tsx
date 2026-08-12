@@ -474,7 +474,11 @@ const Financeiro = () => {
         const filteredInvoices = safeInvoices.filter(i =>
             filterByDate(i.payment_date || i.due_date) && !firstMonthClientIds.has(i.client_id)
         );
-        const filteredExpenses = safeExpenses.filter(e => filterByDate(e.payment_date || e.due_date));
+        // Despesa e custo do MES, nao do recorte de dias: com filtro "Mes" (01/08–hoje),
+        // uma conta que vence dia 25 sumia do card. Compara por yyyy-MM do periodo.
+        const filteredExpenses = safeExpenses.filter(e =>
+            String(e.payment_date || e.due_date || '').substring(0, 7) === currentMonth
+        );
 
         const totalFeesPaid = filteredInvoices.filter(i => i.status === 'paid').reduce((acc, i) => acc + (i.amount || 0), 0);
         const totalAgencyExpenses = filteredExpenses.reduce((acc, e) => acc + (e.amount || 0), 0);

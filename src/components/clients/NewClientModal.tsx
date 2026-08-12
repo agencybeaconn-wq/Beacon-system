@@ -23,8 +23,6 @@ import { cn } from "@/lib/utils";
 import { Star, ShoppingBag, Code, Palette, Zap, Globe, ImageIcon, Workflow, Calendar, TrendingUp, Package, Plus, Percent, DollarSign, Loader2, Check, Sparkles } from "lucide-react";
 import { AutomationService } from "@/services/automations/AutomationService";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { getTemplateForType } from "@/constants/onboarding-templates";
-import type { OnboardingType } from "@/types/onboarding";
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
     Star, Package, ShoppingBag, Code, Palette, Zap, Globe, ImageIcon, Workflow, Calendar, TrendingUp
@@ -38,7 +36,6 @@ const formSchema = z.object({
     commission_base: z.enum(["revenue", "spend"], {
         required_error: "Selecione uma base de cálculo",
     }),
-    responsible_email: z.string().email("E-mail inválido").optional().or(z.literal("")),
 });
 
 export function NewClientModal({ trigger }: { trigger?: React.ReactNode }) {
@@ -49,9 +46,6 @@ export function NewClientModal({ trigger }: { trigger?: React.ReactNode }) {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
-    const [shopifyDomain, setShopifyDomain] = useState("");
-    const [shopifyCollaboratorCode, setShopifyCollaboratorCode] = useState("");
-    const [onboardingType, setOnboardingType] = useState<OnboardingType | "">("");
     const queryClient = useQueryClient();
     const { toast } = useToast();
     const { products: dynamicProducts, isLoading: isLoadingProducts, refetch: refetchProducts } = useAgencyProducts();
@@ -71,7 +65,6 @@ export function NewClientModal({ trigger }: { trigger?: React.ReactNode }) {
             fixed_value: "0,00",
             commission_rate: "10",
             commission_base: "revenue",
-            responsible_email: "",
         },
     });
 
@@ -118,20 +111,8 @@ export function NewClientModal({ trigger }: { trigger?: React.ReactNode }) {
                 assigned_products: selectedProducts
             };
 
-            // Add onboarding type if selected
-            if (onboardingType) {
-                insertData.onboarding_type = onboardingType;
-            }
-
-            // Add Shopify data if provided
-            if (shopifyDomain.trim()) {
-                const domain = shopifyDomain.trim().includes('.myshopify.com')
-                    ? shopifyDomain.trim()
-                    : `${shopifyDomain.trim()}.myshopify.com`;
-                insertData.shopify_domain = domain;
-                insertData.shopify_status = 'pending';
-            }
-
+            // Onboarding e dados Shopify sairam do fluxo de criacao (2026-08):
+            // a conexao Shopify agora vive na pagina do cliente.
             const { data: newClient, error } = await (supabase as any)
                 .from('agency_clients')
                 .insert(insertData)
@@ -140,117 +121,13 @@ export function NewClientModal({ trigger }: { trigger?: React.ReactNode }) {
 
             if (error) throw error;
 
-            console.log("Cliente criado:", newClient);
-
-            // Auto-create onboarding if type selected
-            if (onboardingType && newClient) {
-                try {
-                    const template = getTemplateForType(onboardingType);
-                    if (template) {
-                        const startedAt = new Date().toISOString();
-                        const { data: onbRow, error: onbErr } = await (supabase as any)
-                            .from('onboarding')
-                            .insert({
-                                client_id: newClient.id,
-                                type: onboardingType,
-                                status: 'pendente',
-                                current_phase: template.phases[0]?.phase_key || null,
-                                started_at: startedAt,
-                            })
-                            .select()
-                            .single();
-
-                        if (!onbErr && onbRow) {
-                            const phasesToInsert = template.phases.map((ph) => ({
-                                onboarding_id: onbRow.id,
-                                phase_key: ph.phase_key,
-                                phase_name: ph.phase_name,
-                                phase_order: ph.phase_order,
-                                parallel_group: ph.parallel_group || null,
-                                status: 'pendente',
-                                due_date: ph.due_days_offset > 0
-                                    ? new Date(Date.now() + ph.due_days_offset * 86400000).toISOString()
-                                    : null,
-                            }));
-
-                            const { data: insertedPhases } = await (supabase as any)
-                                .from('onboarding_phases')
-                                .insert(phasesToInsert)
-                                .select();
-
-                            if (insertedPhases) {
-                                const tasksToInsert: any[] = [];
-                                for (const phase of template.phases) {
-                                    const dbPhase = insertedPhases.find((p: any) => p.phase_key === phase.phase_key);
-                                    if (!dbPhase) continue;
-                                    for (const task of phase.tasks) {
-                                        tasksToInsert.push({
-                                            phase_id: dbPhase.id,
-                                            task_key: task.task_key,
-                                            task_name: task.task_name,
-                                            task_description: task.task_description || null,
-                                            is_required: task.is_required,
-                                            status: 'pendente',
-                                            task_order: task.task_order,
-                                        });
-                                    }
-                                }
-                                if (tasksToInsert.length > 0) {
-                                    await (supabase as any).from('onboarding_tasks').insert(tasksToInsert);
-                                }
-                            }
-                            console.log('[NewClientModal] Onboarding criado automaticamente:', onboardingType);
-                        }
-                    }
-                } catch (onbErr: any) {
-                    console.error('[NewClientModal] Erro ao criar onboarding:', onbErr);
-                    toast({
-                        title: "Aviso",
-                        description: "Cliente criado, mas erro ao gerar onboarding: " + (onbErr?.message || ''),
-                        variant: "destructive",
-                    });
-                }
-            }
-
             toast({
                 title: "Cliente criado com sucesso!",
                 description: `${values.name} foi adicionado com ${selectedProducts.length} produtos sincronizados.`,
             });
 
-            // 3. Create linked user/invitation if email provided
-            if (values.responsible_email && newClient) {
-                console.log("Creating invitation for:", values.responsible_email);
-
-                const { data: { session } } = await supabase.auth.getSession();
-
-                const { data: inviteData, error: inviteError } = await supabase.functions.invoke('invite-team-member', {
-                    body: {
-                        email: values.responsible_email.toLowerCase(),
-                        workspace_id: workspaceId,
-                        role: 'client',
-                        linked_client_id: newClient.id,
-                        user_type: 'client',
-                        site_url: window.location.origin
-                    },
-                    headers: session?.access_token ? {
-                        Authorization: `Bearer ${session.access_token}`
-                    } : undefined
-                });
-
-                if (inviteError || inviteData?.error) {
-                    console.error("Erro ao convidar responsável:", inviteError || inviteData?.error);
-                    toast({
-                        title: "Aviso",
-                        description: `Cliente criado, mas ocorreu um erro no convite: ${inviteData?.error || inviteError?.message || 'Erro desconhecido'}`,
-                        variant: "destructive"
-                    });
-                } else {
-                    toast({
-                        title: "Convite Enviado!",
-                        description: `Um convite foi enviado para ${values.responsible_email}.`,
-                    });
-                }
-            }
+            // Convite do responsável saiu do fluxo de criação — o acesso ao
+            // portal é dado depois, na página do cliente (Acesso ao Portal).
 
             // Invalidate queries to refresh lists
             queryClient.invalidateQueries({ queryKey: ['clients'] });
@@ -266,9 +143,6 @@ export function NewClientModal({ trigger }: { trigger?: React.ReactNode }) {
             setOpen(false);
             form.reset();
             setSelectedProducts([]);
-            setShopifyDomain("");
-            setShopifyCollaboratorCode("");
-            setOnboardingType("");
 
             // Navigate to the new client's page
             navigate(`/clients/${newClient.id}`);
@@ -329,23 +203,6 @@ export function NewClientModal({ trigger }: { trigger?: React.ReactNode }) {
 
                             <FormField
                                 control={form.control}
-                                name="responsible_email"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>E-mail do Responsável (Portal do Cliente)</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="cliente@email.com" type="email" {...field} />
-                                        </FormControl>
-                                        <FormDescription>
-                                            O cliente receberá um convite para acessar o próprio portal.
-                                        </FormDescription>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
                                 name="client_type"
                                 render={({ field }) => (
                                     <FormItem className="space-y-3 pt-2 border-t border-border mt-4">
@@ -358,7 +215,7 @@ export function NewClientModal({ trigger }: { trigger?: React.ReactNode }) {
                                                     className={cn(
                                                         "px-6 py-2 rounded-xl text-sm font-semibold transition-all duration-200",
                                                         field.value === 'avulso'
-                                                            ? "bg-red-600 text-white shadow-md scale-105"
+                                                            ? "bg-primary text-primary-foreground shadow-md scale-105"
                                                             : "text-muted-foreground hover:text-foreground hover:bg-muted-foreground/10"
                                                     )}
                                                 >
@@ -370,7 +227,7 @@ export function NewClientModal({ trigger }: { trigger?: React.ReactNode }) {
                                                     className={cn(
                                                         "px-6 py-2 rounded-xl text-sm font-semibold transition-all duration-200",
                                                         field.value === 'fixo'
-                                                            ? "bg-red-600 text-white shadow-md scale-105"
+                                                            ? "bg-primary text-primary-foreground shadow-md scale-105"
                                                             : "text-muted-foreground hover:text-foreground hover:bg-muted-foreground/10"
                                                     )}
                                                 >
@@ -386,36 +243,6 @@ export function NewClientModal({ trigger }: { trigger?: React.ReactNode }) {
                                     </FormItem>
                                 )}
                             />
-
-                            {/* Subtipo de Onboarding */}
-                            <div className="space-y-2 pt-3">
-                                <label className="text-sm font-medium">Tipo de Onboarding</label>
-                                <Select
-                                    value={onboardingType}
-                                    onValueChange={(v) => setOnboardingType(v as OnboardingType)}
-                                >
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Selecione o fluxo de onboarding..." />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {form.watch('client_type') === 'fixo' ? (
-                                            <>
-                                                <SelectItem value="mrr_start">MRR Start</SelectItem>
-                                                <SelectItem value="mrr_growth">MRR Growth</SelectItem>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <SelectItem value="avulso_tema">Tema NODE (Licença)</SelectItem>
-                                                <SelectItem value="avulso_reformulacao">Reformulação de Site</SelectItem>
-                                                <SelectItem value="avulso_arte">Arte / Design</SelectItem>
-                                            </>
-                                        )}
-                                    </SelectContent>
-                                </Select>
-                                <p className="text-[11px] text-muted-foreground">
-                                    Define o checklist de fases e tarefas gerado automaticamente.
-                                </p>
-                            </div>
 
                             {form.watch('client_type') === 'fixo' && (
                                 <div className="space-y-4 pt-4 border-t border-border animate-in fade-in slide-in-from-top-4 duration-300">
@@ -600,39 +427,7 @@ export function NewClientModal({ trigger }: { trigger?: React.ReactNode }) {
                     </p>
                 </div>
 
-                {/* Dados Shopify */}
-                <div className="space-y-4 pt-4 border-t border-border">
-                    <h3 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                        <span className="bg-primary/10 p-1 rounded">3</span>
-                        Dados da Loja Shopify
-                        <Badge variant="outline" className="text-[10px] ml-1">Opcional</Badge>
-                    </h3>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium">Domínio Shopify</label>
-                            <Input
-                                placeholder="minha-loja.myshopify.com"
-                                value={shopifyDomain}
-                                onChange={(e) => setShopifyDomain(e.target.value)}
-                            />
-                            <p className="text-[11px] text-muted-foreground">
-                                O domínio .myshopify.com do cliente
-                            </p>
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium">Código de Colaborador</label>
-                            <Input
-                                placeholder="Código do Shopify Partners"
-                                value={shopifyCollaboratorCode}
-                                onChange={(e) => setShopifyCollaboratorCode(e.target.value)}
-                            />
-                            <p className="text-[11px] text-muted-foreground">
-                                Para solicitar acesso via Shopify Partners
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                {/* Dados Shopify removidos: a conexão vive na página do cliente */}
 
                 {/* Botões no final */}
                 <DialogFooter className="pt-4 border-t border-border">

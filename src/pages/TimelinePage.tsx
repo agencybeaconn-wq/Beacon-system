@@ -56,7 +56,6 @@ export default function TimelinePage() {
     const [activeClients, setActiveClients] = useState<ActiveClient[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [typeFilter, setTypeFilter] = useState<'all' | 'fixo' | 'avulso'>('all');
-    const [sortBy, setSortBy] = useState<'name' | 'priority' | 'tasks'>('name');
     const [searchTerm, setSearchTerm] = useState<string>('');
 
     useEffect(() => {
@@ -148,22 +147,9 @@ export default function TimelinePage() {
             );
         }
 
-        // Sort
-        if (sortBy === 'priority') {
-            return [...filtered].sort((a, b) => {
-                const getDeadlineMs = (c: ActiveClient) => {
-                    if (c.project_deadline) return new Date(c.project_deadline).getTime();
-                    if (c.latestDueDate) return new Date(c.latestDueDate).getTime();
-                    return Infinity;
-                };
-                return getDeadlineMs(a) - getDeadlineMs(b);
-            });
-        }
-        if (sortBy === 'tasks') {
-            return [...filtered].sort((a, b) => b.activeTaskCount - a.activeTaskCount);
-        }
+        // Ordenação fixa por nome (botões Prazo/Demandas removidos a pedido)
         return [...filtered].sort((a, b) => a.name.localeCompare(b.name));
-    }, [activeClients, typeFilter, sortBy, searchTerm]);
+    }, [activeClients, typeFilter, searchTerm]);
 
     const countByType = useMemo(() => ({
         all: activeClients.length,
@@ -233,26 +219,7 @@ export default function TimelinePage() {
                         </TabsList>
                     </Tabs>
                 </div>
-                <div className="flex items-center gap-2">
-                    <Button
-                        variant={sortBy === 'priority' ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => setSortBy(sortBy === 'priority' ? 'name' : 'priority')}
-                        className={cn("gap-1.5 text-xs", sortBy === 'priority' && "bg-red-600 hover:bg-red-700 text-white")}
-                    >
-                        <Timer className="w-3.5 h-3.5" />
-                        Prazo
-                    </Button>
-                    <Button
-                        variant={sortBy === 'tasks' ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => setSortBy(sortBy === 'tasks' ? 'name' : 'tasks')}
-                        className={cn("gap-1.5 text-xs", sortBy === 'tasks' && "bg-red-600 hover:bg-red-700 text-white")}
-                    >
-                        <ClipboardList className="w-3.5 h-3.5" />
-                        Demandas
-                    </Button>
-                </div>
+                {/* Botões de ordenação Prazo/Demandas removidos a pedido (2026-08) */}
             </div>
 
             {filteredClients.length === 0 ? (
