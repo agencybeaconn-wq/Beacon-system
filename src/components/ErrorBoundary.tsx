@@ -1,6 +1,7 @@
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { AlertCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { capturarErro } from "@/lib/observabilidade";
 
 interface Props {
     children: ReactNode;
@@ -42,6 +43,12 @@ export class ErrorBoundary extends Component<Props, State> {
 
     public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         console.error("[ErrorBoundary] Uncaught error:", error, errorInfo);
+
+        // Erro REAL vai pro Sentry (chunk velho não é bug — o reload abaixo resolve).
+        // Sem VITE_SENTRY_DSN configurado a chamada é inerte.
+        if (!ehErroDeChunk(error)) {
+            capturarErro(error, { componentStack: errorInfo.componentStack });
+        }
 
         // Chunk velho pós-deploy: recarrega UMA vez (janela de 15s) pra pegar o HTML
         // novo. Bug real persiste após o reload e cai na tela de erro normal — o
@@ -92,7 +99,7 @@ export class ErrorBoundary extends Component<Props, State> {
                         <h2 className="text-xl font-bold tracking-tight">Ops! Algo deu errado</h2>
                         <p className="text-muted-foreground max-w-md mx-auto">
                             Ocorreu um erro inesperado ao carregar esta parte do sistema.
-                            Nossa equipe técnica já foi notificada (via console).
+                            Nossa equipe técnica já foi notificada.
                         </p>
                     </div>
 

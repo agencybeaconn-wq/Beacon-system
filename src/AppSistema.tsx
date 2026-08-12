@@ -7,7 +7,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
-import { lazy } from "react";
+import { lazy, useEffect } from "react";
+import { iniciarSentry, iniciarPostHog } from "@/lib/observabilidade";
 
 const TrainingLibraryManager = lazy(() => import("./components/training/TrainingLibraryManager"));
 const Login = lazy(() => import("./pages/Login"));
@@ -112,6 +113,12 @@ const queryClient = new QueryClient({
 });
 
 export default function AppSistema() {
+  // Observabilidade só no sistema — a landing não paga esse peso.
+  // Sem as envs (VITE_SENTRY_DSN / VITE_POSTHOG_KEY), as duas chamadas são inertes.
+  useEffect(() => {
+    iniciarSentry();
+    iniciarPostHog();
+  }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,12 +8,50 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import leverLogo from "@/assets/lever-logo.png";
 
+// Anti-bot (Cloudflare Turnstile), gateado por env: sem VITE_TURNSTILE_SITE_KEY o
+// login se comporta exatamente como antes. Com a chave, o widget aparece e o token
+// vai no signInWithPassword — exige o captcha Turnstile TAMBÉM habilitado no
+// painel do Supabase (Auth → Attack Protection), senão o token é só ignorado.
+const TURNSTILE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (el: HTMLElement, opts: Record<string, unknown>) => string;
+      reset: (id?: string) => void;
+    };
+  }
+}
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const turnstileRef = useRef<HTMLDivElement>(null);
+  const widgetId = useRef<string | undefined>(undefined);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (!TURNSTILE_KEY || !turnstileRef.current) return;
+    const montar = () => {
+      if (window.turnstile && turnstileRef.current && !widgetId.current) {
+        widgetId.current = window.turnstile.render(turnstileRef.current, {
+          sitekey: TURNSTILE_KEY,
+          theme: "dark",
+          callback: (token: string) => setCaptchaToken(token),
+          "expired-callback": () => setCaptchaToken(null),
+        });
+      }
+    };
+    if (window.turnstile) { montar(); return; }
+    const s = document.createElement("script");
+    s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    s.async = true;
+    s.onload = montar;
+    document.head.appendChild(s);
+  }, []);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -31,12 +69,18 @@ const Login = () => {
       // Acesso é só por convite: quem entra aqui já tem conta criada pela agência.
       const { error } = await supabase.auth.signInWithPassword({
         email,
-        password
+        password,
+        ...(captchaToken ? { options: { captchaToken } } : {}),
       });
       if (error) throw error;
       toast({ title: "Login realizado!" });
       navigate("/app");
     } catch (error: any) {
+      // token do Turnstile é de uso único: renova o desafio pra nova tentativa
+      if (TURNSTILE_KEY && window.turnstile) {
+        window.turnstile.reset(widgetId.current);
+        setCaptchaToken(null);
+      }
       toast({
         title: "Erro",
         description: error.message || "Erro ao autenticar",
@@ -115,7 +159,13 @@ const Login = () => {
                 </div>
               </div>
 
-              <Button type="submit" className="w-full h-11 font-bold mt-6" disabled={isLoading}>
+              {TURNSTILE_KEY && <div ref={turnstileRef} className="pt-1" />}
+
+              <Button
+                type="submit"
+                className="w-full h-11 font-bold mt-6"
+                disabled={isLoading || (!!TURNSTILE_KEY && !captchaToken)}
+              >
                 {isLoading ? (
                   <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Aguarde...</>
                 ) : (
