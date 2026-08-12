@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 
 import Profile from "./Profile";
 import TeamConnections from "./TeamConnections";
+import { HeaderPortal } from "@/components/HeaderSlot";
 import { CleanupUtility } from "@/components/admin/CleanupUtility";
 import { useTasks } from "@/contexts/TasksContext";
 import { TaskDetailModal } from "@/components/lever-os/TaskDetailModal";
@@ -295,8 +296,9 @@ const SettingsPage = () => {
             <p className="text-muted-foreground">{t('settings.description')}</p>
           </div>
 
-          <div className="hidden lg:flex items-center overflow-x-auto no-scrollbar">
-            <TabsList className="h-10">
+          {/* Desktop: as tabs moram DENTRO do cabeçalho global (HeaderSlot) */}
+          <HeaderPortal>
+            <TabsList className="h-9 border border-border/60 bg-background/50">
               <TabsTrigger value="general" className="flex items-center gap-2">
                 <Settings className="h-4 w-4" />
                 <span className="hidden sm:inline">{t('settings.tabs.general')}</span>
@@ -327,11 +329,11 @@ const SettingsPage = () => {
                 )}
               </TabsTrigger>
             </TabsList>
-          </div>
+          </HeaderPortal>
         </div>
 
-        {/* Mobile Tabs List underneath header */}
-        <div className="flex lg:hidden overflow-x-auto pb-2 no-scrollbar">
+        {/* Mobile Tabs List underneath header (o slot do header é hidden no mobile) */}
+        <div className="flex md:hidden overflow-x-auto pb-2 no-scrollbar">
           <TabsList className="h-10 w-max shrink-0">
             <TabsTrigger value="general" className="flex items-center gap-2">
               <Settings className="h-4 w-4" />

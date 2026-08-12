@@ -73,17 +73,17 @@ export function ExpensesList({
         const safeStaff = staff || [];
         const safePartners = partners || [];
 
-        const expensesTotal = safeExpenses.reduce((acc, e) => acc + (e.amount || 0), 0);
-        const staffTotal = safeStaff.reduce((acc, s) => acc + (s.base_salary || 0), 0);
-        const partnersTotal = safePartners.reduce((acc, p) => acc + (p.amount || 0), 0);
-
-        const total = expensesTotal + staffTotal + partnersTotal;
-        const fixed = safeExpenses.filter(e => e.recurrence_type === 'fixed').reduce((acc, e) => acc + (e.amount || 0), 0) + staffTotal + partnersTotal;
+        // FONTE ÚNICA: a Listagem de Despesas. Salário de equipe e pró-labore
+        // são CADASTRO (gestão de pagamento), não soma automática — senão o
+        // mesmo custo conta duas vezes (ex.: designer lançado como despesa E
+        // com salário na Equipe). Os cards batem 1:1 com a tabela na tela.
+        const total = safeExpenses.reduce((acc, e) => acc + (e.amount || 0), 0);
+        const fixed = safeExpenses.filter(e => e.recurrence_type === 'fixed').reduce((acc, e) => acc + (e.amount || 0), 0);
         const variable = safeExpenses.filter(e => e.recurrence_type === 'variable').reduce((acc, e) => acc + (e.amount || 0), 0);
         const paid = safeExpenses.filter(e => e.status === 'paid').reduce((acc, e) => acc + (e.amount || 0), 0);
 
         return { total, fixed, variable, paid };
-    }, [expenses, staff, partners]);
+    }, [expenses]);
 
     const categories: Record<string, string> = {
         'staff': 'Equipe',

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { AdAccountSelector } from "@/components/AdAccountSelector";
+import { HeaderSlotProvider, HeaderSlotOutlet } from "@/components/HeaderSlot";
 import { NotificationBell } from "@/components/NotificationBell";
 import { GamificationProgressBar } from "@/components/GamificationProgressBar";
 import { useLocation, Navigate } from "react-router-dom";
@@ -121,7 +122,8 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
   }, [location.pathname]); // Re-check on navigation
 
   // Pages where the full header should be hidden (only mobile sidebar trigger shown)
-  const hideFullHeader = ['/clients', '/connections', '/team', '/settings'].includes(location.pathname);
+  // /settings saiu da lista: as tabs da página agora moram DENTRO do header (HeaderSlot)
+  const hideFullHeader = ['/clients', '/connections', '/team'].includes(location.pathname);
 
   return (
     <SidebarInset className="w-full max-w-[100vw] overflow-x-hidden m-0 box-border bg-transparent">
@@ -153,6 +155,8 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
+            {/* Slot: páginas teleportam suas tabs pra cá — à direita, junto do sino */}
+            <HeaderSlotOutlet className="hidden md:flex items-center" />
             <NotificationBell />
           </div>
         </div>
@@ -169,8 +173,10 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
-      <AppSidebar />
-      <DashboardContent>{children}</DashboardContent>
+      <HeaderSlotProvider>
+        <AppSidebar />
+        <DashboardContent>{children}</DashboardContent>
+      </HeaderSlotProvider>
     </SidebarProvider>
   );
 }

@@ -52,6 +52,7 @@ import { useFinancials, ClientFinancialRow } from "@/hooks/useFinancials";
 import { supabase } from "@/integrations/supabase/client";
 import { format, parseISO, startOfMonth, endOfMonth, subMonths } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { HeaderPortal } from "@/components/HeaderSlot";
 import { useOverviewMetrics } from "@/hooks/useOverviewMetrics";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslation } from "react-i18next";
@@ -484,17 +485,10 @@ const Financeiro = () => {
         const totalAgencyExpenses = filteredExpenses.reduce((acc, e) => acc + (e.amount || 0), 0);
         const totalFeesInvoiced = filteredInvoices.reduce((acc, i) => acc + (i.amount || 0), 0);
 
-        // Staff Costs (Salaries + Calculated commissions)
-        // Usually fixed per month, but if we filter "Today" should it be 0? 
-        // User likely wants the summary of what happened in the period.
-        const staffBaseSalaries = safeStaff.reduce((acc, m) => acc + (m.base_salary || 0), 0);
-
-        // Partners Pro-labore
-        const partnersTotal = safePartners.reduce((acc, p) => acc + (p.amount || 0), 0);
-
-        // For "Custos Totais" card, if filtered, we might only show one-off expenses?
-        // Let's stick to the period for agency expenses.
-        const totalCosts = totalAgencyExpenses + staffBaseSalaries + partnersTotal;
+        // Custos Totais = SÓ a Listagem de Despesas do mês (fonte única).
+        // Salário de equipe/pró-labore são cadastro — entram quando lançados
+        // como despesa, senão o mesmo custo conta duas vezes.
+        const totalCosts = totalAgencyExpenses;
 
         const pendingOverviewFees = totalFeesInvoiced - totalFeesPaid;
 
@@ -583,10 +577,13 @@ const Financeiro = () => {
                     <p className="text-muted-foreground mt-1 max-w-2xl">Controle de faturamento, fees e custos da agência.</p>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <TabsList className="h-10 mr-2">
-                        <TabsTrigger value="sales">Vendas</TabsTrigger>
-                        <TabsTrigger value="expenses">Despesas & Custos</TabsTrigger>
-                    </TabsList>
+                    {/* Tabs Vendas/Despesas moram no cabeçalho global (HeaderSlot) */}
+                    <HeaderPortal>
+                        <TabsList className="h-9 border border-border/60 bg-background/50">
+                            <TabsTrigger value="sales">Vendas</TabsTrigger>
+                            <TabsTrigger value="expenses">Despesas & Custos</TabsTrigger>
+                        </TabsList>
+                    </HeaderPortal>
 
                     <div className="flex gap-1 items-center bg-secondary/30 p-1 rounded-md border border-white/5 mr-2">
                         <Button
