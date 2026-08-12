@@ -396,8 +396,11 @@ export default function BriefingForm() {
                 if (pricingRows.length > 0) {
                     await (supabase as any).from('client_pricing').upsert(pricingRows, { onConflict: 'client_id,section,key' });
                 }
-            } catch (pricingErr) {
+            } catch (pricingErr: any) {
                 console.error('Erro ao sincronizar preços:', pricingErr);
+                // Falha SILENCIOSA aqui era a causa de "briefing chegou mas os
+                // preços não atualizaram" — agora grita pro usuário e pro time.
+                toast.error('Briefing salvo, mas os PREÇOS não sincronizaram: ' + (pricingErr?.message || 'erro desconhecido'));
             }
 
             // Generate AI summary
