@@ -1,7 +1,6 @@
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import './i18n';
 
 // Chunk velho pós-deploy: o Vite avisa quando o preload de um módulo dinâmico
 // falha (arquivo com hash antigo que já não existe). Recarrega UMA vez por
