@@ -12,6 +12,10 @@ const HomeNode = lazy(() => import("./pages/landing/home-node/page"));
 const ServicoPage = lazy(() => import("./pages/landing/servicos/ServicoPage"));
 const AppSistema = lazy(() => import("./AppSistema"));
 
+// Só as rotas públicas rolam pro topo em navegação nova — o sistema (SPA com
+// layouts próprios) gerencia o próprio scroll. Manter em sincronia com <Routes>.
+const PAGINAS_PUBLICAS = ["/", "/v1", "/v2", "/criacao-de-sites", "/sistemas-e-ia", "/mentoria-de-ia"];
+
 function RolarParaTopo() {
   const { pathname } = useLocation();
   const tipoNavegacao = useNavigationType();
