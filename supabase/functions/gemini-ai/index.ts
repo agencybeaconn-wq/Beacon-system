@@ -18,7 +18,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7'
 
 // ─── System Instruction (placeholder para definição futura) ────────────────────
 
-const SYSTEM_INSTRUCTION = `Você é um assistente de IA da plataforma Beacon Agency.
+const SYSTEM_INSTRUCTION = `Você é um assistente de IA da plataforma Agency NODE.
 Sua função é analisar dados de marketing, vendas e operações para agências de marketing digital.
 Responda sempre de forma objetiva, profissional e com insights acionáveis.
 Quando apresentar dados numéricos, use formatação clara e organizada.
@@ -55,7 +55,9 @@ function createGeminiModel(temperature = 0.7, maxTokens = 8192) {
     const genAI = new GoogleGenerativeAI(apiKey)
 
     return genAI.getGenerativeModel({
-        model: 'gemini-2.5-flash',
+        // gemini-2.5-flash retornava 404 "no longer available to new users" —
+        // o alias oficial abaixo sempre aponta pro flash atual do Google.
+        model: 'gemini-flash-latest',
         systemInstruction: SYSTEM_INSTRUCTION,
         generationConfig: {
             temperature,
