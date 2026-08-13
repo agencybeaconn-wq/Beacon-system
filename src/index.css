@@ -392,6 +392,14 @@
     stroke-linecap: round;
     stroke-linejoin: round;
   }
+
+  /* O wordmark NODE e branco (desenhado pro fundo escuro). No modo CLARO ele
+     ficava branco-sobre-branco e sumia. brightness(0) forca preto solido
+     (preserva o alfa) — vale pras 10 telas que usam o logo, sem editar cada
+     uma. Vite mantem "lever-logo" no nome do asset, entao casa em producao. */
+  html:not(.dark) img[src*="lever-logo"] {
+    filter: brightness(0);
+  }
 }
 
 @layer components {
