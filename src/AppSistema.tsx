@@ -77,6 +77,7 @@ const SmartDataViz = lazy(() => import("./pages/SmartDataViz"));
 const TimelinePage = lazy(() => import("./pages/TimelinePage"));
 const ProjetosAtivos = lazy(() => import("./pages/ProjetosAtivos"));
 const ClientConnectionsPage = lazy(() => import("./pages/ClientConnectionsPage"));
+const AppMobilePage = lazy(() => import("./pages/AppMobilePage"));
 const ClientTimelinePage = lazy(() => import("./pages/ClientTimelinePage"));
 const ClientOnboardingPage = lazy(() => import("./pages/ClientOnboardingPage"));
 const ClientBriefingPage = lazy(() => import("./pages/ClientBriefingPage"));
@@ -245,6 +246,16 @@ export default function AppSistema() {
                                 }
                               />
                               <Route
+                                path="/clients/:id/aplicativo"
+                                element={
+                                  <ProtectedRoute requiredFeature="clients">
+                                    <DashboardLayout>
+                                      <AppMobilePage />
+                                    </DashboardLayout>
+                                  </ProtectedRoute>
+                                }
+                              />
+                              <Route
                                 path="/tasks"
                                 element={
                                   <ProtectedRoute requiredFeature="demands">
@@ -348,6 +359,11 @@ export default function AppSistema() {
                                 <Route path="clients/:id" element={
                                   <AbacRoute resource="visao_geral" action="read">
                                     <AgencyLayout><ClientDetails /></AgencyLayout>
+                                  </AbacRoute>
+                                } />
+                                <Route path="clients/:id/aplicativo" element={
+                                  <AbacRoute resource="visao_geral" action="read">
+                                    <AgencyLayout><AppMobilePage /></AgencyLayout>
                                   </AbacRoute>
                                 } />
                                 <Route path="pedidos" element={

@@ -22,7 +22,8 @@ import {
     Calendar,
     UserPlus,
     Mail,
-    ShieldCheck
+    ShieldCheck,
+    Smartphone
 } from "lucide-react";
 import {
     DropdownMenu,
@@ -652,6 +653,25 @@ export function ClientSettingsView({ client, clientId, onClientUpdate }: ClientS
                                 </div>
                             </div>
                         </div>
+                    </CardContent>
+                </Card>
+
+                {/* 0.5 Aplicativo Mobile Card — módulo apps white-label */}
+                <Card className="overflow-hidden border-border/40 bg-card text-card-foreground shadow-none">
+                    <CardHeader className="border-b border-border/40 bg-muted/30 pb-6">
+                        <CardTitle className="text-xl flex items-center gap-2 font-bold">
+                            <Smartphone className="w-5 h-5 text-primary" />
+                            Aplicativo Mobile
+                        </CardTitle>
+                        <CardDescription>App white-label da loja: push, automações, rastreio e cashback.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-6 flex items-center justify-between gap-4">
+                        <p className="text-sm text-muted-foreground">
+                            Vincule a loja, gerencie campanhas de push e acompanhe pedidos vindos do app.
+                        </p>
+                        <Button variant="outline" className="shrink-0" onClick={() => navigate(`/clients/${clientId}/aplicativo`)}>
+                            Abrir módulo
+                        </Button>
                     </CardContent>
                 </Card>
 

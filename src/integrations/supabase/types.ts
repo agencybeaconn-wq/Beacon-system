@@ -1435,6 +1435,272 @@ export type Database = {
         }
         Relationships: []
       }
+      app_customers: {
+        Row: {
+          client_id: string
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+          last_order_at: string | null
+          orders_app_count: number
+          shopify_customer_id: string
+          total_spent_app: number
+          updated_at: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          last_order_at?: string | null
+          orders_app_count?: number
+          shopify_customer_id: string
+          total_spent_app?: number
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          last_order_at?: string | null
+          orders_app_count?: number
+          shopify_customer_id?: string
+          total_spent_app?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "app_customers_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "agency_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "app_customers_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "v_agency_clients_visible"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      app_devices: {
+        Row: {
+          app_id: string
+          app_version: string
+          client_id: string
+          device_model: string
+          disabled_reason: string | null
+          expo_push_token: string
+          first_seen_at: string
+          id: string
+          last_seen_at: string
+          locale: string
+          os_version: string
+          platform: string
+          push_enabled: boolean
+          shopify_customer_id: string | null
+        }
+        Insert: {
+          app_id: string
+          app_version?: string
+          client_id: string
+          device_model?: string
+          disabled_reason?: string | null
+          expo_push_token: string
+          first_seen_at?: string
+          id?: string
+          last_seen_at?: string
+          locale?: string
+          os_version?: string
+          platform: string
+          push_enabled?: boolean
+          shopify_customer_id?: string | null
+        }
+        Update: {
+          app_id?: string
+          app_version?: string
+          client_id?: string
+          device_model?: string
+          disabled_reason?: string | null
+          expo_push_token?: string
+          first_seen_at?: string
+          id?: string
+          last_seen_at?: string
+          locale?: string
+          os_version?: string
+          platform?: string
+          push_enabled?: boolean
+          shopify_customer_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "app_devices_app_id_fkey"
+            columns: ["app_id"]
+            isOneToOne: false
+            referencedRelation: "store_apps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "app_devices_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "agency_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "app_devices_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "v_agency_clients_visible"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      app_events: {
+        Row: {
+          app_id: string
+          client_id: string
+          created_at: string
+          device_id: string
+          id: number
+          occurred_at: string
+          payload: Json
+          type: string
+        }
+        Insert: {
+          app_id: string
+          client_id: string
+          created_at?: string
+          device_id: string
+          id?: never
+          occurred_at: string
+          payload?: Json
+          type: string
+        }
+        Update: {
+          app_id?: string
+          client_id?: string
+          created_at?: string
+          device_id?: string
+          id?: never
+          occurred_at?: string
+          payload?: Json
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "app_events_app_id_fkey"
+            columns: ["app_id"]
+            isOneToOne: false
+            referencedRelation: "store_apps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "app_events_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "agency_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "app_events_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "v_agency_clients_visible"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "app_events_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "app_devices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      app_orders: {
+        Row: {
+          app_id: string
+          attributed_via: string
+          client_id: string
+          created_at: string
+          currency: string
+          customer_shopify_id: string | null
+          device_id: string | null
+          financial_status: string
+          id: string
+          order_number: string
+          paid_at: string | null
+          shopify_order_id: string
+          total: number
+        }
+        Insert: {
+          app_id: string
+          attributed_via?: string
+          client_id: string
+          created_at?: string
+          currency?: string
+          customer_shopify_id?: string | null
+          device_id?: string | null
+          financial_status?: string
+          id?: string
+          order_number?: string
+          paid_at?: string | null
+          shopify_order_id: string
+          total: number
+        }
+        Update: {
+          app_id?: string
+          attributed_via?: string
+          client_id?: string
+          created_at?: string
+          currency?: string
+          customer_shopify_id?: string | null
+          device_id?: string | null
+          financial_status?: string
+          id?: string
+          order_number?: string
+          paid_at?: string | null
+          shopify_order_id?: string
+          total?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "app_orders_app_id_fkey"
+            columns: ["app_id"]
+            isOneToOne: false
+            referencedRelation: "store_apps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "app_orders_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "agency_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "app_orders_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "v_agency_clients_visible"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "app_orders_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "app_devices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       briefings: {
         Row: {
           ai_summary: string | null
@@ -1517,6 +1783,119 @@ export type Database = {
           status?: string | null
         }
         Relationships: []
+      }
+      cashback_ledger: {
+        Row: {
+          amount: number
+          app_order_id: string | null
+          client_id: string
+          created_at: string
+          customer_shopify_id: string
+          discount_code: string | null
+          expires_at: string | null
+          id: string
+          kind: string
+          note: string
+          related_ledger_id: string | null
+        }
+        Insert: {
+          amount: number
+          app_order_id?: string | null
+          client_id: string
+          created_at?: string
+          customer_shopify_id: string
+          discount_code?: string | null
+          expires_at?: string | null
+          id?: string
+          kind: string
+          note?: string
+          related_ledger_id?: string | null
+        }
+        Update: {
+          amount?: number
+          app_order_id?: string | null
+          client_id?: string
+          created_at?: string
+          customer_shopify_id?: string
+          discount_code?: string | null
+          expires_at?: string | null
+          id?: string
+          kind?: string
+          note?: string
+          related_ledger_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cashback_ledger_app_order_id_fkey"
+            columns: ["app_order_id"]
+            isOneToOne: false
+            referencedRelation: "app_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cashback_ledger_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "agency_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cashback_ledger_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "v_agency_clients_visible"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cashback_ledger_related_ledger_id_fkey"
+            columns: ["related_ledger_id"]
+            isOneToOne: false
+            referencedRelation: "cashback_ledger"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cashback_rules: {
+        Row: {
+          active: boolean
+          client_id: string
+          config: Json
+          created_at: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          client_id: string
+          config: Json
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          client_id?: string
+          config?: Json
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cashback_rules_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "agency_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cashback_rules_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "v_agency_clients_visible"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       clarity_api_usage: {
         Row: {
@@ -3871,6 +4250,132 @@ export type Database = {
           },
         ]
       }
+      journey_runs: {
+        Row: {
+          client_id: string
+          context: Json
+          current_step: number
+          device_id: string
+          finished_at: string | null
+          id: string
+          journey_id: string
+          next_step_at: string | null
+          started_at: string
+          state: string
+        }
+        Insert: {
+          client_id: string
+          context?: Json
+          current_step?: number
+          device_id: string
+          finished_at?: string | null
+          id?: string
+          journey_id: string
+          next_step_at?: string | null
+          started_at?: string
+          state?: string
+        }
+        Update: {
+          client_id?: string
+          context?: Json
+          current_step?: number
+          device_id?: string
+          finished_at?: string | null
+          id?: string
+          journey_id?: string
+          next_step_at?: string | null
+          started_at?: string
+          state?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "journey_runs_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "agency_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "journey_runs_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "v_agency_clients_visible"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "journey_runs_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "app_devices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "journey_runs_journey_id_fkey"
+            columns: ["journey_id"]
+            isOneToOne: false
+            referencedRelation: "journeys"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      journeys: {
+        Row: {
+          active: boolean
+          app_id: string
+          client_id: string
+          created_at: string
+          definition: Json
+          id: string
+          kind: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          app_id: string
+          client_id: string
+          created_at?: string
+          definition: Json
+          id?: string
+          kind?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          app_id?: string
+          client_id?: string
+          created_at?: string
+          definition?: Json
+          id?: string
+          kind?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "journeys_app_id_fkey"
+            columns: ["app_id"]
+            isOneToOne: false
+            referencedRelation: "store_apps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "journeys_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "agency_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "journeys_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "v_agency_clients_visible"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       landing_events: {
         Row: {
           created_at: string
@@ -4971,6 +5476,164 @@ export type Database = {
           },
         ]
       }
+      push_campaigns: {
+        Row: {
+          app_id: string
+          client_id: string
+          created_at: string
+          created_by: string | null
+          error: string | null
+          id: string
+          open_count: number
+          payload: Json
+          scheduled_at: string | null
+          segment_id: string | null
+          sent_count: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          app_id: string
+          client_id: string
+          created_at?: string
+          created_by?: string | null
+          error?: string | null
+          id?: string
+          open_count?: number
+          payload: Json
+          scheduled_at?: string | null
+          segment_id?: string | null
+          sent_count?: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          app_id?: string
+          client_id?: string
+          created_at?: string
+          created_by?: string | null
+          error?: string | null
+          id?: string
+          open_count?: number
+          payload?: Json
+          scheduled_at?: string | null
+          segment_id?: string | null
+          sent_count?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "push_campaigns_app_id_fkey"
+            columns: ["app_id"]
+            isOneToOne: false
+            referencedRelation: "store_apps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "push_campaigns_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "agency_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "push_campaigns_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "v_agency_clients_visible"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "push_campaigns_segment_id_fkey"
+            columns: ["segment_id"]
+            isOneToOne: false
+            referencedRelation: "segments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      push_sends: {
+        Row: {
+          campaign_id: string | null
+          client_id: string
+          device_id: string
+          error: string | null
+          expo_ticket_id: string | null
+          id: number
+          journey_run_id: string | null
+          kind: string
+          opened_at: string | null
+          payload: Json
+          sent_at: string
+          status: string
+        }
+        Insert: {
+          campaign_id?: string | null
+          client_id: string
+          device_id: string
+          error?: string | null
+          expo_ticket_id?: string | null
+          id?: never
+          journey_run_id?: string | null
+          kind: string
+          opened_at?: string | null
+          payload: Json
+          sent_at?: string
+          status?: string
+        }
+        Update: {
+          campaign_id?: string | null
+          client_id?: string
+          device_id?: string
+          error?: string | null
+          expo_ticket_id?: string | null
+          id?: never
+          journey_run_id?: string | null
+          kind?: string
+          opened_at?: string | null
+          payload?: Json
+          sent_at?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "push_sends_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "push_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "push_sends_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "agency_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "push_sends_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "v_agency_clients_visible"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "push_sends_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "app_devices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "push_sends_journey_run_id_fkey"
+            columns: ["journey_run_id"]
+            isOneToOne: false
+            referencedRelation: "journey_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reviews: {
         Row: {
           approved: boolean
@@ -5152,6 +5815,48 @@ export type Database = {
           },
         ]
       }
+      segments: {
+        Row: {
+          client_id: string
+          created_at: string
+          definition: Json
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          definition?: Json
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          definition?: Json
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "segments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "agency_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "segments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "v_agency_clients_visible"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shipments: {
         Row: {
           created_at: string | null
@@ -5202,6 +5907,57 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      store_apps: {
+        Row: {
+          app_name: string
+          bundle_id: string
+          client_id: string
+          config: Json
+          created_at: string
+          id: string
+          push_limits: Json
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          app_name: string
+          bundle_id: string
+          client_id: string
+          config?: Json
+          created_at?: string
+          id?: string
+          push_limits?: Json
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          app_name?: string
+          bundle_id?: string
+          client_id?: string
+          config?: Json
+          created_at?: string
+          id?: string
+          push_limits?: Json
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_apps_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "agency_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "store_apps_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "v_agency_clients_visible"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       store_deployments: {
         Row: {
@@ -5638,6 +6394,82 @@ export type Database = {
             columns: ["workspace_id"]
             isOneToOne: false
             referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tracked_orders: {
+        Row: {
+          carrier: string
+          client_id: string
+          created_at: string
+          customer_shopify_id: string | null
+          delivered_at: string | null
+          device_id: string | null
+          id: string
+          last_event_at: string | null
+          last_event_text: string
+          order_number: string
+          shopify_order_id: string
+          source: string
+          status: string
+          tracking_number: string | null
+          updated_at: string
+        }
+        Insert: {
+          carrier?: string
+          client_id: string
+          created_at?: string
+          customer_shopify_id?: string | null
+          delivered_at?: string | null
+          device_id?: string | null
+          id?: string
+          last_event_at?: string | null
+          last_event_text?: string
+          order_number?: string
+          shopify_order_id: string
+          source?: string
+          status?: string
+          tracking_number?: string | null
+          updated_at?: string
+        }
+        Update: {
+          carrier?: string
+          client_id?: string
+          created_at?: string
+          customer_shopify_id?: string | null
+          delivered_at?: string | null
+          device_id?: string | null
+          id?: string
+          last_event_at?: string | null
+          last_event_text?: string
+          order_number?: string
+          shopify_order_id?: string
+          source?: string
+          status?: string
+          tracking_number?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tracked_orders_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "agency_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tracked_orders_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "v_agency_clients_visible"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tracked_orders_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "app_devices"
             referencedColumns: ["id"]
           },
         ]
