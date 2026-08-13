@@ -1,19 +1,18 @@
 /**
- * Observabilidade do NODE — Sentry (erros) + PostHog (produto/replay).
+ * Observabilidade do NODE — Sentry (erros).
+ *
+ * (PostHog NÃO mora aqui: o produto/replay tem integração própria e anterior em
+ * `@/lib/posthog.ts` — provider no AppShell + rastreio lazy na landing. Cheguei a
+ * duplicar o init aqui em 2026-08-12 sem saber da existente; a fusão ficou na
+ * integração antiga, que é a casa canônica. Uma fonte de verdade só.)
  *
  * Regras desta camada:
- * 1. TUDO gateado por env: sem VITE_SENTRY_DSN / VITE_POSTHOG_KEY, os módulos
- *    são inertes e os SDKs nem são baixados (import dinâmico). Deploy sem as
- *    chaves se comporta exatamente como hoje.
- * 2. A landing pública NÃO paga o peso: os SDKs iniciam no AppSistema (chunk do
- *    sistema). Na landing, só `capturarErro` existe — e baixa o Sentry sob
- *    demanda QUANDO um erro acontece (erro é raro; peso zero no caminho feliz).
- * 3. Nada de PII além de e-mail no identify; inputs mascarados no replay.
+ * 1. Gateado por env: sem VITE_SENTRY_DSN o módulo é inerte e o SDK nem é baixado.
+ * 2. A landing não paga o peso: init completo só no AppSistema; na landing,
+ *    `capturarErro` baixa o SDK sob demanda QUANDO um erro acontece.
  */
 
 const DSN = import.meta.env.VITE_SENTRY_DSN as string | undefined;
-const PH_KEY = import.meta.env.VITE_POSTHOG_KEY as string | undefined;
-const PH_HOST = (import.meta.env.VITE_POSTHOG_HOST as string | undefined) ?? 'https://us.i.posthog.com';
 
 let sentryCarregando: Promise<typeof import('@sentry/react')> | null = null;
 
@@ -49,21 +48,3 @@ export function capturarErro(erro: unknown, contexto?: Record<string, unknown>) 
     );
 }
 
-/** PostHog no sistema: autocapture + replay (inputs mascarados) + identify do
- *  usuário logado via Supabase — replay e funil por cliente, essencial pro suporte. */
-export function iniciarPostHog() {
-    if (!PH_KEY) return;
-    void import('posthog-js').then(async ({ default: posthog }) => {
-        posthog.init(PH_KEY, {
-            api_host: PH_HOST,
-            capture_pageview: true,
-            session_recording: { maskAllInputs: true },
-        });
-        const { supabase } = await import('@/integrations/supabase/client');
-        supabase.auth.onAuthStateChange((_evento, sessao) => {
-            const u = sessao?.user;
-            if (u) posthog.identify(u.id, { email: u.email });
-            else posthog.reset();
-        });
-    });
-}

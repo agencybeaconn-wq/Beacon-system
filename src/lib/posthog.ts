@@ -32,7 +32,23 @@ export function garantirPostHog() {
         capture_pageview: false,
         capture_pageleave: true,
         autocapture: true,
+        // replay de sessão com inputs mascarados: assiste-se O QUE o usuário fez,
+        // nunca o que digitou (senha, dados de cliente)
+        session_recording: { maskAllInputs: true },
     });
+    // Identifica o usuário logado (replay/funil POR CLIENTE — essencial pro suporte).
+    // Import dinâmico: na landing, o supabase já chega lazy pelo rastreio; aqui só
+    // penduramos o listener. Reset SÓ no logout explícito — resetar em sessão nula
+    // regeneraria o id anônimo a cada visita e quebraria o funil da landing.
+    void import('@/integrations/supabase/client')
+        .then(({ supabase }) => {
+            supabase.auth.onAuthStateChange((evento, sessao) => {
+                const u = sessao?.user;
+                if (u) posthog.identify(u.id, { email: u.email });
+                else if (evento === 'SIGNED_OUT') posthog.reset();
+            });
+        })
+        .catch(() => { /* sem supabase, segue anônimo */ });
     return posthog;
 }
 
