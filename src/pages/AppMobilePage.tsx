@@ -13,6 +13,7 @@ import {
     Wallet, Package, Palette, Settings2, LayoutDashboard,
 } from "lucide-react";
 import { toast } from "sonner";
+import { PushTab } from "@/components/app-mobile/PushTab";
 
 /**
  * Módulo Apps Mobile — página por cliente (/clients/:id/aplicativo).
@@ -210,7 +211,9 @@ export default function AppMobilePage() {
                 </TabsContent>
 
                 <TabsContent value="push" className="mt-6">
-                    {placeholder('E3', 'Compositor de push, agendamento e segmentos.')}
+                    {app && clientId
+                        ? <PushTab clientId={clientId} appId={app.id} />
+                        : placeholder('atual', 'Vincule o app na aba Configurações pra liberar o push.')}
                 </TabsContent>
                 <TabsContent value="automacoes" className="mt-6">
                     {placeholder('E4', 'Jornadas: boas-vindas, carrinho abandonado e fluxos custom.')}
