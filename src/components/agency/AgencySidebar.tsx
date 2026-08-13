@@ -90,6 +90,7 @@ export function AgencySidebar({ onNavigate }: { onNavigate?: () => void }) {
     const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
     const [initialized, setInitialized] = useState<Record<string, boolean>>({});
     const [isHovering, setIsHovering] = useState(false);
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Recolhe pra ícones ao sair, expande no hover — mesmo comportamento da admin.
@@ -102,10 +103,16 @@ export function AgencySidebar({ onNavigate }: { onNavigate?: () => void }) {
     };
     const handleMouseLeave = () => {
         setIsHovering(false);
-        if (!isMobile && open) {
+        if (!isMobile && open && !isPopoverOpen) {
             hoverTimeout.current = setTimeout(() => setOpen(false), 150);
         }
     };
+    // CHAVE: recolhe em repouso. Sem isso a sidebar nasce aberta e nunca fecha
+    // sozinha (o que fazia o colaborador ficar sempre expandido, ao contrário
+    // da admin, que fica em ícones e só abre no hover).
+    useEffect(() => {
+        if (!isPopoverOpen && open && !isMobile && !isHovering) setOpen(false);
+    }, [isPopoverOpen, open, isMobile, setOpen, isHovering]);
     useEffect(() => () => { if (hoverTimeout.current) clearTimeout(hoverTimeout.current); }, []);
 
     const handleNav = () => { if (isMobile) setOpenMobile(false); onNavigate?.(); };
@@ -224,7 +231,7 @@ export function AgencySidebar({ onNavigate }: { onNavigate?: () => void }) {
 
             <SidebarFooter className={cn("p-4 border-t border-border/50 transition-all duration-200 space-y-3", isCollapsed && "items-center px-0")}>
                 <div className={cn("flex items-center justify-between w-full", isCollapsed && "justify-center")}>
-                    <AccountDetailsPopover collapsed={isCollapsed} />
+                    <AccountDetailsPopover collapsed={isCollapsed} onOpenChange={setIsPopoverOpen} />
                 </div>
             </SidebarFooter>
         </Sidebar>

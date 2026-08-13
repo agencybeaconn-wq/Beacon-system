@@ -24,8 +24,9 @@ export function AgencyLayout({ children }: { children: React.ReactNode }) {
 
     if (isClient) return null;
 
+    // defaultOpen=false: nasce recolhida em ícones (igual admin), abre no hover
     return (
-        <SidebarProvider>
+        <SidebarProvider defaultOpen={false}>
             <AgencySidebar />
             <SidebarInset className="w-full max-w-[100vw] overflow-x-hidden m-0 box-border bg-transparent">
                 {/* Topbar flutuante de vidro — mesma da admin */}
