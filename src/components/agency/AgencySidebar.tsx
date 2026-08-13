@@ -1,7 +1,6 @@
 import { ChevronRight } from "lucide-react";
 // Ícones do menu: Heroicons (desenho arredondado, espírito SF Symbols)
 import {
-    Squares2X2Icon,
     ClipboardDocumentListIcon,
     ClipboardDocumentCheckIcon,
     FlagIcon,
@@ -10,14 +9,8 @@ import {
     UserGroupIcon,
     ArrowPathIcon,
     LinkIcon as LinkIconHero,
-    AdjustmentsHorizontalIcon,
-    WrenchScrewdriverIcon,
-    ShoppingCartIcon,
-    SparklesIcon,
     ChartBarIcon,
     CalendarDaysIcon,
-    AcademicCapIcon,
-    PlayIcon,
     Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
@@ -46,17 +39,13 @@ export function AgencySidebar({ onNavigate }: { onNavigate?: () => void }) {
     const { signOut } = useAuth();
     const { clientData } = useDashboard();
     const { isAdmin } = usePermissions();
-    const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({
-        "Ferramentas": true // Open by default or keep it closed? I will default to false, or true if child is active
-    });
+    const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
 
-    // MENU FOR EMPLOYEES (Agency Tools - ABAC Enforced)
+    // MENU DO COLABORADOR (ABAC). Enxugado 2026-08 a pedido: removidas as abas
+    // legadas do Lever (Visão Geral, Prazos de Entrega, Solicitações,
+    // Ferramentas, Treinamentos, Monitoramento, Configurações). Fica só o
+    // núcleo do trabalho do colaborador.
     const menuItems: MenuItem[] = [
-        {
-            title: "Visão Geral",
-            icon: Squares2X2Icon,
-            path: "/agency/dashboard",
-        },
         {
             title: "Demandas",
             icon: ClipboardDocumentListIcon,
@@ -70,16 +59,6 @@ export function AgencySidebar({ onNavigate }: { onNavigate?: () => void }) {
             title: "Prioridades",
             icon: FlagIcon,
             path: "/agency/prioridades",
-        },
-        {
-            title: "Prazos de Entrega",
-            icon: BriefcaseIcon,
-            path: "/agency/active-projects",
-        },
-        {
-            title: "Solicitações",
-            icon: ClipboardDocumentCheckIcon,
-            path: "/agency/solicitacoes",
         },
         {
             title: "Comercial",
@@ -100,48 +79,9 @@ export function AgencySidebar({ onNavigate }: { onNavigate?: () => void }) {
             ]
         },
         {
-            title: "Ferramentas",
-            icon: WrenchScrewdriverIcon,
-            path: "",
-            children: [
-                {
-                    title: "Shopify Manager",
-                    icon: ShoppingCartIcon,
-                    path: "/agency/shopify-manager",
-                },
-                {
-                    title: "Estúdio IA",
-                    icon: SparklesIcon,
-                    path: "/agency/estudio-ia",
-                },
-                {
-                    title: "Claude Skills",
-                    icon: SparklesIcon,
-                    path: "/agency/skills",
-                }
-            ]
-        },
-        {
             title: "Google Calendar",
             icon: CalendarDaysIcon,
             path: "/agency/google-calendar",
-        },
-        {
-            title: "Treinamentos",
-            icon: AcademicCapIcon,
-            path: "",
-            children: [
-                {
-                    title: "Biblioteca",
-                    icon: PlayIcon,
-                    path: "/agency/treinamentos",
-                },
-                {
-                    title: "Gerenciar",
-                    icon: Cog6ToothIcon,
-                    path: "/agency/treinamentos/gerenciar",
-                }
-            ]
         },
         {
             title: "Briefing",
@@ -160,30 +100,17 @@ export function AgencySidebar({ onNavigate }: { onNavigate?: () => void }) {
                 }
             ]
         },
-        {
-            title: "Monitoramento",
-            icon: ChartBarIcon,
-            path: "/agency/logs",
-            adminOnly: true,
-        },
-        {
-            title: "Configurações",
-            icon: Cog6ToothIcon,
-            path: "/agency/settings",
-            adminOnly: true,
-        },
     ];
 
     return (
         // Transparente: o vidro vive no painel flutuante do AgencyLayout —
         // material sobre material colapsa a legibilidade.
         <div className="w-full md:w-64 h-full bg-transparent flex flex-col">
-            <div className="flex flex-col border-b border-border/40 transition-all duration-200 h-16 justify-center px-5 shrink-0 mb-6">
-                <Link to="/agency/dashboard" className="hover:opacity-80 transition-opacity">
-                    <div className="flex items-center gap-2">
-                        <img src={leverLogo} alt="NODE" className="h-4 w-auto" />
-                        <span className="font-bold text-lg text-foreground tracking-tight">System</span>
-                    </div>
+            {/* Logo NODE centralizado, sem o texto "System" (a pedido). Aponta
+                pra 1ª aba mantida (Demandas), já que Visão Geral saiu. */}
+            <div className="flex items-center justify-center border-b border-border/40 h-16 px-5 shrink-0 mb-6">
+                <Link to="/agency/general-board" className="hover:opacity-80 transition-opacity">
+                    <img src={leverLogo} alt="NODE" className="h-5 w-auto" />
                 </Link>
             </div>
 
