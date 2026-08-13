@@ -1,5 +1,5 @@
 import { ChevronRight } from "lucide-react";
-// Ícones do menu: Heroicons (desenho arredondado, espírito SF Symbols)
+// Ícones do menu: Heroicons outline (repouso) + solid (ativo), igual à admin
 import {
     ClipboardDocumentListIcon,
     ClipboardDocumentCheckIcon,
@@ -13,222 +13,221 @@ import {
     CalendarDaysIcon,
     Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
-import { Link, useLocation } from "react-router-dom";
-import { useState, type ElementType } from "react";
+import type { ComponentType, SVGProps } from "react";
+import {
+    ClipboardDocumentListIcon as ClipboardDocumentListSolid,
+    FlagIcon as FlagSolid,
+    ArrowTrendingUpIcon as ArrowTrendingUpSolid,
+    UserGroupIcon as UserGroupSolid,
+    CalendarDaysIcon as CalendarDaysSolid,
+    ClipboardDocumentCheckIcon as ClipboardDocumentCheckSolid,
+} from "@heroicons/react/24/solid";
+import { NavLink, useLocation } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/contexts/AuthContext";
-import { useDashboard } from "@/contexts/DashboardContext";
-import { usePermissions } from "@/contexts/PermissionsContext";
+import {
+    Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarMenu,
+    SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton,
+    SidebarMenuSubItem, useSidebar,
+} from "@/components/ui/sidebar";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { AccountDetailsPopover } from "@/components/sidebar/AccountDetailsPopover";
-
+import nodeTile from "@/assets/node-tile.png";
 import leverLogo from "@/assets/lever-logo.png";
 
-interface MenuItem {
-    title: string;
-    icon: ElementType;
-    path: string;
-    children?: MenuItem[];
-    adminOnly?: boolean;
-}
+type Icon = ComponentType<SVGProps<SVGSVGElement>>;
+interface SubItem { title: string; icon: Icon; url: string; }
+interface MenuItem { title: string; icon: Icon; url?: string; submenu?: SubItem[]; }
 
-import { AdAccountSelector } from "@/components/AdAccountSelector";
+// Menu do COLABORADOR — mesmo shell/estilo da admin, rotas /agency.
+const MENU: MenuItem[] = [
+    {
+        title: "Demandas", icon: ClipboardDocumentListIcon, url: "/agency/general-board",
+        submenu: [
+            { title: "Fixo (MRR)", icon: ArrowPathIcon, url: "/agency/general-board?type=fixo" },
+            { title: "Avulso", icon: BriefcaseIcon, url: "/agency/general-board?type=avulso" },
+        ],
+    },
+    { title: "Prioridades", icon: FlagIcon, url: "/agency/prioridades" },
+    { title: "Comercial", icon: ArrowTrendingUpIcon, url: "/agency/comercial" },
+    {
+        title: "Clientes", icon: UserGroupIcon, url: "/agency/clients",
+        submenu: [
+            { title: "Onboarding", icon: ClipboardDocumentCheckIcon, url: "/agency/client-onboarding" },
+            { title: "Briefing", icon: ClipboardDocumentListIcon, url: "/agency/client-briefing" },
+            { title: "Documentos", icon: BriefcaseIcon, url: "/agency/documentos" },
+            { title: "Preços", icon: ChartBarIcon, url: "/agency/precos" },
+            { title: "Conexões", icon: LinkIconHero, url: "/agency/connections" },
+            { title: "Configurações", icon: Cog6ToothIcon, url: "/agency/client-config" },
+        ],
+    },
+    { title: "Google Calendar", icon: CalendarDaysIcon, url: "/agency/google-calendar" },
+    {
+        title: "Briefing", icon: ClipboardDocumentCheckIcon,
+        submenu: [
+            { title: "Formulário", icon: ClipboardDocumentListIcon, url: "/agency/briefing/formulario" },
+            { title: "Arquivos", icon: BriefcaseIcon, url: "/agency/briefing/arquivos" },
+        ],
+    },
+];
+
+// Ativo = ícone preenchido (padrão iOS), repouso = outline.
+const SOLID_MAP = new Map<Icon, Icon>([
+    [ClipboardDocumentListIcon, ClipboardDocumentListSolid],
+    [FlagIcon, FlagSolid],
+    [ArrowTrendingUpIcon, ArrowTrendingUpSolid],
+    [UserGroupIcon, UserGroupSolid],
+    [CalendarDaysIcon, CalendarDaysSolid],
+    [ClipboardDocumentCheckIcon, ClipboardDocumentCheckSolid],
+]);
 
 export function AgencySidebar({ onNavigate }: { onNavigate?: () => void }) {
+    const { state, isMobile, setOpenMobile, open, setOpen } = useSidebar();
     const location = useLocation();
-    const { signOut } = useAuth();
-    const { clientData } = useDashboard();
-    const { isAdmin } = usePermissions();
+    const isCollapsed = state === "collapsed";
     const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
+    const [initialized, setInitialized] = useState<Record<string, boolean>>({});
+    const [isHovering, setIsHovering] = useState(false);
+    const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
 
-    // MENU DO COLABORADOR (ABAC). Enxugado 2026-08 a pedido: removidas as abas
-    // legadas do Lever (Visão Geral, Prazos de Entrega, Solicitações,
-    // Ferramentas, Treinamentos, Monitoramento, Configurações). Fica só o
-    // núcleo do trabalho do colaborador.
-    const menuItems: MenuItem[] = [
-        {
-            title: "Demandas",
-            icon: ClipboardDocumentListIcon,
-            path: "/agency/general-board",
-            children: [
-                { title: "Fixo (MRR)", icon: ArrowPathIcon, path: "/agency/general-board?type=fixo" },
-                { title: "Avulso", icon: BriefcaseIcon, path: "/agency/general-board?type=avulso" },
-            ],
-        },
-        {
-            title: "Prioridades",
-            icon: FlagIcon,
-            path: "/agency/prioridades",
-        },
-        {
-            title: "Comercial",
-            icon: ArrowTrendingUpIcon,
-            path: "/agency/comercial",
-        },
-        {
-            title: "Clientes",
-            icon: UserGroupIcon,
-            path: "/agency/clients",
-            children: [
-                { title: "Onboarding", icon: ClipboardDocumentCheckIcon, path: "/agency/client-onboarding" },
-                { title: "Briefing", icon: ClipboardDocumentListIcon, path: "/agency/client-briefing" },
-                { title: "Documentos", icon: BriefcaseIcon, path: "/agency/documentos" },
-                { title: "Preços", icon: ChartBarIcon, path: "/agency/precos" },
-                { title: "Conexões", icon: LinkIconHero, path: "/agency/connections" },
-                { title: "Configurações", icon: Cog6ToothIcon, path: "/agency/client-config" },
-            ]
-        },
-        {
-            title: "Google Calendar",
-            icon: CalendarDaysIcon,
-            path: "/agency/google-calendar",
-        },
-        {
-            title: "Briefing",
-            icon: ClipboardDocumentCheckIcon,
-            path: "",
-            children: [
-                {
-                    title: "Formulário",
-                    icon: ClipboardDocumentListIcon,
-                    path: "/agency/briefing/formulario",
-                },
-                {
-                    title: "Arquivos",
-                    icon: BriefcaseIcon,
-                    path: "/agency/briefing/arquivos",
-                }
-            ]
-        },
-    ];
+    // Recolhe pra ícones ao sair, expande no hover — mesmo comportamento da admin.
+    const handleMouseEnter = () => {
+        setIsHovering(true);
+        if (!isMobile) {
+            if (hoverTimeout.current) { clearTimeout(hoverTimeout.current); hoverTimeout.current = null; }
+            if (!open) setOpen(true);
+        }
+    };
+    const handleMouseLeave = () => {
+        setIsHovering(false);
+        if (!isMobile && open) {
+            hoverTimeout.current = setTimeout(() => setOpen(false), 150);
+        }
+    };
+    useEffect(() => () => { if (hoverTimeout.current) clearTimeout(hoverTimeout.current); }, []);
+
+    const handleNav = () => { if (isMobile) setOpenMobile(false); onNavigate?.(); };
+
+    const matchUrl = (url?: string) => {
+        if (!url) return false;
+        if (url.includes("?")) {
+            const [p, q] = url.split("?");
+            return location.pathname === p && location.search === `?${q}`;
+        }
+        return location.pathname === url;
+    };
+
+    const renderIcon = (Icon: Icon, className?: string, active = false) => {
+        const Resolved = active ? (SOLID_MAP.get(Icon) ?? Icon) : Icon;
+        return <Resolved className={cn("h-[18px] w-[18px] shrink-0", className)} strokeWidth={1.5} />;
+    };
+
+    const renderItem = (item: MenuItem) => {
+        if (item.submenu) {
+            const anyChildActive = item.submenu.some(s => matchUrl(s.url));
+            const isOpen = initialized[item.title] ? !!openMenus[item.title] : (openMenus[item.title] ?? anyChildActive);
+            return (
+                <Collapsible key={item.title} open={isOpen}
+                    onOpenChange={(open) => { setInitialized(p => ({ ...p, [item.title]: true })); setOpenMenus(p => ({ ...p, [item.title]: open })); }}
+                    className="group/collapsible">
+                    <SidebarMenuItem>
+                        <motion.div whileHover={{ scale: 0.98 }} whileTap={{ scale: 0.96 }} transition={{ duration: 0.2, ease: "easeInOut" }}
+                            className={cn("flex items-center w-full transition-all duration-300 ease-out",
+                                !isCollapsed ? "px-0 py-1.5" : "p-0 justify-center",
+                                anyChildActive ? "text-primary font-bold bg-primary/10 shadow-sm"
+                                    : "text-muted-foreground hover:text-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground")}>
+                            <SidebarMenuButton asChild tooltip={item.title}
+                                className={cn("h-auto p-0 rounded-none border-none hover:bg-transparent hover:text-inherit flex-1 px-4", !isCollapsed && "gap-3")}>
+                                <NavLink to={item.url || "#"}
+                                    onClick={(e) => { handleNav(); if (!item.url) { e.preventDefault(); setInitialized(p => ({ ...p, [item.title]: true })); setOpenMenus(p => ({ ...p, [item.title]: !isOpen })); } }}
+                                    className="flex items-center gap-3 w-full">
+                                    {renderIcon(item.icon, anyChildActive ? "text-primary" : "text-muted-foreground", anyChildActive)}
+                                    {!isCollapsed && <span className="text-left text-base font-medium tracking-tight truncate">{item.title}</span>}
+                                </NavLink>
+                            </SidebarMenuButton>
+                            {!isCollapsed && (
+                                <CollapsibleTrigger asChild>
+                                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0 hover:bg-transparent hover:text-inherit mr-2" onClick={(e) => e.stopPropagation()}>
+                                        <ChevronRight className={cn("h-4 w-4 shrink-0 transition-transform duration-200", isOpen && "rotate-90", anyChildActive && "text-primary")} strokeWidth={1.5} />
+                                    </Button>
+                                </CollapsibleTrigger>
+                            )}
+                        </motion.div>
+                        {!isCollapsed && (
+                            <CollapsibleContent>
+                                <SidebarMenuSub className="ml-8 pl-0 border-l border-primary/10 space-y-0.5 mt-1 mb-1">
+                                    {item.submenu.map((sub) => {
+                                        const active = matchUrl(sub.url);
+                                        return (
+                                            <SidebarMenuSubItem key={sub.title} className="w-full p-0 m-0 block group/sub-item">
+                                                <motion.div whileHover={{ scale: 0.98, x: 2 }} whileTap={{ scale: 0.96 }} transition={{ duration: 0.2, ease: "easeInOut" }}>
+                                                    <SidebarMenuSubButton asChild className="w-full h-auto p-0 m-0 rounded-none border-none block hover:bg-transparent hover:text-inherit">
+                                                        <NavLink to={sub.url} onClick={handleNav}
+                                                            className={cn("relative flex items-center gap-2.5 px-3 py-1 transition-all duration-300 ease-out font-medium w-full text-[13px]",
+                                                                active ? "text-primary bg-primary/10 font-bold" : "text-muted-foreground hover:text-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground")}>
+                                                            {renderIcon(sub.icon, cn("h-4 w-4 shrink-0 transition-colors", active ? "text-primary" : "text-muted-foreground group-hover/sub-item:text-primary"))}
+                                                            <span className="tracking-tight">{sub.title}</span>
+                                                        </NavLink>
+                                                    </SidebarMenuSubButton>
+                                                </motion.div>
+                                            </SidebarMenuSubItem>
+                                        );
+                                    })}
+                                </SidebarMenuSub>
+                            </CollapsibleContent>
+                        )}
+                    </SidebarMenuItem>
+                </Collapsible>
+            );
+        }
+        const active = matchUrl(item.url);
+        return (
+            <SidebarMenuItem key={item.title}>
+                <motion.div whileHover={{ scale: 0.98 }} whileTap={{ scale: 0.96 }} transition={{ duration: 0.2, ease: "easeInOut" }}
+                    className={cn("flex items-center w-full transition-all duration-300 ease-out",
+                        !isCollapsed ? "px-0 py-1.5" : "p-0 justify-center",
+                        active ? "text-primary font-medium bg-primary/10"
+                            : "text-muted-foreground hover:text-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground")}>
+                    <SidebarMenuButton asChild tooltip={item.title}
+                        className={cn("h-auto p-0 rounded-none border-none hover:bg-transparent hover:text-inherit flex-1 px-4", !isCollapsed && "gap-3")}>
+                        <NavLink to={item.url || "#"} onClick={handleNav} className="flex items-center gap-3 w-full">
+                            {renderIcon(item.icon, active ? "text-primary" : "text-muted-foreground", active)}
+                            {!isCollapsed && <span className="text-left text-base font-medium tracking-tight truncate">{item.title}</span>}
+                        </NavLink>
+                    </SidebarMenuButton>
+                </motion.div>
+            </SidebarMenuItem>
+        );
+    };
 
     return (
-        // Transparente: o vidro vive no painel flutuante do AgencyLayout —
-        // material sobre material colapsa a legibilidade.
-        <div className="w-full md:w-64 h-full bg-transparent flex flex-col">
-            {/* Logo NODE centralizado, sem o texto "System" (a pedido). Aponta
-                pra 1ª aba mantida (Demandas), já que Visão Geral saiu. */}
-            <div className="flex items-center justify-center border-b border-border/40 h-16 px-5 shrink-0 mb-6">
-                <Link to="/agency/general-board" className="hover:opacity-80 transition-opacity">
-                    <img src={leverLogo} alt="NODE" className="h-5 w-auto" />
-                </Link>
-            </div>
-
-            <nav className="flex-1 px-4 space-y-1">
-                {menuItems.filter(item => !item.adminOnly || isAdmin).map((item) => {
-                    const isActive = location.pathname === item.path;
-                    const hasChildren = item.children && item.children.length > 0;
-
-                    if (hasChildren) {
-                        const matchChild = (childPath: string) => {
-                            if (childPath.includes('?')) {
-                                const [p, q] = childPath.split('?');
-                                return location.pathname === p && location.search === `?${q}`;
-                            }
-                            return location.pathname === childPath;
-                        };
-                        const isAnyChildActive = item.children?.some(c => matchChild(c.path));
-                        const isParentActive = !!item.path && location.pathname === item.path;
-                        const isOpen = openMenus[item.title] || isAnyChildActive;
-                        const hasOwnPath = !!item.path;
-
-                        return (
-                            <div key={item.title} className="flex flex-col">
-                                <div
-                                    className={cn(
-                                        "flex items-center mx-2 rounded-[10px] overflow-hidden transition-colors duration-200 ease-out border-none group",
-                                        (isParentActive || isAnyChildActive)
-                                            ? "text-primary"
-                                            : "text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/70"
-                                    )}
-                                >
-                                    {hasOwnPath ? (
-                                        <Link
-                                            to={item.path}
-                                            onClick={() => onNavigate?.()}
-                                            className={cn(
-                                                "flex items-center gap-3 flex-1 px-4 py-1.5",
-                                                isParentActive && "bg-primary/10 font-bold"
-                                            )}
-                                        >
-                                            <item.icon className={cn("h-[18px] w-[18px] shrink-0 transition-colors", (isParentActive || isAnyChildActive) ? "text-primary" : "text-muted-foreground group-hover:text-primary")} strokeWidth={1.5} />
-                                            <span className={cn("text-left text-base tracking-tight truncate", (isParentActive || isAnyChildActive) && "text-primary font-bold")}>{item.title}</span>
-                                        </Link>
-                                    ) : (
-                                        <button
-                                            onClick={() => setOpenMenus(prev => ({ ...prev, [item.title]: !prev[item.title] }))}
-                                            className="flex items-center gap-3 flex-1 px-4 py-1.5"
-                                        >
-                                            <item.icon className={cn("h-[18px] w-[18px] shrink-0 transition-colors", isAnyChildActive ? "text-primary" : "text-muted-foreground group-hover:text-primary")} strokeWidth={1.5} />
-                                            <span className={cn("text-left text-base tracking-tight truncate", isAnyChildActive && "text-primary font-bold")}>{item.title}</span>
-                                        </button>
-                                    )}
-                                    <button
-                                        type="button"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setOpenMenus(prev => ({ ...prev, [item.title]: !prev[item.title] }));
-                                        }}
-                                        className="px-2 py-1.5 mr-1 hover:text-primary"
-                                        aria-label={`Alternar submenu ${item.title}`}
-                                    >
-                                        <ChevronRight className={cn("w-4 h-4 transition-transform", isOpen && "rotate-90", (isParentActive || isAnyChildActive) ? "text-primary" : "text-muted-foreground group-hover:text-primary")} />
-                                    </button>
-                                </div>
-
-                                {isOpen && (
-                                    <div className="flex flex-col space-y-1 mt-1 pb-2">
-                                        {item.children?.map(child => {
-                                            const isChildActive = matchChild(child.path);
-                                            return (
-                                                <Link
-                                                    key={child.path}
-                                                    to={child.path}
-                                                    onClick={() => onNavigate?.()}
-                                                    className={cn(
-                                                        "flex items-center gap-2.5 py-1.5 transition-colors duration-200 ease-out font-medium text-[13px] mx-2 rounded-[10px] pl-9 pr-4",
-                                                        isChildActive
-                                                            ? "text-primary bg-primary/10 font-semibold"
-                                                            : "text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/70"
-                                                    )}
-                                                >
-                                                    <child.icon className={cn("h-[14px] w-[14px] shrink-0 transition-colors", isChildActive ? "text-primary" : "text-muted-foreground")} />
-                                                    {child.title}
-                                                </Link>
-                                            );
-                                        })}
-                                    </div>
-                                )}
-                            </div>
-                        );
-                    }
-
-                    return (
-                        <Link
-                            key={item.path}
-                            to={item.path}
-                            onClick={() => onNavigate?.()}
-                            className={cn(
-                                "flex items-center transition-colors duration-200 ease-out mx-2 px-3 py-1.5 rounded-[10px] border-none group",
-                                isActive
-                                    ? "text-primary font-semibold bg-primary/10"
-                                    : "text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/70"
-                            )}
-                        >
-                            <div className="flex items-center gap-3 w-full">
-                                <item.icon className={cn("h-[18px] w-[18px] shrink-0", isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary")} strokeWidth={1.5} />
-                                <span className="text-left text-base tracking-tight truncate">{item.title}</span>
-                            </div>
-                        </Link>
-                    );
-                })}
-            </nav>
-
-            <div className="p-4 border-t border-border/50 flex flex-col gap-3">
-                <div className="flex items-center justify-between w-full">
-                    <AccountDetailsPopover />
+        <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <Sidebar collapsible="icon" variant="floating" className="border-0 bg-transparent">
+            {/* Logo NODE centralizado, sem "System" */}
+            <div className={cn("flex items-center border-b border-border/40 transition-all duration-200 h-16 justify-center", isCollapsed ? "px-0" : "px-5")}>
+                <div className="select-none">
+                    {!isCollapsed
+                        ? <img src={leverLogo} alt="NODE" className="h-5 w-auto" />
+                        : <img src={nodeTile} alt="NODE" className="h-6 w-6 object-contain rounded" />}
                 </div>
             </div>
+
+            <SidebarContent className="p-0">
+                <SidebarGroup className="p-0">
+                    <SidebarMenu className="gap-0">
+                        {MENU.map(renderItem)}
+                    </SidebarMenu>
+                </SidebarGroup>
+            </SidebarContent>
+
+            <SidebarFooter className={cn("p-4 border-t border-border/50 transition-all duration-200 space-y-3", isCollapsed && "items-center px-0")}>
+                <div className={cn("flex items-center justify-between w-full", isCollapsed && "justify-center")}>
+                    <AccountDetailsPopover collapsed={isCollapsed} />
+                </div>
+            </SidebarFooter>
+        </Sidebar>
         </div>
     );
 }
