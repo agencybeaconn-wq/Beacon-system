@@ -78,6 +78,7 @@ const TimelinePage = lazy(() => import("./pages/TimelinePage"));
 const ProjetosAtivos = lazy(() => import("./pages/ProjetosAtivos"));
 const ClientConnectionsPage = lazy(() => import("./pages/ClientConnectionsPage"));
 const AppMobilePage = lazy(() => import("./pages/AppMobilePage"));
+const AppsOverviewPage = lazy(() => import("./pages/AppsOverviewPage"));
 const ClientTimelinePage = lazy(() => import("./pages/ClientTimelinePage"));
 const ClientOnboardingPage = lazy(() => import("./pages/ClientOnboardingPage"));
 const ClientBriefingPage = lazy(() => import("./pages/ClientBriefingPage"));
@@ -251,6 +252,16 @@ export default function AppSistema() {
                                   <ProtectedRoute requiredFeature="clients">
                                     <DashboardLayout>
                                       <AppMobilePage />
+                                    </DashboardLayout>
+                                  </ProtectedRoute>
+                                }
+                              />
+                              <Route
+                                path="/aplicativos"
+                                element={
+                                  <ProtectedRoute requiredFeature="clients">
+                                    <DashboardLayout>
+                                      <AppsOverviewPage />
                                     </DashboardLayout>
                                   </ProtectedRoute>
                                 }

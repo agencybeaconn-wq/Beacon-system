@@ -1543,6 +1543,13 @@ export type Database = {
             foreignKeyName: "app_devices_app_id_fkey"
             columns: ["app_id"]
             isOneToOne: false
+            referencedRelation: "app_overview"
+            referencedColumns: ["app_id"]
+          },
+          {
+            foreignKeyName: "app_devices_app_id_fkey"
+            columns: ["app_id"]
+            isOneToOne: false
             referencedRelation: "store_apps"
             referencedColumns: ["id"]
           },
@@ -1594,6 +1601,13 @@ export type Database = {
           type?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "app_events_app_id_fkey"
+            columns: ["app_id"]
+            isOneToOne: false
+            referencedRelation: "app_overview"
+            referencedColumns: ["app_id"]
+          },
           {
             foreignKeyName: "app_events_app_id_fkey"
             columns: ["app_id"]
@@ -1671,6 +1685,13 @@ export type Database = {
           total?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "app_orders_app_id_fkey"
+            columns: ["app_id"]
+            isOneToOne: false
+            referencedRelation: "app_overview"
+            referencedColumns: ["app_id"]
+          },
           {
             foreignKeyName: "app_orders_app_id_fkey"
             columns: ["app_id"]
@@ -4357,6 +4378,13 @@ export type Database = {
             foreignKeyName: "journeys_app_id_fkey"
             columns: ["app_id"]
             isOneToOne: false
+            referencedRelation: "app_overview"
+            referencedColumns: ["app_id"]
+          },
+          {
+            foreignKeyName: "journeys_app_id_fkey"
+            columns: ["app_id"]
+            isOneToOne: false
             referencedRelation: "store_apps"
             referencedColumns: ["id"]
           },
@@ -5523,6 +5551,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "push_campaigns_app_id_fkey"
+            columns: ["app_id"]
+            isOneToOne: false
+            referencedRelation: "app_overview"
+            referencedColumns: ["app_id"]
+          },
           {
             foreignKeyName: "push_campaigns_app_id_fkey"
             columns: ["app_id"]
@@ -6839,6 +6874,39 @@ export type Database = {
       }
     }
     Views: {
+      app_overview: {
+        Row: {
+          app_id: string | null
+          app_name: string | null
+          bundle_id: string | null
+          client_id: string | null
+          client_name: string | null
+          created_at: string | null
+          devices: number | null
+          logo_url: string | null
+          pedidos: number | null
+          receita: number | null
+          status: string | null
+          ultimo_webhook: string | null
+          webhooks_ativos: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_apps_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "agency_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "store_apps_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "v_agency_clients_visible"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dw_v_catalog_gap: {
         Row: {
           category: string | null

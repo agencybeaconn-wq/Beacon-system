@@ -96,6 +96,7 @@ import {
   CubeIcon,
   CalendarDaysIcon,
   Cog6ToothIcon,
+  DevicePhoneMobileIcon,
 } from "@heroicons/react/24/outline";
 // Variantes preenchidas pro item ATIVO (padrão iOS: outline em repouso, solid ativo)
 import {
@@ -107,6 +108,7 @@ import {
   CubeIcon as CubeSolid,
   CalendarDaysIcon as CalendarDaysSolid,
   Cog6ToothIcon as Cog6ToothSolid,
+  DevicePhoneMobileIcon as DevicePhoneMobileSolid,
 } from "@heroicons/react/24/solid";
 
 type IconComponent = LucideIcon | React.ComponentType<any>;
@@ -136,6 +138,7 @@ const mainMenuItems: MenuItem[] = [
   { section: 'agency', title: "Comercial", transKey: "sidebar.crm", url: "/comercial", icon: DocumentTextIcon },
   // Clientes vira item único (dropdown removido a pedido) — vai pra lista.
   { section: 'agency', title: "Clientes", transKey: "sidebar.clients", url: "/clients", icon: UserGroupIcon },
+  { section: 'agency', title: "Aplicativos", transKey: "sidebar.apps", url: "/aplicativos", icon: DevicePhoneMobileIcon },
 
   // ─── Seção: Gestão e Ajustes ───
   { section: 'management', title: "Financeiro Agência", transKey: "sidebar.financial_agency", url: "/financeiro", icon: WalletIcon },
@@ -218,6 +221,7 @@ export function AppSidebar() {
       'sidebar.dashboard': 'dashboard',
       'sidebar.general_board': 'demands',
       'sidebar.clients': 'clients',
+      'sidebar.apps': 'clients',
       'sidebar.tasks': 'demands',
       'sidebar.tasks_fixo': 'demands',
       'sidebar.tasks_avulso': 'demands',
@@ -302,6 +306,7 @@ export function AppSidebar() {
     [CubeIcon, CubeSolid],
     [CalendarDaysIcon, CalendarDaysSolid],
     [Cog6ToothIcon, Cog6ToothSolid],
+    [DevicePhoneMobileIcon, DevicePhoneMobileSolid],
   ]);
 
   const renderIcon = (Icon: IconComponent, className?: string, active = false) => {
