@@ -7,6 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { AdAccountSelector } from "@/components/AdAccountSelector";
 import { HeaderSlotProvider, HeaderSlotOutlet } from "@/components/HeaderSlot";
 import { NotificationBell } from "@/components/NotificationBell";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { GamificationProgressBar } from "@/components/GamificationProgressBar";
 import { useLocation, Navigate } from "react-router-dom";
 
@@ -157,6 +158,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-2 shrink-0">
             {/* Slot: páginas teleportam suas tabs pra cá — à direita, junto do sino */}
             <HeaderSlotOutlet className="hidden md:flex items-center" />
+            <ThemeToggle />
             <NotificationBell />
           </div>
         </div>

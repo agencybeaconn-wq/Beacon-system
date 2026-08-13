@@ -68,42 +68,46 @@
        Quatro pesos, como os materials do UIKit. Peso MAIOR = mais opaco =
        separa regiao estrutural. Peso MENOR = mais leve = chama atencao pro
        elemento interativo. */
-    --mat-chrome-bg: 252 252 253;
-    --mat-chrome-alpha: 0.52;
-    --mat-chrome-blur: 28px;
-    --mat-chrome-sat: 180%;
+    /* No CLARO os materiais sao bem mais opacos: sobre fundo claro o vidro
+       transparente vira sopa cinza sem contraste. Alpha alto = card branco
+       nitido com so um toque de translucidez. */
+    --mat-chrome-bg: 255 255 255;
+    --mat-chrome-alpha: 0.80;
+    --mat-chrome-blur: 24px;
+    --mat-chrome-sat: 140%;
 
     --mat-float-bg: 255 255 255;
-    --mat-float-alpha: 0.62;
-    --mat-float-blur: 36px;
-    --mat-float-sat: 200%;
+    --mat-float-alpha: 0.92;
+    --mat-float-blur: 28px;
+    --mat-float-sat: 150%;
 
-    --mat-sheet-bg: 252 252 253;
-    --mat-sheet-alpha: 0.70;
-    --mat-sheet-blur: 44px;
-    --mat-sheet-sat: 190%;
+    --mat-sheet-bg: 255 255 255;
+    --mat-sheet-alpha: 0.94;
+    --mat-sheet-blur: 32px;
+    --mat-sheet-sat: 150%;
 
-    /* Card de conteudo: o vidro mais opaco da escala — carrega tabela e
-       formulario, entao legibilidade ganha do efeito. */
+    /* Card de conteudo: quase solido no claro pra tabela/form lerem limpo. */
     --mat-card-bg: 255 255 255;
-    --mat-card-alpha: 0.58;
-    --mat-card-blur: 20px;
-    --mat-card-sat: 160%;
+    --mat-card-alpha: 0.88;
+    --mat-card-blur: 16px;
+    --mat-card-sat: 140%;
 
     --mat-scrim: 0 0 0;
     --mat-scrim-alpha: 0.28;
 
-    /* Aresta especular: a luz batendo na quina superior do vidro.
-       E o detalhe que separa "div com blur" de "material". */
+    /* Aresta especular: no CLARO a quina de cima recebe um toque de luz, mas o
+       ANEL vira uma linha ESCURA fininha — e o que separa card de fundo (anel
+       branco sobre branco nao separa nada). */
     --mat-edge-top: rgba(255, 255, 255, 0.90);
-    --mat-edge-ring: rgba(255, 255, 255, 0.45);
+    --mat-edge-ring: rgba(0, 0, 0, 0.08);
 
-    /* Campo ambiente — o que o vidro refrata. Sem isso, vidro sobre branco
-       e invisivel. Familia azul-fria, saturacao moderada (regra: 1 acento, <80%). */
-    --amb-a: 221 70% 80%;
-    --amb-b: 258 55% 82%;
-    --amb-c: 199 65% 83%;
-    --amb-base: 220 30% 93%;
+    /* Campo ambiente CLARO — quase branco. O lavanda saturado anterior sujava
+       o fundo e engolia os cards. Agora e um cinza-frio levíssimo: dá a
+       profundidade que o vidro precisa sem virar cor. */
+    --amb-a: 220 30% 96%;
+    --amb-b: 250 24% 96%;
+    --amb-c: 205 28% 97%;
+    --amb-base: 220 20% 98%;
 
     /* ---- Elevacao ----
        Superficie maior le como mais espessa: blur mais forte E sombra mais
@@ -210,12 +214,14 @@
     --mat-edge-top: rgba(255, 255, 255, 0.20);
     --mat-edge-ring: rgba(255, 255, 255, 0.11);
 
-    /* Campo ambiente escuro: brilhos frios com presença — a 1920px os
-       gradientes se espalham e luminosidade <16% desaparece. */
-    --amb-a: 224 60% 24%;
-    --amb-b: 259 50% 20%;
-    --amb-c: 203 58% 18%;
-    --amb-base: 228 24% 5%;
+    /* Fundo PRETO com brilho quase imperceptível — o vidro ainda precisa de
+       ALGO pra refratar (preto puro o deixa invisível, foi o bug que
+       resolvemos), mas a leitura geral é preto. Base neutra ~2%, glows frios
+       dessaturados em ~9-11% de luminosidade. */
+    --amb-a: 225 22% 10%;
+    --amb-b: 258 18% 9%;
+    --amb-c: 205 20% 8%;
+    --amb-base: 0 0% 2%;
 
     /* No escuro a sombra sozinha nao separa — o anel de luz e que separa. */
     --elev-1: 0 1px 2px rgba(0, 0, 0, 0.40);
