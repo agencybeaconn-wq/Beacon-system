@@ -51,12 +51,12 @@ const getInviteEmailHtml = (inviteLink: string) => `
     <div class="wrapper">
         <div class="container">
             <div class="header">
-                <span style="font-size: 26px; font-weight: 900; letter-spacing: -0.02em; color: #ffffff;">Beacon System</span>
+                <span style="font-size: 26px; font-weight: 900; letter-spacing: -0.02em; color: #ffffff;">NODE</span>
             </div>
             <div class="content">
                 <h1 class="title">Você foi convidado!</h1>
                 <p class="text">
-                    Olá! Você foi convidado para colaborar na plataforma <strong>Beacon System</strong>.
+                    Olá! Você foi convidado para colaborar na plataforma <strong>NODE</strong>.
                     Estamos ansiosos para ter você no time.
                 </p>
                 <a href="${inviteLink}" class="btn">Aceitar Convite</a>
@@ -66,7 +66,7 @@ const getInviteEmailHtml = (inviteLink: string) => `
                 </p>
             </div>
             <div class="footer">
-                &copy; 2026 Beacon System. Gestão inteligente para agências.
+                &copy; 2026 NODE. Tecnologia que vende.
             </div>
         </div>
     </div>
@@ -76,14 +76,14 @@ const getInviteEmailHtml = (inviteLink: string) => `
 
 // Versão texto puro do e-mail. Enviar html + text reduz o spam score (mensagens só-HTML
 // pontuam pior nos filtros) e cobre clientes que não renderizam HTML.
-const getInviteEmailText = (inviteLink: string) => `Você foi convidado para colaborar no Beacon System.
+const getInviteEmailText = (inviteLink: string) => `Você foi convidado para colaborar no NODE.
 
 Para aceitar o convite e criar sua senha, acesse:
 ${inviteLink}
 
 Se você não esperava este convite, pode ignorar este e-mail com segurança.
 
-— Beacon System`;
+— NODE`;
 
 serve(instrument("invite-team-member", async (req) => {
     // 1. CORS Preflight
@@ -180,7 +180,7 @@ serve(instrument("invite-team-member", async (req) => {
             }
         }
 
-        const PRODUCTION_URL = 'https://agencybeacon.site';
+        const PRODUCTION_URL = 'https://agencynode.site';
         let siteUrl = Deno.env.get('VITE_APP_URL') || PRODUCTION_URL;
         if (site_url && !site_url.includes('localhost') && !site_url.includes('127.0.0.1')) {
             siteUrl = site_url;
@@ -291,7 +291,7 @@ serve(instrument("invite-team-member", async (req) => {
 
         // Link autossuficiente: aponta DIRETO pra produção carregando o token_hash (fluxo verifyOtp).
         // Independe da Site URL do GoTrue (que estava redirecionando o convite pra localhost) e
-        // mantém o domínio do link IGUAL ao do remetente (@agencybeacon.site) — reduz spam.
+        // mantém o domínio do link IGUAL ao do remetente (@agencynode.site) — reduz spam.
         const tokenHash = linkData?.properties?.hashed_token;
         const verificationType = linkData?.properties?.verification_type || 'magiclink';
         if (!tokenHash) {
@@ -299,10 +299,10 @@ serve(instrument("invite-team-member", async (req) => {
             throw new Error("Falha ao gerar o token do convite (hashed_token ausente)");
         }
         const inviteLink = `${siteUrl}/auth/accept-invite?token_hash=${encodeURIComponent(tokenHash)}&type=${encodeURIComponent(verificationType)}`;
-        const FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL') || 'Beacon System <contato@agencybeacon.site>';
+        const FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL') || 'NODE <contato@agencynode.site>';
         // reply_to em mailbox monitorada faz o e-mail parecer correspondência real (não robô),
         // o que reduz a chance de cair no spam. Sobrescrevível por env.
-        const REPLY_TO = Deno.env.get('RESEND_REPLY_TO') || 'contato@agencybeacon.site';
+        const REPLY_TO = Deno.env.get('RESEND_REPLY_TO') || 'contato@agencynode.site';
 
         const resEmail = await fetch('https://api.resend.com/emails', {
             method: 'POST',
@@ -314,7 +314,7 @@ serve(instrument("invite-team-member", async (req) => {
                 from: FROM_EMAIL,
                 to: [normalizedEmail],
                 reply_to: REPLY_TO,
-                subject: 'Você foi convidado para o Beacon System',
+                subject: 'Você foi convidado para o NODE',
                 html: getInviteEmailHtml(inviteLink),
                 text: getInviteEmailText(inviteLink)
             })

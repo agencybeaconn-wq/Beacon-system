@@ -1,6 +1,6 @@
 /**
  * Send Academy Invite — Edge Function
- * Envia o link de convite do Beacon Academy pra um email via Resend.
+ * Envia o link de convite do NODE Academy pra um email via Resend.
  * Body esperado: { invite_id: uuid } — busca o convite, gera link + email, envia.
  */
 
@@ -31,7 +31,7 @@ const getAcademyEmailHtml = (opts: {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Seu acesso ao Beacon Academy</title>
+  <title>Seu acesso ao NODE Academy</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -42,7 +42,7 @@ const getAcademyEmailHtml = (opts: {
 <body style="margin: 0; padding: 0; font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #fafafa;">
   <div style="max-width: 560px; margin: 0 auto; padding: 40px 24px;">
     <div style="background: #0a0a0a; padding: 32px; border-radius: 16px 16px 0 0; text-align: center;">
-      <span style="display: block; font-size: 24px; font-weight: 900; letter-spacing: -0.02em; color: #ffffff; margin: 0 0 8px;">Beacon</span>
+      <span style="display: block; font-size: 24px; font-weight: 900; letter-spacing: -0.02em; color: #ffffff; margin: 0 0 8px;">NODE</span>
       <p style="color: #fff; font-size: 11px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; margin: 0; opacity: 0.8;">
         Academy
       </p>
@@ -55,7 +55,7 @@ const getAcademyEmailHtml = (opts: {
         ${greeting}
       </h2>
       <p style="font-size: 16px; color: #333; line-height: 1.5; margin: 0 0 20px; font-weight: 400;">
-        Você foi convidado pra acessar <strong>${opts.moduleTitle}</strong> no Beacon Academy.
+        Você foi convidado pra acessar <strong>${opts.moduleTitle}</strong> no NODE Academy.
       </p>
       ${customNoteHtml}
       <p style="font-size: 15px; color: #555; line-height: 1.5; margin: 0 0 28px; font-weight: 400;">
@@ -74,7 +74,7 @@ const getAcademyEmailHtml = (opts: {
       ${expiryNote}
       <hr style="border: none; border-top: 1px solid #eee; margin: 32px 0 20px;" />
       <p style="font-size: 11px; color: #aaa; margin: 0; text-align: center; font-weight: 500;">
-        Beacon Agency · educação prática em IA e desenvolvimento
+        NODE · educação prática em IA e desenvolvimento
       </p>
     </div>
   </div>
@@ -161,7 +161,7 @@ Deno.serve(instrument("send-academy-invite", async (req) => {
       override_link_base
       || Deno.env.get('APP_PUBLIC_URL')
       || Deno.env.get('NEXT_PUBLIC_APP_URL')
-      || 'https://agencybeacon.site'
+      || 'https://agencynode.site'
     ).replace(/\/$/, '');
     const inviteLink = `${linkBase}/academy/convite/${invite.token}`;
 
@@ -172,8 +172,8 @@ Deno.serve(instrument("send-academy-invite", async (req) => {
       });
     }
 
-    const FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL') || 'Beacon Academy <contato@agencybeacon.site>';
-    const moduleTitle = invite.academy_modules?.title || 'Beacon Academy';
+    const FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL') || 'NODE Academy <contato@agencynode.site>';
+    const moduleTitle = invite.academy_modules?.title || 'NODE Academy';
     const moduleType = (invite.academy_modules?.type || 'course') as 'course' | 'mentoria';
 
     const emailRes = await fetch('https://api.resend.com/emails', {
