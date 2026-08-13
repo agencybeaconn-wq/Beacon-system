@@ -7,11 +7,7 @@ import {
     BriefcaseIcon,
     ArrowTrendingUpIcon,
     UserGroupIcon,
-    ArrowPathIcon,
-    LinkIcon as LinkIconHero,
-    ChartBarIcon,
     CalendarDaysIcon,
-    Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import type { ComponentType, SVGProps } from "react";
 import {
@@ -43,26 +39,11 @@ interface MenuItem { title: string; icon: Icon; url?: string; submenu?: SubItem[
 
 // Menu do COLABORADOR — mesmo shell/estilo da admin, rotas /agency.
 const MENU: MenuItem[] = [
-    {
-        title: "Demandas", icon: ClipboardDocumentListIcon, url: "/agency/general-board",
-        submenu: [
-            { title: "Fixo (MRR)", icon: ArrowPathIcon, url: "/agency/general-board?type=fixo" },
-            { title: "Avulso", icon: BriefcaseIcon, url: "/agency/general-board?type=avulso" },
-        ],
-    },
+    // Demandas e Clientes viram itens únicos (dropdowns removidos a pedido).
+    { title: "Demandas", icon: ClipboardDocumentListIcon, url: "/agency/general-board" },
     { title: "Prioridades", icon: FlagIcon, url: "/agency/prioridades" },
     { title: "Comercial", icon: ArrowTrendingUpIcon, url: "/agency/comercial" },
-    {
-        title: "Clientes", icon: UserGroupIcon, url: "/agency/clients",
-        submenu: [
-            { title: "Onboarding", icon: ClipboardDocumentCheckIcon, url: "/agency/client-onboarding" },
-            { title: "Briefing", icon: ClipboardDocumentListIcon, url: "/agency/client-briefing" },
-            { title: "Documentos", icon: BriefcaseIcon, url: "/agency/documentos" },
-            { title: "Preços", icon: ChartBarIcon, url: "/agency/precos" },
-            { title: "Conexões", icon: LinkIconHero, url: "/agency/connections" },
-            { title: "Configurações", icon: Cog6ToothIcon, url: "/agency/client-config" },
-        ],
-    },
+    { title: "Clientes", icon: UserGroupIcon, url: "/agency/clients" },
     { title: "Google Calendar", icon: CalendarDaysIcon, url: "/agency/google-calendar" },
     {
         title: "Briefing", icon: ClipboardDocumentCheckIcon,

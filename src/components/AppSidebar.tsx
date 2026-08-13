@@ -134,22 +134,8 @@ const mainMenuItems: MenuItem[] = [
   { section: 'agency', title: "Demandas", transKey: "sidebar.tasks", url: "/tasks", icon: ClipboardDocumentListIcon },
   { section: 'agency', title: "Prioridades", transKey: "sidebar.priorities", url: "/prioridades", icon: FlagIcon },
   { section: 'agency', title: "Comercial", transKey: "sidebar.crm", url: "/comercial", icon: DocumentTextIcon },
-  {
-    section: 'agency',
-    title: "Clientes",
-    transKey: "sidebar.clients",
-    url: "/clients",
-    icon: UserGroupIcon,
-    submenu: [
-      { title: "Ranking", transKey: "sidebar.clients_ranking", url: "/ranking-clientes", icon: TrophyIcon },
-      { title: "Onboarding", transKey: "sidebar.onboarding", url: "/client-onboarding", icon: ClipboardDocumentCheckIcon },
-      { title: "Briefing", transKey: "sidebar.client_briefing", url: "/client-briefing", icon: ClipboardDocumentListIcon },
-      { title: "Documentos", transKey: "sidebar.files", url: "/documentos", icon: FolderOpenIcon },
-      { title: "Preços", transKey: "sidebar.pricing", url: "/precos", icon: CurrencyDollarIcon },
-      { title: "Conexões", transKey: "sidebar.connections", url: "/client-connections", icon: LinkIconHero },
-      { title: "Configurações", transKey: "sidebar.client_config", url: "/client-config", icon: AdjustmentsHorizontalIcon },
-    ]
-  },
+  // Clientes vira item único (dropdown removido a pedido) — vai pra lista.
+  { section: 'agency', title: "Clientes", transKey: "sidebar.clients", url: "/clients", icon: UserGroupIcon },
 
   // ─── Seção: Gestão e Ajustes ───
   { section: 'management', title: "Financeiro Agência", transKey: "sidebar.financial_agency", url: "/financeiro", icon: WalletIcon },
