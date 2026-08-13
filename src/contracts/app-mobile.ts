@@ -118,6 +118,26 @@ export const pushPayloadSchema = z.object({
 export type PushPayload = z.infer<typeof pushPayloadSchema>;
 
 // ---------------------------------------------------------------------------
+// Segmentos (segments.definition) — filtro salvo que o dispatcher resolve.
+// Campos null = "não filtra por isso". Todos os preenchidos valem em AND.
+// ---------------------------------------------------------------------------
+
+export const segmentDefinitionSchema = z.object({
+  /** só devices dessa plataforma */
+  platform: z.enum(['android', 'ios']).nullable().default(null),
+  /** 'sim' = já comprou pelo app; 'nao' = nunca comprou */
+  comprou: z.enum(['sim', 'nao']).nullable().default(null),
+  /** não abre o app há N dias (win-back) */
+  inativo_dias: z.number().int().min(1).max(365).nullable().default(null),
+  /** instalou há no máximo N dias */
+  instalou_ha_dias: z.number().int().min(1).max(365).nullable().default(null),
+  /** total gasto no app maior ou igual a (BRL) */
+  gasto_minimo: z.number().min(0).nullable().default(null),
+});
+
+export type SegmentDefinition = z.infer<typeof segmentDefinitionSchema>;
+
+// ---------------------------------------------------------------------------
 // Jornadas — motor único de automação (boas-vindas, carrinho abandonado,
 // conforto de entrega e jornadas custom são TODAS instâncias disso)
 // ---------------------------------------------------------------------------

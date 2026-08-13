@@ -1,19 +1,19 @@
 /**
- * Contratos do MÃ³dulo de Apps Mobile (white-label) â€” FONTE DE VERDADE.
+ * Contratos do Módulo de Apps Mobile (white-label) — FONTE DE VERDADE.
  *
- * Schema Zod primeiro, types inferidos depois (nunca o contrÃ¡rio).
+ * Schema Zod primeiro, types inferidos depois (nunca o contrário).
  * Consumidores: painel NODE (este repo), edge functions e o app Expo (node-shell-app).
  *
- * ESPELHO DENO (este arquivo) da fonte src/contracts/app-mobile.ts â€” corpo idÃªntico,
- * muda sÃ³ a linha de import do zod. Alterou aqui, replicar lÃ¡ (fronteira Node/Deno
- * impede import Ãºnico; o corpo dos schemas deve permanecer byte a byte igual).
+ * ESPELHO DENO (este arquivo) da fonte src/contracts/app-mobile.ts — corpo idêntico,
+ * muda só a linha de import do zod. Alterou aqui, replicar lá (fronteira Node/Deno
+ * impede import único; o corpo dos schemas deve permanecer byte a byte igual).
  */
 import { z } from 'npm:zod@3.25.76';
 
 // ---------------------------------------------------------------------------
-// Config remoto do app (store_apps.config) â€” o app Ã© casca burra: busca esse
-// JSON no boot e se monta. Nada aqui exige rebuild; nome/Ã­cone/splash NATIVA
-// ficam no binÃ¡rio e NÃƒO pertencem a este contrato.
+// Config remoto do app (store_apps.config) — o app é casca burra: busca esse
+// JSON no boot e se monta. Nada aqui exige rebuild; nome/ícone/splash NATIVA
+// ficam no binário e NÃO pertencem a este contrato.
 // ---------------------------------------------------------------------------
 
 export const appTabSchema = z.object({
@@ -36,17 +36,17 @@ export const appBannerSchema = z.object({
 });
 
 export const appConfigSchema = z.object({
-  /** versÃ£o do config â€” o app usa pra invalidar cache local */
+  /** versão do config — o app usa pra invalidar cache local */
   version: z.number().int().min(1),
   store_url: z.string().url(),
   theme: z.object({
-    /** cor de acento Ãºnica (regra de design do NODE: 1 acento por projeto) */
+    /** cor de acento única (regra de design do NODE: 1 acento por projeto) */
     accent: z.string().regex(/^#[0-9a-fA-F]{6}$/),
     background: z.string().regex(/^#[0-9a-fA-F]{6}$/),
     foreground: z.string().regex(/^#[0-9a-fA-F]{6}$/),
     logo_url: z.string().url().nullable().default(null),
   }),
-  /** segunda splash (animada, em RN) â€” a nativa Ã© neutra e fica no binÃ¡rio */
+  /** segunda splash (animada, em RN) — a nativa é neutra e fica no binário */
   splash: z.object({
     background: z.string().regex(/^#[0-9a-fA-F]{6}$/),
     logo_url: z.string().url().nullable().default(null),
@@ -82,7 +82,7 @@ export const deviceRegistrationSchema = z.object({
 export type DeviceRegistration = z.infer<typeof deviceRegistrationSchema>;
 
 // ---------------------------------------------------------------------------
-// Telemetria (app -> edge track-event) â€” alimenta dash, segmentos e jornadas
+// Telemetria (app -> edge track-event) — alimenta dash, segmentos e jornadas
 // ---------------------------------------------------------------------------
 
 export const appEventSchema = z.object({
@@ -118,15 +118,35 @@ export const pushPayloadSchema = z.object({
 export type PushPayload = z.infer<typeof pushPayloadSchema>;
 
 // ---------------------------------------------------------------------------
-// Jornadas â€” motor Ãºnico de automaÃ§Ã£o (boas-vindas, carrinho abandonado,
-// conforto de entrega e jornadas custom sÃ£o TODAS instÃ¢ncias disso)
+// Segmentos (segments.definition) — filtro salvo que o dispatcher resolve.
+// Campos null = "não filtra por isso". Todos os preenchidos valem em AND.
+// ---------------------------------------------------------------------------
+
+export const segmentDefinitionSchema = z.object({
+  /** só devices dessa plataforma */
+  platform: z.enum(['android', 'ios']).nullable().default(null),
+  /** 'sim' = já comprou pelo app; 'nao' = nunca comprou */
+  comprou: z.enum(['sim', 'nao']).nullable().default(null),
+  /** não abre o app há N dias (win-back) */
+  inativo_dias: z.number().int().min(1).max(365).nullable().default(null),
+  /** instalou há no máximo N dias */
+  instalou_ha_dias: z.number().int().min(1).max(365).nullable().default(null),
+  /** total gasto no app maior ou igual a (BRL) */
+  gasto_minimo: z.number().min(0).nullable().default(null),
+});
+
+export type SegmentDefinition = z.infer<typeof segmentDefinitionSchema>;
+
+// ---------------------------------------------------------------------------
+// Jornadas — motor único de automação (boas-vindas, carrinho abandonado,
+// conforto de entrega e jornadas custom são TODAS instâncias disso)
 // ---------------------------------------------------------------------------
 
 export const journeyTriggerSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('install') }),
   z.object({
     kind: z.literal('cart_abandoned'),
-    /** minutos sem pedido apÃ³s o Ãºltimo evento de checkout */
+    /** minutos sem pedido após o último evento de checkout */
     after_minutes: z.number().int().min(15).default(60),
   }),
   z.object({
@@ -143,7 +163,7 @@ export const journeyTriggerSchema = z.discriminatedUnion('kind', [
     ]),
   }),
   z.object({
-    /** rastreio mudo: pedido sem evento novo hÃ¡ N dias (o "conforto") */
+    /** rastreio mudo: pedido sem evento novo há N dias (o "conforto") */
     kind: z.literal('order_silent'),
     days_without_event: z.number().int().min(1).max(60),
   }),
@@ -174,13 +194,13 @@ export type JourneyTrigger = z.infer<typeof journeyTriggerSchema>;
 // ---------------------------------------------------------------------------
 
 export const cashbackRuleSchema = z.object({
-  /** % do pedido pago no app que vira saldo (0.5â€“20) */
+  /** % do pedido pago no app que vira saldo (0.5–20) */
   percent: z.number().min(0.5).max(20),
-  /** dias atÃ© o crÃ©dito expirar */
+  /** dias até o crédito expirar */
   validity_days: z.number().int().min(7).max(365).default(90),
-  /** valor mÃ­nimo de pedido pra acumular (BRL) */
+  /** valor mínimo de pedido pra acumular (BRL) */
   min_order_value: z.number().min(0).default(0),
-  /** teto de crÃ©dito por pedido (BRL); null = sem teto */
+  /** teto de crédito por pedido (BRL); null = sem teto */
   max_credit_per_order: z.number().min(1).nullable().default(null),
 });
 
@@ -191,7 +211,7 @@ export type CashbackRule = z.infer<typeof cashbackRuleSchema>;
 // ---------------------------------------------------------------------------
 
 export const pushLimitsSchema = z.object({
-  /** mÃ¡ximo de pushes de marketing por device por dia (rastreio nÃ£o conta) */
+  /** máximo de pushes de marketing por device por dia (rastreio não conta) */
   max_marketing_per_day: z.number().int().min(1).max(10).default(3),
 });
 
