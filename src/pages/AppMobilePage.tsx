@@ -15,6 +15,7 @@ import {
 import { toast } from "sonner";
 import { PushTab } from "@/components/app-mobile/PushTab";
 import { CrmTab } from "@/components/app-mobile/CrmTab";
+import { PersonalizacaoTab } from "@/components/app-mobile/PersonalizacaoTab";
 import { TrackingTab } from "@/components/app-mobile/TrackingTab";
 
 /**
@@ -234,7 +235,9 @@ export default function AppMobilePage() {
                         : placeholder('atual', 'Vincule o app na aba Configurações pra liberar o rastreio.')}
                 </TabsContent>
                 <TabsContent value="personalizacao" className="mt-6">
-                    {placeholder('E8', 'Editor visual de cores, logo, banners e menus do app.')}
+                    {app && clientId
+                        ? <PersonalizacaoTab clientId={clientId} appId={app.id} />
+                        : placeholder('atual', 'Vincule o app na aba Configurações pra liberar a personalização.')}
                 </TabsContent>
 
                 <TabsContent value="configuracoes" className="mt-6 space-y-6">
