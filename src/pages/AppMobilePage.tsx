@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { PushTab } from "@/components/app-mobile/PushTab";
+import { CrmTab } from "@/components/app-mobile/CrmTab";
 
 /**
  * Módulo Apps Mobile — página por cliente (/clients/:id/aplicativo).
@@ -219,7 +220,9 @@ export default function AppMobilePage() {
                     {placeholder('E4', 'Jornadas: boas-vindas, carrinho abandonado e fluxos custom.')}
                 </TabsContent>
                 <TabsContent value="crm" className="mt-6">
-                    {placeholder('E5', 'Perfil unificado do cliente do app com histórico e segmentação.')}
+                    {app && clientId
+                        ? <CrmTab clientId={clientId} />
+                        : placeholder('atual', 'Vincule o app na aba Configurações pra liberar o CRM.')}
                 </TabsContent>
                 <TabsContent value="cashback" className="mt-6">
                     {placeholder('E7', 'Regra de acúmulo, extrato e resgate por cupom.')}
