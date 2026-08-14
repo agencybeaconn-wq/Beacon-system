@@ -24,7 +24,9 @@ declare const Deno: any;
  */
 import { corsHeaders } from '../_shared/cors.ts';
 import { instrument } from '../_shared/logger.ts';
-import { pushPayloadSchema, segmentDefinitionSchema } from '../_shared/app-contracts.ts';
+import {
+    journeyDefinitionSchema, pushPayloadSchema, segmentDefinitionSchema,
+} from '../_shared/app-contracts.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7';
 
 const EXPO_PUSH_URL = 'https://exp.host/--/api/v2/push/send';
@@ -243,6 +245,195 @@ async function processarCampanha(supabase: any, campaignId: string) {
     return { campanha: c.id, alvo: alvo.length, bloqueados_por_teto: bloqueados, enviados, falhas };
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// Motor de jornadas (E4) — boas-vindas, carrinho abandonado e custom são a
+// MESMA máquina: gatilho → espera → push → próximo passo, com saída automática.
+// Roda no mesmo tick do cron. Tudo idempotente: cada varredura pode repetir
+// sem duplicar run nem push.
+// ═══════════════════════════════════════════════════════════════════════════
+
+interface JourneyRow {
+    id: string;
+    client_id: string;
+    app_id: string;
+    kind: string;
+    definition: unknown;
+}
+
+/** Gatilho install: cria run pra cada install sem run desta jornada. */
+async function abrirRunsDeInstall(supabase: any, j: JourneyRow, def: any) {
+    const desde = new Date(Date.now() - 3 * 86400000).toISOString(); // varre 3 dias
+    const { data: installs } = await supabase
+        .from('app_events')
+        .select('device_id, occurred_at')
+        .eq('app_id', j.app_id).eq('type', 'install')
+        .gte('occurred_at', desde);
+    if (!installs?.length) return;
+
+    const { data: existentes } = await supabase
+        .from('journey_runs').select('device_id').eq('journey_id', j.id);
+    const jaTem = new Set((existentes ?? []).map((r: any) => r.device_id));
+
+    const novos = installs.filter((i: any) => !jaTem.has(i.device_id));
+    if (!novos.length) return;
+
+    const delay0 = Number(def.steps[0]?.delay_minutes ?? 0);
+    await supabase.from('journey_runs').insert(novos.map((i: any) => ({
+        journey_id: j.id, client_id: j.client_id, device_id: i.device_id,
+        current_step: 0, state: 'ativa', context: {},
+        next_step_at: new Date(new Date(i.occurred_at).getTime() + delay0 * 60000).toISOString(),
+    })));
+}
+
+/**
+ * Gatilho carrinho abandonado: checkout com attributes[app_device] sem pedido
+ * pago após N minutos → run. Pedido pago com o mesmo checkout_token → saída.
+ */
+async function abrirRunsDeCarrinho(supabase: any, j: JourneyRow, def: any) {
+    const afterMin = Number(def.trigger?.after_minutes ?? 60);
+    const desde = new Date(Date.now() - 2 * 86400000).toISOString();
+    const limite = new Date(Date.now() - afterMin * 60000).toISOString();
+
+    const { data: eventos } = await supabase
+        .from('webhook_events')
+        .select('payload, received_at')
+        .eq('client_id', j.client_id)
+        .in('topic', ['checkouts/create', 'checkouts/update'])
+        .gte('received_at', desde)
+        .lte('received_at', limite)
+        .order('received_at', { ascending: false })
+        .limit(300);
+    if (!eventos?.length) return;
+
+    // último estado de cada checkout + device do app (atributo gravado pela bridge)
+    const porToken = new Map<string, { device: string | null }>();
+    for (const ev of eventos) {
+        const p = ev.payload ?? {};
+        const token = String(p.token ?? p.cart_token ?? '');
+        if (!token || porToken.has(token)) continue;
+        const attrs: Array<{ name: string; value: string }> = p.note_attributes ?? [];
+        const attr = (n: string) => attrs.find((a) => a?.name === n)?.value ?? null;
+        if (attr('app_source') !== 'beacon_app') continue; // carrinho do site, não é nosso
+        porToken.set(token, { device: attr('app_device') });
+    }
+    if (porToken.size === 0) return;
+
+    // pedidos pagos matam o abandono (orders/paid carrega checkout_token)
+    const { data: pagos } = await supabase
+        .from('webhook_events')
+        .select('payload')
+        .eq('client_id', j.client_id).eq('topic', 'orders/paid')
+        .gte('received_at', desde);
+    const tokensPagos = new Set(
+        (pagos ?? []).map((ev: any) => String(ev.payload?.checkout_token ?? '')).filter(Boolean),
+    );
+
+    const { data: existentes } = await supabase
+        .from('journey_runs').select('context, device_id, state, id').eq('journey_id', j.id);
+    const runPorToken = new Map(
+        (existentes ?? []).map((r: any) => [String(r.context?.checkout_token ?? ''), r]),
+    );
+
+    const delay0 = Number(def.steps[0]?.delay_minutes ?? 0);
+    for (const [token, info] of porToken) {
+        const run = runPorToken.get(token);
+        if (tokensPagos.has(token)) {
+            // comprou: run ativa (se houver) sai do fluxo
+            if (run && run.state === 'ativa') {
+                await supabase.from('journey_runs')
+                    .update({ state: 'saida', finished_at: new Date().toISOString() })
+                    .eq('id', run.id);
+            }
+            continue;
+        }
+        if (run || !info.device) continue; // já tem run, ou checkout sem device do app
+        await supabase.from('journey_runs').insert({
+            journey_id: j.id, client_id: j.client_id, device_id: info.device,
+            current_step: 0, state: 'ativa',
+            context: { checkout_token: token },
+            next_step_at: new Date(Date.now() + delay0 * 60000).toISOString(),
+        });
+    }
+}
+
+/** Executa passos vencidos de todas as runs ativas. */
+async function executarPassosDevidos(supabase: any) {
+    const { data: devidas } = await supabase
+        .from('journey_runs')
+        .select('id, journey_id, client_id, device_id, current_step, context')
+        .eq('state', 'ativa')
+        .lte('next_step_at', new Date().toISOString())
+        .limit(100);
+    if (!devidas?.length) return { passos: 0 };
+
+    let passos = 0;
+    for (const run of devidas) {
+        const { data: j } = await supabase
+            .from('journeys').select('id, app_id, active, definition')
+            .eq('id', run.journey_id).maybeSingle();
+        const def = j ? journeyDefinitionSchema.safeParse(j.definition) : null;
+        if (!j?.active || !def?.success) {
+            await supabase.from('journey_runs')
+                .update({ state: 'erro', finished_at: new Date().toISOString() })
+                .eq('id', run.id);
+            continue;
+        }
+
+        const step = def.data.steps[run.current_step];
+        if (!step) {
+            await supabase.from('journey_runs')
+                .update({ state: 'concluida', finished_at: new Date().toISOString() })
+                .eq('id', run.id);
+            continue;
+        }
+
+        const { data: device } = await supabase
+            .from('app_devices')
+            .select('id, client_id, expo_push_token, platform, shopify_customer_id, first_seen_at, last_seen_at, push_enabled')
+            .eq('id', run.device_id).maybeSingle();
+
+        if (device?.push_enabled) {
+            await enviar(supabase, run.client_id, [device as Device], step.push, 'jornada', null, run.id);
+            passos++;
+        }
+
+        const proximo = def.data.steps[run.current_step + 1];
+        await supabase.from('journey_runs').update(
+            proximo
+                ? {
+                    current_step: run.current_step + 1,
+                    next_step_at: new Date(Date.now() + proximo.delay_minutes * 60000).toISOString(),
+                }
+                : { state: 'concluida', finished_at: new Date().toISOString() },
+        ).eq('id', run.id);
+    }
+    return { passos };
+}
+
+async function processarJornadas(supabase: any) {
+    const { data: jornadas } = await supabase
+        .from('journeys')
+        .select('id, client_id, app_id, kind, definition')
+        .eq('active', true)
+        .limit(50);
+
+    for (const j of jornadas ?? []) {
+        const def = journeyDefinitionSchema.safeParse(j.definition);
+        if (!def.success) continue;
+        try {
+            if (def.data.trigger.kind === 'install') {
+                await abrirRunsDeInstall(supabase, j, def.data);
+            } else if (def.data.trigger.kind === 'cart_abandoned') {
+                await abrirRunsDeCarrinho(supabase, j, def.data);
+            }
+            // order_status_changed / order_silent chegam na E6 (rastreio)
+        } catch (e: any) {
+            console.error('[jornadas] abrir runs falhou', j.id, e.message);
+        }
+    }
+    return executarPassosDevidos(supabase);
+}
+
 Deno.serve(instrument('push-dispatch', async (req: Request) => {
     if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
     if (req.method !== 'POST') return json(405, { error: 'Method not allowed' });
@@ -290,7 +481,8 @@ Deno.serve(instrument('push-dispatch', async (req: Request) => {
             for (const c of devidas ?? []) {
                 resultados.push(await processarCampanha(supabase, c.id));
             }
-            return json(200, { tick: true, campanhas: resultados.length, resultados });
+            const jornadas = await processarJornadas(supabase);
+            return json(200, { tick: true, campanhas: resultados.length, resultados, jornadas });
         }
 
         if (body?.campaign_id) {
