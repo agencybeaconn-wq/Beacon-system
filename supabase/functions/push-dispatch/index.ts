@@ -28,7 +28,7 @@ import {
     journeyDefinitionSchema, pushPayloadSchema, segmentDefinitionSchema,
 } from '../_shared/app-contracts.ts';
 import {
-    resolverAlvoPuro, aplicarTetoPuro, podeReivindicarCampanha,
+    resolverAlvoPuro, aplicarTetoPuro, podeReivindicarCampanha, coletarPaginado,
     type DeviceMin, type SegmentoResolvido,
 } from '../_shared/dispatch-audience.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7';
@@ -61,12 +61,21 @@ interface Device {
 async function resolverAlvo(
     supabase: any, clientId: string, appId: string, segmentId: string | null,
 ): Promise<{ alvo: Device[]; motivo: string }> {
-    const { data: devices } = await supabase
-        .from('app_devices')
-        .select('id, expo_push_token, platform, shopify_customer_id, first_seen_at, last_seen_at')
-        .eq('app_id', appId)
-        .eq('push_enabled', true);
-    const todos: Device[] = devices ?? [];
+    // #6/#4 paginação keyset: campanha alcança a base INTEIRA, não só 1000
+    const PAGINA_DEVICES = 1000;
+    const todos = await coletarPaginado<Device>(async (cursor) => {
+        let q = supabase
+            .from('app_devices')
+            .select('id, expo_push_token, platform, shopify_customer_id, first_seen_at, last_seen_at')
+            .eq('app_id', appId)
+            .eq('push_enabled', true)
+            .order('id', { ascending: true })
+            .limit(PAGINA_DEVICES);
+        if (cursor) q = q.gt('id', cursor);
+        const { data, error } = await q;
+        if (error) throw error;
+        return (data ?? []) as Device[];
+    }, PAGINA_DEVICES);
 
     // resolve o segmento pro formato que resolverAlvoPuro entende (fail-closed)
     let segmento: SegmentoResolvido = null;

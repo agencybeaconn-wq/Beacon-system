@@ -96,3 +96,26 @@ export function podeReivindicarCampanha(status: string, enviandoStale: boolean):
     if ((STATUS_CAMPANHA_CLAIMAVEL as readonly string[]).includes(status)) return true;
     return status === 'enviando' && enviandoStale;
 }
+
+/**
+ * #6/#4 PAGINAÇÃO KEYSET: coleta a base inteira em páginas ordenadas por id,
+ * usando o último id como cursor — sem o cap silencioso de 1000 do PostgREST.
+ * `fetchPagina(cursor)` faz uma query `id > cursor order by id limit N`.
+ * Pura/testável: o I/O real vem por injeção.
+ */
+export async function coletarPaginado<T extends { id: string }>(
+    fetchPagina: (cursor: string | null) => Promise<T[]>,
+    tamanhoPagina: number,
+): Promise<T[]> {
+    const todos: T[] = [];
+    let cursor: string | null = null;
+    // trava dura contra loop infinito (cursor que não avança / dados corrompidos)
+    for (let guarda = 0; guarda < 10000; guarda++) {
+        const pagina = await fetchPagina(cursor);
+        if (pagina.length === 0) break;
+        todos.push(...pagina);
+        if (pagina.length < tamanhoPagina) break;
+        cursor = pagina[pagina.length - 1].id;
+    }
+    return todos;
+}

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
-    resolverAlvoPuro, aplicarTetoPuro, podeReivindicarCampanha,
+    resolverAlvoPuro, aplicarTetoPuro, podeReivindicarCampanha, coletarPaginado,
     type DeviceMin, type CustomerAgg,
 } from '../supabase/functions/_shared/dispatch-audience.ts';
 
@@ -85,4 +85,34 @@ test('#8 rascunho/agendada/erro são reivindicáveis', () => {
 test('#8 enviando só volta pra fila se estiver STALE (crash)', () => {
     assert.equal(podeReivindicarCampanha('enviando', false), false);
     assert.equal(podeReivindicarCampanha('enviando', true), true);
+});
+
+// ── #6/#4 paginação keyset ──────────────────────────────────────────────────
+test('#6 coletarPaginado busca ALÉM de 1000 (1.001 em 2 páginas)', async () => {
+    const base = Array.from({ length: 1001 }, (_, i) => ({ id: String(i).padStart(5, '0') }));
+    const PAGINA = 1000;
+    let chamadas = 0;
+    const todos = await coletarPaginado(async (cursor) => {
+        chamadas++;
+        const inicio = cursor ? base.findIndex((r) => r.id > cursor) : 0;
+        return base.slice(inicio, inicio + PAGINA);
+    }, PAGINA);
+    assert.equal(todos.length, 1001);          // pegou o 1001º (que o cap de 1000 esconderia)
+    assert.equal(chamadas, 2);                 // página cheia → busca a próxima
+    assert.equal(todos[1000].id, '01000');     // o último item veio na 2ª página
+});
+
+test('coletarPaginado para na página incompleta (sem chamada extra)', async () => {
+    const base = Array.from({ length: 3 }, (_, i) => ({ id: String(i) }));
+    let chamadas = 0;
+    const todos = await coletarPaginado(async () => { chamadas++; return base; }, 1000);
+    assert.equal(todos.length, 3);
+    assert.equal(chamadas, 1);
+});
+
+test('coletarPaginado com base vazia → zero itens, uma chamada', async () => {
+    let chamadas = 0;
+    const todos = await coletarPaginado(async () => { chamadas++; return []; }, 1000);
+    assert.equal(todos.length, 0);
+    assert.equal(chamadas, 1);
 });
