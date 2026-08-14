@@ -5,7 +5,7 @@ declare const Deno: any;
  * register-device — registro/heartbeat de device do app white-label.
  *
  * POST body = deviceRegistrationSchema (contratos em _shared/app-contracts.ts)
- * → upsert em app_devices por (app_id, expo_push_token) → { device_id, novo }
+ * → upsert em app_devices por (app_id, installation_id) → { device_id, novo }
  *
  * O app chama no primeiro boot (novo=true dispara jornada de boas-vindas via
  * evento 'install' que o próprio app envia na sequência) e a cada abertura
@@ -65,26 +65,34 @@ Deno.serve(instrument('register-device', async (req: Request) => {
         .from('app_devices')
         .select('id')
         .eq('app_id', reg.app_id)
-        .eq('expo_push_token', reg.expo_push_token)
+        .eq('installation_id', reg.installation_id)
         .maybeSingle();
 
-    const row = {
+    const baseRow = {
         app_id: reg.app_id,
         client_id: app.client_id,
-        expo_push_token: reg.expo_push_token,
+        installation_id: reg.installation_id,
         platform: reg.platform,
         app_version: reg.app_version,
         os_version: reg.os_version,
         device_model: reg.device_model,
         locale: reg.locale,
         shopify_customer_id: reg.shopify_customer_id,
-        push_enabled: true,
-        disabled_reason: null,
         last_seen_at: new Date().toISOString(),
     };
 
     if (existing) {
-        const { error } = await supabase.from('app_devices').update(row).eq('id', existing.id);
+        // Heartbeat sem token não apaga um canal que já funcionava. Só uma
+        // tentativa com token novo altera o estado de push.
+        const update = {
+            ...baseRow,
+            ...(reg.expo_push_token ? {
+                expo_push_token: reg.expo_push_token,
+                push_enabled: true,
+                disabled_reason: null,
+            } : {}),
+        };
+        const { error } = await supabase.from('app_devices').update(update).eq('id', existing.id);
         if (error) {
             console.error('[register-device] update falhou', existing.id, error.message);
             return new Response(JSON.stringify({ error: 'erro interno' }), {
@@ -98,7 +106,12 @@ Deno.serve(instrument('register-device', async (req: Request) => {
 
     const { data: created, error } = await supabase
         .from('app_devices')
-        .insert(row)
+        .insert({
+            ...baseRow,
+            expo_push_token: reg.expo_push_token,
+            push_enabled: Boolean(reg.expo_push_token),
+            disabled_reason: reg.expo_push_token ? null : 'sem_permissao_ou_token',
+        })
         .select('id')
         .single();
     if (error || !created) {

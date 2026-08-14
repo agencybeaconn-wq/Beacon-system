@@ -19,6 +19,24 @@ declare const Deno: any;
  * shopify-webhook-receiver está morto justamente por verify_jwt=true).
  */
 import { instrument } from '../_shared/logger.ts';
+import { z } from 'npm:zod@3.25.76';
+import { normalizeTrackingStatus, trackingEventText } from '../_shared/tracking-status.ts';
+
+const idSchema = z.union([z.string(), z.number()]).transform(String);
+const fulfillmentSchema = z.object({
+    id: idSchema.optional(),
+    fulfillment_id: idSchema.optional(),
+    order_id: idSchema.optional(),
+    status: z.string().nullish(),
+    shipment_status: z.string().nullish(),
+    message: z.string().nullish(),
+    tracking_number: z.string().nullish(),
+    tracking_numbers: z.array(z.string()).nullish(),
+    tracking_company: z.string().nullish(),
+    updated_at: z.string().nullish(),
+    created_at: z.string().nullish(),
+    happened_at: z.string().nullish(),
+}).passthrough();
 
 async function getSupabase() {
     const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
@@ -48,11 +66,17 @@ async function handleOrderPaid(supabase: any, clientId: string, payload: any) {
         .from('store_apps').select('id').eq('client_id', clientId).maybeSingle();
     if (!app) return;
 
-    const deviceId = attr('app_device');
+    const claimedDeviceId = attr('app_device');
+    let deviceId: string | null = null;
+    if (claimedDeviceId) {
+        const { data: validDevice } = await supabase.from('app_devices').select('id')
+            .eq('id', claimedDeviceId).eq('app_id', app.id).eq('client_id', clientId).maybeSingle();
+        deviceId = validDevice?.id ?? null;
+    }
     const customerId = payload?.customer?.id ? String(payload.customer.id) : null;
     const total = Number(payload?.current_total_price ?? payload?.total_price ?? 0);
 
-    const { error } = await supabase.from('app_orders').upsert({
+    const { data: insertedOrder, error } = await supabase.from('app_orders').upsert({
         client_id: clientId,
         app_id: app.id,
         shopify_order_id: String(payload.id),
@@ -64,36 +88,140 @@ async function handleOrderPaid(supabase: any, clientId: string, payload: any) {
         device_id: deviceId,
         attributed_via: 'cart_attribute',
         paid_at: payload?.processed_at ?? new Date().toISOString(),
-    }, { onConflict: 'client_id,shopify_order_id', ignoreDuplicates: true });
+    }, { onConflict: 'client_id,shopify_order_id', ignoreDuplicates: true })
+        .select('id')
+        .maybeSingle();
     if (error) {
         console.error('[app-webhooks] app_orders upsert falhou', error.message);
         return;
     }
 
+    // Outro receiver/reprocesso já registrou este pedido. Não incrementa o
+    // agregado de CRM novamente.
+    if (!insertedOrder) return;
+
+    const confirmedAt = payload?.processed_at ?? new Date().toISOString();
+    const { error: trackingError } = await supabase.from('tracked_orders').insert({
+        client_id: clientId,
+        shopify_order_id: String(payload.id),
+        order_number: String(payload?.name ?? payload?.order_number ?? '').replace(/^#/, ''),
+        status: 'confirmado',
+        last_event_text: trackingEventText('confirmado'),
+        last_event_at: confirmedAt,
+        customer_shopify_id: customerId,
+        device_id: deviceId,
+    });
+    if (trackingError && trackingError.code !== '23505') {
+        console.error('[app-webhooks] tracked_orders insert falhou', trackingError.message);
+    }
+
     if (customerId) {
         const display = [payload?.customer?.first_name, payload?.customer?.last_name]
             .filter(Boolean).join(' ');
-        const { data: existing } = await supabase
-            .from('app_customers').select('id, orders_app_count, total_spent_app')
-            .eq('client_id', clientId).eq('shopify_customer_id', customerId).maybeSingle();
+        const { error: aggregateError } = await supabase.rpc('app_customer_add_order', {
+            p_client_id: clientId,
+            p_shopify_customer_id: customerId,
+            p_display_name: display,
+            p_email: payload?.customer?.email ?? '',
+            p_total: total,
+            p_order_at: payload?.processed_at ?? new Date().toISOString(),
+        });
+        if (aggregateError) {
+            console.error('[app-webhooks] agregado do customer falhou', aggregateError.message);
+        }
+    }
+}
+
+async function findTrackedOrder(
+    supabase: any,
+    clientId: string,
+    fulfillmentId: string | undefined,
+    trackingNumber: string | null,
+    orderId: string | undefined,
+) {
+    if (trackingNumber) {
+        const { data } = await supabase.from('tracked_orders').select('id, last_event_at')
+            .eq('client_id', clientId).eq('tracking_number', trackingNumber).limit(1).maybeSingle();
+        if (data) return data;
+    }
+    if (fulfillmentId && !trackingNumber) {
+        const { data } = await supabase.from('tracked_orders').select('id, last_event_at')
+            .eq('client_id', clientId).eq('shopify_fulfillment_id', fulfillmentId).limit(1).maybeSingle();
+        if (data) return data;
+    }
+    if (orderId) {
+        const { data } = await supabase.from('tracked_orders').select('id, last_event_at')
+            .eq('client_id', clientId).eq('shopify_order_id', orderId)
+            .is('tracking_number', null).limit(1).maybeSingle();
+        if (data) return data;
+    }
+    return null;
+}
+
+/** Atualiza apenas pedidos atribuídos ao app; pedido comum da loja não vaza pro app. */
+async function handleFulfillment(supabase: any, clientId: string, rawPayload: unknown) {
+    const parsed = fulfillmentSchema.safeParse(rawPayload);
+    if (!parsed.success) {
+        console.warn('[app-webhooks] fulfillment ignorado: payload inválido');
+        return;
+    }
+    const payload = parsed.data;
+    const fulfillmentId = payload.fulfillment_id ?? payload.id;
+    const orderId = payload.order_id;
+    const numbers = [...new Set([
+        ...(payload.tracking_numbers ?? []),
+        ...(payload.tracking_number ? [payload.tracking_number] : []),
+    ].map((n) => n.trim()).filter(Boolean))];
+    const trackingNumbers: Array<string | null> = numbers.length ? numbers : [null];
+
+    let appOrder: any = null;
+    if (orderId) {
+        const { data } = await supabase.from('app_orders')
+            .select('order_number, customer_shopify_id, device_id')
+            .eq('client_id', clientId).eq('shopify_order_id', orderId).maybeSingle();
+        appOrder = data;
+    }
+
+    // fulfillment_events/create pode não trazer order_id. Nesse caso só atualiza
+    // um fulfillment já vinculado; jamais cria um pedido sem provar a atribuição.
+    if (!appOrder && orderId) return;
+    const inferred = normalizeTrackingStatus(payload.shipment_status ?? payload.status);
+    // Shopify costuma mandar fulfillment.status="success" sem shipment_status
+    // no primeiro post. A presença do código prova que já foi postado.
+    const normalized = inferred === 'desconhecido' && numbers.length > 0 ? 'postado' : inferred;
+    const eventAt = payload.happened_at ?? payload.updated_at ?? payload.created_at ?? new Date().toISOString();
+    const eventText = payload.message?.trim() || trackingEventText(normalized);
+
+    for (const trackingNumber of trackingNumbers) {
+        const existing = await findTrackedOrder(supabase, clientId, fulfillmentId, trackingNumber, orderId);
+        const values: Record<string, unknown> = {
+            status: normalized,
+            last_event_text: eventText,
+            last_event_at: eventAt,
+        };
+        if (fulfillmentId) values.shopify_fulfillment_id = fulfillmentId;
+        if (trackingNumber) values.tracking_number = trackingNumber;
+        if (payload.tracking_company) values.carrier = payload.tracking_company;
+        if (normalized === 'entregue') values.delivered_at = eventAt;
         if (existing) {
-            await supabase.from('app_customers').update({
-                display_name: display || undefined,
-                email: payload?.customer?.email ?? undefined,
-                orders_app_count: (existing.orders_app_count ?? 0) + 1,
-                total_spent_app: Number(existing.total_spent_app ?? 0) + total,
-                last_order_at: new Date().toISOString(),
-            }).eq('id', existing.id);
-        } else {
-            await supabase.from('app_customers').insert({
-                client_id: clientId,
-                shopify_customer_id: customerId,
-                display_name: display || null,
-                email: payload?.customer?.email ?? null,
-                orders_app_count: 1,
-                total_spent_app: total,
-                last_order_at: new Date().toISOString(),
-            });
+            if (existing.last_event_at && new Date(eventAt).getTime() <= new Date(existing.last_event_at).getTime()) {
+                continue; // webhook atrasado/repetido não pode regredir o rastreio
+            }
+            const { error } = await supabase.from('tracked_orders').update(values).eq('id', existing.id);
+            if (error) console.error('[app-webhooks] tracking update falhou', error.message);
+            continue;
+        }
+        if (!appOrder || !orderId) continue;
+        const { error } = await supabase.from('tracked_orders').insert({
+            client_id: clientId,
+            shopify_order_id: orderId,
+            order_number: String(appOrder.order_number ?? '').replace(/^#/, ''),
+            customer_shopify_id: appOrder.customer_shopify_id,
+            device_id: appOrder.device_id,
+            ...values,
+        });
+        if (error && error.code !== '23505') {
+            console.error('[app-webhooks] tracking insert falhou', error.message);
         }
     }
 }
@@ -152,8 +280,10 @@ Deno.serve(instrument('app-shopify-webhooks', async (req: Request) => {
         if (topic === 'orders/paid') {
             await handleOrderPaid(supabase, client.id, payload);
         }
+        if (topic === 'fulfillments/update' || topic === 'fulfillment_events/create') {
+            await handleFulfillment(supabase, client.id, payload);
+        }
         // checkouts/* alimentam o gatilho de carrinho abandonado (motor E4)
-        // fulfillments/* alimentam tracked_orders (motor E6)
         // refunds/create alimenta estorno de cashback (motor E7)
         if (webhookId) {
             await supabase.from('webhook_events')

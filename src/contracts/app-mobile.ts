@@ -69,7 +69,8 @@ export type AppTab = z.infer<typeof appTabSchema>;
 
 export const deviceRegistrationSchema = z.object({
   app_id: z.string().uuid(),
-  expo_push_token: z.string().min(1),
+  installation_id: z.string().uuid(),
+  expo_push_token: z.string().min(1).nullable().default(null),
   platform: z.enum(['android', 'ios']),
   app_version: z.string().min(1),
   os_version: z.string().default(''),
@@ -112,7 +113,9 @@ export const pushPayloadSchema = z.object({
   body: z.string().min(1).max(240),
   image_url: z.string().url().nullable().default(null),
   /** rota da loja ou tela nativa aberta ao tocar (ex.: "/collections/promo") */
-  deep_link: z.string().nullable().default(null),
+  deep_link: z.string()
+    .refine((v) => v.startsWith('/') && !v.startsWith('//') && !v.includes('\\'), 'deep_link deve ser uma rota interna')
+    .nullable().default(null),
 });
 
 export type PushPayload = z.infer<typeof pushPayloadSchema>;
@@ -216,3 +219,26 @@ export const pushLimitsSchema = z.object({
 });
 
 export type PushLimits = z.infer<typeof pushLimitsSchema>;
+
+export const trackingStatusSchema = z.enum([
+  'confirmado', 'postado', 'transito_internacional', 'alfandega',
+  'transito_nacional', 'saiu_para_entrega', 'entregue', 'problema', 'desconhecido',
+]);
+
+export const publicTrackedOrderSchema = z.object({
+  id: z.string().uuid(),
+  order_number: z.string(),
+  tracking_number: z.string().nullable(),
+  carrier: z.string(),
+  status: trackingStatusSchema,
+  last_event_text: z.string(),
+  last_event_at: z.string().datetime().nullable(),
+  delivered_at: z.string().datetime().nullable(),
+});
+
+export type PublicTrackedOrder = z.infer<typeof publicTrackedOrderSchema>;
+
+export const trackingRequestSchema = z.object({
+  app_id: z.string().uuid(),
+  installation_id: z.string().uuid(),
+});

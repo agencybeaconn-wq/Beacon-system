@@ -15,6 +15,7 @@ import {
 import { toast } from "sonner";
 import { PushTab } from "@/components/app-mobile/PushTab";
 import { CrmTab } from "@/components/app-mobile/CrmTab";
+import { TrackingTab } from "@/components/app-mobile/TrackingTab";
 
 /**
  * Módulo Apps Mobile — página por cliente (/clients/:id/aplicativo).
@@ -228,7 +229,9 @@ export default function AppMobilePage() {
                     {placeholder('E7', 'Regra de acúmulo, extrato e resgate por cupom.')}
                 </TabsContent>
                 <TabsContent value="rastreio" className="mt-6">
-                    {placeholder('E6', 'Linha do tempo de entrega e os templates de push de conforto.')}
+                    {app && clientId
+                        ? <TrackingTab clientId={clientId} appId={app.id} />
+                        : placeholder('atual', 'Vincule o app na aba Configurações pra liberar o rastreio.')}
                 </TabsContent>
                 <TabsContent value="personalizacao" className="mt-6">
                     {placeholder('E8', 'Editor visual de cores, logo, banners e menus do app.')}

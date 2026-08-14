@@ -258,6 +258,12 @@ interface JourneyRow {
     app_id: string;
     kind: string;
     definition: unknown;
+    created_at?: string;
+}
+
+async function insertRunIdempotente(supabase: any, values: Record<string, unknown>) {
+    const { error } = await supabase.from('journey_runs').insert(values);
+    if (error && error.code !== '23505') throw error;
 }
 
 /** Gatilho install: cria run pra cada install sem run desta jornada. */
@@ -356,6 +362,82 @@ async function abrirRunsDeCarrinho(supabase: any, j: JourneyRow, def: any) {
     }
 }
 
+/** Uma mudança normalizada no rastreio abre uma execução exatamente uma vez. */
+async function abrirRunsDeStatus(supabase: any, j: JourneyRow, def: any) {
+    const status = def.trigger.status;
+    let query = supabase.from('tracked_orders')
+        .select('id, device_id, order_number, status, status_changed_at, last_event_at')
+        .eq('client_id', j.client_id).eq('status', status)
+        .not('device_id', 'is', null)
+        .order('status_changed_at', { ascending: false }).limit(300);
+    if (j.created_at) query = query.gte('status_changed_at', j.created_at);
+    const { data: orders, error } = await query;
+    if (error) throw error;
+    const delay0 = Number(def.steps[0]?.delay_minutes ?? 0);
+
+    for (const order of orders ?? []) {
+        if (status === 'entregue') {
+            await supabase.from('journey_runs').update({
+                state: 'saida', finished_at: new Date().toISOString(),
+            }).eq('device_id', order.device_id).eq('state', 'ativa')
+                .contains('context', { tracked_order_id: order.id });
+        }
+        const changedAt = order.status_changed_at ?? order.last_event_at ?? new Date().toISOString();
+        await insertRunIdempotente(supabase, {
+            journey_id: j.id, client_id: j.client_id, device_id: order.device_id,
+            current_step: 0, state: 'ativa',
+            context: {
+                tracked_order_id: order.id,
+                order_number: order.order_number,
+                status: order.status,
+                status_changed_at: changedAt,
+                dedupe_key: `${order.id}:status:${order.status}:${changedAt}`,
+            },
+            next_step_at: new Date(new Date(changedAt).getTime() + delay0 * 60000).toISOString(),
+        });
+    }
+}
+
+/** Abre conforto só quando o MESMO evento continua sem atualização por N dias. */
+async function abrirRunsDeSilencio(supabase: any, j: JourneyRow, def: any) {
+    const days = Number(def.trigger.days_without_event);
+    const limite = new Date(Date.now() - days * 86400000).toISOString();
+    const { data: orders, error } = await supabase.from('tracked_orders')
+        .select('id, device_id, order_number, status, last_event_at')
+        .eq('client_id', j.client_id).is('delivered_at', null)
+        .not('device_id', 'is', null).not('last_event_at', 'is', null)
+        .lte('last_event_at', limite).limit(300);
+    if (error) throw error;
+    const delay0 = Number(def.steps[0]?.delay_minutes ?? 0);
+
+    for (const order of orders ?? []) {
+        const eventAt = order.last_event_at;
+        await insertRunIdempotente(supabase, {
+            journey_id: j.id, client_id: j.client_id, device_id: order.device_id,
+            current_step: 0, state: 'ativa',
+            context: {
+                tracked_order_id: order.id,
+                order_number: order.order_number,
+                status: order.status,
+                last_event_at: eventAt,
+                silent_run: true,
+                dedupe_key: `${order.id}:silent:${eventAt}`,
+            },
+            next_step_at: new Date(Date.now() + delay0 * 60000).toISOString(),
+        });
+    }
+}
+
+function renderPushTemplate(push: any, context: Record<string, unknown>) {
+    const variables: Record<string, string> = {
+        pedido: String(context.order_number ?? ''),
+        status: String(context.status ?? ''),
+    };
+    const render = (value: string) => Object.entries(variables)
+        .reduce((text, [key, replacement]) => text.replaceAll(`{{${key}}}`, replacement), value);
+    return { ...push, title: render(push.title), body: render(push.body) };
+}
+
 /** Executa passos vencidos de todas as runs ativas. */
 async function executarPassosDevidos(supabase: any) {
     const { data: devidas } = await supabase
@@ -379,6 +461,21 @@ async function executarPassosDevidos(supabase: any) {
             continue;
         }
 
+        if (run.context?.tracked_order_id) {
+            const { data: tracked } = await supabase.from('tracked_orders')
+                .select('status, last_event_at, delivered_at')
+                .eq('id', run.context.tracked_order_id).maybeSingle();
+            const staleSilent = run.context?.silent_run && (
+                !tracked || tracked.delivered_at || tracked.last_event_at !== run.context.last_event_at
+            );
+            if (staleSilent) {
+                await supabase.from('journey_runs')
+                    .update({ state: 'saida', finished_at: new Date().toISOString() })
+                    .eq('id', run.id);
+                continue;
+            }
+        }
+
         const step = def.data.steps[run.current_step];
         if (!step) {
             await supabase.from('journey_runs')
@@ -393,7 +490,9 @@ async function executarPassosDevidos(supabase: any) {
             .eq('id', run.device_id).maybeSingle();
 
         if (device?.push_enabled) {
-            await enviar(supabase, run.client_id, [device as Device], step.push, 'jornada', null, run.id);
+            const push = renderPushTemplate(step.push, run.context ?? {});
+            const kind = run.context?.tracked_order_id ? 'rastreio' : 'jornada';
+            await enviar(supabase, run.client_id, [device as Device], push, kind, null, run.id);
             passos++;
         }
 
@@ -413,7 +512,7 @@ async function executarPassosDevidos(supabase: any) {
 async function processarJornadas(supabase: any) {
     const { data: jornadas } = await supabase
         .from('journeys')
-        .select('id, client_id, app_id, kind, definition')
+        .select('id, client_id, app_id, kind, definition, created_at')
         .eq('active', true)
         .limit(50);
 
@@ -425,8 +524,11 @@ async function processarJornadas(supabase: any) {
                 await abrirRunsDeInstall(supabase, j, def.data);
             } else if (def.data.trigger.kind === 'cart_abandoned') {
                 await abrirRunsDeCarrinho(supabase, j, def.data);
+            } else if (def.data.trigger.kind === 'order_status_changed') {
+                await abrirRunsDeStatus(supabase, j, def.data);
+            } else if (def.data.trigger.kind === 'order_silent') {
+                await abrirRunsDeSilencio(supabase, j, def.data);
             }
-            // order_status_changed / order_silent chegam na E6 (rastreio)
         } catch (e: any) {
             console.error('[jornadas] abrir runs falhou', j.id, e.message);
         }

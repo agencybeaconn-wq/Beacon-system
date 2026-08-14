@@ -1,0 +1,11 @@
+[functions.app-tracking]
+verify_jwt = false
+
+[functions.register-device]
+verify_jwt = false
+
+[functions.app-shopify-webhooks]
+verify_jwt = false
+
+[functions.push-dispatch]
+verify_jwt = false
