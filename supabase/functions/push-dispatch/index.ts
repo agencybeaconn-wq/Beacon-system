@@ -27,7 +27,14 @@ import { instrument } from '../_shared/logger.ts';
 import {
     journeyDefinitionSchema, pushPayloadSchema, segmentDefinitionSchema,
 } from '../_shared/app-contracts.ts';
+import {
+    resolverAlvoPuro, aplicarTetoPuro, podeReivindicarCampanha,
+    type DeviceMin, type SegmentoResolvido,
+} from '../_shared/dispatch-audience.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7';
+
+/** stale lease: 'enviando' há mais que isto = a function morreu no meio. */
+const CAMPANHA_LEASE_MS = 10 * 60000;
 
 const EXPO_PUSH_URL = 'https://exp.host/--/api/v2/push/send';
 const LOTE = 100;
@@ -47,55 +54,50 @@ interface Device {
     last_seen_at: string;
 }
 
-/** Aplica o filtro do segmento sobre os devices do cliente. */
+/**
+ * I/O do alvo — busca devices + resolve o segmento (fail-closed via
+ * resolverAlvoPuro, testado). Devolve os Device completos correspondentes.
+ */
 async function resolverAlvo(
     supabase: any, clientId: string, appId: string, segmentId: string | null,
-): Promise<Device[]> {
+): Promise<{ alvo: Device[]; motivo: string }> {
     const { data: devices } = await supabase
         .from('app_devices')
         .select('id, expo_push_token, platform, shopify_customer_id, first_seen_at, last_seen_at')
         .eq('app_id', appId)
         .eq('push_enabled', true);
-    let alvo: Device[] = devices ?? [];
-    if (!segmentId || alvo.length === 0) return alvo;
+    const todos: Device[] = devices ?? [];
 
-    const { data: seg } = await supabase
-        .from('segments').select('definition').eq('id', segmentId).maybeSingle();
-    const parsed = segmentDefinitionSchema.safeParse(seg?.definition ?? {});
-    if (!parsed.success) return alvo;
-    const f = parsed.data;
-    const agora = Date.now();
-    const dias = (iso: string) => (agora - new Date(iso).getTime()) / 86400000;
+    // resolve o segmento pro formato que resolverAlvoPuro entende (fail-closed)
+    let segmento: SegmentoResolvido = null;
+    if (segmentId) {
+        const { data: seg } = await supabase
+            .from('segments').select('definition').eq('id', segmentId).maybeSingle();
+        if (!seg) segmento = 'ausente';
+        else {
+            const parsed = segmentDefinitionSchema.safeParse(seg.definition ?? {});
+            segmento = parsed.success ? parsed.data : 'invalido';
+        }
+    }
 
-    if (f.platform) alvo = alvo.filter((d) => d.platform === f.platform);
-    if (f.inativo_dias !== null) alvo = alvo.filter((d) => dias(d.last_seen_at) >= f.inativo_dias!);
-    if (f.instalou_ha_dias !== null) alvo = alvo.filter((d) => dias(d.first_seen_at) <= f.instalou_ha_dias!);
-
-    // filtros que dependem de compra olham o CRM do app (por customer)
-    if (f.comprou !== null || f.gasto_minimo !== null) {
-        const { data: clientes } = await supabase
+    // CRM só quando o filtro precisa (compra/gasto)
+    let clientes: any[] = [];
+    if (segmento && segmento !== 'ausente' && segmento !== 'invalido'
+        && (segmento.comprou !== null || segmento.gasto_minimo !== null)) {
+        const { data } = await supabase
             .from('app_customers')
             .select('shopify_customer_id, orders_app_count, total_spent_app')
             .eq('client_id', clientId);
-        const porId = new Map<string, { pedidos: number; gasto: number }>(
-            (clientes ?? []).map((c: any) => [
-                String(c.shopify_customer_id),
-                { pedidos: Number(c.orders_app_count ?? 0), gasto: Number(c.total_spent_app ?? 0) },
-            ]),
-        );
-        alvo = alvo.filter((d) => {
-            const c = d.shopify_customer_id ? porId.get(d.shopify_customer_id) : undefined;
-            const comprou = !!c && c.pedidos > 0;
-            if (f.comprou === 'sim' && !comprou) return false;
-            if (f.comprou === 'nao' && comprou) return false;
-            if (f.gasto_minimo !== null && (c?.gasto ?? 0) < f.gasto_minimo) return false;
-            return true;
-        });
+        clientes = data ?? [];
     }
-    return alvo;
+
+    const { alvo, motivo } = resolverAlvoPuro(
+        todos as DeviceMin[], clientes, segmento, Date.now(),
+    );
+    return { alvo: alvo as Device[], motivo };
 }
 
-/** Remove devices que já bateram o teto diário de push de marketing. */
+/** I/O do teto — conta pushes de marketing do dia e delega a decisão pura. */
 async function aplicarTeto(
     supabase: any, devices: Device[], tetoDia: number,
 ): Promise<{ permitidos: Device[]; bloqueados: number }> {
@@ -111,8 +113,8 @@ async function aplicarTeto(
     for (const e of envios ?? []) {
         contagem.set(e.device_id, (contagem.get(e.device_id) ?? 0) + 1);
     }
-    const permitidos = devices.filter((d) => (contagem.get(d.id) ?? 0) < tetoDia);
-    return { permitidos, bloqueados: devices.length - permitidos.length };
+    const r = aplicarTetoPuro(devices as DeviceMin[], contagem, tetoDia);
+    return { permitidos: r.permitidos as Device[], bloqueados: r.bloqueados };
 }
 
 /**
@@ -206,11 +208,15 @@ async function enviar(
 async function processarCampanha(supabase: any, campaignId: string) {
     const { data: c } = await supabase
         .from('push_campaigns')
-        .select('id, client_id, app_id, payload, segment_id, status')
+        .select('id, client_id, app_id, payload, segment_id, status, updated_at')
         .eq('id', campaignId).maybeSingle();
     if (!c) return { erro: 'campanha não encontrada' };
-    if (['enviando', 'enviada'].includes(c.status)) {
-        return { erro: `campanha já ${c.status}` };
+
+    // #8 máquina de estado: 'enviada' nunca reabre; 'enviando' só se stale (crash)
+    const enviandoStale = c.status === 'enviando'
+        && Date.now() - new Date(c.updated_at ?? 0).getTime() > CAMPANHA_LEASE_MS;
+    if (!podeReivindicarCampanha(c.status, enviandoStale)) {
+        return { erro: `campanha não reivindicável (status ${c.status})` };
     }
 
     const payload = pushPayloadSchema.safeParse(c.payload);
@@ -220,17 +226,18 @@ async function processarCampanha(supabase: any, campaignId: string) {
         return { erro: 'payload inválido' };
     }
 
-    // trava otimista: só segue quem conseguiu mudar o status (evita envio dobrado)
+    // trava otimista atômica: reivindica SÓ o status esperado (o mesmo lido).
+    // Dois ticks: só um casa o status atual → o outro perde a corrida.
     const { data: travou } = await supabase.from('push_campaigns')
-        .update({ status: 'enviando' })
-        .eq('id', c.id).neq('status', 'enviando').select('id');
-    if (!travou || travou.length === 0) return { erro: 'campanha já está sendo enviada' };
+        .update({ status: 'enviando', updated_at: new Date().toISOString() })
+        .eq('id', c.id).eq('status', c.status).select('id');
+    if (!travou || travou.length === 0) return { erro: 'campanha já reivindicada por outro tick' };
 
     const { data: app } = await supabase
         .from('store_apps').select('push_limits').eq('id', c.app_id).maybeSingle();
     const teto = Number(app?.push_limits?.max_marketing_per_day ?? 3);
 
-    const alvo = await resolverAlvo(supabase, c.client_id, c.app_id, c.segment_id);
+    const { alvo, motivo } = await resolverAlvo(supabase, c.client_id, c.app_id, c.segment_id);
     const { permitidos, bloqueados } = await aplicarTeto(supabase, alvo, teto);
     const { enviados, falhas } = await enviar(
         supabase, c.client_id, permitidos, payload.data, 'campanha', c.id, null,
@@ -239,10 +246,14 @@ async function processarCampanha(supabase: any, campaignId: string) {
     await supabase.from('push_campaigns').update({
         status: 'enviada',
         sent_count: enviados,
-        error: falhas > 0 ? `${falhas} falha(s) de envio` : null,
+        error: falhas > 0 ? `${falhas} falha(s) de envio`
+            : alvo.length === 0 ? `nenhum alvo (${motivo})` : null,
     }).eq('id', c.id);
 
-    return { campanha: c.id, alvo: alvo.length, bloqueados_por_teto: bloqueados, enviados, falhas };
+    return {
+        campanha: c.id, alvo: alvo.length, motivo_alvo: motivo,
+        bloqueados_por_teto: bloqueados, enviados, falhas,
+    };
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -283,12 +294,17 @@ async function abrirRunsDeInstall(supabase: any, j: JourneyRow, def: any) {
     const novos = installs.filter((i: any) => !jaTem.has(i.device_id));
     if (!novos.length) return;
 
+    // #19: dedupe_key + insert idempotente — o índice único protege mesmo se
+    // dois ticks concorrerem ou o select de "existentes" truncar em 1000.
     const delay0 = Number(def.steps[0]?.delay_minutes ?? 0);
-    await supabase.from('journey_runs').insert(novos.map((i: any) => ({
-        journey_id: j.id, client_id: j.client_id, device_id: i.device_id,
-        current_step: 0, state: 'ativa', context: {},
-        next_step_at: new Date(new Date(i.occurred_at).getTime() + delay0 * 60000).toISOString(),
-    })));
+    for (const i of novos) {
+        await insertRunIdempotente(supabase, {
+            journey_id: j.id, client_id: j.client_id, device_id: i.device_id,
+            current_step: 0, state: 'ativa', context: {},
+            dedupe_key: `${j.id}:install:${i.device_id}`,
+            next_step_at: new Date(new Date(i.occurred_at).getTime() + delay0 * 60000).toISOString(),
+        });
+    }
 }
 
 /**
@@ -298,29 +314,34 @@ async function abrirRunsDeInstall(supabase: any, j: JourneyRow, def: any) {
 async function abrirRunsDeCarrinho(supabase: any, j: JourneyRow, def: any) {
     const afterMin = Number(def.trigger?.after_minutes ?? 60);
     const desde = new Date(Date.now() - 2 * 86400000).toISOString();
-    const limite = new Date(Date.now() - afterMin * 60000).toISOString();
+    const limiteMs = Date.now() - afterMin * 60000;
 
+    // #10: SEM filtro por limite aqui — pega o evento MAIS RECENTE de cada
+    // token; se ele for recente (comprador ainda no checkout), NÃO abre run.
+    // Antes, o filtro `<= limite` escondia o update novo e pescava um antigo,
+    // disparando "carrinho abandonado" com o comprador ainda ativo.
     const { data: eventos } = await supabase
         .from('webhook_events')
         .select('payload, received_at')
         .eq('client_id', j.client_id)
         .in('topic', ['checkouts/create', 'checkouts/update'])
         .gte('received_at', desde)
-        .lte('received_at', limite)
         .order('received_at', { ascending: false })
-        .limit(300);
+        .limit(500);
     if (!eventos?.length) return;
 
-    // último estado de cada checkout + device do app (atributo gravado pela bridge)
-    const porToken = new Map<string, { device: string | null }>();
+    const porToken = new Map<string, { device: string | null; ultimoMs: number }>();
     for (const ev of eventos) {
         const p = ev.payload ?? {};
         const token = String(p.token ?? p.cart_token ?? '');
-        if (!token || porToken.has(token)) continue;
+        if (!token || porToken.has(token)) continue; // já ordenado desc → 1º = mais recente
         const attrs: Array<{ name: string; value: string }> = p.note_attributes ?? [];
         const attr = (n: string) => attrs.find((a) => a?.name === n)?.value ?? null;
         if (attr('app_source') !== 'beacon_app') continue; // carrinho do site, não é nosso
-        porToken.set(token, { device: attr('app_device') });
+        porToken.set(token, {
+            device: attr('app_device'),
+            ultimoMs: new Date(ev.received_at).getTime(),
+        });
     }
     if (porToken.size === 0) return;
 
@@ -353,10 +374,14 @@ async function abrirRunsDeCarrinho(supabase: any, j: JourneyRow, def: any) {
             continue;
         }
         if (run || !info.device) continue; // já tem run, ou checkout sem device do app
-        await supabase.from('journey_runs').insert({
+        // #10: só abandona se o ÚLTIMO evento do checkout já passou do limite
+        // (comprador parado). Se mexeu há pouco, ainda está ativo — espera.
+        if (info.ultimoMs > limiteMs) continue;
+        await insertRunIdempotente(supabase, {
             journey_id: j.id, client_id: j.client_id, device_id: info.device,
             current_step: 0, state: 'ativa',
             context: { checkout_token: token },
+            dedupe_key: `${j.id}:cart:${token}`,
             next_step_at: new Date(Date.now() + delay0 * 60000).toISOString(),
         });
     }
@@ -383,15 +408,17 @@ async function abrirRunsDeStatus(supabase: any, j: JourneyRow, def: any) {
                 .contains('context', { tracked_order_id: order.id });
         }
         const changedAt = order.status_changed_at ?? order.last_event_at ?? new Date().toISOString();
+        const dedupe = `${order.id}:status:${order.status}:${changedAt}`;
         await insertRunIdempotente(supabase, {
             journey_id: j.id, client_id: j.client_id, device_id: order.device_id,
             current_step: 0, state: 'ativa',
+            dedupe_key: dedupe, // coluna canônica (o índice único novo é sobre ela)
             context: {
                 tracked_order_id: order.id,
                 order_number: order.order_number,
                 status: order.status,
                 status_changed_at: changedAt,
-                dedupe_key: `${order.id}:status:${order.status}:${changedAt}`,
+                dedupe_key: dedupe,
             },
             next_step_at: new Date(new Date(changedAt).getTime() + delay0 * 60000).toISOString(),
         });
@@ -412,16 +439,18 @@ async function abrirRunsDeSilencio(supabase: any, j: JourneyRow, def: any) {
 
     for (const order of orders ?? []) {
         const eventAt = order.last_event_at;
+        const dedupe = `${order.id}:silent:${eventAt}`;
         await insertRunIdempotente(supabase, {
             journey_id: j.id, client_id: j.client_id, device_id: order.device_id,
             current_step: 0, state: 'ativa',
+            dedupe_key: dedupe, // coluna canônica
             context: {
                 tracked_order_id: order.id,
                 order_number: order.order_number,
                 status: order.status,
                 last_event_at: eventAt,
                 silent_run: true,
-                dedupe_key: `${order.id}:silent:${eventAt}`,
+                dedupe_key: dedupe,
             },
             next_step_at: new Date(Date.now() + delay0 * 60000).toISOString(),
         });
@@ -438,18 +467,41 @@ function renderPushTemplate(push: any, context: Record<string, unknown>) {
     return { ...push, title: render(push.title), body: render(push.body) };
 }
 
+/** lease do claim de run: empurra next_step_at pra frente enquanto processa. */
+const RUN_LEASE_MS = 5 * 60000;
+
+/**
+ * #7 CLAIM ATÔMICO: reivindica UMA run empurrando next_step_at pro futuro
+ * (lease), só se ela ainda estiver devida. Dois ticks concorrentes: só um
+ * update casa a condição `next_step_at <= agora` → o outro pega 0 linhas e
+ * pula. Se a function morrer, o lease expira e outro tick reprocessa (no pior
+ * caso 1 push repetido em crash — muito melhor que dup em CADA tick).
+ */
+async function reivindicarRun(supabase: any, runId: string, nextStepAt: string): Promise<boolean> {
+    const lease = new Date(Date.now() + RUN_LEASE_MS).toISOString();
+    const { data } = await supabase.from('journey_runs')
+        .update({ next_step_at: lease })
+        .eq('id', runId).eq('state', 'ativa').lte('next_step_at', nextStepAt)
+        .select('id');
+    return !!data && data.length > 0;
+}
+
 /** Executa passos vencidos de todas as runs ativas. */
 async function executarPassosDevidos(supabase: any) {
+    const agora = new Date().toISOString();
     const { data: devidas } = await supabase
         .from('journey_runs')
-        .select('id, journey_id, client_id, device_id, current_step, context')
+        .select('id, journey_id, client_id, device_id, current_step, context, next_step_at')
         .eq('state', 'ativa')
-        .lte('next_step_at', new Date().toISOString())
+        .lte('next_step_at', agora)
         .limit(100);
     if (!devidas?.length) return { passos: 0 };
 
     let passos = 0;
     for (const run of devidas) {
+        // reivindica antes de processar — perdeu a corrida, outro tick cuida
+        const ganhou = await reivindicarRun(supabase, run.id, run.next_step_at);
+        if (!ganhou) continue;
         const { data: j } = await supabase
             .from('journeys').select('id, app_id, active, definition')
             .eq('id', run.journey_id).maybeSingle();
@@ -489,11 +541,41 @@ async function executarPassosDevidos(supabase: any) {
             .select('id, client_id, expo_push_token, platform, shopify_customer_id, first_seen_at, last_seen_at, push_enabled')
             .eq('id', run.device_id).maybeSingle();
 
+        // #11 exit_on='purchase': quem já comprou pelo app não recebe o resto
+        // da jornada (boas-vindas/carrinho). 'delivery' já é tratado pelo
+        // rastreio (status 'entregue' + saída do silent).
+        if (def.data.exit_on === 'purchase' && device?.shopify_customer_id) {
+            const { data: cli } = await supabase
+                .from('app_customers').select('orders_app_count')
+                .eq('client_id', run.client_id)
+                .eq('shopify_customer_id', device.shopify_customer_id).maybeSingle();
+            if (Number(cli?.orders_app_count ?? 0) > 0) {
+                await supabase.from('journey_runs')
+                    .update({ state: 'saida', finished_at: new Date().toISOString() })
+                    .eq('id', run.id);
+                continue;
+            }
+        }
+
         if (device?.push_enabled) {
             const push = renderPushTemplate(step.push, run.context ?? {});
-            const kind = run.context?.tracked_order_id ? 'rastreio' : 'jornada';
-            await enviar(supabase, run.client_id, [device as Device], push, kind, null, run.id);
-            passos++;
+            // rastreio é transacional (não conta cota); jornada de marketing sim (#9/#17)
+            const rastreio = !!run.context?.tracked_order_id;
+            const kind = rastreio ? 'rastreio' : 'jornada';
+
+            let podeEnviar = true;
+            if (!rastreio) {
+                const { data: app } = await supabase
+                    .from('store_apps').select('push_limits').eq('id', j.app_id).maybeSingle();
+                const teto = Number(app?.push_limits?.max_marketing_per_day ?? 3);
+                const { permitidos } = await aplicarTeto(supabase, [device as Device], teto);
+                podeEnviar = permitidos.length > 0;
+            }
+
+            if (podeEnviar) {
+                await enviar(supabase, run.client_id, [device as Device], push, kind, null, run.id);
+                passos++;
+            }
         }
 
         const proximo = def.data.steps[run.current_step + 1];

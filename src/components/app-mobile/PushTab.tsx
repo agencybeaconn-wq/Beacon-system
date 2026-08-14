@@ -108,8 +108,25 @@ export function PushTab({ clientId, appId }: Props) {
         [titulo, corpo],
     );
 
+    // min do input de agendamento: agora (em horário local, formato datetime-local)
+    const minAgendamento = useMemo(() => {
+        const d = new Date(Date.now() - new Date().getTimezoneOffset() * 60000);
+        return d.toISOString().slice(0, 16);
+    }, []);
+
+    const limparForm = () => {
+        setTitulo(""); setCorpo(""); setImagem(""); setDeepLink(""); setAgendarPara("");
+    };
+
     const disparar = async () => {
         if (!payloadValido) return;
+        const agendada = agendarPara !== "";
+
+        // #15 bloqueia agendamento no passado (o tick dispararia no minuto seguinte)
+        if (agendada && new Date(agendarPara).getTime() <= Date.now()) {
+            toast({ title: "Data inválida", description: "Escolha um horário no futuro para agendar.", variant: "destructive" });
+            return;
+        }
         setEnviando(true);
 
         const payload = {
@@ -118,7 +135,6 @@ export function PushTab({ clientId, appId }: Props) {
             image_url: imagem.trim() || null,
             deep_link: deepLink.trim() || null,
         };
-        const agendada = agendarPara !== "";
 
         const { data: criada, error } = await supabase.from("push_campaigns").insert({
             client_id: clientId,
@@ -131,6 +147,7 @@ export function PushTab({ clientId, appId }: Props) {
 
         if (error || !criada) {
             setEnviando(false);
+            // #12 form preservado — o lojista não reescreve tudo
             toast({ title: "Erro ao criar campanha", description: error?.message, variant: "destructive" });
             return;
         }
@@ -138,22 +155,48 @@ export function PushTab({ clientId, appId }: Props) {
         if (agendada) {
             setEnviando(false);
             toast({ title: "Campanha agendada", description: "O envio sai automaticamente no horário." });
-        } else {
-            const { data, error: envioErro } = await supabase.functions.invoke("push-dispatch", {
-                body: { campaign_id: criada.id },
-            });
-            setEnviando(false);
-            if (envioErro || data?.erro) {
-                toast({ title: "Falha no envio", description: data?.erro ?? envioErro?.message, variant: "destructive" });
-            } else {
-                toast({
-                    title: "Push enviado",
-                    description: `${data?.enviados ?? 0} enviado(s)` +
-                        (data?.bloqueados_por_teto ? `, ${data.bloqueados_por_teto} fora por teto diário` : ""),
-                });
-            }
+            limparForm();
+            void carregar();
+            return;
         }
-        setTitulo(""); setCorpo(""); setImagem(""); setDeepLink(""); setAgendarPara("");
+
+        const { data, error: envioErro } = await supabase.functions.invoke("push-dispatch", {
+            body: { campaign_id: criada.id },
+        });
+        setEnviando(false);
+
+        if (envioErro || data?.erro) {
+            toast({ title: "Falha no envio", description: data?.erro ?? envioErro?.message, variant: "destructive" });
+            return; // #12 mantém o form
+        }
+
+        const enviados = Number(data?.enviados ?? 0);
+        const falhas = Number(data?.falhas ?? 0);
+        const bloqueados = Number(data?.bloqueados_por_teto ?? 0);
+
+        // #13 toast honesto: 0 enviados NÃO é sucesso
+        if (enviados === 0) {
+            const motivo = data?.motivo_alvo === "segmento_invalido" ? "o segmento é inválido"
+                : data?.motivo_alvo === "segmento_ausente" ? "o segmento não existe mais"
+                : bloqueados > 0 ? "todos os aparelhos bateram o limite diário"
+                : "nenhum aparelho elegível (ninguém instalou o app ainda ou o segmento não casou)";
+            toast({
+                title: "Nada foi enviado",
+                description: `Motivo: ${motivo}. A campanha ficou registrada.`,
+                variant: "destructive",
+            });
+            void carregar();
+            return; // #12 mantém o form pra ajustar e reenviar
+        }
+
+        toast({
+            title: `Push enviado para ${enviados} aparelho(s)`,
+            description: [
+                falhas > 0 ? `${falhas} falha(s)` : null,
+                bloqueados > 0 ? `${bloqueados} fora por limite diário` : null,
+            ].filter(Boolean).join(" · ") || "Entrega concluída.",
+        });
+        limparForm();
         void carregar();
     };
 
@@ -227,7 +270,7 @@ export function PushTab({ clientId, appId }: Props) {
                         </div>
                         <div className="space-y-1.5">
                             <Label htmlFor="push-agendar">Agendar (vazio = enviar agora)</Label>
-                            <Input id="push-agendar" type="datetime-local" value={agendarPara} onChange={(e) => setAgendarPara(e.target.value)} />
+                            <Input id="push-agendar" type="datetime-local" min={minAgendamento} value={agendarPara} onChange={(e) => setAgendarPara(e.target.value)} />
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
