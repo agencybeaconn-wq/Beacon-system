@@ -112,11 +112,13 @@ export function PersonalizacaoTab({ clientId, appId }: Props) {
                 duration_ms: form.splash_duration_ms,
             },
         };
-        const { error } = await supabase
-            .from("store_apps").update({ config: novoConfig }).eq("id", appId);
+        // #15: grava pela edge que valida com Zod (não mais UPDATE direto no PostgREST)
+        const { data, error } = await supabase.functions.invoke("app-config-update", {
+            body: { app_id: appId, config: novoConfig },
+        });
         setSalvando(false);
-        if (error) {
-            toast({ title: "Erro ao salvar", description: error.message, variant: "destructive" });
+        if (error || data?.error) {
+            toast({ title: "Erro ao salvar", description: data?.error ?? error?.message, variant: "destructive" });
             return;
         }
         toast({
