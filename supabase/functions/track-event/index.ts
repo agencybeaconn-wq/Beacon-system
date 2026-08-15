@@ -13,6 +13,7 @@ declare const Deno: any;
 import { instrument } from '../_shared/logger.ts';
 import { corsHeaders } from '../_shared/cors.ts';
 import { appEventSchema } from '../_shared/app-contracts.ts';
+import { dentroDoLimite } from '../_shared/rate-limit.ts';
 
 async function getSupabase() {
     const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
@@ -47,6 +48,16 @@ Deno.serve(instrument('track-event', async (req: Request) => {
     const ev = parsed.data;
 
     const supabase = await getSupabase();
+
+    // #12 rate-limit: telemetria é escrita pública; sem teto, flood infla app_events
+    const ok = await dentroDoLimite(supabase, 'event', ev.app_id, req, {
+        app: [3000, 60], ip: [300, 60],
+    });
+    if (!ok) {
+        return new Response(JSON.stringify({ error: 'muitas requisições' }), {
+            status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+    }
 
     // device precisa pertencer ao app — client_id vem do banco, não do payload
     const { data: device } = await supabase

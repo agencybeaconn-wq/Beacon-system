@@ -15,9 +15,9 @@ declare const Deno: any;
 import { corsHeaders } from '../_shared/cors.ts';
 import { z } from 'npm:zod@3.25.76';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7';
+import { dentroDoLimite } from '../_shared/rate-limit.ts';
 
 const MAX_BODY_BYTES = 32 * 1024; // caixa-preta não precisa de payload maior
-const TETO_POR_APP_10MIN = 60;    // acima disso é loop/flood — descarta com 429
 
 const appErrorSchema = z.object({
     app_id: z.string().uuid().nullable().default(null),
@@ -55,20 +55,12 @@ Deno.serve(async (req: Request) => {
             Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
         );
 
-        // freio anti-inundação por app (app_id null cai num balde próprio)
-        const desde = new Date(Date.now() - 10 * 60000).toISOString();
-        let quota = supabase
-            .from('system_logs')
-            .select('id', { count: 'exact', head: true })
-            .eq('function_name', 'app-mobile')
-            .gte('created_at', desde);
-        quota = ev.app_id
-            ? quota.eq('context->>app_id', ev.app_id)
-            : quota.is('context->>app_id', null);
-        const { count } = await quota;
-        if ((count ?? 0) >= TETO_POR_APP_10MIN) {
-            return json(429, { error: 'teto de relatórios atingido — tente depois' });
-        }
+        // #12 rate-limit atômico (substitui o count em system_logs, mais barato):
+        // um app em crash-loop, ou curl malicioso, não afoga a tabela de logs.
+        const ok = await dentroDoLimite(supabase, 'error', ev.app_id ?? 'nulo', req, {
+            app: [120, 600], ip: [60, 600],
+        });
+        if (!ok) return json(429, { error: 'teto de relatórios atingido — tente depois' });
 
         const { error } = await supabase.from('system_logs').insert({
             function_name: 'app-mobile',

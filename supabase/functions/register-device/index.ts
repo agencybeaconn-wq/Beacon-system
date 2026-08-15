@@ -14,6 +14,7 @@ declare const Deno: any;
 import { instrument } from '../_shared/logger.ts';
 import { corsHeaders } from '../_shared/cors.ts';
 import { deviceRegistrationSchema } from '../_shared/app-contracts.ts';
+import { dentroDoLimite } from '../_shared/rate-limit.ts';
 
 async function getSupabase() {
     const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
@@ -48,6 +49,18 @@ Deno.serve(instrument('register-device', async (req: Request) => {
     const reg = parsed.data;
 
     const supabase = await getSupabase();
+
+    // #12 rate-limit: registro é upsert por installation; um app_id vazado não
+    // pode criar devices sem teto. Generoso por app (heartbeat reabre sessão),
+    // apertado por IP (o abusador anônimo).
+    const ok = await dentroDoLimite(supabase, 'register', reg.app_id, req, {
+        app: [600, 60], ip: [60, 60],
+    });
+    if (!ok) {
+        return new Response(JSON.stringify({ error: 'muitas requisições' }), {
+            status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+    }
 
     // app precisa existir — também dá o client_id (fonte: banco, nunca o payload)
     const { data: app } = await supabase
