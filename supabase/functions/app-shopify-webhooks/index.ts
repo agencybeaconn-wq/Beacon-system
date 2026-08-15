@@ -22,6 +22,7 @@ import { instrument } from '../_shared/logger.ts';
 import { z } from 'npm:zod@3.25.76';
 import { normalizeTrackingStatus, trackingEventText } from '../_shared/tracking-status.ts';
 import { validarAtribuicao } from '../_shared/attribution.ts';
+import { deveAtribuirPedido, fulfillmentRegrediu, inferirStatusFulfillment } from '../_shared/webhook-logic.ts';
 
 const idSchema = z.union([z.string(), z.number()]).transform(String);
 const fulfillmentSchema = z.object({
@@ -77,17 +78,18 @@ async function handleOrderPaid(supabase: any, clientId: string, payload: any) {
     // #13 atribuição ASSINADA: o cart attribute `app_source` é forjável por
     // qualquer visitante da storefront. Só um token HMAC válido (emitido pelo
     // register-device, vinculado a device+app+expiração) prova origem no app.
+    // A decisão do gate vive em webhook-logic (deveAtribuirPedido, testada).
     const secret = Deno.env.get('ATTRIBUTION_SECRET');
     const token = attr('app_attribution');
-    if (!secret || !token) return; // sem prova assinada → não é pedido do app
-    const veredito = await validarAtribuicao(token, secret, Date.now());
-    if (!veredito.valido || veredito.app_id !== app.id) return; // forjado/expirado/outro app
+    const veredito = token && secret ? await validarAtribuicao(token, secret, Date.now()) : null;
+    const decisao = deveAtribuirPedido({ secretPresente: Boolean(secret), token, veredito, appId: app.id });
+    if (!decisao.atribuir) return; // sem prova / forjado / expirado / outro app
 
     // device do token, confirmado no banco (mesmo app + tenant)
     let deviceId: string | null = null;
-    if (veredito.device_id) {
+    if (decisao.deviceCandidato) {
         const { data: validDevice } = await supabase.from('app_devices').select('id')
-            .eq('id', veredito.device_id).eq('app_id', app.id).eq('client_id', clientId).maybeSingle();
+            .eq('id', decisao.deviceCandidato).eq('app_id', app.id).eq('client_id', clientId).maybeSingle();
         deviceId = validDevice?.id ?? null;
     }
     const customerId = payload?.customer?.id ? String(payload.customer.id) : null;
@@ -203,9 +205,8 @@ async function handleFulfillment(supabase: any, clientId: string, rawPayload: un
     // um fulfillment já vinculado; jamais cria um pedido sem provar a atribuição.
     if (!appOrder && orderId) return;
     const inferred = normalizeTrackingStatus(payload.shipment_status ?? payload.status);
-    // Shopify costuma mandar fulfillment.status="success" sem shipment_status
-    // no primeiro post. A presença do código prova que já foi postado.
-    const normalized = inferred === 'desconhecido' && numbers.length > 0 ? 'postado' : inferred;
+    // postado-por-código e anti-regressão vivem em webhook-logic (testadas).
+    const normalized = inferirStatusFulfillment(inferred, numbers.length);
     const eventAt = payload.happened_at ?? payload.updated_at ?? payload.created_at ?? new Date().toISOString();
     const eventText = payload.message?.trim() || trackingEventText(normalized);
 
@@ -221,7 +222,7 @@ async function handleFulfillment(supabase: any, clientId: string, rawPayload: un
         if (payload.tracking_company) values.carrier = payload.tracking_company;
         if (normalized === 'entregue') values.delivered_at = eventAt;
         if (existing) {
-            if (existing.last_event_at && new Date(eventAt).getTime() <= new Date(existing.last_event_at).getTime()) {
+            if (fulfillmentRegrediu(existing.last_event_at, eventAt)) {
                 continue; // webhook atrasado/repetido não pode regredir o rastreio
             }
             const { error } = await supabase.from('tracked_orders').update(values).eq('id', existing.id);
