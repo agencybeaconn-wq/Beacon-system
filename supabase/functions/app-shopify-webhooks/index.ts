@@ -21,6 +21,7 @@ declare const Deno: any;
 import { instrument } from '../_shared/logger.ts';
 import { z } from 'npm:zod@3.25.76';
 import { normalizeTrackingStatus, trackingEventText } from '../_shared/tracking-status.ts';
+import { validarAtribuicao } from '../_shared/attribution.ts';
 
 const idSchema = z.union([z.string(), z.number()]).transform(String);
 const fulfillmentSchema = z.object({
@@ -64,21 +65,29 @@ async function verifyShopifyHmac(body: string, hmacHeader: string, secret: strin
     return constantTimeEqual(computed, hmacHeader);
 }
 
-/** orders/paid com attributes[app_source]=beacon_app vira pedido do app */
+/** orders/paid com token de atribuição ASSINADO vira pedido do app */
 async function handleOrderPaid(supabase: any, clientId: string, payload: any) {
     const attrs: Array<{ name: string; value: string }> = payload?.note_attributes ?? [];
     const attr = (n: string) => attrs.find((a) => a?.name === n)?.value ?? null;
-    if (attr('app_source') !== 'beacon_app') return; // pedido do site, não é nosso
 
     const { data: app } = await supabase
         .from('store_apps').select('id').eq('client_id', clientId).maybeSingle();
     if (!app) return;
 
-    const claimedDeviceId = attr('app_device');
+    // #13 atribuição ASSINADA: o cart attribute `app_source` é forjável por
+    // qualquer visitante da storefront. Só um token HMAC válido (emitido pelo
+    // register-device, vinculado a device+app+expiração) prova origem no app.
+    const secret = Deno.env.get('ATTRIBUTION_SECRET');
+    const token = attr('app_attribution');
+    if (!secret || !token) return; // sem prova assinada → não é pedido do app
+    const veredito = await validarAtribuicao(token, secret, Date.now());
+    if (!veredito.valido || veredito.app_id !== app.id) return; // forjado/expirado/outro app
+
+    // device do token, confirmado no banco (mesmo app + tenant)
     let deviceId: string | null = null;
-    if (claimedDeviceId) {
+    if (veredito.device_id) {
         const { data: validDevice } = await supabase.from('app_devices').select('id')
-            .eq('id', claimedDeviceId).eq('app_id', app.id).eq('client_id', clientId).maybeSingle();
+            .eq('id', veredito.device_id).eq('app_id', app.id).eq('client_id', clientId).maybeSingle();
         deviceId = validDevice?.id ?? null;
     }
     const customerId = payload?.customer?.id ? String(payload.customer.id) : null;
@@ -94,7 +103,7 @@ async function handleOrderPaid(supabase: any, clientId: string, payload: any) {
         financial_status: String(payload?.financial_status ?? ''),
         customer_shopify_id: customerId,
         device_id: deviceId,
-        attributed_via: 'cart_attribute',
+        attributed_via: 'signed_token',
         paid_at: payload?.processed_at ?? new Date().toISOString(),
     }, { onConflict: 'client_id,shopify_order_id', ignoreDuplicates: true })
         .select('id')

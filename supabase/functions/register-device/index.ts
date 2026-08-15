@@ -15,6 +15,14 @@ import { instrument } from '../_shared/logger.ts';
 import { corsHeaders } from '../_shared/cors.ts';
 import { deviceRegistrationSchema } from '../_shared/app-contracts.ts';
 import { dentroDoLimite } from '../_shared/rate-limit.ts';
+import { assinarAtribuicao } from '../_shared/attribution.ts';
+
+/** token de atribuição pro app gravar no carrinho (Fase 2 #13). */
+async function tokenAtribuicao(deviceId: string, appId: string): Promise<string | null> {
+    const secret = Deno.env.get('ATTRIBUTION_SECRET');
+    if (!secret) return null;
+    return assinarAtribuicao(deviceId, appId, secret, Date.now());
+}
 
 async function getSupabase() {
     const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
@@ -112,7 +120,10 @@ Deno.serve(instrument('register-device', async (req: Request) => {
                 status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             });
         }
-        return new Response(JSON.stringify({ device_id: existing.id, novo: false }), {
+        return new Response(JSON.stringify({
+            device_id: existing.id, novo: false,
+            attribution_token: await tokenAtribuicao(existing.id, reg.app_id),
+        }), {
             status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
     }
@@ -134,7 +145,10 @@ Deno.serve(instrument('register-device', async (req: Request) => {
         });
     }
 
-    return new Response(JSON.stringify({ device_id: created.id, novo: true }), {
+    return new Response(JSON.stringify({
+        device_id: created.id, novo: true,
+        attribution_token: await tokenAtribuicao(created.id, reg.app_id),
+    }), {
         status: 201, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 }));
