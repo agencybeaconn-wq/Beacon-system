@@ -46,6 +46,14 @@ async function getSupabase() {
     );
 }
 
+/** #16 comparação constant-time — `===` de string vaza timing (early exit). */
+function constantTimeEqual(a: string, b: string): boolean {
+    if (a.length !== b.length) return false; // length do HMAC é fixo, não vaza
+    let diff = 0;
+    for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+    return diff === 0;
+}
+
 async function verifyShopifyHmac(body: string, hmacHeader: string, secret: string): Promise<boolean> {
     const encoder = new TextEncoder();
     const key = await crypto.subtle.importKey(
@@ -53,7 +61,7 @@ async function verifyShopifyHmac(body: string, hmacHeader: string, secret: strin
     );
     const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(body));
     const computed = btoa(String.fromCharCode(...new Uint8Array(signature)));
-    return computed === hmacHeader;
+    return constantTimeEqual(computed, hmacHeader);
 }
 
 /** orders/paid com attributes[app_source]=beacon_app vira pedido do app */
@@ -259,13 +267,9 @@ Deno.serve(instrument('app-shopify-webhooks', async (req: Request) => {
     try { payload = JSON.parse(body); }
     catch { return new Response('Invalid JSON', { status: 400 }); }
 
-    // dedup — Shopify reenvia; o webhook_id é o idempotency key
-    if (webhookId) {
-        const { data: dup } = await supabase
-            .from('webhook_events').select('id').eq('webhook_id', webhookId).limit(1).maybeSingle();
-        if (dup) return new Response(JSON.stringify({ ok: true, duplicate: true }), { status: 200 });
-    }
-
+    // #16 dedup ATÔMICO: o insert é o claim. Índice único (client_id, webhook_id)
+    // → dois reenvios simultâneos, só o primeiro insere; o segundo pega 23505 e
+    // é reconhecido como duplicado (sem reprocessar → sem dobrar atribuição).
     const { error: insertErr } = await supabase.from('webhook_events').insert({
         client_id: client.id,
         shop_domain: shopDomain,
@@ -274,7 +278,12 @@ Deno.serve(instrument('app-shopify-webhooks', async (req: Request) => {
         payload,
         processed: false,
     });
-    if (insertErr) console.error('[app-webhooks] log falhou', insertErr.message);
+    if (insertErr) {
+        if (insertErr.code === '23505') {
+            return new Response(JSON.stringify({ ok: true, duplicate: true }), { status: 200 });
+        }
+        console.error('[app-webhooks] log falhou', insertErr.message);
+    }
 
     try {
         if (topic === 'orders/paid') {
